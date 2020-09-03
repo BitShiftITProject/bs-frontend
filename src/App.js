@@ -9,13 +9,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-
-        <h1> SIGN UP STUFF</h1>
-        <Signup />
-
         <h1> LOG IN STUFF</h1>
         {/* later on would have to split them into different html pages each */}
         <Login />
+        <h1> SIGN UP STUFF</h1>
+        <Signup />
+
+       
 
         <h1> FORGOT PASSWORD STUFF</h1>
 
