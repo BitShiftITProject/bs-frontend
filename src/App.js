@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import Signup from "./Components/Signup/Signup";
+import Login from "./Components/Login/Login";
+import ForgotPassword from "./Components/ForgotPassword/ForgotPassword";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import "./App.css";
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+
+        <h1> SIGN UP STUFF</h1>
+        <Signup />
+
+        <h1> LOG IN STUFF</h1>
+        {/* later on would have to split them into different html pages each */}
+        <Login />
+
+        <h1> FORGOT PASSWORD STUFF</h1>
+
+        <ForgotPassword/>
+
+      </div>
+    );
+  }
 }
 
 export default App;
