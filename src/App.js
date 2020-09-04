@@ -1,14 +1,15 @@
-import React from "react";
-import Signup from "./Components/Signup";
-import Login from "./Components/Login";
-import ForgotPassword from "./Components/ForgotPassword";
-import ContactInfo from "./Components/ContactInfo";
+import React from 'react'
+import Signup from './Components/Signup'
+import Login from './Components/Login'
+import ForgotPassword from './Components/ForgotPassword'
+import ContactInfo from './Components/ContactInfo'
+import SideBar from './Components/SideBar'
 
-import "./App.css";
+import './App.css'
 
 const App = () => {
   return (
-    <div className="App">
+    <div className='App'>
       {/* later on would have to split them into different html pages each */}
       <h1> LOG IN STUFF</h1>
       <Login />
@@ -22,8 +23,9 @@ const App = () => {
       <h1> CONTACT INFO STUFF</h1>
       <ContactInfo />
 
+      <SideBar />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
