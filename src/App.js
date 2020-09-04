@@ -3,6 +3,7 @@ import Signup from "./Components/Signup";
 import Login from "./Components/Login";
 import ForgotPassword from "./Components/ForgotPassword";
 import ContactInfo from "./Components/ContactInfo";
+import SideBar from "./Components/SideBar";
 
 import "./App.css";
 
