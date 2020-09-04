@@ -19,13 +19,13 @@ const Login = () => {
                 <Button className="login__button" type="submit" variant="contained" color="primary"> LOG IN</Button>
 
                 <label htmlFor="login__remember"> Rememeber Me </label>
-                
-                <Checkbox id="login__remember" className="login__remember"
-                            defaultChecked
-                            color="primary"
-                            inputProps={{ 'aria-label': 'secondary checkbox' }} />
 
-               
+                <Checkbox id="login__remember" className="login__remember"
+                    defaultChecked
+                    color="primary"
+                    inputProps={{ 'aria-label': 'secondary checkbox' }} />
+
+
 
 
                 {/* if clicking forgot password brings us to a new page

@@ -11,6 +11,8 @@ const App = () => {
   return (
     <div className='App'>
       {/* later on would have to split them into different html pages each */}
+      <SideBar />
+      
       <h1> LOG IN STUFF</h1>
       <Login />
 
@@ -23,7 +25,7 @@ const App = () => {
       <h1> CONTACT INFO STUFF</h1>
       <ContactInfo />
 
-      <SideBar />
+      
     </div>
   )
 }
