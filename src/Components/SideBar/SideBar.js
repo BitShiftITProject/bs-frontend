@@ -14,7 +14,7 @@ import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import { mainListItems, secondaryListItems } from './listItems'
+import { mainListItems } from './listItems'
 
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -158,7 +158,7 @@ export default function SideBar() {
                 <Divider />
                 <List>{mainListItems}</List>
                 <Divider />
-                <List>{secondaryListItems}</List>
+                {/* <List>{secondaryListItems}</List> */}
             </Drawer>
 
             <main className={classes.content}>

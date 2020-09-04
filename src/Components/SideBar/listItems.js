@@ -2,22 +2,18 @@ import React from 'react'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import ListSubheader from '@material-ui/core/ListSubheader'
-
-
-import AssignmentIcon from '@material-ui/icons/Assignment'
-
+// import ListSubheader from '@material-ui/core/ListSubheader'
+// import AssignmentIcon from '@material-ui/icons/Assignment'
 
 import HomeIcon from '@material-ui/icons/Home';
-import PersonIcon from '@material-ui/icons/Person';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import SettingsIcon from '@material-ui/icons/Settings';
-
+import DescriptionIcon from '@material-ui/icons/Description';
 export const mainListItems = (
   <div>
     <ListItem button>
       <ListItemIcon>
-        <HomeIcon/>
+        <HomeIcon />
       </ListItemIcon>
       <ListItemText primary='Home' />
     </ListItem>
@@ -25,15 +21,15 @@ export const mainListItems = (
 
     <ListItem button>
       <ListItemIcon>
-        <PersonIcon/>
+        <DescriptionIcon />
       </ListItemIcon>
-      <ListItemText primary='My Account' />
+      <ListItemText primary='Portfolios' />
     </ListItem>
 
 
     <ListItem button>
       <ListItemIcon>
-        <HelpOutlineIcon/>
+        <HelpOutlineIcon />
       </ListItemIcon>
       <ListItemText primary='Help' />
     </ListItem>
@@ -41,7 +37,7 @@ export const mainListItems = (
 
     <ListItem button>
       <ListItemIcon>
-        <SettingsIcon/>
+        <SettingsIcon />
       </ListItemIcon>
       <ListItemText primary='Settings' />
     </ListItem>
@@ -49,24 +45,24 @@ export const mainListItems = (
   </div>
 )
 
-export const secondaryListItems = (
-  <div>
-    <ListSubheader inset>Portfolios</ListSubheader>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary='IT Resume' />
-    </ListItem>
+// export const secondaryListItems = (
+//   <div>
+//     <ListSubheader inset>Portfolios</ListSubheader>
+//     <ListItem button>
+//       <ListItemIcon>
+//         <AssignmentIcon />
+//       </ListItemIcon>
+//       <ListItemText primary='IT Resume' />
+//     </ListItem>
 
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary='Art Resume' />
-    </ListItem>
+//     <ListItem button>
+//       <ListItemIcon>
+//         <AssignmentIcon />
+//       </ListItemIcon>
+//       <ListItemText primary='Art Resume' />
+//     </ListItem>
 
 
-   
-  </div>
-)
+
+//   </div>
+// )
