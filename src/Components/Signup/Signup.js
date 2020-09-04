@@ -8,38 +8,25 @@ const Signup = () => {
 				<FormControl>
 
 					{/* NOT SURE WHICH ONE WE WOULD USE OVERALL TO SIGN IN (email or username) SO BOTH IS INCLUDED FOR NOW */}
-					<label className = "Signup-Email"> 
-						Email:  
-						<TextField  type = "email" placeholder = "email@domain.com" required/>
-					</label>
+					<label htmlFor="signup__email"> Email: </label>
+					<TextField id="signup__email" type="email" placeholder="email@domain.com" required ></TextField>
 
-					<label> 
-						Username:  
-						<TextField  type = "text" placeholder = "Username" required/>
-					</label>
+					<label htmlFor="signup__username"> Username: </label>
+					<TextField id="signup__username" type="text" placeholder="Username" required ></TextField>
 
-					<label> 
-						Firstname:  
-						<TextField  type = "text" placeholder = "John" required/>
-					</label>
+					<label htmlFor="signup__password">  Password: </label>
+					<TextField id="signup__password" type="password" placeholder="**********" required pattern=".{8,12}" title="8 to 12 characters"></TextField>
 
-					<label> 
-						LastName:  
-						<TextField  type = "text" placeholder = "Smith" required/>
-					</label>
+					<label htmlFor="signup__confirm_password">  Confirm Password: </label>
+					<TextField id="signup__confirm_password" type="password" placeholder="**********" required pattern=".{8,12}" title="8 to 12 characters"></TextField>
 
-					{/* not 100% sure the password requirements are so for now this is just the default */}
-					<label>
-						Password: 
-						<TextField  type = "password" placeholder = "**********" required pattern=".{8,12}" title="8 to 12 characters"/>
-					</label>
+					<label htmlFor="signup__first_name"> First Name: </label>
+					<TextField id="signup__first_name" type = "text" placeholder = "John" required/>
 
-					<label>
-						Confirm Password: 
-						<TextField  type = "password" placeholder = "**********" required pattern=".{8,12}" title="8 to 12 characters"/>
-					</label>
+					<label htmlFor="signup__last_name"> Last Name: </label>
+					<TextField id="signup__last_name" type = "text" placeholder = "Smith" required/>
 
-                    <Button className= "Signup-SubmitButton" type="submit"> SIGN UP </Button>
+                    <Button className= "signup_button" type="submit"> SIGN UP </Button>
 				</FormControl>
 			</div>)
 }
