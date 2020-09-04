@@ -7,16 +7,12 @@ const Login = () => {
         <div className="Login">
             <FormControl>
                 {/* NOT SURE WHICH ONE WE WOULD USE OVERALL TO SIGN IN (email or username) SO BOTH IS INCLUDED FOR NOW */}
+                <label htmlFor="login__email" className="login__email"> Email: </label>
+                <TextField id="login__email" type="email" placeholder="email@domain.com" required ></TextField>
 
-                <label className="LogIn-Email">
-                    Email:
-            <TextField type="email" placeholder="email@domain.com" required />
-                </label>
 
-                <label>
-                    Username:
-            <TextField type="text" placeholder="Username" required />
-                </label>
+                <label htmlFor="login__username" className="login__username"> Username: </label>
+                <TextField id="login__username" type="text" placeholder="Username" required ></TextField>
 
                 <label>
                     Password:
