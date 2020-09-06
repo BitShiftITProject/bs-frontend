@@ -1,3 +1,5 @@
+import "./SideBar.css"
+
 import React from 'react'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
@@ -20,6 +22,9 @@ import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 const drawerWidth = 240
+
+
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
