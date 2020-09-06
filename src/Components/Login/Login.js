@@ -18,7 +18,7 @@ const Login = () => {
 
                 <Button className="login__button" type="submit" variant="contained" color="primary"> LOG IN</Button>
 
-                <label htmlFor="login__remember"> Rememeber Me </label>
+                <label htmlFor="login__remember"> Remember Me </label>
 
                 <Checkbox id="login__remember" className="login__remember"
                     defaultChecked
