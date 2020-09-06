@@ -1,34 +1,107 @@
-import React from "react";
-import './Signup.css';
-import { TextField , FormControl , Button} from '@material-ui/core';
+import React from 'react'
+import './Signup.css'
+import { TextField, FormControl, Button } from '@material-ui/core'
 
-const Signup = () => {
-		return (
-			<div className="Signup">
-				<FormControl>
+class Signup extends Component {
+  state = { email: '', username: '', password: '', confirm: '', firstName: '', lastName: '' }
 
-					{/* NOT SURE WHICH ONE WE WOULD USE OVERALL TO SIGN IN (email or username) SO BOTH IS INCLUDED FOR NOW */}
-					<label htmlFor="signup__email"> Email: </label>
-					<TextField id="signup__email" type="email" placeholder="email@domain.com" required ></TextField>
+  handleClick = (e) => {
+    this.setState({ [e.target.name]: e.target.value })
+  }
 
-					<label htmlFor="signup__username"> Username: </label>
-					<TextField id="signup__username" type="text" placeholder="Username" required ></TextField>
+  handleSubmit = (e) => {
+    console.log('Signup:')
+    console.log('Email:', this.state.email)
+    console.log('Username:', this.state.username)
+    console.log('Password:', this.state.password)
+    console.log('Confirm Password:', this.state.confirm)
+    console.log('First Name:', this.state.firstName)
+    console.log('Last Name:', this.state.lastName)
+  }
 
-					<label htmlFor="signup__password">  Password: </label>
-					<TextField id="signup__password" type="password" placeholder="**********" required pattern=".{8,12}" title="8 to 12 characters"></TextField>
+  render() {
+    return (
+      <div className='Signup'>
+        <FormControl onSubmit={this.handleSubmit}>
+          {/* NOT SURE WHICH ONE WE WOULD USE OVERALL TO SIGN IN (email or username) SO BOTH IS INCLUDED FOR NOW */}
+          <label htmlFor='signup__email'> Email: </label>
+          <TextField
+            id='signup__email'
+            type='email'
+            placeholder='email@domain.com'
+            name='email'
+            value={this.state.email}
+            onClick={this.handleClick}
+            required
+          ></TextField>
 
-					<label htmlFor="signup__confirm_password">  Confirm Password: </label>
-					<TextField id="signup__confirm_password" type="password" placeholder="**********" required pattern=".{8,12}" title="8 to 12 characters"></TextField>
+          <label htmlFor='signup__username'> Username: </label>
+          <TextField
+            id='signup__username'
+            type='text'
+            placeholder='Username'
+            name='username'
+            value={this.state.username}
+            onClick={this.handleClick}
+            required
+          ></TextField>
 
-					<label htmlFor="signup__first_name"> First Name: </label>
-					<TextField id="signup__first_name" type = "text" placeholder = "John" required/>
+          <label htmlFor='signup__password'> Password: </label>
+          <TextField
+            id='signup__password'
+            type='password'
+            placeholder='**********'
+            required
+            pattern='.{8,12}'
+            title='8 to 12 characters'
+            name='password'
+            value={this.state.password}
+            onClick={this.handleClick}
+          ></TextField>
 
-					<label htmlFor="signup__last_name"> Last Name: </label>
-					<TextField id="signup__last_name" type = "text" placeholder = "Smith" required/>
+          <label htmlFor='signup__confirm_password'> Confirm Password: </label>
+          <TextField
+            id='signup__confirm_password'
+            type='password'
+            placeholder='**********'
+            required
+            pattern='.{8,12}'
+            title='8 to 12 characters'
+            name='password'
+            value={this.state.password}
+            onClick={this.handleClick}
+          ></TextField>
 
-                    <Button className= "signup_button" type="submit"> SIGN UP </Button>
-				</FormControl>
-			</div>)
+          <label htmlFor='signup__first_name'> First Name: </label>
+          <TextField
+            id='signup__first_name'
+            type='text'
+            placeholder='John'
+            name='firstName'
+            value={this.state.firstName}
+            onClick={this.handleClick}
+            required
+          />
+
+          <label htmlFor='signup__last_name'> Last Name: </label>
+          <TextField
+            id='signup__last_name'
+            type='text'
+            placeholder='Smith'
+            name='lastName'
+            value={this.state.lastName}
+            onClick={this.handleClick}
+            required
+          />
+
+          <Button className='signup_button' type='submit'>
+            {' '}
+            SIGN UP{' '}
+          </Button>
+        </FormControl>
+      </div>
+    )
+  }
 }
 
-export default Signup;
+export default Signup
