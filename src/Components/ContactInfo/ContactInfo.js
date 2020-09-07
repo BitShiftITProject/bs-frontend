@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import './ContactInfo.css'
 import { TextField, FormControl, Button } from '@material-ui/core'
 
