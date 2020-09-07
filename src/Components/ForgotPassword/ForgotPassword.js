@@ -5,7 +5,7 @@ import { TextField, FormControl, Button } from '@material-ui/core'
 class ForgotPassword extends Component {
   state = { email: '', username: '' }
 
-  handleClick = (e) => {
+  handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
@@ -22,9 +22,8 @@ class ForgotPassword extends Component {
           {/* NOT SURE WHICH ONE WE WOULD USE OVERALL TO SIGN IN (email or username) SO BOTH IS INCLUDED FOR NOW */}
 
           <p>
-            {' '}
             Please enter the email you signed up with or your username, and we'll send you a link
-            for a new password :){' '}
+            for a new password :)
           </p>
 
           <label htmlFor='forgot_password__email' className='forgot_password__email'>
@@ -37,7 +36,7 @@ class ForgotPassword extends Component {
             placeholder='email@domain.com'
             name='email'
             value={this.state.email}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
             required
           />
 
@@ -50,7 +49,7 @@ class ForgotPassword extends Component {
             placeholder='Username'
             name='username'
             value={this.state.username}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
             required
           />
 

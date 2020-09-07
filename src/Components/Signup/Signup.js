@@ -5,7 +5,7 @@ import { TextField, FormControl, Button } from '@material-ui/core'
 class Signup extends Component {
   state = { email: '', username: '', password: '', confirm: '', firstName: '', lastName: '' }
 
-  handleClick = (e) => {
+  handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
@@ -31,7 +31,7 @@ class Signup extends Component {
             placeholder='email@domain.com'
             name='email'
             value={this.state.email}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
             required
           ></TextField>
 
@@ -42,7 +42,7 @@ class Signup extends Component {
             placeholder='Username'
             name='username'
             value={this.state.username}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
             required
           ></TextField>
 
@@ -56,7 +56,7 @@ class Signup extends Component {
             title='8 to 12 characters'
             name='password'
             value={this.state.password}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
           ></TextField>
 
           <label htmlFor='signup__confirm_password'> Confirm Password: </label>
@@ -69,7 +69,7 @@ class Signup extends Component {
             title='8 to 12 characters'
             name='password'
             value={this.state.password}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
           ></TextField>
 
           <label htmlFor='signup__first_name'> First Name: </label>
@@ -79,7 +79,7 @@ class Signup extends Component {
             placeholder='John'
             name='firstName'
             value={this.state.firstName}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
             required
           />
 
@@ -90,7 +90,7 @@ class Signup extends Component {
             placeholder='Smith'
             name='lastName'
             value={this.state.lastName}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
             required
           />
 
