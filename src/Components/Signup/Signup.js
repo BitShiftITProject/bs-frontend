@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './Signup.css'
+import {BACKEND, SIGNUP} from '../../Endpoints'
 import { TextField, FormControl, Button } from '@material-ui/core'
 
 class Signup extends Component {
@@ -10,6 +11,33 @@ class Signup extends Component {
   }
 
   handleSubmit = (e) => {
+      //TODO: THIS FUNCTION ISN'T CALLED WHY AAAAAAAAA
+    e.preventDefault()
+
+    const details = {
+        email: this.state.email, 
+        username: this.state.username, 
+        password: this.state.password, 
+        firstName: this.state.firstName, 
+        lastName: this.state.lastName
+    };
+
+    fetch(BACKEND + SIGNUP, 
+        {
+            method: "POST",
+            headers: {'Content-type': 'application/json'},
+            body: JSON.stringify(details)
+        }
+    )
+    .then((response) => {
+        if(response.ok){
+            // TODO: Check if this actually works for redirecting
+            window.location.href = "/login";
+        }else {
+            //TODO: Redirect to failed to create account page
+        }
+    })
+    
     console.log('Signup:')
     console.log('Email:', this.state.email)
     console.log('Username:', this.state.username)

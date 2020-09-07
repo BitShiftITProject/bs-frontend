@@ -1,16 +1,43 @@
 import React, { Component } from 'react'
 import './Login.css'
+import {BACKEND, AUTHENTICATE} from '../../Endpoints'
 import { TextField, FormControl, Button, Checkbox } from '@material-ui/core'
 
 class Login extends Component {
-  state = { email: '', username: '', password: '' }
+    constructor(props) {
+        super(props);
+        this.state = { email: '', username: '', password: '' };
+    }
 
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
   handleSubmit = (e) => {
+      //TODO: THIS FUNCTION ISN'T CALLED WHY AAAAAAAAA
     e.preventDefault()
+
+    const details = {
+        username: this.state.username, 
+        password: this.state.password, 
+    };
+
+    fetch(BACKEND + AUTHENTICATE, 
+        {
+            method: "POST",
+            headers: {'Content-type': 'application/json'},
+            body: JSON.stringify(details)
+        }
+    )
+    .then((response) => {
+        if(response.ok){
+            window.sessionStorage.accessToken = response.body.access_token;
+            // TODO: Check if this actually works for redirecting
+            window.location.href = "/";
+        }else {
+            //TODO: Redirect to failed to login page
+        }
+    })
 
     console.log('Login:')
     console.log('Email:', this.state.email)
@@ -22,21 +49,6 @@ class Login extends Component {
     return (
       <div className='Login'>
         <FormControl onSubmit={this.handleSubmit}>
-          {/* NOT SURE WHICH ONE WE WOULD USE OVERALL TO SIGN IN (email or username) SO BOTH IS INCLUDED FOR NOW */}
-          <label htmlFor='login__email' className='login__email'>
-            {' '}
-            Email:{' '}
-          </label>
-          <TextField
-            id='login__email'
-            type='email'
-            placeholder='email@domain.com'
-            name='email'
-            value={this.state.email}
-            onChange={this.handleChange}
-            required
-          ></TextField>
-
           <label htmlFor='login__username' className='login__username'>
             {' '}
             Username:{' '}
@@ -91,7 +103,7 @@ class Login extends Component {
             className='login__forgot_password'
             variant='contained'
             color='default'
-            href='#top'
+            href='/forgotpassword'
           >
             {' '}
             Forgot your password?{' '}
