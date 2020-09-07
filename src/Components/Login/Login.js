@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import './Login.css'
 import { TextField, FormControl, Button, Checkbox } from '@material-ui/core'
 
