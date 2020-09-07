@@ -5,11 +5,13 @@ import { TextField, FormControl, Button } from '@material-ui/core'
 class ContactInfo extends Component {
   state = { number: '', email: '', address: '', github: '', linkedin: '' }
 
-  handleClick = (e) => {
+  handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
   handleSubmit = (e) => {
+    e.preventDefault()
+
     console.log('Contact Info:')
     console.log('Number:', this.state.number)
     console.log('Email:', this.state.email)
@@ -30,7 +32,7 @@ class ContactInfo extends Component {
             placeholder='0000000000'
             name='number'
             value={this.state.number}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
             required
           />
 
@@ -43,7 +45,7 @@ class ContactInfo extends Component {
             placeholder='email@domain.com'
             name='email'
             value={this.state.email}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
             required
           ></TextField>
 
@@ -54,7 +56,7 @@ class ContactInfo extends Component {
             placeholder='Address'
             name='address'
             value={this.state.address}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
             required
           />
 
@@ -64,7 +66,7 @@ class ContactInfo extends Component {
             type='url'
             name='github'
             value={this.state.github}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
           />
 
           <label htmlFor='contact_info__linkedin'> Linkedin: </label>
@@ -73,7 +75,7 @@ class ContactInfo extends Component {
             type='url'
             name='linkedin'
             value={this.state.linkedin}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
           />
 
           <Button

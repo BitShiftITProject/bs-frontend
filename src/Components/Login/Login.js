@@ -5,11 +5,13 @@ import { TextField, FormControl, Button, Checkbox } from '@material-ui/core'
 class Login extends Component {
   state = { email: '', username: '', password: '' }
 
-  handleClick = (e) => {
+  handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
   handleSubmit = (e) => {
+    e.preventDefault()
+
     console.log('Login:')
     console.log('Email:', this.state.email)
     console.log('Username:', this.state.username)
@@ -31,7 +33,7 @@ class Login extends Component {
             placeholder='email@domain.com'
             name='email'
             value={this.state.email}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
             required
           ></TextField>
 
@@ -45,7 +47,7 @@ class Login extends Component {
             placeholder='Username'
             name='username'
             value={this.state.username}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
             required
           ></TextField>
 
@@ -59,7 +61,7 @@ class Login extends Component {
             placeholder='**********'
             name='password'
             value={this.state.password}
-            onClick={this.handleClick}
+            onChange={this.handleChange}
             required
           ></TextField>
 
@@ -78,13 +80,13 @@ class Login extends Component {
             inputProps={{ 'aria-label': 'secondary checkbox' }}
           />
 
-          {/* if clicking forgot password brings us to a new page
+          {/* if Changeing forgot password brings us to a new page
                   <a href="#top" className="login__forgot_password"> Forgot your password? </a>*/}
 
-          {/* if clicking forgot password just brings a popup then the button itself wont be a link */}
+          {/* if Changeing forgot password just brings a popup then the button itself wont be a link */}
           {/* <Button variant="contained" color="primary" className="login__forgot_password"> Forgot your password? </Button>  */}
 
-          {/* if clicking forgot password button is a link */}
+          {/* if Changeing forgot password button is a link */}
           <Button
             className='login__forgot_password'
             variant='contained'
