@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './ContactInfo.css'
-import { TextField, FormControl, Button } from '@material-ui/core'
+import { TextField, Button } from '@material-ui/core'
 
 class ContactInfo extends Component {
   state = { number: '', email: '', address: '', github: '', linkedin: '' }
@@ -11,6 +11,8 @@ class ContactInfo extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
+
+    alert('Printed details to console!')
 
     console.log('Contact Info:')
     console.log('Number:', this.state.number)
@@ -23,7 +25,7 @@ class ContactInfo extends Component {
   render() {
     return (
       <div className='contact_info'>
-        <FormControl onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit}>
           {/* NOT SURE WHICH ONE WE WOULD USE OVERALL TO SIGN IN (email or username) SO BOTH IS INCLUDED FOR NOW */}
           <label htmlFor='contact_info__number'>Mobile Number:</label>
           <TextField
@@ -86,7 +88,7 @@ class ContactInfo extends Component {
           >
             SAVE DETAILS
           </Button>
-        </FormControl>
+        </form>
       </div>
     )
   }
