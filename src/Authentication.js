@@ -72,19 +72,13 @@ class Authentication extends Component {
                 return (
                   <div>
                     <div>
-                      <Link exact to='/login'>
-                        Login
-                      </Link>
+                      <Link to='/login'>Login</Link>
                     </div>
                     <div>
-                      <Link exact to='/signup'>
-                        Signup
-                      </Link>
+                      <Link to='/signup'>Signup</Link>
                     </div>
                     <div>
-                      <Link exact to='/forgotpassword'>
-                        Forgot Password
-                      </Link>
+                      <Link to='/forgotpassword'>Forgot Password</Link>
                     </div>
                   </div>
                 )
