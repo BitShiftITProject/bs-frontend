@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './Signup.css'
-import {BACKEND, SIGNUP} from '../../Endpoints'
-import { TextField, FormControl, Button } from '@material-ui/core'
+import { BACKEND, SIGNUP } from '../../Endpoints'
+import { TextField, Button } from '@material-ui/core'
 
 class Signup extends Component {
   state = { email: '', username: '', password: '', confirm: '', firstName: '', lastName: '' }
@@ -11,33 +11,31 @@ class Signup extends Component {
   }
 
   handleSubmit = (e) => {
-      //TODO: THIS FUNCTION ISN'T CALLED WHY AAAAAAAAA
     e.preventDefault()
 
-    const details = {
-        email: this.state.email, 
-        username: this.state.username, 
-        password: this.state.password, 
-        firstName: this.state.firstName, 
-        lastName: this.state.lastName
-    };
+    if (this.state.password !== this.state.confirm) {
+      alert('Password does not match!')
 
-    fetch(BACKEND + SIGNUP, 
-        {
-            method: "POST",
-            headers: {'Content-type': 'application/json'},
-            body: JSON.stringify(details)
-        }
-    )
-    .then((response) => {
-        if(response.ok){
-            // TODO: Check if this actually works for redirecting
-            window.location.href = "/login";
-        }else {
-            //TODO: Redirect to failed to create account page
-        }
-    })
-    
+      return
+    }
+
+    alert('Printed details to console!')
+
+    // const details = {
+    //   ...this.state,
+    // }
+
+    // fetch(BACKEND + SIGNUP, {
+    //   method: 'POST',
+    //   headers: { 'Content-type': 'application/json' },
+    //   body: JSON.stringify(details),
+    // }).then((response) => {
+    //   if (response.ok) {
+    //     window.location.href = '/login'
+    //   } else {
+    //   }
+    // })
+
     console.log('Signup:')
     console.log('Email:', this.state.email)
     console.log('Username:', this.state.username)
@@ -50,7 +48,7 @@ class Signup extends Component {
   render() {
     return (
       <div className='Signup'>
-        <FormControl onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit}>
           {/* NOT SURE WHICH ONE WE WOULD USE OVERALL TO SIGN IN (email or username) SO BOTH IS INCLUDED FOR NOW */}
           <label htmlFor='signup__email'> Email: </label>
           <TextField
@@ -95,8 +93,8 @@ class Signup extends Component {
             required
             pattern='.{8,12}'
             title='8 to 12 characters'
-            name='password'
-            value={this.state.password}
+            name='confirm'
+            value={this.state.confirm}
             onChange={this.handleChange}
           ></TextField>
 
@@ -122,11 +120,10 @@ class Signup extends Component {
             required
           />
 
-          <Button className='signup_button' type='submit'>
-            {' '}
-            SIGN UP{' '}
+          <Button className='signup_button' type='submit' variant='contained' color='primary'>
+            SIGN UP
           </Button>
-        </FormControl>
+        </form>
       </div>
     )
   }
