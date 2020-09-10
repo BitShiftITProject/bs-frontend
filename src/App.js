@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import Authentication from './Authentication.js'
+// import TestRenderImage from './TestRenderImage.js'
 
 class App extends Component {
     constructor() {
@@ -11,6 +12,7 @@ class App extends Component {
         return (
             <div id="Main">
                 <Authentication/>
+                {/* <TestRenderImage /> */}
             </div>
         );
     } 
