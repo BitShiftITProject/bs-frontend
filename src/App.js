@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import Authentication from './Authentication.js'
+// import TestRenderImage from './TestRenderImage.js'
 
 class App extends Component {
   render() {
     return (
       <div className='App'>
         <Authentication />
+        {/* <TestRenderImage /> */}
       </div>
     )
   }
