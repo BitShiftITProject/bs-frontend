@@ -1,7 +1,7 @@
 import React from 'react'
 import clsx from 'clsx'
 import { useStyles } from '../../useStyles'
-import { CardActionArea, Typography, Card, Fab } from '@material-ui/core'
+import { Card, Fab, CardContent } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 
 export default function AddPortfolioCard(props) {
@@ -12,7 +12,7 @@ export default function AddPortfolioCard(props) {
   const { dispatch } = props
   return (
     <Card className={addPortfolioCard}>
-      <CardActionArea
+      <CardContent
         className={classes.addPortfolioContainer}
         onClick={() => dispatch({ type: 'addPortfolio' })}
       >
@@ -25,7 +25,7 @@ export default function AddPortfolioCard(props) {
           Add Portfolio
           <AddIcon className={classes.addPortfolioIcon} />
         </Fab>
-      </CardActionArea>
+      </CardContent>
     </Card>
   )
 }

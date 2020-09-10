@@ -12,17 +12,24 @@ import {
   Typography,
   Divider,
   IconButton,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
 } from '@material-ui/core'
 
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import { mainListItems } from './listItems'
 
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import SettingsIcon from '@material-ui/icons/Settings'
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
+import HomeIcon from '@material-ui/icons/Home'
+import DescriptionIcon from '@material-ui/icons/Description'
+import { useHistory } from 'react-router-dom'
+const drawerWidth = 240
 
 export default function Sidebar(props) {
+  const history = useHistory()
   const classes = useStyles()
   const [open, setOpen] = useState(true)
   const handleDrawerOpen = () => {
@@ -31,6 +38,58 @@ export default function Sidebar(props) {
   const handleDrawerClose = () => {
     setOpen(false)
   }
+
+  const mainListItems = (
+    <div>
+      <ListItem
+        button
+        onClick={() => {
+          history.push('/home')
+        }}
+      >
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary='Home' />
+      </ListItem>
+
+      <ListItem
+        button
+        onClick={() => {
+          history.push('/portfolio')
+        }}
+      >
+        <ListItemIcon>
+          <DescriptionIcon />
+        </ListItemIcon>
+        <ListItemText primary='Portfolios' />
+      </ListItem>
+
+      <ListItem
+        button
+        onClick={() => {
+          history.push('/help')
+        }}
+      >
+        <ListItemIcon>
+          <HelpOutlineIcon />
+        </ListItemIcon>
+        <ListItemText primary='Help' />
+      </ListItem>
+
+      <ListItem
+        button
+        onClick={() => {
+          history.push('/settings')
+        }}
+      >
+        <ListItemIcon>
+          <SettingsIcon />
+        </ListItemIcon>
+        <ListItemText primary='Settings' />
+      </ListItem>
+    </div>
+  )
 
   const { content } = props
 

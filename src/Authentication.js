@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
+import { BACKEND, LOGGEDIN } from './Endpoints'
+
+import HomePage from './Components/LoggedInComponents/HomePage'
+import EditProfilePage from './Components/LoggedInComponents/EditProfilePage'
+import PortfoliosPage from './Components/LoggedInComponents/PortfoliosPage'
+import HelpPage from './Components/LoggedInComponents/HelpPage'
+import SettingsPage from './Components/LoggedInComponents/SettingsPage'
+
 import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
-import HomePage from './Components/LoggedInComponents/HomePage'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
-
-import { BACKEND, LOGGEDIN } from './Endpoints'
 
 async function loggedIn() {
   // Get access token from session storage
@@ -37,7 +42,7 @@ async function loggedIn() {
 // Keep all == as is
 
 class Authentication extends Component {
-  state = { loggedIn: true }
+  state = { loggedIn: false }
 
   async componentDidMount() {
     // let logincheck = await loggedIn()
@@ -56,46 +61,47 @@ class Authentication extends Component {
     } else if (this.state.loggedIn === true) {
       // Route for pages accessible when logged in
       return (
-        <BrowserRouter>
-          <Switch>
-            <Route render={() => <HomePage />} />
-          </Switch>
-        </BrowserRouter>
+        <Switch>
+          <Route exact path='/home' render={() => <HomePage />} />
+          <Route exact path='/home/profile' render={() => <EditProfilePage />} />
+          <Route exact path='/portfolios' render={() => <PortfoliosPage />} />
+          <Route exact path='/help' render={() => <HelpPage />} />
+          <Route exact path='/settings' render={() => <SettingsPage />} />
+          <Redirect to='/home' />
+        </Switch>
       )
     } else if (this.state.loggedIn === false) {
       // Route for pages accessible when not logged in
       return (
-        <BrowserRouter>
-          <Switch>
-            <Route
-              exact
-              path='/login'
-              render={(routeProps) => <Login toggleLogin={this.toggleLogin} {...routeProps} />}
-            />
-            <Route exact path='/signup' render={() => <Signup />} />
-            <Route exact path='/forgotpassword' render={() => <ForgotPassword />} />
-            <Route
-              exact
-              path='/'
-              render={() => {
-                return (
+        <Switch>
+          <Route
+            exact
+            path='/login'
+            render={(routeProps) => <Login toggleLogin={this.toggleLogin} {...routeProps} />}
+          />
+          <Route exact path='/signup' render={() => <Signup />} />
+          <Route exact path='/forgotpassword' render={() => <ForgotPassword />} />
+          <Route
+            exact
+            path='/'
+            render={() => {
+              return (
+                <div>
                   <div>
-                    <div>
-                      <Link to='/login'>Login</Link>
-                    </div>
-                    <div>
-                      <Link to='/signup'>Signup</Link>
-                    </div>
-                    <div>
-                      <Link to='/forgotpassword'>Forgot Password</Link>
-                    </div>
+                    <Link to='/login'>Login</Link>
                   </div>
-                )
-              }}
-            />
-            <Redirect to='/' />
-          </Switch>
-        </BrowserRouter>
+                  <div>
+                    <Link to='/signup'>Signup</Link>
+                  </div>
+                  <div>
+                    <Link to='/forgotpassword'>Forgot Password</Link>
+                  </div>
+                </div>
+              )
+            }}
+          />
+          <Redirect to='/' />
+        </Switch>
       )
     }
   }
