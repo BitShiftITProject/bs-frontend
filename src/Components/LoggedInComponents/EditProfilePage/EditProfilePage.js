@@ -1,8 +1,11 @@
 import React, { useState, useReducer } from 'react'
 import { v4 as uuid } from 'uuid'
 import clsx from 'clsx'
+import OnOutsiceClick from 'react-outclick'
+
 import { useStyles } from '../../useStyles'
 import Sidebar from '../Sidebar'
+
 import {
   Container,
   Grid,
@@ -39,6 +42,9 @@ const initialContact = {
   state: '',
   country: '',
   accounts: [],
+  tempWebsite: '',
+  tempUsername: '',
+  editAccount: false,
 }
 
 const reducer = (state, newState) => ({ ...state, ...newState })
@@ -84,8 +90,35 @@ export default function EditProfilePage() {
     setContact({ accounts: newAccounts })
   }
 
+  const handleChangeAccount = (event) => {
+    const { name, value } = event.target
+
+    if (name === 'website') {
+      setContact({ tempWebsite: value })
+    } else {
+      setContact({ tempUsername: value })
+    }
+  }
+
+  const handleFinishEdit = (event, id) => {
+    if (event.key === 'Enter') {
+      const newAccounts = contact.accounts.map((acc) => {
+        if (event.name === 'website') {
+          console.log(contact.tempWebsite)
+          return acc.id === id ? { ...acc, website: contact.tempWebsite } : acc
+        } else {
+          console.log(contact.tempUsername)
+          return acc.id === id ? { ...acc, username: contact.tempUsername } : acc
+        }
+      })
+
+      setContact({ accounts: newAccounts })
+      setContact({ editAccount: false })
+    }
+  }
+
   const handleRemoveAccount = (id) => {
-    const newAccounts = contact.accounts.filter((l) => l.id != id)
+    const newAccounts = contact.accounts.filter((acc) => acc.id !== id)
     setContact({ ...contact, accounts: newAccounts })
   }
 
@@ -189,36 +222,72 @@ export default function EditProfilePage() {
                 <Chip label='Accounts' color='primary' />
               </Grid>
               <List component='nav' aria-label='profile accounts'>
-                {contact.accounts.map((l) => (
-                  <ListItem key={l.id} className={classes.accountListItem}>
+                {contact.accounts.map((acc) => (
+                  <ListItem key={acc.id} className={classes.accountListItem}>
                     <Fab
                       className={classes.removeAccountButton}
                       size='small'
                       aria-label='remove account'
-                      onClick={() => handleRemoveAccount(l.id)}
+                      onClick={() => handleRemoveAccount(acc.id)}
                     >
                       <CloseIcon />
                     </Fab>
                     <Grid item container spacing={2} direction='row'>
                       <Grid item xs={12} md={4}>
-                        <TextField
-                          fullWidth
-                          placeholder='Website'
-                          variant='outlined'
-                          name='website'
-                          value={contact.website}
-                          onChange={handleOnContactChange}
-                        />
+                        {contact.editAccount ? (
+                          <OnOutsiceClick
+                            onOutsideClick={(event) => {
+                              handleFinishEdit(event, acc.id)
+                            }}
+                          >
+                            <TextField
+                              fullWidth
+                              placeholder='Website'
+                              variant='outlined'
+                              name='website'
+                              value={contact.tempWebsite}
+                              onChange={handleChangeAccount}
+                            />
+                          </OnOutsiceClick>
+                        ) : (
+                          <TextField
+                            fullWidth
+                            placeholder='Website'
+                            variant='outlined'
+                            name='website'
+                            value={acc.website}
+                            onClick={() => setContact({ editAccount: true })}
+                            onFocus={() => setContact({ editAccount: true })}
+                          />
+                        )}
                       </Grid>
                       <Grid item xs={12} md={8}>
-                        <TextField
-                          fullWidth
-                          placeholder='Username'
-                          variant='outlined'
-                          name='username'
-                          value={contact.username}
-                          onChange={handleOnContactChange}
-                        />
+                        {contact.editAccount ? (
+                          <OnOutsiceClick
+                            onOutsideClick={(event) => {
+                              handleFinishEdit(event, acc.id)
+                            }}
+                          >
+                            <TextField
+                              fullWidth
+                              placeholder='Username'
+                              variant='outlined'
+                              name='username'
+                              value={contact.username}
+                              onChange={handleChangeAccount}
+                            />
+                          </OnOutsiceClick>
+                        ) : (
+                          <TextField
+                            fullWidth
+                            placeholder='Username'
+                            variant='outlined'
+                            name='username'
+                            value={acc.username}
+                            onClick={() => setContact({ editAccount: true })}
+                            onFocus={() => setContact({ editAccount: true })}
+                          />
+                        )}
                       </Grid>
                     </Grid>
                   </ListItem>
@@ -327,7 +396,7 @@ export default function EditProfilePage() {
       )
   }
 
-  const content = (
+  return (
     <main className={classes.content}>
       <div className={classes.appBarSpacer} />
       <Container maxWidth='lg' className={classes.container}>
@@ -360,5 +429,4 @@ export default function EditProfilePage() {
       </Container>
     </main>
   )
-  return <Sidebar content={content} />
 }

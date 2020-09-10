@@ -7,6 +7,7 @@ import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
 
 import { BACKEND, LOGGEDIN } from './Endpoints'
 import EditProfilePage from './Components/LoggedInComponents/EditProfilePage/EditProfilePage'
+import Sidebar from './Components/LoggedInComponents/Sidebar'
 
 async function loggedIn() {
   // Get access token from session storage
@@ -59,8 +60,12 @@ class Authentication extends Component {
       return (
         <BrowserRouter>
           <Switch>
-            <Route exact path='/home/profile' render={() => <EditProfilePage />} />
-            <Route exact path='/home' render={() => <HomePage />} />
+            <Route
+              exact
+              path='/home/profile'
+              render={() => <Sidebar content={<EditProfilePage />} />}
+            />
+            <Route exact path='/home' render={() => <Sidebar content={<HomePage />} />} />
             <Redirect to='/home' />
           </Switch>
         </BrowserRouter>

@@ -13,7 +13,7 @@ export default function HomePage() {
   const history = useHistory()
   const crumbs = ['Home']
 
-  const content = (
+  return (
     <main className={classes.content}>
       <div className={classes.appBarSpacer} />
       <Container maxWidth='lg' className={classes.container}>
@@ -26,6 +26,4 @@ export default function HomePage() {
       </Container>
     </main>
   )
-
-  return <Sidebar content={content} />
 }
