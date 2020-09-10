@@ -7,10 +7,15 @@ import { useHistory } from 'react-router-dom'
 
 export default function HomeProfile(props) {
   const classes = useStyles()
+  const history = useHistory()
   const profilePaper = clsx(classes.paper, classes.fixedHeight, classes.profileContainer)
 
   const { xs, md, lg } = props
   const history = useHistory()
+  const handleClick = (e) => {
+    history.push('/home/profile')
+  }
+
   const handleClick = (e) => {
     history.push('/home/profile')
   }
@@ -38,6 +43,7 @@ export default function HomeProfile(props) {
               variant='extended'
               size='small'
               aria-label='edit profile'
+              onClick={handleClick}
             >
               Edit
             </Fab>

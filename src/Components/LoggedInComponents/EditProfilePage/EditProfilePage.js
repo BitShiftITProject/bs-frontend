@@ -20,8 +20,6 @@ import PersonIcon from '@material-ui/icons/Person'
 import PhoneIcon from '@material-ui/icons/Phone'
 import AddIcon from '@material-ui/icons/Add'
 import CloseIcon from '@material-ui/icons/Close'
-// import DateFnsUtils from '@date-io/date-fns'
-// import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
 
 const initialAbout = {
   firstName: '',

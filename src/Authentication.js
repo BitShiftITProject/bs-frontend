@@ -12,6 +12,9 @@ import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
 
+import { BACKEND, LOGGEDIN } from './Endpoints'
+import EditProfilePage from './Components/LoggedInComponents/EditProfilePage/EditProfilePage'
+
 async function loggedIn() {
   // Get access token from session storage
   const accessToken = window.sessionStorage.accessToken
@@ -61,14 +64,13 @@ class Authentication extends Component {
     } else if (this.state.loggedIn === true) {
       // Route for pages accessible when logged in
       return (
-        <Switch>
-          <Route exact path='/home' render={() => <HomePage />} />
-          <Route exact path='/home/profile' render={() => <EditProfilePage />} />
-          <Route exact path='/portfolios' render={() => <PortfoliosPage />} />
-          <Route exact path='/help' render={() => <HelpPage />} />
-          <Route exact path='/settings' render={() => <SettingsPage />} />
-          <Redirect to='/home' />
-        </Switch>
+        <BrowserRouter>
+          <Switch>
+            <Route exact path='/home/profile' render={() => <EditProfilePage />} />
+            <Route exact path='/home' render={() => <HomePage />} />
+            <Redirect to='/home' />
+          </Switch>
+        </BrowserRouter>
       )
     } else if (this.state.loggedIn === false) {
       // Route for pages accessible when not logged in

@@ -5,6 +5,7 @@ import { Container, Grid } from '@material-ui/core'
 import PortfolioCardList from '../PortfolioCardList'
 import HomeProfile from '../HomeProfile'
 import HeaderBreadcrumbs from '../HeaderBreadcrumbs'
+import { useHistory } from 'react-router-dom'
 
 export default function HomePage() {
   const classes = useStyles()
