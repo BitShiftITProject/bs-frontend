@@ -24,8 +24,6 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 const drawerWidth = 240
 
 
-
-
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
