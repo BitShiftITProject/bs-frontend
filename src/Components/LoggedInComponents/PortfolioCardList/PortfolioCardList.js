@@ -9,10 +9,10 @@ import AddPortfolioCard from '../AddPortfolioCard'
 function reducer(state, action) {
   switch (action.type) {
     case 'addPortfolio':
+      alert('Added portfolio!')
       // return {
       //   portfolios: [...state.portfolios, { title: action.title, desc: action.desc }],
       // }
-      alert('Added portfolio!')
       return state
     default:
       return state

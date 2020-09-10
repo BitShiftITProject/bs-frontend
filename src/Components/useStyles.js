@@ -79,11 +79,12 @@ const useStyles = makeStyles((theme) => ({
   breadcrumbLink: {
     display: 'flex',
     fontSize: '1.25em',
-    fontWeight: 'lighter',
+    fontWeight: '400',
     alignItems: 'center',
   },
   breadcrumbIcon: {
     marginRight: theme.spacing(1),
+    marginBottom: '2px',
     width: 23,
     height: 23,
   },
@@ -103,6 +104,7 @@ const useStyles = makeStyles((theme) => ({
       height: 700,
     },
   },
+
   profileContainer: {
     display: 'flex',
     justifyContent: 'center',
@@ -188,6 +190,27 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       marginLeft: theme.spacing(0.5),
     },
+  },
+
+  listMenu: {
+    padding: 0,
+  },
+
+  profileForm: {
+    '& .MuiTextField-root': {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+      marginRight: theme.spacing(2),
+    },
+  },
+
+  accountListContent: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+
+  removeAccountButton: {
+    marginRight: 20,
   },
 }))
 
