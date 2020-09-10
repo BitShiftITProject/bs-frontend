@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './Login.css'
-import { BACKEND, AUTHENTICATE } from '../../Endpoints'
+import { BACKEND, AUTHENTICATE } from '../../../Endpoints'
 import { TextField, Button, Checkbox } from '@material-ui/core'
 
 class Login extends Component {
@@ -16,8 +16,6 @@ class Login extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-
-    alert('Printed details to console!')
 
     // const details = {
     //   ...this.state,
@@ -35,9 +33,13 @@ class Login extends Component {
     //   }
     // })
 
-    console.log('Login:')
+    console.log('Logged in!')
     console.log('Username:', this.state.username)
     console.log('Password:', this.state.password)
+
+    console.log(this.props)
+    this.props.toggleLogin()
+    this.props.history.push('/home')
   }
 
   render() {

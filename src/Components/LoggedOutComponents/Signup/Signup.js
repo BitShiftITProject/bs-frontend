@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './Signup.css'
-import { BACKEND, SIGNUP } from '../../Endpoints'
+import { BACKEND, SIGNUP } from '../../../Endpoints'
 import { TextField, Button } from '@material-ui/core'
 
 class Signup extends Component {
