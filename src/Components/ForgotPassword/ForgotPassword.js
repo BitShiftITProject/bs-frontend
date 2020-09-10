@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './ForgotPassword.css'
-import { TextField, FormControl, Button } from '@material-ui/core'
+import { TextField, Button } from '@material-ui/core'
 
 class ForgotPassword extends Component {
   state = { email: '', username: '' }
@@ -10,7 +10,11 @@ class ForgotPassword extends Component {
   }
 
   handleSubmit = (e) => {
-    console.log('Forgot Password:')
+    e.preventDefault()
+
+    alert('Printed details to console!')
+
+    console.log('Forgot Password')
     console.log('Email:', this.state.email)
     console.log('Username:', this.state.username)
   }
@@ -18,7 +22,7 @@ class ForgotPassword extends Component {
   render() {
     return (
       <div className='forgot_password'>
-        <FormControl>
+        <form onSubmit={this.handleSubmit}>
           {/* NOT SURE WHICH ONE WE WOULD USE OVERALL TO SIGN IN (email or username) SO BOTH IS INCLUDED FOR NOW */}
 
           <p>
@@ -27,8 +31,7 @@ class ForgotPassword extends Component {
           </p>
 
           <label htmlFor='forgot_password__email' className='forgot_password__email'>
-            {' '}
-            Email:{' '}
+            Email:
           </label>
           <TextField
             id='forgot_password__email'
@@ -37,7 +40,7 @@ class ForgotPassword extends Component {
             name='email'
             value={this.state.email}
             onChange={this.handleChange}
-            required
+            required={!this.state.username}
           />
 
           <p> or </p>
@@ -50,14 +53,18 @@ class ForgotPassword extends Component {
             name='username'
             value={this.state.username}
             onChange={this.handleChange}
-            required
+            required={!this.state.email}
           />
 
-          <Button className='forgot_password__button' type='submit'>
-            {' '}
-            Send Password Reset Link{' '}
+          <Button
+            className='forgot_password__button'
+            type='submit'
+            variant='contained'
+            color='primary'
+          >
+            Send Password Reset Link
           </Button>
-        </FormControl>
+        </form>
       </div>
     )
   }
