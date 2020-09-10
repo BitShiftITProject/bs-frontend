@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
-import Login from './Components/Login'
-import Signup from './Components/Signup'
-import Sidebar from './Components/SideBar'
-import ForgotPassword from './Components/ForgotPassword'
+import Login from './Components/LoggedOutComponents/Login'
+import Signup from './Components/LoggedOutComponents/Signup'
+import HomePage from './Components/LoggedInComponents/HomePage'
+import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
+
 import { BACKEND, LOGGEDIN } from './Endpoints'
 
 async function loggedIn() {
@@ -36,34 +37,42 @@ async function loggedIn() {
 // Keep all == as is
 
 class Authentication extends Component {
-  state = { loggedIn: null }
+  state = { loggedIn: true }
 
   async componentDidMount() {
-    let logincheck = await loggedIn()
-    this.setState({ loggedIn: logincheck })
+    // let logincheck = await loggedIn()
+    // this.setState({ loggedIn: logincheck })
+  }
+
+  toggleLogin = () => {
+    console.log('Toggled login from', this.state.loggedIn, 'to', !this.state.loggedIn)
+    this.setState((st) => ({ loggedIn: !st.loggedIn }))
   }
 
   render() {
     if (this.state.loggedIn == null) {
       // Route for loading page while getting if the user is logged in
       return <p>Loading</p>
-    } else if (this.state.loggedIn == true) {
+    } else if (this.state.loggedIn === true) {
       // Route for pages accessible when logged in
       return (
         <BrowserRouter>
-          <Sidebar />
           <Switch>
-            <Route component={Error} />
+            <Route render={() => <HomePage />} />
           </Switch>
         </BrowserRouter>
       )
-    } else if (this.state.loggedIn == false) {
+    } else if (this.state.loggedIn === false) {
       // Route for pages accessible when not logged in
       return (
         <BrowserRouter>
           <Switch>
-            <Route exact path='/login' component={Login} />
-            <Route exact path='/signup' component={Signup} />
+            <Route
+              exact
+              path='/login'
+              render={(routeProps) => <Login toggleLogin={this.toggleLogin} {...routeProps} />}
+            />
+            <Route exact path='/signup' render={() => <Signup />} />
             <Route exact path='/forgotpassword' render={() => <ForgotPassword />} />
             <Route
               exact

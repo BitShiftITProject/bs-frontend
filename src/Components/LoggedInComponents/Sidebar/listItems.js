@@ -5,10 +5,10 @@ import ListItemText from '@material-ui/core/ListItemText'
 // import ListSubheader from '@material-ui/core/ListSubheader'
 // import AssignmentIcon from '@material-ui/icons/Assignment'
 
-import HomeIcon from '@material-ui/icons/Home';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-import SettingsIcon from '@material-ui/icons/Settings';
-import DescriptionIcon from '@material-ui/icons/Description';
+import HomeIcon from '@material-ui/icons/Home'
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
+import SettingsIcon from '@material-ui/icons/Settings'
+import DescriptionIcon from '@material-ui/icons/Description'
 export const mainListItems = (
   <div>
     <ListItem button>
@@ -18,14 +18,12 @@ export const mainListItems = (
       <ListItemText primary='Home' />
     </ListItem>
 
-
     <ListItem button>
       <ListItemIcon>
         <DescriptionIcon />
       </ListItemIcon>
       <ListItemText primary='Portfolios' />
     </ListItem>
-
 
     <ListItem button>
       <ListItemIcon>
@@ -34,14 +32,12 @@ export const mainListItems = (
       <ListItemText primary='Help' />
     </ListItem>
 
-
     <ListItem button>
       <ListItemIcon>
         <SettingsIcon />
       </ListItemIcon>
       <ListItemText primary='Settings' />
     </ListItem>
-
   </div>
 )
 
@@ -61,8 +57,6 @@ export const mainListItems = (
 //       </ListItemIcon>
 //       <ListItemText primary='Art Resume' />
 //     </ListItem>
-
-
 
 //   </div>
 // )
