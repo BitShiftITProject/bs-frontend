@@ -4,13 +4,9 @@ import Authentication from './Authentication.js'
 // import TestRenderImage from './TestRenderImage.js'
 
 class App extends Component {
-    constructor() {
-        super();
-    }
-
     render() {
         return (
-            <div id="Main">
+            <div className="App">
                 <Authentication/>
                 {/* <TestRenderImage /> */}
             </div>
