@@ -90,6 +90,11 @@ class ForgotPassword extends Component {
             Send Password Reset Link
           </Button>
 
+          <Link to="/login"
+            variant='body2'>
+            {"Remembered your password? Log in"}
+          </Link>
+
 
         </form>
       </div>

@@ -122,7 +122,7 @@ class Authentication extends Component {
                 )
               }}
             />
-            <Redirect to='/' />
+            <Redirect to='/login' />
           </Switch>
         </BrowserRouter>
       )

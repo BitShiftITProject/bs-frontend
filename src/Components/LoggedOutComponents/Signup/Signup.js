@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import './Signup.css'
 import { BACKEND, SIGNUP } from '../../../Endpoints'
-import { TextField, Button, Avatar, Typography } from '@material-ui/core'
+import { TextField, Button, Avatar, Typography, Grid } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import { Link } from 'react-router-dom'
 
 class Signup extends Component {
   state = { email: '', username: '', password: '', confirm: '', firstName: '', lastName: '' }
@@ -144,9 +145,31 @@ class Signup extends Component {
             fullWidth
           />
 
-          <Button className='signup_button' type='submit' variant='contained' color='primary'>
-            SIGN UP
+
+          <Grid container>
+            <Grid item xs>
+              <Button
+                className='signup_button'
+                type='submit'
+                variant="contained"
+                color='primary' >
+                SIGN UP
           </Button>
+
+            </Grid>
+
+            <Grid item>
+
+              <Link to="/login"
+                variant='body2'>
+                {"Have an account? Log in"}
+              </Link>
+
+            </Grid>
+          </Grid>
+
+
+
         </form>
       </div>
     )
