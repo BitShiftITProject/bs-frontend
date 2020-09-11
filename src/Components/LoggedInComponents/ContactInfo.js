@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import './ContactInfo.css'
+
 import { TextField, Button } from '@material-ui/core'
 
 class ContactInfo extends Component {

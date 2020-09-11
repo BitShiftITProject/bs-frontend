@@ -6,6 +6,7 @@ const loggedOutStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   modal: {},
   avatar: {

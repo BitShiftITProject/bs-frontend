@@ -68,6 +68,13 @@ const loggedInStyles = makeStyles((theme) => ({
     height: '100vh',
     overflow: 'auto',
   },
+
+  sidebarItems: {
+    '& ListItem': {
+      paddingRight: 0,
+    },
+  },
+
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
