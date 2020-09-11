@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 import clsx from 'clsx'
 import OnOutsiceClick from 'react-outclick'
 
-import { useStyles } from '../../useStyles'
+import { loggedInStyles } from '../../loggedInStyles'
 import Sidebar from '../Sidebar'
 
 import {
@@ -122,7 +122,7 @@ export default function EditProfilePage() {
     setContact({ ...contact, accounts: newAccounts })
   }
 
-  const classes = useStyles()
+  const classes = loggedInStyles()
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
   const listMenu = clsx(fixedHeightPaper, classes.listMenu)
 

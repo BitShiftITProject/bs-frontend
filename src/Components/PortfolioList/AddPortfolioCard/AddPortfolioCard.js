@@ -1,11 +1,11 @@
 import React from 'react'
 import clsx from 'clsx'
-import { useStyles } from '../../useStyles'
+import { loggedInStyles } from '../../loggedInStyles'
 import { CardActionArea, Typography, Card, Fab } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 
 export default function AddPortfolioCard(props) {
-  const classes = useStyles()
+  const classes = loggedInStyles()
 
   const addPortfolioCard = clsx(classes.addPortfolioContainer, classes.portfolioCard)
 

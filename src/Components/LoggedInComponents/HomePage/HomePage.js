@@ -1,16 +1,14 @@
 import React from 'react'
 import clsx from 'clsx'
 import Sidebar from '../Sidebar'
-import { useStyles } from '../../useStyles'
+import { loggedInStyles } from '../../loggedInStyles'
 import { Container, Grid } from '@material-ui/core'
 import PortfolioCardList from '../../PortfolioList/PortfolioCardList'
 import HomeProfile from '../HomeProfile'
 import HeaderBreadcrumbs from '../HeaderBreadcrumbs'
-import { useHistory } from 'react-router-dom'
 
 export default function HomePage() {
-  const classes = useStyles()
-  const history = useHistory()
+  const classes = loggedInStyles()
   const crumbs = ['Home']
 
   return (

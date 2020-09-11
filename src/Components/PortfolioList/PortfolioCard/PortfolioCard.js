@@ -1,9 +1,9 @@
 import React from 'react'
-import { useStyles } from '../../useStyles'
+import { loggedInStyles } from '../../loggedInStyles'
 import { CardActionArea, CardMedia, CardContent, Typography, Card } from '@material-ui/core'
 
 export default function PortfolioCard(props) {
-  const classes = useStyles()
+  const classes = loggedInStyles()
 
   const { title, desc } = props
 

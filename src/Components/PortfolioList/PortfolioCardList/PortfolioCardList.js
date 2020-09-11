@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react'
 import clsx from 'clsx'
 
-import { useStyles } from '../../useStyles'
+import { loggedInStyles } from '../../loggedInStyles'
 import { Grid, Paper } from '@material-ui/core'
 import PortfolioCard from '../PortfolioCard'
 import AddPortfolioCard from '../AddPortfolioCard'
@@ -20,7 +20,7 @@ function reducer(state, action) {
 }
 
 export default function PortfolioCardList(props) {
-  const classes = useStyles()
+  const classes = loggedInStyles()
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
   const { xs, md, lg } = props
 

@@ -2,11 +2,11 @@ import React from 'react'
 import { Grid, Paper, ButtonBase, Typography, Fab } from '@material-ui/core'
 import clsx from 'clsx'
 
-import { useStyles } from '../../useStyles'
+import { loggedInStyles } from '../../loggedInStyles'
 import { useHistory } from 'react-router-dom'
 
 export default function HomeProfile(props) {
-  const classes = useStyles()
+  const classes = loggedInStyles()
   const history = useHistory()
   const profilePaper = clsx(classes.paper, classes.fixedHeight, classes.profileContainer)
 

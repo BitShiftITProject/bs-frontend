@@ -2,7 +2,7 @@ import './Sidebar.css'
 
 import React, { useState } from 'react'
 import clsx from 'clsx'
-import { useStyles } from '../../useStyles'
+import { loggedInStyles } from '../../loggedInStyles'
 import {
   CssBaseline,
   Drawer,
@@ -32,7 +32,7 @@ import DescriptionIcon from '@material-ui/icons/Description'
 import { useHistory } from 'react-router-dom'
 
 export default function Sidebar(props) {
-  const classes = useStyles()
+  const classes = loggedInStyles()
   const history = useHistory()
   const [open, setOpen] = useState(true)
   const handleDrawerOpen = () => {
@@ -94,7 +94,7 @@ export default function Sidebar(props) {
     </div>
   )
 
-  const { content } = props
+  const { content, toggleLogin } = props
 
   return (
     <div className={classes.root}>
@@ -122,8 +122,8 @@ export default function Sidebar(props) {
           </IconButton>
           <IconButton color='inherit'>
             <SettingsIcon />
-          </IconButton>{' '}
-          <IconButton color='inherit'>
+          </IconButton>
+          <IconButton color='inherit' onClick={toggleLogin}>
             <PowerSettingsNewIcon />
           </IconButton>
         </Toolbar>

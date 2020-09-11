@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
 import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
-import HomePage from './Components/LoggedInComponents/HomePage'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
+import Landing from './Components/LoggedOutComponents/Landing'
+
+import HomePage from './Components/LoggedInComponents/HomePage'
 
 import { BACKEND, LOGGEDIN } from './Endpoints'
 import EditProfilePage from './Components/LoggedInComponents/EditProfilePage/EditProfilePage'
@@ -39,7 +41,7 @@ async function loggedIn() {
 // Keep all == as is
 
 class Authentication extends Component {
-  state = { loggedIn: true }
+  state = { loggedIn: false }
 
   async componentDidMount() {
     // let logincheck = await loggedIn()
@@ -63,9 +65,15 @@ class Authentication extends Component {
             <Route
               exact
               path='/home/profile'
-              render={() => <Sidebar content={<EditProfilePage />} />}
+              render={() => (
+                <Sidebar toggleLogin={this.toggleLogin} content={<EditProfilePage />} />
+              )}
             />
-            <Route exact path='/home' render={() => <Sidebar content={<HomePage />} />} />
+            <Route
+              exact
+              path='/home'
+              render={() => <Sidebar toggleLogin={this.toggleLogin} content={<HomePage />} />}
+            />
             <Redirect to='/home' />
           </Switch>
         </BrowserRouter>
@@ -78,10 +86,23 @@ class Authentication extends Component {
             <Route
               exact
               path='/login'
-              render={(routeProps) => <Login toggleLogin={this.toggleLogin} {...routeProps} />}
+              render={(routeProps) => (
+                <Landing content={<Login {...routeProps} toggleLogin={this.toggleLogin} />} />
+              )}
             />
-            <Route exact path='/signup' render={() => <Signup />} />
-            <Route exact path='/forgotpassword' render={() => <ForgotPassword />} />
+            <Route
+              exact
+              path='/signup'
+              render={(routeProps) => (
+                <Landing content={<Signup {...routeProps} toggleLogin={this.toggleLogin} />} />
+              )}
+            />
+            <Route
+              exact
+              path='/forgotpassword'
+              render={() => <Landing content={<ForgotPassword />} />}
+            />
+            <Route exact path='/landing' render={() => <Landing />} />
             <Route
               exact
               path='/'

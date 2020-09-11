@@ -1,7 +1,17 @@
 import React, { Component } from 'react'
 import './Login.css'
 import { BACKEND, AUTHENTICATE } from '../../../Endpoints'
-import { TextField, Button, Checkbox } from '@material-ui/core'
+import {
+  TextField,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Avatar,
+  Typography,
+} from '@material-ui/core'
+import { Link } from 'react-router-dom'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 
 class Login extends Component {
   state = { username: '', password: '', rememberMe: false }
@@ -37,7 +47,6 @@ class Login extends Component {
     console.log('Username:', this.state.username)
     console.log('Password:', this.state.password)
 
-    console.log(this.props)
     this.props.toggleLogin()
     this.props.history.push('/home')
   }
@@ -45,56 +54,55 @@ class Login extends Component {
   render() {
     return (
       <div className='Login'>
+        <Avatar>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component='h1' variant='h5'>
+          Log In
+        </Typography>
         <form onSubmit={this.handleSubmit}>
-          <label htmlFor='login__username' className='login__username'>
-            Username:
-          </label>
-
           <TextField
-            id='login__username'
-            type='text'
-            placeholder='Username'
-            name='username'
-            value={this.state.username}
-            onChange={this.handleChange}
+            variant='outlined'
+            margin='normal'
             required
-          ></TextField>
-
-          <label htmlFor='login__password' className='login__password'>
-            Password:
-          </label>
-
-          <TextField
-            id='login__password'
-            type='password'
-            placeholder='**********'
-            name='password'
-            value={this.state.password}
-            onChange={this.handleChange}
-            required
-          ></TextField>
-
-          <Button className='login__button' type='submit' variant='contained' color='primary'>
-            LOG IN
-          </Button>
-
-          <label htmlFor='login__remember'> Remember Me </label>
-          <Checkbox
-            id='login__remember'
-            className='login__remember'
-            color='primary'
-            inputProps={{ 'aria-label': 'secondary checkbox' }}
-            onChange={this.handleCheckbox}
+            fullWidth
+            id='email'
+            label='Email Address'
+            name='email'
+            autoComplete='email'
+            autoFocus
           />
+          <TextField
+            variant='outlined'
+            margin='normal'
+            required
+            fullWidth
+            name='password'
+            label='Password'
+            type='password'
+            id='password'
+            autoComplete='current-password'
+          />
+          <FormControlLabel
+            control={<Checkbox value='remember' color='primary' />}
+            label='Remember me'
+          />
+          <Button type='submit' fullWidth variant='contained' color='primary'>
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href='#' variant='body2'>
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href='#' variant='body2'>
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
         </form>
-        <Button
-          className='login__forgot_password'
-          variant='contained'
-          color='default'
-          href='/forgotpassword'
-        >
-          Forgot your password?
-        </Button>
       </div>
     )
   }

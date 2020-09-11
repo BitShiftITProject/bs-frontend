@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import './Signup.css'
 import { BACKEND, SIGNUP } from '../../../Endpoints'
-import { TextField, Button } from '@material-ui/core'
+import { TextField, Button, Avatar, Typography } from '@material-ui/core'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 
 class Signup extends Component {
   state = { email: '', username: '', password: '', confirm: '', firstName: '', lastName: '' }
@@ -48,21 +49,33 @@ class Signup extends Component {
   render() {
     return (
       <div className='Signup'>
+        <Avatar>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component='h1' variant='h5'>
+          Sign Up
+        </Typography>
         <form onSubmit={this.handleSubmit}>
           {/* NOT SURE WHICH ONE WE WOULD USE OVERALL TO SIGN IN (email or username) SO BOTH IS INCLUDED FOR NOW */}
-          <label htmlFor='signup__email'> Email: </label>
           <TextField
+            variant='outlined'
+            margin='normal'
+            required
+            fullWidth
+            label='Email Address'
+            autoFocus
             id='signup__email'
             type='email'
-            placeholder='email@domain.com'
+            placeholder='Email'
             name='email'
             value={this.state.email}
             onChange={this.handleChange}
-            required
           ></TextField>
 
-          <label htmlFor='signup__username'> Username: </label>
           <TextField
+            variant='outlined'
+            margin='normal'
+            fullWidth
             id='signup__username'
             type='text'
             placeholder='Username'
@@ -72,11 +85,15 @@ class Signup extends Component {
             required
           ></TextField>
 
-          <label htmlFor='signup__password'> Password: </label>
           <TextField
             id='signup__password'
+            variant='outlined'
+            margin='normal'
+            fullWidth
+            label='Password'
+            autoComplete='current-password'
             type='password'
-            placeholder='**********'
+            placeholder='Password'
             required
             pattern='.{8,12}'
             title='8 to 12 characters'
@@ -85,11 +102,14 @@ class Signup extends Component {
             onChange={this.handleChange}
           ></TextField>
 
-          <label htmlFor='signup__confirm_password'> Confirm Password: </label>
           <TextField
             id='signup__confirm_password'
+            variant='outlined'
+            margin='normal'
+            fullWidth
+            label='Confirm Password'
             type='password'
-            placeholder='**********'
+            placeholder='Confirm Password'
             required
             pattern='.{8,12}'
             title='8 to 12 characters'
@@ -98,7 +118,6 @@ class Signup extends Component {
             onChange={this.handleChange}
           ></TextField>
 
-          <label htmlFor='signup__first_name'> First Name: </label>
           <TextField
             id='signup__first_name'
             type='text'
@@ -107,9 +126,11 @@ class Signup extends Component {
             value={this.state.firstName}
             onChange={this.handleChange}
             required
+            variant='outlined'
+            margin='normal'
+            fullWidth
           />
 
-          <label htmlFor='signup__last_name'> Last Name: </label>
           <TextField
             id='signup__last_name'
             type='text'
@@ -118,6 +139,9 @@ class Signup extends Component {
             value={this.state.lastName}
             onChange={this.handleChange}
             required
+            variant='outlined'
+            margin='normal'
+            fullWidth
           />
 
           <Button className='signup_button' type='submit' variant='contained' color='primary'>

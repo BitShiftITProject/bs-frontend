@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography, Breadcrumbs } from '@material-ui/core'
-import { useStyles } from '../../useStyles'
+import { loggedInStyles } from '../../loggedInStyles'
 import { useLocation, useHistory, Link } from 'react-router-dom'
 import HomeIcon from '@material-ui/icons/Home'
 
@@ -14,7 +14,7 @@ const breadcrumbIconMap = {
 }
 
 export default function HeaderBreadcrumbs(props) {
-  const classes = useStyles()
+  const classes = loggedInStyles()
   const { pathname } = useLocation()
   const history = useHistory()
 
