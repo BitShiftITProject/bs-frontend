@@ -1,6 +1,17 @@
 import React, { Component } from 'react'
 import './ForgotPassword.css'
-import { TextField, Button } from '@material-ui/core'
+import { BACKEND, AUTHENTICATE } from '../../../Endpoints'
+import {
+  TextField,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Avatar,
+  Typography,
+} from '@material-ui/core'
+import { Link } from 'react-router-dom'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 
 class ForgotPassword extends Component {
   state = { email: '', username: '' }
@@ -22,18 +33,27 @@ class ForgotPassword extends Component {
   render() {
     return (
       <div className='forgot_password'>
+        <Typography component='h1' variant='h5'>
+          Forgot Password?
+        </Typography>
+
+        <Typography component='h3' variant='h10'>
+          Enter the email you signed up with or your username, and we'll send you a link to change your password
+          </Typography>
         <form onSubmit={this.handleSubmit}>
           {/* NOT SURE WHICH ONE WE WOULD USE OVERALL TO SIGN IN (email or username) SO BOTH IS INCLUDED FOR NOW */}
 
-          <p>
-            Please enter the email you signed up with or your username, and we'll send you a link
-            for a new password :)
-          </p>
-
-          <label htmlFor='forgot_password__email' className='forgot_password__email'>
+          {/* <label htmlFor='forgot_password__email' className='forgot_password__email'>
             Email:
-          </label>
+          </label> */}
+
+
           <TextField
+            variant='outlined'
+            margin='normal'
+            fullWidth
+            label='Email Address'
+
             id='forgot_password__email'
             type='email'
             placeholder='email@domain.com'
@@ -43,10 +63,14 @@ class ForgotPassword extends Component {
             required={!this.state.username}
           />
 
-          <p> or </p>
-
-          <label htmlFor='forgot_password__username'> Username: </label>
+          {/* <label htmlFor='forgot_password__username'> Username: </label> */}
           <TextField
+            variant='outlined'
+            margin='normal'
+            required
+            fullWidth
+            label='Username'
+
             id='forgot_password__username'
             type='text'
             placeholder='Username'
@@ -59,11 +83,14 @@ class ForgotPassword extends Component {
           <Button
             className='forgot_password__button'
             type='submit'
+            fullWidth
             variant='contained'
             color='primary'
           >
             Send Password Reset Link
           </Button>
+
+
         </form>
       </div>
     )
