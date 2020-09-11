@@ -13,7 +13,7 @@ function reducer(state, action) {
     //   // return {
     //   //   portfolios: [...state.portfolios, { title: action.title, desc: action.desc }],
     //   // }
-    //   history.push('/portfolio/add')
+    //   history.push('/portfolio/edit')
 
 
     //   alert('Added portfolio!')

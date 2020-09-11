@@ -9,7 +9,7 @@ import HomePage from './Components/LoggedInComponents/HomePage'
 
 import { BACKEND, LOGGEDIN } from './Endpoints'
 import EditProfilePage from './Components/LoggedInComponents/EditProfilePage/EditProfilePage'
-import AddPortfolioPage from './Components/LoggedInComponents/AddPortfolioPage'
+import EditPortfolioPage from './Components/LoggedInComponents/EditPortfolioPage'
 
 import Sidebar from './Components/LoggedInComponents/Sidebar'
 
@@ -43,7 +43,7 @@ async function loggedIn() {
 // Keep all == as is
 
 class Authentication extends Component {
-  state = { loggedIn: false }
+  state = { loggedIn: true }
 
   async componentDidMount() {
     // let logincheck = await loggedIn()
@@ -77,10 +77,10 @@ class Authentication extends Component {
             <Route
               exact
               // path='/home/profile'
-              path='/portfolio/add'
+              path='/portfolio/edit'
 
               render={() => (
-                <Sidebar toggleLogin={this.toggleLogin} content={<AddPortfolioPage />} />
+                <Sidebar toggleLogin={this.toggleLogin} content={<EditPortfolioPage />} />
               )}
             />
 

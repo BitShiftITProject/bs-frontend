@@ -12,7 +12,7 @@ export default function AddPortfolioCard(props) {
   const addPortfolioCard = clsx(classes.addPortfolioContainer, classes.portfolioCard)
 
   const handleClick = (e) => {
-    history.push('/portfolio/add')
+    history.push('/portfolio/edit')
 
   }
   return (

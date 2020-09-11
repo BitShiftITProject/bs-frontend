@@ -10,8 +10,7 @@ const breadcrumbNameMap = {
   home: 'Home',
   profile: 'Profile',
   portfolio: 'Portfolio',
-  add: 'Add Portfolio',
-
+  edit: 'Edit Portfolio',
 
 }
 
