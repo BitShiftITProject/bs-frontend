@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Authentication from './Authentication'
-
 class App extends Component {
   render() {
     return (

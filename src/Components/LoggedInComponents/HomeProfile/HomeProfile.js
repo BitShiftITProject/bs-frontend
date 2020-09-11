@@ -4,6 +4,7 @@ import clsx from 'clsx'
 
 import { loggedInStyles } from '../../loggedInStyles'
 import { useHistory } from 'react-router-dom'
+import { DesktopWindowsTwoTone } from '@material-ui/icons'
 
 export default function HomeProfile(props) {
   const classes = loggedInStyles()
@@ -13,8 +14,9 @@ export default function HomeProfile(props) {
   const { xs, md, lg } = props
 
   const handleClick = (e) => {
-    history.push('/home/profile')
+    history.push('/profile')
   }
+
 
   return (
     <Grid item xs={xs} md={md} lg={lg}>

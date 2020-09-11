@@ -3,18 +3,23 @@ import clsx from 'clsx'
 import { loggedInStyles } from '../../loggedInStyles'
 import { CardActionArea, Typography, Card, Fab } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
+import { useHistory } from 'react-router-dom'
 
 export default function AddPortfolioCard(props) {
+  const history = useHistory()
   const classes = loggedInStyles()
 
   const addPortfolioCard = clsx(classes.addPortfolioContainer, classes.portfolioCard)
 
-  const { dispatch } = props
+  const handleClick = (e) => {
+    history.push('/portfolio/add')
+
+  }
   return (
     <Card className={addPortfolioCard}>
       <CardActionArea
         className={classes.addPortfolioContainer}
-        onClick={() => dispatch({ type: 'addPortfolio' })}
+        onClick={() => handleClick()}
       >
         <Fab
           className={classes.addPortfolioFab}

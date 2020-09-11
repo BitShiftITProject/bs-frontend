@@ -3,14 +3,22 @@ import { Typography, Breadcrumbs } from '@material-ui/core'
 import { loggedInStyles } from '../../loggedInStyles'
 import { useLocation, useHistory, Link } from 'react-router-dom'
 import HomeIcon from '@material-ui/icons/Home'
+import PersonIcon from '@material-ui/icons/Person'
+import DescriptionIcon from '@material-ui/icons/Description'
 
 const breadcrumbNameMap = {
   home: 'Home',
   profile: 'Profile',
+  portfolio: 'Portfolio',
+  add: 'Add Portfolio',
+
+
 }
 
 const breadcrumbIconMap = {
   home: <HomeIcon />,
+  profile: <PersonIcon />,
+  portfolio: <DescriptionIcon />,
 }
 
 export default function HeaderBreadcrumbs(props) {
@@ -54,13 +62,13 @@ export default function HeaderBreadcrumbs(props) {
               {breadcrumbNameMap[c]}
             </Link>
           ) : (
-            <Typography className={classes.breadcrumbLink} key={c}>
-              <span className={breadcrumbIconMap[c] ? classes.breadcrumbIcon : ''}>
-                {breadcrumbIconMap[c]}
-              </span>
-              {breadcrumbNameMap[c]}
-            </Typography>
-          )
+              <Typography className={classes.breadcrumbLink} key={c}>
+                <span className={breadcrumbIconMap[c] ? classes.breadcrumbIcon : ''}>
+                  {breadcrumbIconMap[c]}
+                </span>
+                {breadcrumbNameMap[c]}
+              </Typography>
+            )
         )}
       </Breadcrumbs>
       <div className={classes.breadcrumbSpacer}></div>

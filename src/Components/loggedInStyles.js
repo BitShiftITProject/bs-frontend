@@ -16,6 +16,7 @@ const loggedInStyles = makeStyles((theme) => ({
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
+
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
@@ -190,6 +191,9 @@ const loggedInStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       marginLeft: theme.spacing(0.5),
     },
+
+    // this makes the plus red on the add portfolio red
+    // color: theme.palette.error.main,
   },
 
   listMenu: {

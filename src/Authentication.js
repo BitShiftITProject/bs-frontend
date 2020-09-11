@@ -9,6 +9,8 @@ import HomePage from './Components/LoggedInComponents/HomePage'
 
 import { BACKEND, LOGGEDIN } from './Endpoints'
 import EditProfilePage from './Components/LoggedInComponents/EditProfilePage/EditProfilePage'
+import AddPortfolioPage from './Components/LoggedInComponents/AddPortfolioPage'
+
 import Sidebar from './Components/LoggedInComponents/Sidebar'
 
 async function loggedIn() {
@@ -64,11 +66,24 @@ class Authentication extends Component {
           <Switch>
             <Route
               exact
-              path='/home/profile'
+              // path='/home/profile'
+              path='/profile'
+
               render={() => (
                 <Sidebar toggleLogin={this.toggleLogin} content={<EditProfilePage />} />
               )}
             />
+
+            <Route
+              exact
+              // path='/home/profile'
+              path='/portfolio/add'
+
+              render={() => (
+                <Sidebar toggleLogin={this.toggleLogin} content={<AddPortfolioPage />} />
+              )}
+            />
+
             <Route
               exact
               path='/home'
@@ -103,25 +118,6 @@ class Authentication extends Component {
               render={() => <Landing content={<ForgotPassword />} />}
             />
             <Route exact path='/landing' render={() => <Landing />} />
-            <Route
-              exact
-              path='/'
-              render={() => {
-                return (
-                  <div>
-                    <div>
-                      <Link to='/login'>Login</Link>
-                    </div>
-                    <div>
-                      <Link to='/signup'>Signup</Link>
-                    </div>
-                    <div>
-                      <Link to='/forgotpassword'>Forgot Password</Link>
-                    </div>
-                  </div>
-                )
-              }}
-            />
             <Redirect to='/login' />
           </Switch>
         </BrowserRouter>

@@ -16,6 +16,7 @@ import {
 
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import PersonIcon from '@material-ui/icons/Person'
 
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import SettingsIcon from '@material-ui/icons/Settings'
@@ -31,10 +32,12 @@ import HomeIcon from '@material-ui/icons/Home'
 import DescriptionIcon from '@material-ui/icons/Description'
 import { useHistory } from 'react-router-dom'
 
+
 export default function Sidebar(props) {
   const classes = loggedInStyles()
   const history = useHistory()
   const [open, setOpen] = useState(true)
+
   const handleDrawerOpen = () => {
     setOpen(true)
   }
@@ -56,12 +59,29 @@ export default function Sidebar(props) {
         <ListItemText primary='Home' />
       </ListItem>
 
+
+
+      <ListItem
+        button
+        onClick={() => {
+          history.push('/profile')
+        }}
+      >
+
+        <ListItemIcon>
+          <PersonIcon />
+        </ListItemIcon>
+        <ListItemText primary='Profile' className="sidebar-home-sub" />
+      </ListItem>
+
+
       <ListItem
         button
         onClick={() => {
           history.push('/portfolios')
         }}
       >
+
         <ListItemIcon>
           <DescriptionIcon />
         </ListItemIcon>

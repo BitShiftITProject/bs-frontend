@@ -41,22 +41,22 @@ export const mainListItems = (
   </div>
 )
 
-// export const secondaryListItems = (
-//   <div>
-//     <ListSubheader inset>Portfolios</ListSubheader>
-//     <ListItem button>
-//       <ListItemIcon>
-//         <AssignmentIcon />
-//       </ListItemIcon>
-//       <ListItemText primary='IT Resume' />
-//     </ListItem>
+export const secondaryListItems = (
+  <div>
+    <ListSubheader inset>Portfolios</ListSubheader>
+    <ListItem button>
+      <ListItemIcon>
+        <AssignmentIcon />
+      </ListItemIcon>
+      <ListItemText primary='IT Resume' />
+    </ListItem>
 
-//     <ListItem button>
-//       <ListItemIcon>
-//         <AssignmentIcon />
-//       </ListItemIcon>
-//       <ListItemText primary='Art Resume' />
-//     </ListItem>
+    <ListItem button>
+      <ListItemIcon>
+        <AssignmentIcon />
+      </ListItemIcon>
+      <ListItemText primary='Art Resume' />
+    </ListItem>
 
-//   </div>
-// )
+  </div>
+)
