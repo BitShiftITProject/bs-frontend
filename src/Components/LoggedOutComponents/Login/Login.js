@@ -46,9 +46,6 @@ class Login extends Component {
     console.log('Logged in!')
     console.log('Username:', this.state.username)
     console.log('Password:', this.state.password)
-
-    this.props.toggleLogin()
-    this.props.history.push('/home')
   }
 
   render() {

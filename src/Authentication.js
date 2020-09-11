@@ -48,11 +48,6 @@ class Authentication extends Component {
     // this.setState({ loggedIn: logincheck })
   }
 
-  toggleLogin = () => {
-    console.log('Toggled login from', this.state.loggedIn, 'to', !this.state.loggedIn)
-    this.setState((st) => ({ loggedIn: !st.loggedIn }))
-  }
-
   render() {
     if (this.state.loggedIn == null) {
       // Route for loading page while getting if the user is logged in
@@ -65,15 +60,9 @@ class Authentication extends Component {
             <Route
               exact
               path='/home/profile'
-              render={() => (
-                <Sidebar toggleLogin={this.toggleLogin} content={<EditProfilePage />} />
-              )}
+              render={() => <Sidebar content={<EditProfilePage />} />}
             />
-            <Route
-              exact
-              path='/home'
-              render={() => <Sidebar toggleLogin={this.toggleLogin} content={<HomePage />} />}
-            />
+            <Route exact path='/home' render={() => <Sidebar content={<HomePage />} />} />
             <Redirect to='/home' />
           </Switch>
         </BrowserRouter>
@@ -86,16 +75,12 @@ class Authentication extends Component {
             <Route
               exact
               path='/login'
-              render={(routeProps) => (
-                <Landing content={<Login {...routeProps} toggleLogin={this.toggleLogin} />} />
-              )}
+              render={(routeProps) => <Landing content={<Login {...routeProps} />} />}
             />
             <Route
               exact
               path='/signup'
-              render={(routeProps) => (
-                <Landing content={<Signup {...routeProps} toggleLogin={this.toggleLogin} />} />
-              )}
+              render={(routeProps) => <Landing content={<Signup {...routeProps} />} />}
             />
             <Route
               exact

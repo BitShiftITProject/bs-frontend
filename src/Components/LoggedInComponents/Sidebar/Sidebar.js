@@ -94,7 +94,7 @@ export default function Sidebar(props) {
     </div>
   )
 
-  const { content, toggleLogin } = props
+  const { content } = props
 
   return (
     <div className={classes.root}>
@@ -123,7 +123,7 @@ export default function Sidebar(props) {
           <IconButton color='inherit'>
             <SettingsIcon />
           </IconButton>
-          <IconButton color='inherit' onClick={toggleLogin}>
+          <IconButton color='inherit'>
             <PowerSettingsNewIcon />
           </IconButton>
         </Toolbar>
@@ -144,7 +144,6 @@ export default function Sidebar(props) {
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
-        {/* <List>{secondaryListItems}</List> */}
       </Drawer>
 
       {content}
