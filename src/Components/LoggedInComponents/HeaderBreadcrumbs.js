@@ -17,6 +17,7 @@ const breadcrumbNameMap = {
   portfolios: 'Portfolios',
   help: 'Help',
   settings: 'Settings',
+  edit: 'Edit Portfolio',
 }
 
 // For mapping a path segment (the singular segment between /'s) to a

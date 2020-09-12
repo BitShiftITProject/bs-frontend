@@ -1,5 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
+import { useHistory } from 'react-router-dom'
 
 import { loggedInStyles } from '../loggedInStyles'
 import { Grid, Paper, Fab } from '@material-ui/core'
@@ -20,9 +21,10 @@ const testPortfolios = [
 export default function PortfolioCardList(props) {
   // TODO: Grab and store user portfolio
   const portfolios = testPortfolios
+  const history = useHistory()
 
   const addPortfolio = (details) => {
-    alert('Added portfolio!')
+    history.push('/portfolios/edit')
   }
 
   // Contains all styling

@@ -8,8 +8,11 @@ import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
 
 import HomePage from './Components/LoggedInComponents/HomePage'
 import EditProfilePage from './Components/LoggedInComponents/EditProfilePage'
+import PortfolioCardList from './Components/LoggedInComponents/PortfolioCardList'
+import EditPortfolioPage from './Components/LoggedInComponents/EditPortfolioPage'
 import SettingsPage from './Components/LoggedInComponents/SettingsPage'
 import HelpPage from './Components/LoggedInComponents/HelpPage'
+import Sidebar from './Components/LoggedInComponents/Sidebar'
 
 async function loggedIn() {
   // Get access token from session storage
@@ -62,7 +65,12 @@ class Authentication extends Component {
           <Switch>
             <Route exact path='/settings' render={() => <SettingsPage />} />
             <Route exact path='/help' render={() => <HelpPage />} />
-            <Route exact path='/portfolios' render={() => <EditProfilePage />} />
+            <Route exact path='/portfolios/edit' render={() => <EditPortfolioPage />} />
+            <Route
+              exact
+              path='/portfolios'
+              render={() => <Sidebar content={<PortfolioCardList xs={12} md={12} lg={12} />} />}
+            />
             <Route exact path='/profile' render={() => <EditProfilePage />} />
             <Route exact path='/home' render={() => <HomePage />} />
             <Redirect to='/home' />
