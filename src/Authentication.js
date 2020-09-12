@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import { BACKEND, LOGGEDIN } from './Endpoints'
+
 import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
 
 import HomePage from './Components/LoggedInComponents/HomePage'
-
-import { BACKEND, LOGGEDIN } from './Endpoints'
 import EditProfilePage from './Components/LoggedInComponents/EditProfilePage'
 
 async function loggedIn() {
@@ -58,7 +58,10 @@ class Authentication extends Component {
       return (
         <BrowserRouter>
           <Switch>
-            <Route exact path='/home/profile' render={() => <EditProfilePage />} />
+            <Route exact path='/settings' render={() => <EditProfilePage />} />
+            <Route exact path='/help' render={() => <EditProfilePage />} />
+            <Route exact path='/portfolios' render={() => <EditProfilePage />} />
+            <Route exact path='/profile' render={() => <EditProfilePage />} />
             <Route exact path='/home' render={() => <HomePage />} />
             <Redirect to='/home' />
           </Switch>
