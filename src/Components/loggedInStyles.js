@@ -88,6 +88,8 @@ const loggedInStyles = makeStyles((theme) => ({
     fontSize: '1.25em',
     fontWeight: '400',
     alignItems: 'center',
+    textDecoration: 'none',
+    color: theme.palette.text.primary,
   },
   breadcrumbIcon: {
     marginRight: theme.spacing(1),
@@ -104,8 +106,9 @@ const loggedInStyles = makeStyles((theme) => ({
   },
   fixedHeight: {
     height: 700,
+    overflow: 'scroll',
     [theme.breakpoints.down('sm')]: {
-      height: '100%',
+      height: 500,
     },
     [theme.breakpoints.up('md')]: {
       height: 700,
@@ -116,6 +119,9 @@ const loggedInStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      height: '100%',
+    },
   },
   profileImage: {
     overflow: 'hidden',
@@ -154,40 +160,47 @@ const loggedInStyles = makeStyles((theme) => ({
 
   portfolioCard: {
     width: '100%',
-    height: 300,
+    height: 'auto',
+    [theme.breakpoints.up('lg')]: {
+      height: 300,
+    },
+    overflow: 'scroll',
   },
 
-  portfolioActionArea: {
-    height: '100%',
+  portfolioCardActionArea: {
+    width: '100%',
+    height: 'auto',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
+    textAlign: 'justify',
   },
+
   portfolioCardMedia: {
     height: 200,
     backgroundColor: 'rgb(190,190,190)',
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
+    },
+  },
+
+  portfolioCardContent: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 24,
+    paddingLeft: 16,
   },
 
   addPortfolioContainer: {
-    height: 300,
-    backgroundColor: 'rgb(190,190,190)',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    [theme.breakpoints.down('sm')]: {
-      height: 100,
-    },
+    paddingBottom: 30,
   },
-
   addPortfolioFab: {
-    [theme.breakpoints.down('sm')]: {
-      width: 130,
-      height: 60,
-      borderRadius: '35px',
-      fontSize: '12.5px',
-    },
     '&:hover': {
       backgroundColor: '#5468dd',
     },
@@ -201,23 +214,25 @@ const loggedInStyles = makeStyles((theme) => ({
 
   listMenu: {
     padding: 0,
+    [theme.breakpoints.down('sm')]: {
+      height: '100%',
+    },
   },
 
-  profileForm: {
+  editProfileForm: {
+    '& .MuiGrid-root': {
+      paddingBottom: theme.spacing(0),
+    },
+    '& .MuiChip-root': {
+      marginBottom: theme.spacing(0),
+      marginTop: theme.spacing(0),
+    },
+
     '& .MuiTextField-root': {
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(2),
       marginRight: theme.spacing(2),
     },
-  },
-
-  accountListContent: {
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
-
-  removeAccountButton: {
-    marginRight: 20,
   },
 }))
 

@@ -3,6 +3,10 @@ import { Typography, Breadcrumbs } from '@material-ui/core'
 import { loggedInStyles } from '../loggedInStyles'
 import { useLocation, Link } from 'react-router-dom'
 import HomeIcon from '@material-ui/icons/Home'
+import PersonIcon from '@material-ui/icons/Person'
+import DescriptionIcon from '@material-ui/icons/Description'
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
+import SettingsIcon from '@material-ui/icons/Settings'
 
 // For mapping a path segment (the singular segment between /'s)
 // to a corresponding breadcrumb NAME (all segments must have a corresponding crumb)
@@ -10,12 +14,19 @@ import HomeIcon from '@material-ui/icons/Home'
 const breadcrumbNameMap = {
   home: 'Home',
   profile: 'Profile',
+  portfolios: 'Portfolios',
+  help: 'Help',
+  settings: 'Settings',
 }
 
 // For mapping a path segment (the singular segment between /'s) to a
 // corresponding breadcrumb ICON (if needed)
 const breadcrumbIconMap = {
   home: <HomeIcon />,
+  profile: <PersonIcon />,
+  portfolios: <DescriptionIcon />,
+  help: <HelpOutlineIcon />,
+  settings: <SettingsIcon />,
 }
 
 export default function HeaderBreadcrumbs(props) {
@@ -61,7 +72,11 @@ export default function HeaderBreadcrumbs(props) {
               {breadcrumbNameMap[segment]}
             </Link>
           ) : (
-            <Typography className={classes.breadcrumbLink} key={segment}>
+            <Typography
+              style={{ fontWeight: 'bold' }}
+              className={classes.breadcrumbLink}
+              key={segment}
+            >
               <span className={breadcrumbIconMap[segment] ? classes.breadcrumbIcon : ''}>
                 {breadcrumbIconMap[segment]}
               </span>

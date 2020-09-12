@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { CssBaseline, Container, Grid } from '@material-ui/core'
+import { CssBaseline, Container, Paper } from '@material-ui/core'
 import { loggedOutStyles } from '../loggedOutStyles'
 
 export default function LandingContainer(props) {
@@ -11,11 +11,9 @@ export default function LandingContainer(props) {
   const { content } = props
 
   return (
-    <Container component='main' maxWidth='xs'>
+    <Container component='main' className={classes.root}>
       <CssBaseline />
-      <Grid container justify='center' alignItems='center' className={classes.paper}>
-        {content}
-      </Grid>
+      <Paper className={classes.paper}>{content}</Paper>
     </Container>
   )
 }

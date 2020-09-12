@@ -1,6 +1,6 @@
 import React from 'react'
 import { loggedInStyles } from '../loggedInStyles'
-import { CardActionArea, CardMedia, CardContent, Typography, Card } from '@material-ui/core'
+import { CardMedia, CardContent, Typography, Card, Button, Grid } from '@material-ui/core'
 
 export default function PortfolioCard(props) {
   // Contains all styling
@@ -11,17 +11,29 @@ export default function PortfolioCard(props) {
 
   return (
     <Card className={classes.portfolioCard}>
-      <CardActionArea className={classes.portfolioActionArea}>
+      <div className={classes.portfolioCardActionArea}>
         <CardMedia src='/' className={classes.portfolioCardMedia} />
         <CardContent className={classes.portfolioCardContent}>
-          <Typography gutterBottom variant='h5' component='h2'>
-            {title}
-          </Typography>
-          <Typography variant='body2' color='textSecondary' component='p'>
-            {desc}
-          </Typography>
+          <Grid container direction='row'>
+            <Grid item xs={10} className={classes.portfolioDesc}>
+              <Typography gutterBottom variant='h6' component='h3'>
+                {title}
+              </Typography>
+              <Typography variant='body2' color='textSecondary' component='p'>
+                {desc}
+              </Typography>
+            </Grid>
+            <Grid item container direction='column' xs={2}>
+              <Button size='small' color='primary'>
+                View
+              </Button>
+              <Button size='small' color='primary'>
+                Edit
+              </Button>
+            </Grid>
+          </Grid>
         </CardContent>
-      </CardActionArea>
+      </div>
     </Card>
   )
 }

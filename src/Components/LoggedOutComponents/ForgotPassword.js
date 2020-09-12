@@ -55,7 +55,7 @@ class ForgotPassword extends Component {
           <Typography component='h5' variant='h5' gutterBottom>
             Forgot Password
           </Typography>
-          <Typography variant='subtitle2' gutterBottom>
+          <Typography variant='subtitle2' style={{ textAlign: 'center' }} gutterBottom>
             Please enter the email you signed up with or your username, and we'll send you a link
             for a new password{' '}
             <span role='img' aria-label='smiling cowboy lol'>
@@ -104,7 +104,7 @@ class ForgotPassword extends Component {
               variant='contained'
               color='primary'
             >
-              Send Reset Password Link
+              Reset Password
             </Button>
           </span>
         </form>

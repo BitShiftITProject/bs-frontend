@@ -16,6 +16,9 @@ import {
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 
+import HomeIcon from '@material-ui/icons/Home'
+import PersonIcon from '@material-ui/icons/Person'
+import DescriptionIcon from '@material-ui/icons/Description'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import SettingsIcon from '@material-ui/icons/Settings'
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
@@ -26,8 +29,6 @@ import ListItemText from '@material-ui/core/ListItemText'
 // import ListSubheader from '@material-ui/core/ListSubheader'
 // import AssignmentIcon from '@material-ui/icons/Assignment'
 
-import HomeIcon from '@material-ui/icons/Home'
-import DescriptionIcon from '@material-ui/icons/Description'
 import { useHistory } from 'react-router-dom'
 import HeaderBreadcrumbs from './HeaderBreadcrumbs'
 
@@ -37,7 +38,7 @@ export default function Sidebar(props) {
 
   /* --------------------------- States and Handlers -------------------------- */
 
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -101,6 +102,18 @@ export default function Sidebar(props) {
           <HomeIcon />
         </ListItemIcon>
         <ListItemText primary='Home' />
+      </ListItem>
+
+      <ListItem
+        button
+        onClick={() => {
+          history.push('/profile')
+        }}
+      >
+        <ListItemIcon>
+          <PersonIcon />
+        </ListItemIcon>
+        <ListItemText primary='Profile' />
       </ListItem>
 
       <ListItem

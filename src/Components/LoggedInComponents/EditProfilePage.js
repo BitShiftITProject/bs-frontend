@@ -107,7 +107,7 @@ export default function EditProfilePage() {
     // Contact Form
     case 'contact':
       form = (
-        <form className={classes.profileForm} noValidate autoComplete='off'>
+        <form className={classes.editProfileForm} noValidate autoComplete='off'>
           <Grid item container spacing={0} direction='column'>
             <Grid item container justify='space-between'>
               {/**
@@ -206,7 +206,7 @@ export default function EditProfilePage() {
     // About Me form
     default:
       form = (
-        <form className={classes.profileForm} noValidate autoComplete='off'>
+        <form className={classes.editProfileForm} noValidate autoComplete='off'>
           <Grid container spacing={0} direction='column'>
             {/**
              * ABOUT ME DETAILS: First Name, Last Name, Occupation
