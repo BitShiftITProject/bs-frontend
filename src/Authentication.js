@@ -47,12 +47,12 @@ async function loggedIn() {
 // Keep all == as is
 
 class Authentication extends Component {
-  state = { loggedIn: false }
+  state = { loggedIn: true }
 
-  async componentDidMount() {
-    let logincheck = await loggedIn()
-    this.setState({ loggedIn: logincheck })
-  }
+  // async componentDidMount() {
+  //   let logincheck = await loggedIn()
+  //   this.setState({ loggedIn: logincheck })
+  // }
 
   render() {
     if (this.state.loggedIn == null) {
