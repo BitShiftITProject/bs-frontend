@@ -3,6 +3,10 @@ import { makeStyles } from '@material-ui/core/styles'
 const drawerWidth = 240
 
 const loggedInStyles = makeStyles((theme) => ({
+  /* -------------------------------------------------------------------------- */
+  /*                          Sidebar / AppBar / Paper                          */
+  /* -------------------------------------------------------------------------- */
+
   root: {
     display: 'flex',
   },
@@ -80,23 +84,6 @@ const loggedInStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(4),
   },
 
-  breadcrumbSpacer: {
-    height: '20px',
-  },
-  breadcrumbLink: {
-    display: 'flex',
-    fontSize: '1.25em',
-    fontWeight: '400',
-    alignItems: 'center',
-    textDecoration: 'none',
-    color: theme.palette.text.primary,
-  },
-  breadcrumbIcon: {
-    marginRight: theme.spacing(1),
-    marginBottom: '2px',
-    width: 23,
-    height: 23,
-  },
   paper: {
     padding: theme.spacing(4),
     borderRadius: 0,
@@ -108,12 +95,45 @@ const loggedInStyles = makeStyles((theme) => ({
     height: 700,
     overflow: 'scroll',
     [theme.breakpoints.down('sm')]: {
-      height: 500,
+      height: '70vh',
     },
     [theme.breakpoints.up('md')]: {
       height: 700,
     },
   },
+
+  listMenu: {
+    padding: 0,
+    [theme.breakpoints.down('sm')]: {
+      height: '100%',
+    },
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                                 Breadcrumbs                                */
+  /* -------------------------------------------------------------------------- */
+
+  breadcrumbSpacer: {
+    height: '20px',
+  },
+  breadcrumbLink: {
+    display: 'flex',
+    fontSize: '1.5em',
+    fontWeight: '400',
+    alignItems: 'center',
+    textDecoration: 'none',
+    color: theme.palette.text.primary,
+  },
+  breadcrumbIcon: {
+    marginRight: theme.spacing(1),
+    marginBottom: '2px',
+    width: 30,
+    height: 27,
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Home Profile                                */
+  /* -------------------------------------------------------------------------- */
 
   profileContainer: {
     display: 'flex',
@@ -154,9 +174,13 @@ const loggedInStyles = makeStyles((theme) => ({
     backgroundColor: 'rgba(190,190,190,0.5)',
   },
 
-  editProfile: {
+  editProfileButton: {
     width: '75px !important',
   },
+
+  /* -------------------------------------------------------------------------- */
+  /*                               Portfolio Card                               */
+  /* -------------------------------------------------------------------------- */
 
   portfolioCard: {
     width: '100%',
@@ -165,6 +189,12 @@ const loggedInStyles = makeStyles((theme) => ({
       height: 300,
     },
     overflow: 'scroll',
+    scrollPadding: '0 0 5px 0',
+    boxSizing: 'border-box',
+
+    [theme.breakpoints.between('lg', 'lg')]: {
+      borderBottom: '8px solid white',
+    },
   },
 
   portfolioCardActionArea: {
@@ -193,6 +223,10 @@ const loggedInStyles = makeStyles((theme) => ({
     paddingLeft: 16,
   },
 
+  /* -------------------------------------------------------------------------- */
+  /*                  Add Portfolio Button (PortfolioCardList)                  */
+  /* -------------------------------------------------------------------------- */
+
   addPortfolioContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -212,12 +246,9 @@ const loggedInStyles = makeStyles((theme) => ({
     },
   },
 
-  listMenu: {
-    padding: 0,
-    [theme.breakpoints.down('sm')]: {
-      height: '100%',
-    },
-  },
+  /* -------------------------------------------------------------------------- */
+  /*                              Edit Profile Page                             */
+  /* -------------------------------------------------------------------------- */
 
   editProfileForm: {
     '& .MuiGrid-root': {

@@ -11,7 +11,7 @@ export default function HomeProfile(props) {
 
   // Routes user to the user profile page, where a user can edit their profiles
   const handleClickProfile = () => {
-    history.push('/home/profile')
+    history.push('/profile')
   }
 
   // Contains all styling
@@ -49,7 +49,7 @@ export default function HomeProfile(props) {
          */}
         <div className={classes.profileContainer}>
           <Fab
-            className={classes.editProfile}
+            className={classes.editProfileButton}
             variant='extended'
             size='small'
             aria-label='edit profile'

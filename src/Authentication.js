@@ -8,6 +8,8 @@ import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
 
 import HomePage from './Components/LoggedInComponents/HomePage'
 import EditProfilePage from './Components/LoggedInComponents/EditProfilePage'
+import SettingsPage from './Components/LoggedInComponents/SettingsPage'
+import HelpPage from './Components/LoggedInComponents/HelpPage'
 
 async function loggedIn() {
   // Get access token from session storage
@@ -58,8 +60,8 @@ class Authentication extends Component {
       return (
         <BrowserRouter>
           <Switch>
-            <Route exact path='/settings' render={() => <EditProfilePage />} />
-            <Route exact path='/help' render={() => <EditProfilePage />} />
+            <Route exact path='/settings' render={() => <SettingsPage />} />
+            <Route exact path='/help' render={() => <HelpPage />} />
             <Route exact path='/portfolios' render={() => <EditProfilePage />} />
             <Route exact path='/profile' render={() => <EditProfilePage />} />
             <Route exact path='/home' render={() => <HomePage />} />
