@@ -75,10 +75,20 @@ export default function Sidebar(props) {
           noWrap
           className={classes.title}
         ></Typography>
-        <IconButton color='inherit'>
+        <IconButton
+          onClick={() => {
+            history.push('/help')
+          }}
+          color='inherit'
+        >
           <HelpOutlineIcon />
         </IconButton>
-        <IconButton color='inherit'>
+        <IconButton
+          onClick={() => {
+            history.push('/settings')
+          }}
+          color='inherit'
+        >
           <SettingsIcon />
         </IconButton>
         <IconButton color='inherit'>
