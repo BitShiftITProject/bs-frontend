@@ -1,43 +1,71 @@
 import React, { Component } from 'react'
-import './Signup.css'
-import { BACKEND, SIGNUP } from '../../../Endpoints'
-import { TextField, Button, Avatar, Typography } from '@material-ui/core'
+
+import { BACKEND, SIGNUP } from '../../Endpoints'
+import { TextField, Button, Avatar, Typography, styled, withStyles, Fab } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import LandingContainer from './LandingContainer'
+
+const styles = {
+  div: {
+    width: '100%',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+
+  span: {
+    transform: 'translateX(-25px)',
+  },
+
+  fab: {
+    transform: 'scale(0.65)',
+  },
+}
+
+const PaddedTextField = styled(TextField)({
+  marginTop: '5%',
+  marginBottom: '5%',
+})
 
 class Signup extends Component {
   state = { email: '', username: '', password: '', confirm: '', firstName: '', lastName: '' }
 
+  // Handles changes in text input
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
+  // POST request to backend signup endpoint, sending the current state data to
+  // create a user
   handleSubmit = (e) => {
     e.preventDefault()
 
+    // Password must match
     if (this.state.password !== this.state.confirm) {
       alert('Password does not match!')
 
       return
     }
 
-    alert('Printed details to console!')
+    const details = {
+      ...this.state,
+    }
 
-    // const details = {
-    //   ...this.state,
-    // }
+    fetch(BACKEND + SIGNUP, {
+      method: 'POST',
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify(details),
+    }).then((response) => {
+      if (response.ok) {
+        window.location.href = '/login'
+      } else {
+      }
+    })
 
-    // fetch(BACKEND + SIGNUP, {
-    //   method: 'POST',
-    //   headers: { 'Content-type': 'application/json' },
-    //   body: JSON.stringify(details),
-    // }).then((response) => {
-    //   if (response.ok) {
-    //     window.location.href = '/login'
-    //   } else {
-    //   }
-    // })
-
-    console.log('Signup:')
+    console.log('SIGNUP')
     console.log('Email:', this.state.email)
     console.log('Username:', this.state.username)
     console.log('Password:', this.state.password)
@@ -47,17 +75,17 @@ class Signup extends Component {
   }
 
   render() {
-    return (
-      <div className='Signup'>
-        <Avatar>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component='h1' variant='h5'>
-          Sign Up
-        </Typography>
-        <form onSubmit={this.handleSubmit}>
-          {/* NOT SURE WHICH ONE WE WOULD USE OVERALL TO SIGN IN (email or username) SO BOTH IS INCLUDED FOR NOW */}
-          <TextField
+    const { classes, history } = this.props
+    const content = (
+      <div className={classes.div}>
+        <form onSubmit={this.handleSubmit} className={classes.form}>
+          <Avatar>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component='h1' variant='h5'>
+            Sign Up
+          </Typography>
+          <PaddedTextField
             variant='outlined'
             margin='normal'
             required
@@ -70,22 +98,9 @@ class Signup extends Component {
             name='email'
             value={this.state.email}
             onChange={this.handleChange}
-          ></TextField>
+          ></PaddedTextField>
 
-          <TextField
-            variant='outlined'
-            margin='normal'
-            fullWidth
-            id='signup__username'
-            type='text'
-            placeholder='Username'
-            name='username'
-            value={this.state.username}
-            onChange={this.handleChange}
-            required
-          ></TextField>
-
-          <TextField
+          <PaddedTextField
             id='signup__password'
             variant='outlined'
             margin='normal'
@@ -94,15 +109,14 @@ class Signup extends Component {
             autoComplete='current-password'
             type='password'
             placeholder='Password'
-            required
             pattern='.{8,12}'
             title='8 to 12 characters'
             name='password'
             value={this.state.password}
             onChange={this.handleChange}
-          ></TextField>
+          ></PaddedTextField>
 
-          <TextField
+          <PaddedTextField
             id='signup__confirm_password'
             variant='outlined'
             margin='normal'
@@ -116,12 +130,13 @@ class Signup extends Component {
             name='confirm'
             value={this.state.confirm}
             onChange={this.handleChange}
-          ></TextField>
+          ></PaddedTextField>
 
-          <TextField
+          <PaddedTextField
             id='signup__first_name'
             type='text'
             placeholder='John'
+            label='First Name'
             name='firstName'
             value={this.state.firstName}
             onChange={this.handleChange}
@@ -131,10 +146,11 @@ class Signup extends Component {
             fullWidth
           />
 
-          <TextField
+          <PaddedTextField
             id='signup__last_name'
             type='text'
             placeholder='Smith'
+            label='Last Name'
             name='lastName'
             value={this.state.lastName}
             onChange={this.handleChange}
@@ -143,14 +159,25 @@ class Signup extends Component {
             margin='normal'
             fullWidth
           />
-
-          <Button className='signup_button' type='submit' variant='contained' color='primary'>
-            SIGN UP
-          </Button>
+          <span className={classes.span}>
+            <Fab
+              onClick={() => history.push('/login')}
+              color='primary'
+              aria-label='login'
+              className={classes.fab}
+            >
+              <ArrowBackIcon />
+            </Fab>
+            <Button className='signup_button' type='submit' variant='contained' color='primary'>
+              Sign Up
+            </Button>
+          </span>
         </form>
       </div>
     )
+
+    return <LandingContainer content={content} />
   }
 }
 
-export default Signup
+export default withStyles(styles)(Signup)

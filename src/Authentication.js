@@ -1,14 +1,17 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import { BACKEND, LOGGEDIN } from './Endpoints'
+
 import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
-import Landing from './Components/LoggedOutComponents/Landing'
 
 import HomePage from './Components/LoggedInComponents/HomePage'
-
-import { BACKEND, LOGGEDIN } from './Endpoints'
-import EditProfilePage from './Components/LoggedInComponents/EditProfilePage/EditProfilePage'
+import EditProfilePage from './Components/LoggedInComponents/EditProfilePage'
+import PortfolioCardList from './Components/LoggedInComponents/PortfolioCardList'
+import EditPortfolioPage from './Components/LoggedInComponents/EditPortfolioPage'
+import SettingsPage from './Components/LoggedInComponents/SettingsPage'
+import HelpPage from './Components/LoggedInComponents/HelpPage'
 import Sidebar from './Components/LoggedInComponents/Sidebar'
 
 async function loggedIn() {
@@ -19,8 +22,11 @@ async function loggedIn() {
   if (accessToken == null) {
     return false
   } else {
-    // There is an access token in session storage
-    // POST access token to the backend to check if we are logged in
+    /**
+     * There is an access token in session storage
+     * POST access token to the backend to check if we are logged in
+     */
+
     return fetch(BACKEND + LOGGEDIN, {
       method: 'POST',
       headers: { 'Content-type': 'application/json' },
@@ -44,13 +50,8 @@ class Authentication extends Component {
   state = { loggedIn: false }
 
   async componentDidMount() {
-    // let logincheck = await loggedIn()
-    // this.setState({ loggedIn: logincheck })
-  }
-
-  toggleLogin = () => {
-    console.log('Toggled login from', this.state.loggedIn, 'to', !this.state.loggedIn)
-    this.setState((st) => ({ loggedIn: !st.loggedIn }))
+    let logincheck = await loggedIn()
+    this.setState({ loggedIn: logincheck })
   }
 
   render() {
@@ -62,18 +63,16 @@ class Authentication extends Component {
       return (
         <BrowserRouter>
           <Switch>
+            <Route exact path='/settings' render={() => <SettingsPage />} />
+            <Route exact path='/help' render={() => <HelpPage />} />
+            <Route exact path='/portfolios/edit' render={() => <EditPortfolioPage />} />
             <Route
               exact
-              path='/home/profile'
-              render={() => (
-                <Sidebar toggleLogin={this.toggleLogin} content={<EditProfilePage />} />
-              )}
+              path='/portfolios'
+              render={() => <Sidebar content={<PortfolioCardList xs={12} md={12} lg={12} />} />}
             />
-            <Route
-              exact
-              path='/home'
-              render={() => <Sidebar toggleLogin={this.toggleLogin} content={<HomePage />} />}
-            />
+            <Route exact path='/profile' render={() => <EditProfilePage />} />
+            <Route exact path='/home' render={() => <HomePage />} />
             <Redirect to='/home' />
           </Switch>
         </BrowserRouter>
@@ -83,46 +82,11 @@ class Authentication extends Component {
       return (
         <BrowserRouter>
           <Switch>
-            <Route
-              exact
-              path='/login'
-              render={(routeProps) => (
-                <Landing content={<Login {...routeProps} toggleLogin={this.toggleLogin} />} />
-              )}
-            />
-            <Route
-              exact
-              path='/signup'
-              render={(routeProps) => (
-                <Landing content={<Signup {...routeProps} toggleLogin={this.toggleLogin} />} />
-              )}
-            />
-            <Route
-              exact
-              path='/forgotpassword'
-              render={() => <Landing content={<ForgotPassword />} />}
-            />
-            <Route exact path='/landing' render={() => <Landing />} />
-            <Route
-              exact
-              path='/'
-              render={() => {
-                return (
-                  <div>
-                    <div>
-                      <Link to='/login'>Login</Link>
-                    </div>
-                    <div>
-                      <Link to='/signup'>Signup</Link>
-                    </div>
-                    <div>
-                      <Link to='/forgotpassword'>Forgot Password</Link>
-                    </div>
-                  </div>
-                )
-              }}
-            />
-            <Redirect to='/' />
+            <Route exact path='/login' component={Login} />
+            <Route exact path='/signup' component={Signup} />
+            <Route exact path='/forgotpassword' component={ForgotPassword} />
+
+            <Redirect to='/login' />
           </Switch>
         </BrowserRouter>
       )

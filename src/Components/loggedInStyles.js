@@ -3,6 +3,10 @@ import { makeStyles } from '@material-ui/core/styles'
 const drawerWidth = 240
 
 const loggedInStyles = makeStyles((theme) => ({
+  /* -------------------------------------------------------------------------- */
+  /*                          Sidebar / AppBar / Paper                          */
+  /* -------------------------------------------------------------------------- */
+
   root: {
     display: 'flex',
   },
@@ -68,26 +72,18 @@ const loggedInStyles = makeStyles((theme) => ({
     height: '100vh',
     overflow: 'auto',
   },
+
+  sidebarItems: {
+    '& ListItem': {
+      paddingRight: 0,
+    },
+  },
+
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
 
-  breadcrumbSpacer: {
-    height: '20px',
-  },
-  breadcrumbLink: {
-    display: 'flex',
-    fontSize: '1.25em',
-    fontWeight: '400',
-    alignItems: 'center',
-  },
-  breadcrumbIcon: {
-    marginRight: theme.spacing(1),
-    marginBottom: '2px',
-    width: 23,
-    height: 23,
-  },
   paper: {
     padding: theme.spacing(4),
     borderRadius: 0,
@@ -97,18 +93,55 @@ const loggedInStyles = makeStyles((theme) => ({
   },
   fixedHeight: {
     height: 700,
+    overflow: 'scroll',
     [theme.breakpoints.down('sm')]: {
-      height: '100%',
+      height: '70vh',
     },
     [theme.breakpoints.up('md')]: {
       height: 700,
     },
   },
 
+  listMenu: {
+    padding: 0,
+    [theme.breakpoints.down('sm')]: {
+      height: '100%',
+    },
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                                 Breadcrumbs                                */
+  /* -------------------------------------------------------------------------- */
+
+  breadcrumbSpacer: {
+    height: '20px',
+  },
+  breadcrumbLink: {
+    display: 'flex',
+    fontSize: '1.5em',
+    fontWeight: '400',
+    alignItems: 'center',
+    textDecoration: 'none',
+    color: theme.palette.text.primary,
+  },
+  breadcrumbIcon: {
+    marginRight: theme.spacing(1),
+    marginBottom: '2px',
+    width: 30,
+    height: 27,
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Home Profile                                */
+  /* -------------------------------------------------------------------------- */
+
   profileContainer: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      height: '100%',
+    },
   },
   profileImage: {
     overflow: 'hidden',
@@ -141,46 +174,67 @@ const loggedInStyles = makeStyles((theme) => ({
     backgroundColor: 'rgba(190,190,190,0.5)',
   },
 
-  editProfile: {
+  editProfileButton: {
     width: '75px !important',
   },
 
+  /* -------------------------------------------------------------------------- */
+  /*                               Portfolio Card                               */
+  /* -------------------------------------------------------------------------- */
+
   portfolioCard: {
     width: '100%',
-    height: 300,
+    height: 'auto',
+    [theme.breakpoints.up('lg')]: {
+      height: 300,
+    },
+    overflow: 'scroll',
+    scrollPadding: '0 0 5px 0',
+    boxSizing: 'border-box',
+
+    [theme.breakpoints.between('lg', 'lg')]: {
+      borderBottom: '8px solid white',
+    },
   },
 
-  portfolioActionArea: {
-    height: '100%',
+  portfolioCardActionArea: {
+    width: '100%',
+    height: 'auto',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
+    textAlign: 'justify',
   },
+
   portfolioCardMedia: {
     height: 200,
     backgroundColor: 'rgb(190,190,190)',
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
+    },
   },
 
+  portfolioCardContent: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 24,
+    paddingLeft: 16,
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                  Add Portfolio Button (PortfolioCardList)                  */
+  /* -------------------------------------------------------------------------- */
+
   addPortfolioContainer: {
-    height: 300,
-    backgroundColor: 'rgb(190,190,190)',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    [theme.breakpoints.down('sm')]: {
-      height: 100,
-    },
+    paddingBottom: 30,
   },
-
   addPortfolioFab: {
-    [theme.breakpoints.down('sm')]: {
-      width: 130,
-      height: 60,
-      borderRadius: '35px',
-      fontSize: '12.5px',
-    },
     '&:hover': {
       backgroundColor: '#5468dd',
     },
@@ -192,25 +246,24 @@ const loggedInStyles = makeStyles((theme) => ({
     },
   },
 
-  listMenu: {
-    padding: 0,
-  },
+  /* -------------------------------------------------------------------------- */
+  /*                              Edit Profile Page                             */
+  /* -------------------------------------------------------------------------- */
 
-  profileForm: {
+  editProfileForm: {
+    '& .MuiGrid-root': {
+      paddingBottom: theme.spacing(0),
+    },
+    '& .MuiChip-root': {
+      marginBottom: theme.spacing(0),
+      marginTop: theme.spacing(0),
+    },
+
     '& .MuiTextField-root': {
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(2),
       marginRight: theme.spacing(2),
     },
-  },
-
-  accountListContent: {
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
-
-  removeAccountButton: {
-    marginRight: 20,
   },
 }))
 
