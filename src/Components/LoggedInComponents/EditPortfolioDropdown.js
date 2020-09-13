@@ -25,9 +25,9 @@ const useStyles = makeStyles((theme) => ({
 
     },
     popper: {
-        width: "60%",
+        width: "100%",
 
-    },
+    }
 
 }));
 
@@ -76,8 +76,6 @@ export default function EditPortfolioDropdown() {
         // alignItems="center"
         >
             <Paper >
-
-
                 <Button
                     className={classes.button}
                     ref={anchorRef}
@@ -87,30 +85,31 @@ export default function EditPortfolioDropdown() {
                     color="primary"
                     variant="contained"
                 >
-                    DROPDOWNBAR
+                    Editing Options
                 </Button>
-                <Popper
-                    // className={classes.popper}
-                    open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+                <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
                     {({ TransitionProps, placement }) => (
                         <Grow
                             {...TransitionProps}
                             style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
                         >
-                            <Paper>
+                            <Paper >
                                 <ClickAwayListener onClickAway={handleClose}>
-                                    <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
+
+                                    <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} >
+                                        <MenuItem sonClick={handleClose}>Style</MenuItem>
                                         <MenuItem onClick={handleClose}>Content</MenuItem>
-                                        <MenuItem onClick={handleClose}>Styles</MenuItem>
                                     </MenuList>
+
                                 </ClickAwayListener>
+
                             </Paper>
+
                         </Grow>
                     )}
                 </Popper>
 
             </Paper>
-
 
         </Grid>
     );
