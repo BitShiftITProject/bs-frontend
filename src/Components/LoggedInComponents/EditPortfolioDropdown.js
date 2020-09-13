@@ -23,7 +23,11 @@ const useStyles = makeStyles((theme) => ({
     button: {
         width: "100%",
 
-    }
+    },
+    popper: {
+        width: "60%",
+
+    },
 
 }));
 
@@ -85,26 +89,25 @@ export default function EditPortfolioDropdown() {
                 >
                     DROPDOWNBAR
                 </Button>
-                <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+                <Popper
+                    // className={classes.popper}
+                    open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
                     {({ TransitionProps, placement }) => (
                         <Grow
                             {...TransitionProps}
                             style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
                         >
-                            <Paper >
+                            <Paper>
                                 <ClickAwayListener onClickAway={handleClose}>
-                                    <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown} >
-                                        <MenuItem sonClick={handleClose}>Style</MenuItem>
+                                    <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                                         <MenuItem onClick={handleClose}>Content</MenuItem>
-
+                                        <MenuItem onClick={handleClose}>Styles</MenuItem>
                                     </MenuList>
                                 </ClickAwayListener>
                             </Paper>
                         </Grow>
                     )}
                 </Popper>
-
-
 
             </Paper>
 
