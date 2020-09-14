@@ -90,15 +90,15 @@ const loggedInStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
+    '&::-webkit-scrollbar': {
+      display: 'none',
+    },
   },
   fixedHeight: {
-    height: 700,
+    height: '70vh',
     overflow: 'scroll',
-    [theme.breakpoints.down('sm')]: {
-      height: '70vh',
-    },
-    [theme.breakpoints.up('md')]: {
-      height: 700,
+    '&::-webkit-scrollbar': {
+      display: 'none',
     },
   },
 
@@ -107,6 +107,36 @@ const loggedInStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       height: '100%',
     },
+  },
+
+  floatingTopContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 30,
+  },
+
+  floatingBottomContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 30,
+  },
+
+  changeHeightAtSmall: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      height: '100%',
+    },
+  },
+
+  padded: {
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
   },
 
   /* -------------------------------------------------------------------------- */
@@ -123,6 +153,11 @@ const loggedInStyles = makeStyles((theme) => ({
     alignItems: 'center',
     textDecoration: 'none',
     color: theme.palette.text.primary,
+    cursor: 'default',
+  },
+
+  '.MuiLink-root:hover': {
+    textDecoration: 'underline',
   },
   breadcrumbIcon: {
     marginRight: theme.spacing(1),
@@ -135,14 +170,6 @@ const loggedInStyles = makeStyles((theme) => ({
   /*                                Home Profile                                */
   /* -------------------------------------------------------------------------- */
 
-  profileContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    [theme.breakpoints.down('sm')]: {
-      height: '100%',
-    },
-  },
   profileImage: {
     overflow: 'hidden',
     borderRadius: '50%',
@@ -191,9 +218,8 @@ const loggedInStyles = makeStyles((theme) => ({
     overflow: 'scroll',
     scrollPadding: '0 0 5px 0',
     boxSizing: 'border-box',
-
-    [theme.breakpoints.between('lg', 'lg')]: {
-      borderBottom: '8px solid white',
+    '& .MuiCardContent-root': {
+      paddingBottom: 0,
     },
   },
 
@@ -205,6 +231,7 @@ const loggedInStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     alignItems: 'stretch',
     textAlign: 'justify',
+    paddingBottom: 16,
   },
 
   portfolioCardMedia: {
@@ -219,21 +246,20 @@ const loggedInStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 24,
-    paddingLeft: 16,
+  },
+
+  portfolioCardButtons: {
+    [theme.breakpoints.between('xs', 'xs')]: {
+      paddingTop: '5%',
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+    },
   },
 
   /* -------------------------------------------------------------------------- */
   /*                  Add Portfolio Button (PortfolioCardList)                  */
   /* -------------------------------------------------------------------------- */
 
-  addPortfolioContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: 30,
-  },
   addPortfolioFab: {
     '&:hover': {
       backgroundColor: '#5468dd',
@@ -251,19 +277,41 @@ const loggedInStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
 
   editProfileForm: {
-    '& .MuiGrid-root': {
-      paddingBottom: theme.spacing(0),
-    },
+    // '& .MuiGrid-root': {
+    //   paddingBottom: theme.spacing(0),
+    // },
     '& .MuiChip-root': {
       marginBottom: theme.spacing(0),
       marginTop: theme.spacing(0),
     },
 
-    '& .MuiTextField-root': {
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-      marginRight: theme.spacing(2),
+    // '& .MuiTextField-root': {
+    //   marginRight: theme.spacing(2),
+    // },
+    '& .MuiInputLabel-outlined:focus-': {
+      overflow: 'hidden',
     },
+  },
+
+  singleForm: {
+    paddingTop: '8px',
+    paddingBottom: '8px',
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                             Edit Portfolio Page                            */
+  /* -------------------------------------------------------------------------- */
+
+  hiddenButtonItem: {
+    '&:hover button': {
+      visibility: 'visible',
+    },
+  },
+
+  hiddenButton: {
+    background: 'none',
+    boxShadow: 'none',
+    visibility: 'hidden',
   },
 }))
 

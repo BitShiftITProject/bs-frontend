@@ -14,16 +14,28 @@ export default function PortfolioCard(props) {
       <div className={classes.portfolioCardActionArea}>
         <CardMedia src='/' className={classes.portfolioCardMedia} />
         <CardContent className={classes.portfolioCardContent}>
-          <Grid container direction='row'>
-            <Grid item xs={10} className={classes.portfolioDesc}>
+          <Grid container direction='row' justify='space-around'>
+            <Grid item xs={12} sm={9}>
               <Typography gutterBottom variant='h6' component='h3'>
                 {title}
               </Typography>
-              <Typography variant='body2' color='textSecondary' component='p'>
+              <Typography
+                variant='body2'
+                color='textSecondary'
+                component='p'
+                className={classes.portfolioDesc}
+              >
                 {desc}
               </Typography>
             </Grid>
-            <Grid item container direction='column' xs={2}>
+            <Grid
+              item
+              container
+              direction='column'
+              xs={12}
+              sm={2}
+              className={classes.portfolioCardButtons}
+            >
               <Button size='small' color='primary'>
                 View
               </Button>

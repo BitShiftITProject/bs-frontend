@@ -15,10 +15,17 @@ import {
   ListItem,
   TextField,
   Chip,
+  Fab,
 } from '@material-ui/core'
+import { styled } from '@material-ui/core/styles'
 import PersonIcon from '@material-ui/icons/Person'
 import PhoneIcon from '@material-ui/icons/Phone'
 // import CloseIcon from '@material-ui/icons/Close'
+
+const PaddedFormGrid = styled(Grid)({
+  marginTop: '8px',
+  marginBottom: '8px',
+})
 
 // Initial About Me and Contact data, will be fetched from database for the
 // currently authenticated user as the initial data in the states of the forms
@@ -86,6 +93,10 @@ export default function EditProfilePage() {
     setContact({ [name]: value })
   }
 
+  const handleSubmit = (e) => {
+    alert(page)
+  }
+
   /* --------------------------------- Styles --------------------------------- */
 
   // Used for general styles
@@ -120,11 +131,12 @@ export default function EditProfilePage() {
                 </Fab>
                 */}
             </Grid>
-            <Grid item container spacing={2}>
+            <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth
                   label='Email'
+                  type='email'
                   variant='outlined'
                   name='email'
                   helperText='Changing this will not change your login email address'
@@ -142,8 +154,20 @@ export default function EditProfilePage() {
                   onChange={handleOnContactChange}
                 />
               </Grid>
-            </Grid>
-            <Grid item container spacing={2}>
+            </PaddedFormGrid>
+            <PaddedFormGrid item>
+              <Grid item xs={12} className={classes.singleForm}>
+                <TextField
+                  fullWidth
+                  label='Company'
+                  variant='outlined'
+                  name='company'
+                  value={contact.company}
+                  onChange={handleOnContactChange}
+                />
+              </Grid>
+            </PaddedFormGrid>
+            <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth
@@ -154,8 +178,8 @@ export default function EditProfilePage() {
                   onChange={handleOnContactChange}
                 />
               </Grid>
-              <Grid item container spacing={0} xs={12} md={6}>
-                <Grid item xs={9}>
+              <Grid item container spacing={0} xs={12} md={6} justify='space-between'>
+                <Grid item xs={7}>
                   <TextField
                     fullWidth
                     label='Town / Suburb'
@@ -165,7 +189,17 @@ export default function EditProfilePage() {
                     onChange={handleOnContactChange}
                   />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
+                  <TextField
+                    fullWidth
+                    label='Postcode'
+                    variant='outlined'
+                    name='postcode'
+                    value={contact.postcode}
+                    onChange={handleOnContactChange}
+                  />
+                </Grid>
+                <Grid item xs={2}>
                   <TextField
                     fullWidth
                     label='State'
@@ -176,8 +210,8 @@ export default function EditProfilePage() {
                   />
                 </Grid>
               </Grid>
-            </Grid>
-            <Grid item container spacing={2}>
+            </PaddedFormGrid>
+            <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth
@@ -198,7 +232,7 @@ export default function EditProfilePage() {
                   onChange={handleOnContactChange}
                 />
               </Grid>
-            </Grid>
+            </PaddedFormGrid>
           </Grid>
         </form>
       )
@@ -214,7 +248,7 @@ export default function EditProfilePage() {
             <Grid item>
               <Chip label='Details' color='primary' />
             </Grid>
-            <Grid item container spacing={2}>
+            <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth
@@ -235,17 +269,19 @@ export default function EditProfilePage() {
                   onChange={handleOnAboutChange}
                 />
               </Grid>
-            </Grid>
-            <Grid item>
-              <TextField
-                label='Occupation'
-                variant='outlined'
-                fullWidth
-                name='occupation'
-                value={about.occupation}
-                onChange={handleOnAboutChange}
-              />
-            </Grid>
+            </PaddedFormGrid>
+            <PaddedFormGrid item>
+              <Grid item className={classes.singleForm}>
+                <TextField
+                  label='Occupation'
+                  variant='outlined'
+                  fullWidth
+                  name='occupation'
+                  value={about.occupation}
+                  onChange={handleOnAboutChange}
+                />
+              </Grid>
+            </PaddedFormGrid>
           </Grid>
           {/**
            * ABOUT ME DESCRIPTION
@@ -254,49 +290,54 @@ export default function EditProfilePage() {
             <Grid item>
               <Chip label='Description' color='primary' />
             </Grid>
-            <Grid item>
-              <TextField
-                placeholder='Type something...'
-                fullWidth
-                multiline
-                rows={7}
-                variant='outlined'
-                name='description'
-                value={about.description}
-                onChange={handleOnAboutChange}
-              />
-            </Grid>
-          </Grid>
-          <Grid item container spacing={0} direction='column'>
-            <Grid item>
-              <Chip label='Tags' color='primary' />
-            </Grid>
-            {/**
-             * ABOUT ME TAGS
-             */}
-            <Grid item>
-              <TextField
-                placeholder='Type and enter to add a tag...'
-                fullWidth
-                variant='outlined'
-                name='tagText'
-                value={tagText}
-                onChange={(e) => setTagText(e.target.value)}
-                onKeyDown={handleAddTag}
-              />
-
-              <Grid item container spacing={1} direction='row'>
-                {about.tags.map((t) => (
-                  <Grid item key={t.id}>
-                    <Chip
-                      label={t.label}
-                      color='primary'
-                      variant='outlined'
-                      onDelete={() => handleRemoveTag(t.id)}
-                    />
-                  </Grid>
-                ))}
+            <PaddedFormGrid item>
+              <Grid item className={classes.singleForm}>
+                <TextField
+                  placeholder='Type something...'
+                  fullWidth
+                  multiline
+                  rows={7}
+                  variant='outlined'
+                  name='description'
+                  value={about.description}
+                  onChange={handleOnAboutChange}
+                />
               </Grid>
+            </PaddedFormGrid>
+
+            <Grid item container spacing={0} direction='column'>
+              <Grid item>
+                <Chip label='Tags' color='primary' />
+              </Grid>
+              {/**
+               * ABOUT ME TAGS
+               */}
+              <PaddedFormGrid item>
+                <Grid item className={classes.singleForm}>
+                  <TextField
+                    placeholder='Type and enter to add a tag...'
+                    fullWidth
+                    variant='outlined'
+                    name='tagText'
+                    value={tagText}
+                    onChange={(e) => setTagText(e.target.value)}
+                    onKeyDown={handleAddTag}
+                  />
+                </Grid>
+
+                <Grid item container spacing={1} direction='row' className={classes.singleForm}>
+                  {about.tags.map((t) => (
+                    <PaddedFormGrid item key={t.id}>
+                      <Chip
+                        label={t.label}
+                        color='primary'
+                        variant='outlined'
+                        onDelete={() => handleRemoveTag(t.id)}
+                      />
+                    </PaddedFormGrid>
+                  ))}
+                </Grid>
+              </PaddedFormGrid>
             </Grid>
           </Grid>
         </form>
@@ -311,13 +352,13 @@ export default function EditProfilePage() {
       <Grid item xs={12} md={3} lg={2}>
         <Paper className={listMenu}>
           <List component='nav' aria-label='profile sections'>
-            <ListItem button onClick={() => setPage('aboutMe')}>
+            <ListItem button selected={page === 'aboutMe'} onClick={() => setPage('aboutMe')}>
               <ListItemIcon>
                 <PersonIcon />
               </ListItemIcon>
               <ListItemText primary='About Me' />
             </ListItem>
-            <ListItem button onClick={() => setPage('contact')}>
+            <ListItem button selected={page === 'contact'} onClick={() => setPage('contact')}>
               <ListItemIcon>
                 <PhoneIcon />
               </ListItemIcon>
@@ -329,8 +370,17 @@ export default function EditProfilePage() {
       {/**
        * FORM with user profile data
        */}
-      <Grid item xs={12} md={9} lg={10}>
-        <Paper className={fixedHeightPaper}>{form}</Paper>
+      <Grid item xs={12} md={9} lg={10} container direction='column' justify='space-between'>
+        <Paper className={fixedHeightPaper}>
+          <Grid item style={{ overflow: 'scroll' }}>
+            {form}
+          </Grid>
+          <Grid item className={classes.floatingBottomContainer}>
+            <Fab color='action' variant='extended' aria-label='save changes' onClick={handleSubmit}>
+              Save Changes
+            </Fab>
+          </Grid>
+        </Paper>
       </Grid>
     </Grid>
   )

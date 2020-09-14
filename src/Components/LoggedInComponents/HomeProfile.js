@@ -18,7 +18,7 @@ export default function HomeProfile(props) {
   const classes = loggedInStyles()
 
   // Adds flex spacing and aligning, otherwise identical to all other Paper components
-  const profilePaper = clsx(classes.paper, classes.fixedHeight, classes.profileContainer)
+  const profilePaper = clsx(classes.paper, classes.fixedHeight, classes.changeHeightAtSmall)
 
   // Breakpoint sizes and click handler for profile picture and edit button
   const { xs, md, lg } = props
@@ -29,7 +29,7 @@ export default function HomeProfile(props) {
         {/**
          * PROFILE PICTURE ICON
          */}
-        <div className={classes.profileContainer}>
+        <div className={classes.changeHeightAtSmall}>
           <ButtonBase className={classes.profileImage} onClick={handleClickProfile}>
             <img
               className={classes.profileImg}
@@ -47,7 +47,7 @@ export default function HomeProfile(props) {
         {/**
          * EDIT PROFILE BUTTON
          */}
-        <div className={classes.profileContainer}>
+        <div className={classes.changeHeightAtSmall}>
           <Fab
             className={classes.editProfileButton}
             variant='extended'

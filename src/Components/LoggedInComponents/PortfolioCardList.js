@@ -34,9 +34,9 @@ export default function PortfolioCardList(props) {
   // Breakpoint sizes for portfolio
   const { xs, md, lg } = props
   return (
-    <Grid item xs={xs} md={md} lg={lg} direction='row'>
+    <Grid item container xs={xs} md={md} lg={lg} direction='row'>
       <Paper className={fixedHeightPaper}>
-        <Grid container className={classes.addPortfolioContainer}>
+        <Grid item className={classes.floatingTopContainer}>
           <Fab
             className={classes.addPortfolioFab}
             color='primary'
@@ -49,9 +49,9 @@ export default function PortfolioCardList(props) {
           </Fab>
         </Grid>
         <Grid container spacing={3} style={{ overflow: 'scroll' }}>
-          {portfolios.map((p) => (
-            <Grid item xs={12} lg={6}>
-              <PortfolioCard key={p.title} title={p.title} desc={p.desc} />
+          {portfolios.map((p, idx) => (
+            <Grid key={idx} item xs={12} lg={6}>
+              <PortfolioCard title={p.title} desc={p.desc} />
             </Grid>
           ))}
         </Grid>
