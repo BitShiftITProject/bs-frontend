@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import clsx from 'clsx'
 import { useHistory } from 'react-router-dom'
 
@@ -19,20 +19,63 @@ const testPortfolios = [
 ]
 
 export default function PortfolioCardList(props) {
-  // TODO: Grab and store user portfolio
-  const portfolios = testPortfolios
+  /* -------------------------------------------------------------------------- */
+  /*                       Fetching Initial Portfolio List                      */
+  /* -------------------------------------------------------------------------- */
+
+  let portfoliosRef = useRef(testPortfolios)
+
+  // useEffect is run every time a component is updated
+
+  useEffect(() => {
+    // TODO: Set up fetch for current user's list of portfolio id's
+    let portfolios = portfoliosRef.current
+
+    async function fetchPortfolios() {
+      const accessToken = window.sessionStorage.accessToken
+      // const response = await fetch().json()
+      return []
+    }
+
+    portfolios = fetchPortfolios()
+  }, [])
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Handlers                                  */
+  /* -------------------------------------------------------------------------- */
+
   const history = useHistory()
 
-  const addPortfolio = (details) => {
-    history.push('/portfolios/edit')
+  const handleAdd = (details) => {
+    history.push('/portfolios/add')
   }
 
-  // Contains all styling
+  const handleView = (portfolioId) => {
+    alert(`View: ${portfolioId}`)
+  }
+
+  const handleEdit = (portfolioId) => {
+    alert(`Edit: ${portfolioId}`)
+  }
+
+  const handleDelete = (portfolioId) => {
+    alert(`Deleted: ${portfolioId}`)
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
+
   const classes = loggedInStyles()
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
   // Breakpoint sizes for portfolio
   const { xs, md, lg } = props
+
+  /* -------------------------------------------------------------------------- */
+  /*                               Portfolio List                               */
+  /* -------------------------------------------------------------------------- */
+
   return (
     <Grid item container xs={xs} md={md} lg={lg} direction='row'>
       <Paper className={fixedHeightPaper}>
@@ -42,16 +85,26 @@ export default function PortfolioCardList(props) {
             color='primary'
             variant='extended'
             aria-label='add portfolio'
-            onClick={addPortfolio}
+            onClick={handleAdd}
           >
             Add Portfolio
             <AddIcon className={classes.addPortfolioIcon} />
           </Fab>
         </Grid>
         <Grid container spacing={3} style={{ overflow: 'scroll' }}>
-          {portfolios.map((p, idx) => (
+          {portfoliosRef.current.map((p, idx) => (
             <Grid key={idx} item xs={12} lg={6}>
-              <PortfolioCard title={p.title} desc={p.desc} />
+              {/*
+               * PORTFOLIO CARD: Need to change portfolioId to appropriate Id
+               */}
+              <PortfolioCard
+                portfolioId={p.title}
+                title={p.title}
+                desc={p.desc}
+                viewPortfolio={handleView}
+                editPortfolio={handleEdit}
+                deletePortfolio={handleDelete}
+              />
             </Grid>
           ))}
         </Grid>

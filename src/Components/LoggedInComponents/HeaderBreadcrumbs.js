@@ -17,6 +17,7 @@ const breadcrumbNameMap = {
   portfolios: 'Portfolios',
   help: 'Help',
   settings: 'Settings',
+  add: 'Add Portfolio',
   edit: 'Edit Portfolio',
 }
 

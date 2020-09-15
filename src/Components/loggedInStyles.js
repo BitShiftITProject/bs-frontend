@@ -1,6 +1,12 @@
-import { makeStyles } from '@material-ui/core/styles'
+import { Grid } from '@material-ui/core'
+import { makeStyles, styled } from '@material-ui/core/styles'
 
 const drawerWidth = 240
+
+const PaddedFormGrid = styled(Grid)({
+  marginTop: '8px',
+  marginBottom: '8px',
+})
 
 const loggedInStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
@@ -95,7 +101,7 @@ const loggedInStyles = makeStyles((theme) => ({
     },
   },
   fixedHeight: {
-    height: '70vh',
+    height: '73vh',
     overflow: 'scroll',
     '&::-webkit-scrollbar': {
       display: 'none',
@@ -139,6 +145,12 @@ const loggedInStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
   },
 
+  formLabel: {
+    '& .Mui-focused': {
+      color: theme.palette.info.main,
+    },
+  },
+
   /* -------------------------------------------------------------------------- */
   /*                                 Breadcrumbs                                */
   /* -------------------------------------------------------------------------- */
@@ -153,7 +165,7 @@ const loggedInStyles = makeStyles((theme) => ({
     alignItems: 'center',
     textDecoration: 'none',
     color: theme.palette.text.primary,
-    cursor: 'default',
+    '& a': 'pointer',
   },
 
   '.MuiLink-root:hover': {
@@ -198,7 +210,7 @@ const loggedInStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     ...theme.typography.button,
     width: '80%',
-    backgroundColor: 'rgba(190,190,190,0.5)',
+    backgroundColor: theme.palette.background.default,
   },
 
   editProfileButton: {
@@ -213,46 +225,32 @@ const loggedInStyles = makeStyles((theme) => ({
     width: '100%',
     height: 'auto',
     [theme.breakpoints.up('lg')]: {
-      height: 300,
+      height: 350,
     },
-    overflow: 'scroll',
-    scrollPadding: '0 0 5px 0',
-    boxSizing: 'border-box',
-    '& .MuiCardContent-root': {
+    '& .MuiCardContent-root:last-child': {
       paddingBottom: 0,
     },
+
+    // scrollPadding: '0 0 5px 0',
+    // boxSizing: 'border-box',
+    // '& .MuiCardContent-root': {
+    //   paddingBottom: 0,
+    // },
   },
 
-  portfolioCardActionArea: {
-    width: '100%',
+  portfolioContent: {
     height: 'auto',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'stretch',
-    textAlign: 'justify',
-    paddingBottom: 16,
+    [theme.breakpoints.up('lg')]: {
+      height: 100,
+    },
+    overflow: 'scroll',
   },
 
   portfolioCardMedia: {
     height: 200,
-    backgroundColor: 'rgb(190,190,190)',
+    backgroundColor: theme.palette.background.default,
     [theme.breakpoints.down('md')]: {
       display: 'none',
-    },
-  },
-
-  portfolioCardContent: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  portfolioCardButtons: {
-    [theme.breakpoints.between('xs', 'xs')]: {
-      paddingTop: '5%',
-      flexDirection: 'row',
-      justifyContent: 'space-evenly',
     },
   },
 
@@ -262,7 +260,7 @@ const loggedInStyles = makeStyles((theme) => ({
 
   addPortfolioFab: {
     '&:hover': {
-      backgroundColor: '#5468dd',
+      backgroundColor: theme.palette.primary.dark,
     },
   },
   addPortfolioIcon: {
@@ -315,4 +313,4 @@ const loggedInStyles = makeStyles((theme) => ({
   },
 }))
 
-export { loggedInStyles }
+export { loggedInStyles, PaddedFormGrid }

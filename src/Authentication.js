@@ -9,6 +9,7 @@ import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
 import HomePage from './Components/LoggedInComponents/HomePage'
 import EditProfilePage from './Components/LoggedInComponents/EditProfilePage'
 import PortfolioCardList from './Components/LoggedInComponents/PortfolioCardList'
+import AddPortfolioPage from './Components/LoggedInComponents/AddPortfolioPage'
 import EditPortfolioPage from './Components/LoggedInComponents/EditPortfolioPage'
 import SettingsPage from './Components/LoggedInComponents/SettingsPage'
 import HelpPage from './Components/LoggedInComponents/HelpPage'
@@ -67,6 +68,7 @@ class Authentication extends Component {
             <Route exact path='/settings' render={() => <SettingsPage />} />
             <Route exact path='/help' render={() => <HelpPage />} />
             <Route exact path='/portfolios/edit' render={() => <EditPortfolioPage />} />
+            <Route exact path='/portfolios/add' render={() => <AddPortfolioPage />} />
             <Route
               exact
               path='/portfolios'

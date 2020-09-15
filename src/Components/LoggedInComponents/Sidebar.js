@@ -38,7 +38,7 @@ export default function Sidebar(props) {
 
   /* --------------------------- States and Handlers -------------------------- */
 
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -173,8 +173,6 @@ export default function Sidebar(props) {
         paper: drawerStyle,
       }}
       open={open}
-      onMouseEnter={handleDrawerOpen}
-      onMouseLeave={handleDrawerClose}
     >
       <div className={classes.toolbarIcon}>
         <IconButton onClick={handleDrawerClose}>

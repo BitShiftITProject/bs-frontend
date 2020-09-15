@@ -1,36 +1,180 @@
-import React from 'react'
+import React, { useState } from 'react'
 import clsx from 'clsx'
 
-import { loggedInStyles } from '../loggedInStyles'
+import { loggedInStyles, PaddedFormGrid } from '../loggedInStyles'
+import CustomDialog from './CustomDialog'
 
 import {
   Grid,
   Typography,
   Paper,
   Fab,
-  Button,
   Divider,
   List,
   ListItem,
   ListItemText,
   TextField,
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@material-ui/core'
 import CreateIcon from '@material-ui/icons/Create'
 import CloseIcon from '@material-ui/icons/Close'
 import Sidebar from './Sidebar'
 
 export default function EditPortfolioPage() {
+  // Test Data
+  const title = 'My Portfolio'
+  const listItems = ['About Me', 'Education', 'Contact']
+
+  /* -------------------------------------------------------------------------- */
+  /*                             State and Handlers                             */
+  /* -------------------------------------------------------------------------- */
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styles                                   */
+  /* -------------------------------------------------------------------------- */
+
   const classes = loggedInStyles()
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
   const leftPanel = clsx(fixedHeightPaper, classes.changeHeightAtSmall)
 
-  const listItems = ['About Me', 'Education', 'Contact']
+  /* -------------------------------------------------------------------------- */
+  /*                                   Dialog                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const [open, setOpen] = useState(false)
+  const [dialogContent, setDialogContent] = useState({ type: '', target: '' })
+
+  const handleClick = (name, value) => {
+    setDialogContent({ type: name, target: value })
+    setOpen(true)
+  }
+
+  const handleEdit = (e) => {
+    e.preventDefault()
+    console.log(dialogContent)
+    setOpen(false)
+  }
+
+  const handleDelete = () => {
+    alert(`Deleted ${dialogContent.target}!`)
+    setOpen(false)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const dialogType = {
+    title: (
+      <form onSubmit={handleEdit}>
+        <DialogTitle id='form-dialog-title'>Edit portfolio</DialogTitle>
+        <DialogContent>
+          <TextField
+            className={classes.formLabel}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            autoFocus
+            margin='dense'
+            id='portfolioName'
+            label='Title'
+            fullWidth
+          />
+          <TextField
+            className={classes.formLabel}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            autoFocus
+            margin='dense'
+            id='portfolioDesc'
+            label='Description'
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} variant='outlined'>
+            Cancel
+          </Button>
+          <Button onClick={handleEdit} variant='contained'>
+            Save
+          </Button>
+        </DialogActions>
+      </form>
+    ),
+    page: (
+      <form onSubmit={handleEdit}>
+        <DialogTitle id='form-dialog-title'>Edit page</DialogTitle>
+        <DialogContent>
+          <TextField
+            className={classes.formLabel}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            autoFocus
+            label='Title'
+            margin='dense'
+            id='pageName'
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} variant='outlined'>
+            Cancel
+          </Button>
+          <Button onClick={handleEdit} variant='contained'>
+            Save
+          </Button>
+        </DialogActions>
+      </form>
+    ),
+    delete: (
+      <div>
+        <DialogTitle id='alert-dialog-title'>{'Delete this page?'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Are you sure you want to delete the{' '}
+            <span style={{ fontWeight: 'bold' }}>{dialogContent.target}</span> page?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color='primary' variant='outlined'>
+            Cancel
+          </Button>
+          <Button onClick={handleDelete} color='error' variant='container' autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </div>
+    ),
+  }
+
+  const dialog = (
+    <CustomDialog open={open} setOpen={setOpen} content={dialogType[dialogContent.type]} />
+  )
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Page Content                                */
+  /* -------------------------------------------------------------------------- */
 
   const content = (
     <Grid container direction='row' spacing={0}>
+      {/*
+       * LIST MENU
+       */}
       <Grid item xs={12} md={4} lg={3}>
         <Paper className={leftPanel}>
+          {/*
+           * LIST MENU CONTENT
+           */}
           <Grid style={{ width: '100%', height: '100%' }}>
+            {/*
+             * PORTFOLIO TITLE
+             */}
             <Grid
               container
               direction='row'
@@ -38,39 +182,36 @@ export default function EditPortfolioPage() {
               alignItems='center'
               className={classes.padded}
             >
-              <Typography variant='button'>Title</Typography>
-              <Fab size='small'>
+              <Typography variant='button'>{title}</Typography>
+              <Fab color='primary' size='small' onClick={() => handleClick('title', title)}>
                 <CreateIcon />
               </Fab>
             </Grid>
             <Divider orientation='horizontal' />
+
+            {/*
+             * PORTFOLIO PAGES
+             */}
+
             <Grid container direction='column' justify='space-evenly' className={classes.padded}>
               <Typography variant='overline'>Pages</Typography>
               <List>
                 {listItems.map((item, idx) => (
                   <ListItem key={idx} button className={classes.hiddenButtonItem}>
-                    <ListItemText
-                      onClick={() => {
-                        alert(item)
-                      }}
-                    >
-                      {item}
-                    </ListItemText>
+                    <ListItemText onClick={() => {}}>{item}</ListItemText>
                     <Fab
+                      color='primary'
                       size='small'
                       className={classes.hiddenButton}
-                      onClick={() => {
-                        alert(`Editing ${item}`)
-                      }}
+                      onClick={() => handleClick('page', item)}
                     >
                       <CreateIcon />
                     </Fab>
                     <Fab
+                      color='primary'
                       size='small'
                       className={classes.hiddenButton}
-                      onClick={() => {
-                        alert(`Deleting ${item}`)
-                      }}
+                      onClick={() => handleClick('delete', item)}
                     >
                       <CloseIcon />
                     </Fab>
@@ -82,25 +223,51 @@ export default function EditPortfolioPage() {
         </Paper>
       </Grid>
 
+      {/*
+       * PAGE SECTIONS
+       */}
+
       <Grid item xs={12} md={8} lg={9}>
         <Paper className={fixedHeightPaper}>
-          <Grid item xs={12} container direction='column' style={{ height: '100%' }}>
-            <Grid item>
-              <form>
-                <Grid container justify='space-around' direction='column'>
-                  <TextField variant='outlined' label='Title' fullWidth multiline></TextField>
-                  <TextField variant='outlined' label='Paragraph' fullWidth multiline></TextField>
-                </Grid>
-              </form>
-            </Grid>
-            <Grid item>
-              <Fab>
-                <CreateIcon />
-              </Fab>
-            </Grid>
+          {/*
+           * PAGE CONTENT
+           */}
+          <Grid
+            item
+            xs={12}
+            container
+            direction='column'
+            justify='space-between'
+            style={{ height: '100%', overflow: 'scroll' }}
+          >
+            <form>
+              <Grid container direction='column'>
+                <PaddedFormGrid item>
+                  <TextField
+                    className={classes.formLabel}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    variant='outlined'
+                    label='Paragraph'
+                    fullWidth
+                    multiline
+                  ></TextField>
+                </PaddedFormGrid>
+              </Grid>
+            </form>
+          </Grid>
+          {/*
+           * SAVE CHANGES BUTTON
+           */}
+          <Grid item className={classes.floatingBottomContainer}>
+            <Fab color='primary' variant='extended'>
+              <Typography variant='button'>Save Changes</Typography>
+            </Fab>
           </Grid>
         </Paper>
       </Grid>
+      {dialog}
     </Grid>
   )
   return <Sidebar content={content} />

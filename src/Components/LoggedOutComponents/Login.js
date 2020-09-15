@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 
 import { BACKEND, AUTHENTICATE } from '../../Endpoints'
 import {
@@ -16,6 +16,7 @@ import {
 import { Link } from 'react-router-dom'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import LandingContainer from './LandingContainer'
+import { loggedOutStyles } from '../loggedOutStyles'
 
 const styles = {
   div: {
@@ -48,22 +49,22 @@ const PaddedTextField = styled(TextField)({
   marginBottom: '5%',
 })
 
-class Login extends Component {
-  state = { email: '', password: '', rememberMe: false }
+function Login(props) {
+  const [state, setState] = useState({ email: '', password: '', rememberMe: false })
 
-  handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value })
+  function handleChange(e) {
+    setState({ [e.target.name]: e.target.value })
   }
 
-  handleCheckbox = (e) => {
-    this.setState((st) => ({ rememberMe: !st.rememberMe }))
+  function handleCheckbox(e) {
+    setState((st) => ({ rememberMe: !st.rememberMe }))
   }
 
-  handleSubmit = (e) => {
+  function handleSubmit(e) {
     e.preventDefault()
 
     const details = {
-      ...this.state,
+      ...state,
     }
 
     fetch(BACKEND + AUTHENTICATE, {
@@ -79,77 +80,92 @@ class Login extends Component {
     })
 
     console.log('Logged in!')
-    console.log('Email:', this.state.email)
-    console.log('Password:', this.state.password)
+    console.log('Email:', state.email)
+    console.log('Password:', state.password)
   }
 
-  render() {
-    const { classes } = this.props
-    const content = (
-      <div className={classes.div}>
-        <form onSubmit={this.handleSubmit} className={classes.form}>
-          <Avatar>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component='h1' variant='h5'>
-            Log In
-          </Typography>
-          <PaddedTextField
-            variant='outlined'
-            margin='normal'
-            required
-            fullWidth
-            id='email'
-            label='Email Address'
-            name='email'
-            autoComplete='email'
-            autoFocus
-            onChange={this.handleChange}
-          />
-          <PaddedTextField
-            variant='outlined'
-            margin='normal'
-            required
-            fullWidth
-            name='password'
-            label='Password'
-            type='password'
-            id='password'
-            autoComplete='current-password'
-            onChange={this.handleChange}
-          />
-          <FormControlLabel
-            className={classes.div}
-            control={
-              <Checkbox
-                value='remember'
-                color='primary'
-                onClick={this.handleCheckbox}
-                className={classes.rememberMe}
-              />
-            }
-            label='Remember me'
-          />
-          <Button type='submit' fullWidth variant='contained' color='primary'>
-            Log In
-          </Button>
-          <Grid container className={classes.links}>
-            <Grid item xs>
-              <Link to='/forgotpassword' variant='body2'>
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link to='/signup' variant='body2'>
-                {"Don't have an account?"}
-              </Link>
-            </Grid>
+  const style = loggedOutStyles()
+  const { classes } = props
+  const content = (
+    <div className={classes.div}>
+      <form onSubmit={handleSubmit} className={classes.form}>
+        <Avatar>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component='h1' variant='h5'>
+          Log In
+        </Typography>
+        <PaddedTextField
+          InputLabelProps={{
+            shrink: true,
+          }}
+          className={style.formLabel}
+          variant='outlined'
+          margin='normal'
+          required
+          fullWidth
+          id='email'
+          label='Email Address'
+          name='email'
+          autoComplete='email'
+          autoFocus
+          onChange={handleChange}
+        />
+        <PaddedTextField
+          InputLabelProps={{
+            shrink: true,
+          }}
+          className={style.formLabel}
+          variant='outlined'
+          margin='normal'
+          required
+          fullWidth
+          name='password'
+          label='Password'
+          type='password'
+          id='password'
+          autoComplete='current-password'
+          onChange={handleChange}
+        />
+        <Grid container justify='space-between'>
+          <Grid item xs={7} md={5}>
+            <FormControlLabel
+              className={classes.div}
+              control={
+                <Checkbox
+                  value='remember'
+                  color='primary'
+                  onClick={handleCheckbox}
+                  className={classes.rememberMe}
+                />
+              }
+              label='Remember me'
+            />
           </Grid>
-        </form>
-      </div>
-    )
-    return <LandingContainer content={content} />
-  }
+          <Grid item xs={5} md={7}>
+            {' '}
+          </Grid>
+        </Grid>
+
+        <Button type='submit' fullWidth variant='contained' color='primary'>
+          Log In
+        </Button>
+        <Grid container className={classes.links}>
+          <Grid item xs>
+            <Link to='/forgotpassword' variant='body2'>
+              Forgot password?
+            </Link>
+          </Grid>
+          <Grid item>
+            <Link to='/signup' variant='body2'>
+              {"Don't have an account?"}
+            </Link>
+          </Grid>
+        </Grid>
+      </form>
+    </div>
+  )
+  return <LandingContainer content={content} />
 }
 
 export default withStyles(styles)(Login)

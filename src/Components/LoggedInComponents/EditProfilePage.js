@@ -1,10 +1,10 @@
-import React, { useState, useReducer } from 'react'
+import React, { useState, useReducer, useRef, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
 import clsx from 'clsx'
 
 import Sidebar from './Sidebar'
 
-import { loggedInStyles } from '../loggedInStyles'
+import { loggedInStyles, PaddedFormGrid } from '../loggedInStyles'
 
 import {
   Grid,
@@ -17,15 +17,9 @@ import {
   Chip,
   Fab,
 } from '@material-ui/core'
-import { styled } from '@material-ui/core/styles'
 import PersonIcon from '@material-ui/icons/Person'
 import PhoneIcon from '@material-ui/icons/Phone'
 // import CloseIcon from '@material-ui/icons/Close'
-
-const PaddedFormGrid = styled(Grid)({
-  marginTop: '8px',
-  marginBottom: '8px',
-})
 
 // Initial About Me and Contact data, will be fetched from database for the
 // currently authenticated user as the initial data in the states of the forms
@@ -51,18 +45,44 @@ const initialContact = {
 const reducer = (state, newState) => ({ ...state, ...newState })
 
 export default function EditProfilePage() {
-  /* --------------------------- States and Handlers -------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                         Fetching Initial User Data                         */
+  /* -------------------------------------------------------------------------- */
 
-  const [page, setPage] = useState('aboutMe')
+  let profileRef = useRef({})
+
+  // useEffect is run every time a component is updated
+
+  useEffect(() => {
+    // TODO: Set up fetch for current user's profile
+    let profile = profileRef.current
+
+    async function fetchProfile() {
+      const accessToken = window.sessionStorage.accessToken
+      // const response = await fetch().json()
+      return {}
+    }
+
+    profile = fetchProfile()
+  }, [])
+
+  /* -------------------------------------------------------------------------- */
+  /*                          States and their Setters                          */
+  /* -------------------------------------------------------------------------- */
+
+  const [page, setPage] = useState()
   const [tagText, setTagText] = useState('')
   const [about, setAbout] = useReducer(reducer, initialAbout)
   const [contact, setContact] = useReducer(reducer, initialContact)
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Handlers                                  */
+  /* -------------------------------------------------------------------------- */
 
   // Handles changes in any text input in the About Me form, reflects this
   // change in the 'about' state object
   const handleOnAboutChange = (event) => {
     const { name, value } = event.target
-    console.log(name, value)
     setAbout({ [name]: value })
   }
 
@@ -93,11 +113,14 @@ export default function EditProfilePage() {
     setContact({ [name]: value })
   }
 
-  const handleSubmit = (e) => {
+  function handleSubmit(e) {
+    e.preventDefault()
     alert(page)
   }
 
-  /* --------------------------------- Styles --------------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
 
   // Used for general styles
   const classes = loggedInStyles()
@@ -108,7 +131,9 @@ export default function EditProfilePage() {
   // Used for the list menu containing the About Me and Contact options
   const listMenu = clsx(fixedHeightPaper, classes.listMenu)
 
-  /* --------------------------- Form to be Rendered -------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                             Form to be Rendered                            */
+  /* -------------------------------------------------------------------------- */
 
   // Switch between About Me and Contact options according to the 'page' state
 
@@ -134,6 +159,10 @@ export default function EditProfilePage() {
             <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   fullWidth
                   label='Email'
                   type='email'
@@ -146,6 +175,10 @@ export default function EditProfilePage() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   fullWidth
                   label='Contact Number'
                   variant='outlined'
@@ -158,6 +191,10 @@ export default function EditProfilePage() {
             <PaddedFormGrid item>
               <Grid item xs={12} className={classes.singleForm}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   fullWidth
                   label='Company'
                   variant='outlined'
@@ -170,6 +207,10 @@ export default function EditProfilePage() {
             <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   fullWidth
                   label='Address Line 1'
                   variant='outlined'
@@ -181,6 +222,10 @@ export default function EditProfilePage() {
               <Grid item container spacing={0} xs={12} md={6} justify='space-between'>
                 <Grid item xs={7}>
                   <TextField
+                    className={classes.formLabel}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     fullWidth
                     label='Town / Suburb'
                     variant='outlined'
@@ -191,6 +236,10 @@ export default function EditProfilePage() {
                 </Grid>
                 <Grid item xs={2}>
                   <TextField
+                    className={classes.formLabel}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     fullWidth
                     label='Postcode'
                     variant='outlined'
@@ -201,6 +250,10 @@ export default function EditProfilePage() {
                 </Grid>
                 <Grid item xs={2}>
                   <TextField
+                    className={classes.formLabel}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     fullWidth
                     label='State'
                     variant='outlined'
@@ -214,6 +267,10 @@ export default function EditProfilePage() {
             <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   fullWidth
                   label='Address Line 2'
                   variant='outlined'
@@ -224,6 +281,10 @@ export default function EditProfilePage() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   fullWidth
                   label='Country'
                   variant='outlined'
@@ -251,6 +312,10 @@ export default function EditProfilePage() {
             <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   fullWidth
                   label='First Name'
                   variant='outlined'
@@ -261,6 +326,10 @@ export default function EditProfilePage() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   fullWidth
                   label='Last Name'
                   variant='outlined'
@@ -273,6 +342,10 @@ export default function EditProfilePage() {
             <PaddedFormGrid item>
               <Grid item className={classes.singleForm}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   label='Occupation'
                   variant='outlined'
                   fullWidth
@@ -293,6 +366,10 @@ export default function EditProfilePage() {
             <PaddedFormGrid item>
               <Grid item className={classes.singleForm}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                   placeholder='Type something...'
                   fullWidth
                   multiline
@@ -315,6 +392,10 @@ export default function EditProfilePage() {
               <PaddedFormGrid item>
                 <Grid item className={classes.singleForm}>
                   <TextField
+                    className={classes.formLabel}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     placeholder='Type and enter to add a tag...'
                     fullWidth
                     variant='outlined'
@@ -343,6 +424,11 @@ export default function EditProfilePage() {
         </form>
       )
   }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Page Content                                */
+  /* -------------------------------------------------------------------------- */
+  // Contains the form to be rendered
 
   const content = (
     <Grid container direction='row' spacing={0}>
@@ -376,7 +462,7 @@ export default function EditProfilePage() {
             {form}
           </Grid>
           <Grid item className={classes.floatingBottomContainer}>
-            <Fab color='action' variant='extended' aria-label='save changes' onClick={handleSubmit}>
+            <Fab variant='extended' aria-label='save changes' onClick={handleSubmit}>
               Save Changes
             </Fab>
           </Grid>
