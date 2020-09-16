@@ -1,12 +1,38 @@
 import React from 'react'
-import { Typography, Breadcrumbs } from '@material-ui/core'
-import { loggedInStyles } from '../loggedInStyles'
+import { Breadcrumbs, makeStyles } from '@material-ui/core'
+import { loggedInStyles, CursorTypography } from '../loggedInStyles'
 import { useLocation, Link } from 'react-router-dom'
 import HomeIcon from '@material-ui/icons/Home'
 import PersonIcon from '@material-ui/icons/Person'
 import DescriptionIcon from '@material-ui/icons/Description'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import SettingsIcon from '@material-ui/icons/Settings'
+
+const useStyles = makeStyles((theme) => ({
+  /* -------------------------------------------------------------------------- */
+  /*                                 Breadcrumbs                                */
+  /* -------------------------------------------------------------------------- */
+
+  breadcrumbLink: {
+    display: 'flex',
+    fontSize: '1.5em',
+    fontWeight: '400',
+    alignItems: 'center',
+    textDecoration: 'none',
+    color: theme.palette.text.primary,
+    '& a': 'pointer',
+  },
+
+  '.MuiLink-root:hover': {
+    textDecoration: 'underline',
+  },
+  breadcrumbIcon: {
+    marginRight: theme.spacing(1),
+    marginBottom: '2px',
+    width: 30,
+    height: 27,
+  },
+}))
 
 // For mapping a path segment (the singular segment between /'s)
 // to a corresponding breadcrumb NAME (all segments must have a corresponding crumb)
@@ -33,7 +59,7 @@ const breadcrumbIconMap = {
 
 export default function HeaderBreadcrumbs(props) {
   // Contains all styling
-  const classes = loggedInStyles()
+  const classes = useStyles()
 
   // React Router hook used to get pathname from the Location routeProp
   const { pathname } = useLocation()
@@ -60,7 +86,7 @@ export default function HeaderBreadcrumbs(props) {
 
   return (
     <div>
-      <Breadcrumbs className={classes.breadcrumbs} aria-label='breadcrumb'>
+      <Breadcrumbs aria-label='breadcrumb'>
         {/**
          * Maps each path segment to a Typography component if it is the last path segment,
          * and a router Link otherwise.
@@ -74,7 +100,7 @@ export default function HeaderBreadcrumbs(props) {
               {breadcrumbNameMap[segment]}
             </Link>
           ) : (
-            <Typography
+            <CursorTypography
               style={{ fontWeight: 'bold' }}
               className={classes.breadcrumbLink}
               key={segment}
@@ -83,7 +109,7 @@ export default function HeaderBreadcrumbs(props) {
                 {breadcrumbIconMap[segment]}
               </span>
               {breadcrumbNameMap[segment]}
-            </Typography>
+            </CursorTypography>
           )
         )}
       </Breadcrumbs>

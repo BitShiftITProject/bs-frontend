@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Sidebar from './Sidebar'
+import { CursorTypography } from '../loggedInStyles'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,11 +41,15 @@ export default function HelpPage() {
           </Typography>
           {help[section].map((question) => (
             <Accordion key={question.q}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls='panel1a-content'>
-                <Typography className={classes.heading}>{question.q}</Typography>
+              <AccordionSummary
+                className={classes.heading}
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls='panel1a-content'
+              >
+                <CursorTypography>{question.q}</CursorTypography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>{question.a}</Typography>
+                <CursorTypography>{question.a}</CursorTypography>
               </AccordionDetails>
             </Accordion>
           ))}

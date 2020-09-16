@@ -1,27 +1,55 @@
 import React from 'react'
-import { loggedInStyles } from '../loggedInStyles'
+import { CursorTypography } from '../loggedInStyles'
 import {
   CardMedia,
   CardContent,
-  Typography,
   Card,
   Button,
   Grid,
   CardActions,
-  // CardActionArea,
-  // Fab,
   IconButton,
-  // Menu,
-  // MenuItem,
+  makeStyles,
 } from '@material-ui/core'
 
-// import MoreVertIcon from '@material-ui/icons/MoreVert'
 import ShareIcon from '@material-ui/icons/Share'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 
+const useStyles = makeStyles((theme) => ({
+  /* -------------------------------------------------------------------------- */
+  /*                               Portfolio Card                               */
+  /* -------------------------------------------------------------------------- */
+
+  portfolioCard: {
+    width: '100%',
+    height: 'auto',
+    [theme.breakpoints.up('lg')]: {
+      height: 350,
+    },
+    '& .MuiCardContent-root:last-child': {
+      paddingBottom: 0,
+    },
+  },
+
+  portfolioContent: {
+    height: 'auto',
+    [theme.breakpoints.up('lg')]: {
+      height: 100,
+    },
+    overflow: 'scroll',
+  },
+
+  portfolioCardMedia: {
+    height: 200,
+    backgroundColor: theme.palette.background.default,
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
+    },
+  },
+}))
+
 export default function PortfolioCard(props) {
   // Contains all styling
-  const classes = loggedInStyles()
+  const classes = useStyles()
 
   /* -------------------------------------------------------------------------- */
   /*                       Portfolio Details and Handlers                       */
@@ -42,61 +70,17 @@ export default function PortfolioCard(props) {
     deletePortfolio(portfolioId)
   }
 
-  // Menu
-  // const ITEM_HEIGHT = 48
-  // const [anchorEl, setAnchorEl] = useState(null)
-  // const open = Boolean(anchorEl)
-
-  // const handleClick = (event) => {
-  //   setAnchorEl(event.currentTarget)
-  // }
-
-  // const handleClose = () => {
-  //   setAnchorEl(null)
-  // }
-
-  // const menu = (
-  //   <Grid>
-  //     <IconButton onClick={handleClick}>
-  //       <MoreVertIcon />
-  //     </IconButton>
-  //     <Menu
-  //       id='long-menu'
-  //       anchorEl={anchorEl}
-  //       keepMounted
-  //       open={open}
-  //       onClose={handleClose}
-  //       PaperProps={{
-  //         style: {
-  //           maxHeight: ITEM_HEIGHT * 4.5,
-  //           width: '10ch',
-  //         },
-  //       }}
-  //     >
-  //       {/*
-  //        * All MenuItems must have the portfolio ID as the value
-  //        */}
-  //       {Object.keys(options).map((option) => (
-  //         <MenuItem key={option} onClick={options[option]}>
-  //           {option}
-  //         </MenuItem>
-  //       ))}
-  //     </Menu>
-  //   </Grid>
-  // )
-
-  // const options = { Delete: handleDelete }
   return (
     <Card className={classes.portfolioCard}>
       <Grid container spacing={1} direction='column'>
         <CardMedia src='/' className={classes.portfolioCardMedia} />
         <CardContent className={classes.portfolioContent}>
-          <Typography gutterBottom variant='h5' component='h2'>
+          <CursorTypography gutterBottom variant='h5' component='h2'>
             {title}
-          </Typography>
-          <Typography variant='body2' color='textSecondary' component='p'>
+          </CursorTypography>
+          <CursorTypography variant='body2' color='textSecondary' component='p'>
             {desc}
-          </Typography>
+          </CursorTypography>
         </CardContent>
       </Grid>
 

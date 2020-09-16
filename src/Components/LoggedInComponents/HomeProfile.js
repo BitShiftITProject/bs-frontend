@@ -1,9 +1,58 @@
 import React from 'react'
-import { Grid, Paper, ButtonBase, Typography, Fab } from '@material-ui/core'
-import clsx from 'clsx'
+import { Grid, Paper, ButtonBase, Fab, makeStyles, Typography } from '@material-ui/core'
 
-import { loggedInStyles } from '../loggedInStyles'
+import { loggedInStyles, CursorTypography } from '../loggedInStyles'
 import { useHistory } from 'react-router-dom'
+
+const useStyles = makeStyles((theme) => ({
+  /* -------------------------------------------------------------------------- */
+  /*                                Home Profile                                */
+  /* -------------------------------------------------------------------------- */
+
+  changeHeightAtSmall: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      height: '100%',
+    },
+  },
+
+  profileImage: {
+    overflow: 'hidden',
+    borderRadius: '50%',
+    height: 200,
+    width: 200,
+  },
+
+  profileImg: {
+    maxHeight: '100%',
+    display: 'block',
+  },
+
+  profileName: {
+    paddingTop: theme.spacing(3),
+    fontWeight: 'lighter',
+    paddingBottom: '5%',
+    textAlign: 'center',
+  },
+
+  profileOccupation: {
+    margin: '0 auto',
+    textAlign: 'center',
+    paddingRight: '5%',
+    paddingLeft: '5%',
+    borderRadius: '20px',
+    cursor: 'pointer',
+    ...theme.typography.button,
+    width: '80%',
+    backgroundColor: theme.palette.background.default,
+  },
+
+  editProfileButton: {
+    width: '75px !important',
+  },
+}))
 
 export default function HomeProfile(props) {
   // Router hook to send user to some page.
@@ -15,17 +64,17 @@ export default function HomeProfile(props) {
   }
 
   // Contains all styling
-  const classes = loggedInStyles()
+  const classes = useStyles()
 
   // Adds flex spacing and aligning, otherwise identical to all other Paper components
-  const profilePaper = clsx(classes.paper, classes.fixedHeight, classes.changeHeightAtSmall)
+  const leftPanel = loggedInStyles().leftPanel
 
   // Breakpoint sizes and click handler for profile picture and edit button
   const { xs, md, lg } = props
 
   return (
     <Grid item xs={xs} md={md} lg={lg}>
-      <Paper className={profilePaper}>
+      <Paper className={leftPanel}>
         {/**
          * PROFILE PICTURE ICON
          */}

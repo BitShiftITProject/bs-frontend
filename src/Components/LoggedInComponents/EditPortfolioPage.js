@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
-import clsx from 'clsx'
 
-import { loggedInStyles, PaddedFormGrid } from '../loggedInStyles'
+import { loggedInStyles, PaddedFormGrid, CursorTypography } from '../loggedInStyles'
 import CustomDialog from './CustomDialog'
 
 import {
   Grid,
-  Typography,
   Paper,
   Fab,
   Divider,
@@ -38,8 +36,8 @@ export default function EditPortfolioPage() {
   /* -------------------------------------------------------------------------- */
 
   const classes = loggedInStyles()
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
-  const leftPanel = clsx(fixedHeightPaper, classes.changeHeightAtSmall)
+  const fixedHeightPaper = classes.fixedHeightPaper
+  const leftPanel = classes.leftPanel
 
   /* -------------------------------------------------------------------------- */
   /*                                   Dialog                                   */
@@ -182,7 +180,7 @@ export default function EditPortfolioPage() {
               alignItems='center'
               className={classes.padded}
             >
-              <Typography variant='button'>{title}</Typography>
+              <CursorTypography variant='button'>{title}</CursorTypography>
               <Fab color='primary' size='small' onClick={() => handleClick('title', title)}>
                 <CreateIcon />
               </Fab>
@@ -194,7 +192,7 @@ export default function EditPortfolioPage() {
              */}
 
             <Grid container direction='column' justify='space-evenly' className={classes.padded}>
-              <Typography variant='overline'>Pages</Typography>
+              <CursorTypography variant='overline'>Pages</CursorTypography>
               <List>
                 {listItems.map((item, idx) => (
                   <ListItem key={idx} button className={classes.hiddenButtonItem}>
@@ -262,7 +260,7 @@ export default function EditPortfolioPage() {
            */}
           <Grid item className={classes.floatingBottomContainer}>
             <Fab color='primary' variant='extended'>
-              <Typography variant='button'>Save Changes</Typography>
+              <CursorTypography variant='button'>Save Changes</CursorTypography>
             </Fab>
           </Grid>
         </Paper>

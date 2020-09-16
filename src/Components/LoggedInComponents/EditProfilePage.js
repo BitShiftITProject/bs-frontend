@@ -1,6 +1,5 @@
 import React, { useState, useReducer, useRef, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
-import clsx from 'clsx'
 
 import Sidebar from './Sidebar'
 
@@ -16,10 +15,34 @@ import {
   TextField,
   Chip,
   Fab,
+  makeStyles,
 } from '@material-ui/core'
 import PersonIcon from '@material-ui/icons/Person'
 import PhoneIcon from '@material-ui/icons/Phone'
 // import CloseIcon from '@material-ui/icons/Close'
+
+const useStyles = makeStyles((theme) => ({
+  /* -------------------------------------------------------------------------- */
+  /*                              Edit Profile Page                             */
+  /* -------------------------------------------------------------------------- */
+
+  editProfileForm: {
+    // '& .MuiGrid-root': {
+    //   paddingBottom: theme.spacing(0),
+    // },
+    '& .MuiChip-root': {
+      marginBottom: theme.spacing(0),
+      marginTop: theme.spacing(0),
+    },
+
+    // '& .MuiTextField-root': {
+    //   marginRight: theme.spacing(2),
+    // },
+    '& .MuiInputLabel-outlined:focus-': {
+      overflow: 'hidden',
+    },
+  },
+}))
 
 // Initial About Me and Contact data, will be fetched from database for the
 // currently authenticated user as the initial data in the states of the forms
@@ -124,12 +147,9 @@ export default function EditProfilePage() {
 
   // Used for general styles
   const classes = loggedInStyles()
-
-  // Used for all Paper components to give consistent height and spacing
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
+  const editProfileForm = useStyles().editProfileForm
 
   // Used for the list menu containing the About Me and Contact options
-  const listMenu = clsx(fixedHeightPaper, classes.listMenu)
 
   /* -------------------------------------------------------------------------- */
   /*                             Form to be Rendered                            */
@@ -143,7 +163,7 @@ export default function EditProfilePage() {
     // Contact Form
     case 'contact':
       form = (
-        <form className={classes.editProfileForm} noValidate autoComplete='off'>
+        <form className={editProfileForm} noValidate autoComplete='off'>
           <Grid item container spacing={0} direction='column'>
             <Grid item container justify='space-between'>
               {/**
@@ -189,7 +209,7 @@ export default function EditProfilePage() {
               </Grid>
             </PaddedFormGrid>
             <PaddedFormGrid item>
-              <Grid item xs={12} className={classes.singleForm}>
+              <Grid item xs={12} className={classes.padded}>
                 <TextField
                   className={classes.formLabel}
                   InputLabelProps={{
@@ -301,7 +321,7 @@ export default function EditProfilePage() {
     // About Me form
     default:
       form = (
-        <form className={classes.editProfileForm} noValidate autoComplete='off'>
+        <form className={editProfileForm} noValidate autoComplete='off'>
           <Grid container spacing={0} direction='column'>
             {/**
              * ABOUT ME DETAILS: First Name, Last Name, Occupation
@@ -340,7 +360,7 @@ export default function EditProfilePage() {
               </Grid>
             </PaddedFormGrid>
             <PaddedFormGrid item>
-              <Grid item className={classes.singleForm}>
+              <Grid item className={classes.padded}>
                 <TextField
                   className={classes.formLabel}
                   InputLabelProps={{
@@ -364,7 +384,7 @@ export default function EditProfilePage() {
               <Chip label='Description' color='primary' />
             </Grid>
             <PaddedFormGrid item>
-              <Grid item className={classes.singleForm}>
+              <Grid item className={classes.padded}>
                 <TextField
                   className={classes.formLabel}
                   InputLabelProps={{
@@ -390,7 +410,7 @@ export default function EditProfilePage() {
                * ABOUT ME TAGS
                */}
               <PaddedFormGrid item>
-                <Grid item className={classes.singleForm}>
+                <Grid item className={classes.padded}>
                   <TextField
                     className={classes.formLabel}
                     InputLabelProps={{
@@ -406,7 +426,7 @@ export default function EditProfilePage() {
                   />
                 </Grid>
 
-                <Grid item container spacing={1} direction='row' className={classes.singleForm}>
+                <Grid item container spacing={1} direction='row' className={classes.padded}>
                   {about.tags.map((t) => (
                     <PaddedFormGrid item key={t.id}>
                       <Chip
@@ -436,7 +456,7 @@ export default function EditProfilePage() {
        * LIST MENU with About Me, Contact options
        */}
       <Grid item xs={12} md={3} lg={2}>
-        <Paper className={listMenu}>
+        <Paper className={classes.listMenu}>
           <List component='nav' aria-label='profile sections'>
             <ListItem button selected={page === 'aboutMe'} onClick={() => setPage('aboutMe')}>
               <ListItemIcon>
@@ -457,7 +477,7 @@ export default function EditProfilePage() {
        * FORM with user profile data
        */}
       <Grid item xs={12} md={9} lg={10} container direction='column' justify='space-between'>
-        <Paper className={fixedHeightPaper}>
+        <Paper className={classes.fixedHeightPaper}>
           <Grid item style={{ overflow: 'scroll' }}>
             {form}
           </Grid>

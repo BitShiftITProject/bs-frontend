@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 
 import { BACKEND, SIGNUP } from '../../Endpoints'
-import { TextField, Button, Avatar, Typography, styled, withStyles, Fab } from '@material-ui/core'
+import { TextField, Button, Avatar, styled, withStyles, Fab } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import LandingContainer from './LandingContainer'
+import { CursorTypography } from '../loggedInStyles'
 import { loggedOutStyles } from '../loggedOutStyles'
 import { useHistory } from 'react-router-dom'
 
@@ -91,9 +92,9 @@ function Signup(props) {
         <Avatar>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component='h1' variant='h5'>
+        <CursorTypography component='h1' variant='h5'>
           Sign Up
-        </Typography>
+        </CursorTypography>
         <PaddedTextField
           InputLabelProps={{
             shrink: true,

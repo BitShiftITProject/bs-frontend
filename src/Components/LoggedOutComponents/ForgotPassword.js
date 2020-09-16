@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { withStyles, styled } from '@material-ui/core/styles'
 
-import { TextField, Button, Typography, Fab } from '@material-ui/core'
+import { TextField, Button, Fab } from '@material-ui/core'
 import LandingContainer from './LandingContainer'
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
+import { CursorTypography } from '../loggedInStyles'
 import { loggedOutStyles } from '../loggedOutStyles'
 
 const styles = {
@@ -46,16 +47,20 @@ function ForgotPassword(props) {
   const content = (
     <div className={classes.div}>
       <form onSubmit={(e) => handleSubmit(e)} className={classes.form}>
-        <Typography component='h5' variant='h5' gutterBottom>
+        <CursorTypography component='h5' variant='h5' gutterBottom>
           Forgot Password
-        </Typography>
-        <Typography variant='subtitle2' style={{ width: '50%', textAlign: 'center' }} gutterBottom>
+        </CursorTypography>
+        <CursorTypography
+          variant='subtitle2'
+          style={{ width: '50%', textAlign: 'center' }}
+          gutterBottom
+        >
           Please enter the email or username you use to sign up with, and we'll send you a link for
           a new password{' '}
           <span role='img' aria-label='smiling cowboy lol'>
             🤠
           </span>
-        </Typography>
+        </CursorTypography>
 
         <PaddedTextField
           InputLabelProps={{
@@ -73,7 +78,7 @@ function ForgotPassword(props) {
           fullWidth
         />
 
-        <Typography variant='button'>or</Typography>
+        <CursorTypography variant='button'>or</CursorTypography>
 
         <PaddedTextField
           InputLabelProps={{

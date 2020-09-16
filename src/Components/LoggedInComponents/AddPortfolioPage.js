@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import clsx from 'clsx'
 
 import { Grid, Paper, TextField, Button } from '@material-ui/core'
 import { loggedInStyles, PaddedFormGrid } from '../loggedInStyles'
@@ -18,7 +17,7 @@ export default function AddPortfolioPage() {
   /* -------------------------------------------------------------------------- */
 
   const classes = loggedInStyles()
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
+  const fixedHeightPaper = loggedInStyles().fixedHeightPaper
 
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */

@@ -1,11 +1,36 @@
 import React, { useEffect, useRef } from 'react'
-import clsx from 'clsx'
 import { useHistory } from 'react-router-dom'
 
 import { loggedInStyles } from '../loggedInStyles'
-import { Grid, Paper, Fab } from '@material-ui/core'
+import { Grid, Paper, Fab, makeStyles } from '@material-ui/core'
 import PortfolioCard from './PortfolioCard'
 import AddIcon from '@material-ui/icons/Add'
+
+const useStyles = makeStyles((theme) => ({
+  /* -------------------------------------------------------------------------- */
+  /*                  Add Portfolio Button (PortfolioCardList)                  */
+  /* -------------------------------------------------------------------------- */
+
+  floatingTopContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 30,
+  },
+
+  addPortfolioFab: {
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark,
+    },
+  },
+  addPortfolioIcon: {
+    marginLeft: theme.spacing(1),
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: theme.spacing(0.5),
+    },
+  },
+}))
 
 // Some test portfolios as visual guide
 const testPortfolios = [
@@ -66,8 +91,8 @@ export default function PortfolioCardList(props) {
   /*                                   Styling                                  */
   /* -------------------------------------------------------------------------- */
 
-  const classes = loggedInStyles()
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
+  const classes = useStyles()
+  const fixedHeightPaper = loggedInStyles().fixedHeightPaper
 
   // Breakpoint sizes for portfolio
   const { xs, md, lg } = props

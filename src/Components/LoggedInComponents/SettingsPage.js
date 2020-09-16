@@ -1,16 +1,10 @@
 import React, { useContext, useState } from 'react'
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Grid,
-  Switch,
-  Typography,
-} from '@material-ui/core'
+import { Accordion, AccordionDetails, AccordionSummary, Grid, Switch } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Sidebar from './Sidebar'
 import { CustomThemeContext } from '../Contexts/CustomThemeContext'
+import { CursorTypography } from '../loggedInStyles'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,12 +43,12 @@ export default function SettingsPage() {
     <div className={classes.root}>
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>General settings</Typography>
-          <Typography className={classes.secondaryHeading}></Typography>
+          <CursorTypography className={classes.heading}>General settings</CursorTypography>
+          <CursorTypography className={classes.secondaryHeading}></CursorTypography>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container justify='flex-start' alignItems='center'>
-            <Typography>Dark Mode</Typography>
+            <CursorTypography>Dark Mode</CursorTypography>
             <Switch
               checked={theme === 'dark'}
               onChange={toggleTheme}
@@ -66,14 +60,14 @@ export default function SettingsPage() {
       </Accordion>
       <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>Login Data</Typography>
-          <Typography className={classes.secondaryHeading}></Typography>
+          <CursorTypography className={classes.heading}>Login data</CursorTypography>
+          <CursorTypography className={classes.secondaryHeading}></CursorTypography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
+          <CursorTypography>
             Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius pulvinar
             diam eros in elit. Pellentesque convallis laoreet laoreet.
-          </Typography>
+          </CursorTypography>
         </AccordionDetails>
       </Accordion>
     </div>

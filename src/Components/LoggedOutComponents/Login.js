@@ -8,7 +8,6 @@ import {
   FormControlLabel,
   Grid,
   Avatar,
-  Typography,
   styled,
   withStyles,
 } from '@material-ui/core'
@@ -16,6 +15,7 @@ import {
 import { Link } from 'react-router-dom'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import LandingContainer from './LandingContainer'
+import { CursorTypography } from '../loggedInStyles'
 import { loggedOutStyles } from '../loggedOutStyles'
 
 const styles = {
@@ -92,9 +92,9 @@ function Login(props) {
         <Avatar>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component='h1' variant='h5'>
+        <CursorTypography component='h1' variant='h5'>
           Log In
-        </Typography>
+        </CursorTypography>
         <PaddedTextField
           InputLabelProps={{
             shrink: true,
