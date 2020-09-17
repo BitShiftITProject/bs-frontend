@@ -73,6 +73,18 @@ export default function EditPortfolioPage() {
   const [open, setOpen] = useState(false)
   const [dialogContent, setDialogContent] = useState({ type: '', target: '' })
 
+  const patchPortfolio = (patchDetails) => {
+    fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
+        method: 'PATCH',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(patchDetails)
+    })
+  }
+
   const handleClick = (name, value) => {
     setDialogContent({ type: name, target: value })
     setOpen(true)
@@ -80,7 +92,7 @@ export default function EditPortfolioPage() {
 
   const handleEdit = (e) => {
     e.preventDefault()
-    alert(`Edited: ${dialogContent.target}`)
+    patchPortfolio({"title":portfolio.title, "description":portfolio.description});
     setOpen(false)
   }
 
@@ -112,6 +124,8 @@ export default function EditPortfolioPage() {
     // I made it so that the state of the paragraph content is modified and kept in
     // the 'paragraph' variable, updated using the 'setParagraph' method.
     // So when sending a PATCH request, the body should be JSON.stringify({pages: {content: paragraph}})
+    patchPortfolio({"pages":{"content":paragraph}});
+    history.push('/portfolios');
   }
 
   const dialogType = {
@@ -130,7 +144,7 @@ export default function EditPortfolioPage() {
             label='Title'
             fullWidth
             value={portfolio.title}
-            onChange={(e) => setPortfolio(e.target.value)}
+            onChange={(e) => setPortfolio({...portfolio, title: e.target.value})}
           />
           <TextField
             className={classes.formLabel}
@@ -143,7 +157,7 @@ export default function EditPortfolioPage() {
             label='Description'
             fullWidth
             value={portfolio.description}
-            onChange={(e) => setPortfolio(e.target.value)}
+            onChange={(e) => setPortfolio({...portfolio, description: e.target.value})}
           />
         </DialogContent>
         <DialogActions>
