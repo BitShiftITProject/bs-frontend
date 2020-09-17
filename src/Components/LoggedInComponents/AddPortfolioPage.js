@@ -36,7 +36,7 @@ export default function AddPortfolioPage() {
     const details = {
       title,
       description: description,
-      pages: [],
+      pages: {},
       owner: emailId
     }
 
