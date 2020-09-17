@@ -6,6 +6,9 @@ const LOGGEDIN = '/cognito/loggedin'
 const PORTFOLIOS = '/portfolios';
 const USERS = '/users';
 
+const USERS = '/users'
+const PORTFOLIOS = '/portfolios'
+
 module.exports = {
   BACKEND,
   AUTHENTICATE,

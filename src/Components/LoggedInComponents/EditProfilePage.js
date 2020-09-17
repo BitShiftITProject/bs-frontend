@@ -1,10 +1,9 @@
-import React, { useState, useReducer } from 'react'
+import React, { useState, useReducer, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
-import clsx from 'clsx'
 
 import Sidebar from './Sidebar'
 
-import { loggedInStyles } from '../loggedInStyles'
+import { loggedInStyles, PaddedFormGrid } from '../loggedInStyles'
 
 import {
   Grid,
@@ -15,47 +14,126 @@ import {
   ListItem,
   TextField,
   Chip,
+  Fab,
+  makeStyles
 } from '@material-ui/core'
 import PersonIcon from '@material-ui/icons/Person'
 import PhoneIcon from '@material-ui/icons/Phone'
 // import CloseIcon from '@material-ui/icons/Close'
 
+import { BACKEND, USERS } from '../../Endpoints'
+import { useHistory } from 'react-router-dom'
+
+const useStyles = makeStyles((theme) => ({
+  /* -------------------------------------------------------------------------- */
+  /*                              Edit Profile Page                             */
+  /* -------------------------------------------------------------------------- */
+
+  editProfileForm: {
+    // '& .MuiGrid-root': {
+    //   paddingBottom: theme.spacing(0),
+    // },
+    '& .MuiChip-root': {
+      marginBottom: theme.spacing(0),
+      marginTop: theme.spacing(0)
+    },
+
+    // '& .MuiTextField-root': {
+    //   marginRight: theme.spacing(2),
+    // },
+    '& .MuiInputLabel-outlined:focus-': {
+      overflow: 'hidden'
+    }
+  }
+}))
+
 // Initial About Me and Contact data, will be fetched from database for the
 // currently authenticated user as the initial data in the states of the forms
 const initialAbout = {
-  firstName: '',
-  lastName: '',
+  first_name: '',
+  last_name: '',
   occupation: '',
   description: '',
-  tags: [],
+  tags: []
 }
 
 const initialContact = {
   email: '',
-  address1: '',
-  address2: '',
-  number: '',
-  town: '',
+  address_line_1: '',
+  address_line_2: '',
+  phone: '',
+  town_suburb: '',
   state: '',
-  country: '',
+  country: ''
 }
 
 // Reducer to update the state object
 const reducer = (state, newState) => ({ ...state, ...newState })
 
 export default function EditProfilePage() {
-  /* --------------------------- States and Handlers -------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                          States and their Setters                          */
+  /* -------------------------------------------------------------------------- */
 
-  const [page, setPage] = useState('aboutMe')
+  const [page, setPage] = useState()
   const [tagText, setTagText] = useState('')
   const [about, setAbout] = useReducer(reducer, initialAbout)
   const [contact, setContact] = useReducer(reducer, initialContact)
+
+  /* -------------------------------------------------------------------------- */
+  /*                         Fetching Initial User Data                         */
+  /* -------------------------------------------------------------------------- */
+
+  const emailId = window.sessionStorage.getItem('emailId')
+  const history = useHistory()
+
+  // TODO: Set up catch block for errors
+  useEffect(() => {
+    async function fetchUser() {
+      if (!emailId) history.push('/login')
+
+      const response = await fetch(BACKEND + USERS + '/' + emailId, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+          'Content-type': 'application/json'
+        }
+      })
+      const user = response.json()
+      return user
+    }
+
+    fetchUser().then((user) => {
+      setAbout({
+        first_name: user.first_name || '',
+        last_name: user.last_name || '',
+        occupation: user.occupation || '',
+        description: user.description || '',
+        tags: user.tags || []
+      })
+      setContact({
+        profile_email: user.profile_email || user.email,
+        company: user.company || '',
+        address_line_1: user.address_line_1 || '',
+        address_line_2: user.address_line_2 || '',
+        phone: user.phone || '',
+        town_suburb: user.town_suburb || '',
+        postcode: user.postcode || '',
+        state: user.state || '',
+        country: user.country || ''
+      })
+    })
+  }, [emailId, history])
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Handlers                                  */
+  /* -------------------------------------------------------------------------- */
 
   // Handles changes in any text input in the About Me form, reflects this
   // change in the 'about' state object
   const handleOnAboutChange = (event) => {
     const { name, value } = event.target
-    console.log(name, value)
     setAbout({ [name]: value })
   }
 
@@ -86,20 +164,49 @@ export default function EditProfilePage() {
     setContact({ [name]: value })
   }
 
-  /* --------------------------------- Styles --------------------------------- */
+  function handleSubmit(e) {
+    e.preventDefault()
+
+    if (!emailId) history.push('/login')
+
+    const details = { ...about, ...contact }
+
+    // TODO: Fortify catch block
+
+    fetch(BACKEND + USERS + '/' + emailId, {
+      method: 'PATCH',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(details)
+    })
+      .then((response) => {
+        if (response.ok) console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
 
   // Used for general styles
   const classes = loggedInStyles()
-
-  // Used for all Paper components to give consistent height and spacing
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
+  const editProfileForm = useStyles().editProfileForm
 
   // Used for the list menu containing the About Me and Contact options
-  const listMenu = clsx(fixedHeightPaper, classes.listMenu)
 
-  /* --------------------------- Form to be Rendered -------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                             Form to be Rendered                            */
+  /* -------------------------------------------------------------------------- */
 
-  // Switch between About Me and Contact options according to the 'page' state
+  // Switch between About Me and Contact options according to the 'page' state:
+  // - Will render the About Me form if page === 'aboutMe'
+  // - Will render the Contact form if page === 'contact'
 
   let form
 
@@ -107,7 +214,7 @@ export default function EditProfilePage() {
     // Contact Form
     case 'contact':
       form = (
-        <form className={classes.editProfileForm} noValidate autoComplete='off'>
+        <form className={editProfileForm} noValidate autoComplete='off'>
           <Grid item container spacing={0} direction='column'>
             <Grid item container justify='space-between'>
               {/**
@@ -120,53 +227,104 @@ export default function EditProfilePage() {
                 </Fab>
                 */}
             </Grid>
-            <Grid item container spacing={2}>
+            <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
                   fullWidth
                   label='Email'
+                  type='email'
                   variant='outlined'
-                  name='email'
+                  name='profile_email'
                   helperText='Changing this will not change your login email address'
-                  value={contact.email}
+                  value={contact.profile_email}
                   onChange={handleOnContactChange}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
                   fullWidth
                   label='Contact Number'
                   variant='outlined'
-                  name='number'
-                  value={contact.number}
+                  name='phone'
+                  value={contact.phone}
                   onChange={handleOnContactChange}
                 />
               </Grid>
-            </Grid>
-            <Grid item container spacing={2}>
+            </PaddedFormGrid>
+            <PaddedFormGrid item>
+              <Grid item xs={12} className={classes.padded}>
+                <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                  fullWidth
+                  label='Company'
+                  variant='outlined'
+                  name='company'
+                  value={contact.company}
+                  onChange={handleOnContactChange}
+                />
+              </Grid>
+            </PaddedFormGrid>
+            <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
                   fullWidth
                   label='Address Line 1'
                   variant='outlined'
-                  name='address1'
-                  value={contact.address1}
+                  name='address_line_1'
+                  value={contact.address_line_1}
                   onChange={handleOnContactChange}
                 />
               </Grid>
-              <Grid item container spacing={0} xs={12} md={6}>
-                <Grid item xs={9}>
+              <Grid item container spacing={0} xs={12} md={6} justify='space-between'>
+                <Grid item xs={7}>
                   <TextField
+                    className={classes.formLabel}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
                     fullWidth
                     label='Town / Suburb'
                     variant='outlined'
-                    name='town'
-                    value={contact.town}
+                    name='town_suburb'
+                    value={contact.town_suburb}
                     onChange={handleOnContactChange}
                   />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                   <TextField
+                    className={classes.formLabel}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    fullWidth
+                    label='Postcode'
+                    variant='outlined'
+                    name='postcode'
+                    value={contact.postcode}
+                    onChange={handleOnContactChange}
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <TextField
+                    className={classes.formLabel}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
                     fullWidth
                     label='State'
                     variant='outlined'
@@ -176,20 +334,28 @@ export default function EditProfilePage() {
                   />
                 </Grid>
               </Grid>
-            </Grid>
-            <Grid item container spacing={2}>
+            </PaddedFormGrid>
+            <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
                   fullWidth
                   label='Address Line 2'
                   variant='outlined'
-                  name='address2'
-                  value={contact.address2}
+                  name='address_line_2'
+                  value={contact.address_line_2}
                   onChange={handleOnContactChange}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
                   fullWidth
                   label='Country'
                   variant='outlined'
@@ -198,7 +364,7 @@ export default function EditProfilePage() {
                   onChange={handleOnContactChange}
                 />
               </Grid>
-            </Grid>
+            </PaddedFormGrid>
           </Grid>
         </form>
       )
@@ -206,7 +372,7 @@ export default function EditProfilePage() {
     // About Me form
     default:
       form = (
-        <form className={classes.editProfileForm} noValidate autoComplete='off'>
+        <form className={editProfileForm} noValidate autoComplete='off'>
           <Grid container spacing={0} direction='column'>
             {/**
              * ABOUT ME DETAILS: First Name, Last Name, Occupation
@@ -214,38 +380,52 @@ export default function EditProfilePage() {
             <Grid item>
               <Chip label='Details' color='primary' />
             </Grid>
-            <Grid item container spacing={2}>
+            <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
                   fullWidth
                   label='First Name'
                   variant='outlined'
-                  name='firstName'
-                  value={about.firstName}
+                  name='first_name'
+                  value={about.first_name}
                   onChange={handleOnAboutChange}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
                   fullWidth
                   label='Last Name'
                   variant='outlined'
-                  name='lastName'
-                  value={about.lastName}
+                  name='last_name'
+                  value={about.last_name}
                   onChange={handleOnAboutChange}
                 />
               </Grid>
-            </Grid>
-            <Grid item>
-              <TextField
-                label='Occupation'
-                variant='outlined'
-                fullWidth
-                name='occupation'
-                value={about.occupation}
-                onChange={handleOnAboutChange}
-              />
-            </Grid>
+            </PaddedFormGrid>
+            <PaddedFormGrid item>
+              <Grid item className={classes.padded}>
+                <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                  label='Occupation'
+                  variant='outlined'
+                  fullWidth
+                  name='occupation'
+                  value={about.occupation}
+                  onChange={handleOnAboutChange}
+                />
+              </Grid>
+            </PaddedFormGrid>
           </Grid>
           {/**
            * ABOUT ME DESCRIPTION
@@ -254,54 +434,71 @@ export default function EditProfilePage() {
             <Grid item>
               <Chip label='Description' color='primary' />
             </Grid>
-            <Grid item>
-              <TextField
-                placeholder='Type something...'
-                fullWidth
-                multiline
-                rows={7}
-                variant='outlined'
-                name='description'
-                value={about.description}
-                onChange={handleOnAboutChange}
-              />
-            </Grid>
-          </Grid>
-          <Grid item container spacing={0} direction='column'>
-            <Grid item>
-              <Chip label='Tags' color='primary' />
-            </Grid>
-            {/**
-             * ABOUT ME TAGS
-             */}
-            <Grid item>
-              <TextField
-                placeholder='Type and enter to add a tag...'
-                fullWidth
-                variant='outlined'
-                name='tagText'
-                value={tagText}
-                onChange={(e) => setTagText(e.target.value)}
-                onKeyDown={handleAddTag}
-              />
-
-              <Grid item container spacing={1} direction='row'>
-                {about.tags.map((t) => (
-                  <Grid item key={t.id}>
-                    <Chip
-                      label={t.label}
-                      color='primary'
-                      variant='outlined'
-                      onDelete={() => handleRemoveTag(t.id)}
-                    />
-                  </Grid>
-                ))}
+            <PaddedFormGrid item>
+              <Grid item className={classes.padded}>
+                <TextField
+                  className={classes.formLabel}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                  placeholder='Type something...'
+                  fullWidth
+                  multiline
+                  rows={7}
+                  variant='outlined'
+                  name='description'
+                  value={about.description}
+                  onChange={handleOnAboutChange}
+                />
               </Grid>
+            </PaddedFormGrid>
+
+            <Grid item container spacing={0} direction='column'>
+              <Grid item>
+                <Chip label='Tags' color='primary' />
+              </Grid>
+              {/**
+               * ABOUT ME TAGS
+               */}
+              <PaddedFormGrid item>
+                <Grid item className={classes.padded}>
+                  <TextField
+                    className={classes.formLabel}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    placeholder='Type and enter to add a tag...'
+                    fullWidth
+                    variant='outlined'
+                    name='tagText'
+                    value={tagText}
+                    onChange={(e) => setTagText(e.target.value)}
+                    onKeyDown={handleAddTag}
+                  />
+                </Grid>
+
+                <Grid item container spacing={1} direction='row' className={classes.padded}>
+                  {about.tags.map((t) => (
+                    <Grid item key={t.id}>
+                      <Chip
+                        label={t.label}
+                        variant='outlined'
+                        onDelete={() => handleRemoveTag(t.id)}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              </PaddedFormGrid>
             </Grid>
           </Grid>
         </form>
       )
   }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Page Content                                */
+  /* -------------------------------------------------------------------------- */
+  // Contains the form to be rendered
 
   const content = (
     <Grid container direction='row' spacing={0}>
@@ -309,15 +506,15 @@ export default function EditProfilePage() {
        * LIST MENU with About Me, Contact options
        */}
       <Grid item xs={12} md={3} lg={2}>
-        <Paper className={listMenu}>
+        <Paper className={classes.listMenu}>
           <List component='nav' aria-label='profile sections'>
-            <ListItem button onClick={() => setPage('aboutMe')}>
+            <ListItem button selected={page === 'aboutMe'} onClick={() => setPage('aboutMe')}>
               <ListItemIcon>
                 <PersonIcon />
               </ListItemIcon>
               <ListItemText primary='About Me' />
             </ListItem>
-            <ListItem button onClick={() => setPage('contact')}>
+            <ListItem button selected={page === 'contact'} onClick={() => setPage('contact')}>
               <ListItemIcon>
                 <PhoneIcon />
               </ListItemIcon>
@@ -329,8 +526,17 @@ export default function EditProfilePage() {
       {/**
        * FORM with user profile data
        */}
-      <Grid item xs={12} md={9} lg={10}>
-        <Paper className={fixedHeightPaper}>{form}</Paper>
+      <Grid item xs={12} md={9} lg={10} container direction='column' justify='space-between'>
+        <Paper className={classes.fixedHeightPaper}>
+          <Grid item style={{ overflow: 'scroll' }}>
+            {form}
+          </Grid>
+          <Grid item className={classes.floatingBottomContainer}>
+            <Fab variant='extended' aria-label='save changes' onClick={handleSubmit}>
+              Save Changes
+            </Fab>
+          </Grid>
+        </Paper>
       </Grid>
     </Grid>
   )

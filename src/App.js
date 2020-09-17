@@ -1,15 +1,14 @@
-import React, { Component } from 'react'
+import React from 'react'
 import Authentication from './Authentication'
+import { CssBaseline } from '@material-ui/core'
+import CustomThemeProvider from './Components/Contexts/CustomThemeContext'
 
-class App extends Component {
-  render() {
-    return (
-      <div className='App'>
+export default function App() {
+  return (
+    <CustomThemeProvider>
+      <CssBaseline>
         <Authentication />
-        {/* <TestRenderImage /> */}
-      </div>
-    )
-  }
+      </CssBaseline>
+    </CustomThemeProvider>
+  )
 }
-
-export default App

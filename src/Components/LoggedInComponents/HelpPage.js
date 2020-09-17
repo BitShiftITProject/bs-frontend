@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Sidebar from './Sidebar'
+import { CursorTypography } from '../loggedInStyles'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular,
+    fontWeight: theme.typography.fontWeightBold,
     '&:hover': {
       textDecoration: 'underline',
       color: theme.palette.info.main,
@@ -21,44 +22,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const help = {
+  General: [
+    { q: 'Question 1', a: 'Answer 1' },
+    { q: 'Question 2', a: 'Answer 2' },
+  ],
+}
+
 export default function HelpPage() {
   const classes = useStyles()
 
   const content = (
     <div className={classes.root}>
-      <Typography variant='h6' component='h6' className={classes.title}>
-        General
-      </Typography>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls='panel1a-content'
-          id='panel1a-header'
-        >
-          <Typography className={classes.heading}>Accordion 1</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-            sit amet blandit leo lobortis eget.
+      {Object.keys(help).map((section) => (
+        <div key={section}>
+          <Typography variant='h6' component='h6' className={classes.title}>
+            {section}
           </Typography>
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls='panel2a-content'
-          id='panel2a-header'
-        >
-          <Typography className={classes.heading}>Accordion 2</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-            sit amet blandit leo lobortis eget.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
+          {help[section].map((question) => (
+            <Accordion key={question.q}>
+              <AccordionSummary
+                className={classes.heading}
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls='panel1a-content'
+              >
+                <CursorTypography>{question.q}</CursorTypography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <CursorTypography>{question.a}</CursorTypography>
+              </AccordionDetails>
+            </Accordion>
+          ))}
+        </div>
+      ))}
     </div>
   )
 

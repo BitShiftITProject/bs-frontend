@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import clsx from 'clsx'
-import { loggedInStyles } from '../loggedInStyles'
+import { CursorTypography } from '../loggedInStyles'
 import {
   CssBaseline,
   Drawer,
   AppBar,
   Toolbar,
   List,
-  Typography,
   Divider,
   IconButton,
   Container,
+  makeStyles
 } from '@material-ui/core'
 
 import MenuIcon from '@material-ui/icons/Menu'
@@ -32,13 +32,102 @@ import ListItemText from '@material-ui/core/ListItemText'
 import { useHistory } from 'react-router-dom'
 import HeaderBreadcrumbs from './HeaderBreadcrumbs'
 
+const drawerWidth = 240
+
+const useStyles = makeStyles((theme) => ({
+  /* -------------------------------------------------------------------------- */
+  /*                          Sidebar / AppBar / Paper                          */
+  /* -------------------------------------------------------------------------- */
+
+  root: {
+    display: 'flex'
+  },
+  toolbar: {
+    paddingRight: 24 // keep right padding when drawer closed
+  },
+  toolbarIcon: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: '0 8px',
+    ...theme.mixins.toolbar
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    })
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  menuButton: {
+    marginRight: 36
+  },
+  menuButtonHidden: {
+    display: 'none'
+  },
+  title: {
+    flexGrow: 1
+  },
+  drawerPaper: {
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+
+  drawerPaperClose: {
+    overflowX: 'hidden',
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    width: theme.spacing(7),
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(9)
+    }
+  },
+
+  appBarSpacer: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    height: '100vh',
+    overflow: 'auto'
+  },
+
+  sidebarItems: {
+    '& ListItem': {
+      paddingRight: 0
+    }
+  },
+
+  breadcrumbSpacer: {
+    height: '20px'
+  },
+
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4)
+  }
+}))
+
 export default function Sidebar(props) {
   // Used to send a user to some page, using history.push({pathname})
   const history = useHistory()
 
   /* --------------------------- States and Handlers -------------------------- */
 
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -49,7 +138,7 @@ export default function Sidebar(props) {
 
   /* --------------------------------- Styles --------------------------------- */
 
-  const classes = loggedInStyles()
+  const classes = useStyles()
   const appBarStyle = clsx(classes.appBar, open && classes.appBarShift)
   const toggleMenuIconStyle = clsx(classes.menuButton, open && classes.menuButtonHidden)
   const drawerStyle = clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
@@ -68,13 +157,12 @@ export default function Sidebar(props) {
         >
           <MenuIcon />
         </IconButton>
-        <Typography
+        <CursorTypography
           component='h1'
           variant='h6'
           color='inherit'
-          noWrap
           className={classes.title}
-        ></Typography>
+        ></CursorTypography>
         <IconButton
           onClick={() => {
             history.push('/help')
@@ -91,7 +179,15 @@ export default function Sidebar(props) {
         >
           <SettingsIcon />
         </IconButton>
-        <IconButton color='inherit'>
+        {/* LOGOUT: Temporarily by removing 'emailId' and 'portfolioId' */}
+        <IconButton
+          onClick={() => {
+            window.sessionStorage.removeItem('emailId')
+            window.sessionStorage.removeItem('portfolioId')
+            window.location.href = '/login'
+          }}
+          color='inherit'
+        >
           <PowerSettingsNewIcon />
         </IconButton>
       </Toolbar>
@@ -170,11 +266,9 @@ export default function Sidebar(props) {
     <Drawer
       variant='permanent'
       classes={{
-        paper: drawerStyle,
+        paper: drawerStyle
       }}
       open={open}
-      onMouseEnter={handleDrawerOpen}
-      onMouseLeave={handleDrawerClose}
     >
       <div className={classes.toolbarIcon}>
         <IconButton onClick={handleDrawerClose}>

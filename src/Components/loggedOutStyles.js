@@ -36,6 +36,11 @@ const loggedOutStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  formLabel: {
+    '& .Mui-focused': {
+      color: theme.palette.info.main,
+    },
+  },
 }))
 
 export { loggedOutStyles }

@@ -1,60 +1,353 @@
-import React from 'react'
-import clsx from 'clsx'
+import React, { useEffect, useState } from 'react'
 
-import { loggedInStyles } from '../loggedInStyles'
+import { loggedInStyles, PaddedFormGrid, CursorTypography } from '../loggedInStyles'
+import CustomDialog from './CustomDialog'
 import HeaderBreadcrumbs from './HeaderBreadcrumbs'
 import EditPortfolioDropdown from './EditPortfolioDropdown'
 
-import { Container, Grid, Typography, Paper } from '@material-ui/core'
+import {
+  Grid,
+  Paper,
+  Fab,
+  Divider,
+  List,
+  // ListItem,
+  // ListItemText,
+  TextField,
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from '@material-ui/core'
+import CreateIcon from '@material-ui/icons/Create'
+// import CloseIcon from '@material-ui/icons/Close'
 import Sidebar from './Sidebar'
 
-export default function EditPortfolioPage(props) {
+import { BACKEND, PORTFOLIOS } from '../../Endpoints'
+import { useHistory } from 'react-router-dom'
+
+export default function EditPortfolioPage() {
+  /* -------------------------------------------------------------------------- */
+  /*                          States and their Setters                          */
+  /* -------------------------------------------------------------------------- */
+
+  const [portfolio, setPortfolio] = useState({})
+  const [paragraph, setParagraph] = useState('')
+
+  /* -------------------------------------------------------------------------- */
+  /*                         Fetching Current Portfolio                         */
+  /* -------------------------------------------------------------------------- */
+
+  const history = useHistory()
+  const portfolioId = window.sessionStorage.getItem('portfolioId')
+
+  // Runs when the component is mounted for the first time, fetches the
+  // portfolio using the portfolioId item set in the sessionStorage.
+  // The portfolioId is set in the sessionStorage when:
+  // - A user clicks on the Add Portfolio button in AddPortfolioPage
+  // - A user clicks on the Edit button in PortfolioCard
+  useEffect(() => {
+    async function fetchPortfolio() {
+      const response = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+          'Content-type': 'application/json'
+        }
+      })
+
+      // TODO: Set up catch block for errors
+
+      const portfolio = await response.json()
+      return portfolio
+    }
+    fetchPortfolio().then((portfolio) => {
+      setPortfolio({ ...portfolio })
+      setParagraph(portfolio.pages.content || '')
+    })
+  }, [portfolioId])
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styles                                   */
+  /* -------------------------------------------------------------------------- */
+
   const classes = loggedInStyles()
-  const profilePaper = clsx(classes.paper, classes.fixedHeight)
+  const fixedHeightPaper = classes.fixedHeightPaper
+  const leftPanel = classes.leftPanel
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Dialog                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const [open, setOpen] = useState(false)
+  const [dialogContent, setDialogContent] = useState({ type: '', target: '' })
+
+  const handleClick = (name, value) => {
+    setDialogContent({ type: name, target: value })
+    setOpen(true)
+  }
+
+  const handleEdit = (e) => {
+    e.preventDefault()
+    patchPortfolio({ title: portfolio.title, description: portfolio.description })
+    setOpen(false)
+  }
+
+  const handleDelete = () => {
+    alert(`Deleted ${dialogContent.target}!`)
+    setOpen(false)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const patchPortfolio = (patchDetails) => {
+    fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
+      method: 'PATCH',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(patchDetails)
+    })
+  }
+
+  async function handleSubmit() {
+    patchPortfolio({ pages: { content: paragraph } })
+    history.push('/portfolios')
+  }
+
+  const dialogType = {
+    // Contains the contents to be rendered when a dialog is triggered, which is
+    // to be sent to the CustomDialog component
+    /* -------------------------------------------------------------------------- */
+    // Dialog to show when the Edit button next to the portfolio title is clicked
+    title: (
+      <form onSubmit={handleEdit}>
+        <DialogTitle id='form-dialog-title'>Edit portfolio</DialogTitle>
+        <DialogContent>
+          <TextField
+            className={classes.formLabel}
+            InputLabelProps={{
+              shrink: true
+            }}
+            autoFocus
+            margin='dense'
+            id='portfolioName'
+            label='Title'
+            fullWidth
+            value={portfolio.title}
+            onChange={(e) => setPortfolio({ ...portfolio, title: e.target.value })}
+          />
+          <TextField
+            className={classes.formLabel}
+            InputLabelProps={{
+              shrink: true
+            }}
+            autoFocus
+            margin='dense'
+            id='portfolioDesc'
+            label='Description'
+            fullWidth
+            value={portfolio.description}
+            onChange={(e) => setPortfolio({ ...portfolio, description: e.target.value })}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} variant='outlined'>
+            Cancel
+          </Button>
+          <Button onClick={handleEdit} variant='contained'>
+            Save
+          </Button>
+        </DialogActions>
+      </form>
+    ),
+    /* -------------------------------------------------------------------------- */
+    // Dialog to show when the Edit button next to a page is clicked (doesn't
+    // exist yet)
+    page: (
+      <form onSubmit={handleEdit}>
+        <DialogTitle id='form-dialog-title'>Edit page</DialogTitle>
+        <DialogContent>
+          <TextField
+            className={classes.formLabel}
+            InputLabelProps={{
+              shrink: true
+            }}
+            autoFocus
+            label='Title'
+            margin='dense'
+            id='pageName'
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} variant='outlined'>
+            Cancel
+          </Button>
+          <Button onClick={handleEdit} variant='contained'>
+            Save
+          </Button>
+        </DialogActions>
+      </form>
+    ),
+    /* -------------------------------------------------------------------------- */
+    // Dialog to show when the Delete button next to a page is clicked (doesn't
+    // exist yet)
+    delete: (
+      <div>
+        <DialogTitle id='alert-dialog-title'>{'Delete this page?'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Are you sure you want to delete the{' '}
+            <span style={{ fontWeight: 'bold' }}>{dialogContent.target}</span> page?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color='primary' variant='outlined'>
+            Cancel
+          </Button>
+          <Button onClick={handleDelete} color='error' variant='container' autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </div>
+    )
+  }
+
+  const dialog = (
+    <CustomDialog open={open} setOpen={setOpen} content={dialogType[dialogContent.type]} />
+  )
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Page Content                                */
+  /* -------------------------------------------------------------------------- */
 
   const content = (
-    <div>
-      <Grid container direction='row' spacing={0}>
-        <EditPortfolioDropdown />
-
-        <Grid item xs={12} md={4} lg={3}>
-          <Paper className={profilePaper}>
+    
+    <Grid container direction='row' spacing={0}>
+      {/* <EditPortfolioDropdown /> */}
+      {/*
+       * LIST MENU
+       */}
+      <Grid item xs={12} md={4} lg={3}>
+        <Paper className={leftPanel}>
+          {/*
+           * LIST MENU CONTENT
+           */}
+          <Grid style={{ width: '100%', height: '100%' }}>
+            {/*
+             * PORTFOLIO TITLE
+             */}
             <Grid
-              item
               container
-              direction='column'
-              justify='flex-start'
-              alignItems='flex-start'
-              xs={12}
-              md={4}
-              lg={3}
+              direction='row'
+              justify='space-between'
+              alignItems='center'
+              className={classes.padded}
             >
-              <Grid item>
-                <Typography variant='h5' component='h5' className={classes.profileName}>
-                  TITLE
-              </Typography>
-              </Grid>
+              <CursorTypography variant='button'>{portfolio.title}</CursorTypography>
+              <Fab
+                color='primary'
+                size='small'
+                onClick={() => handleClick('title', portfolio.title)}
+              >
+                <CreateIcon />
+              </Fab>
+            </Grid>
+            <Divider orientation='horizontal' />
 
-              <Grid item>
-                <Typography variant='h5' component='h5' className={classes.profileName}>
-                  EDUCATION STUFF
-              </Typography>
-              </Grid>
+            {/*
+             * PORTFOLIO PAGES (doesn't exist yet, a portfolio currently only has 1 page)
+             */}
+
+            {/* Each Portfolio object in the DB has a pages attribute.
+             * This attribute is currently temporarily set as an object.
+             */}
+
+            <Grid container direction='column' justify='space-evenly' className={classes.padded}>
+              <CursorTypography variant='overline'>Pages</CursorTypography>
+              <List>
+                {/*portfolio.pages &&
+                  portfolio.pages.map((page, idx) => (
+                    <ListItem key={idx} button className={classes.hiddenButtonItem}>
+                      <ListItemText onClick={() => {}}>{page.name}</ListItemText>
+                      <Fab
+                        color='primary'
+                        size='small'
+                        className={classes.hiddenButton}
+                        onClick={() => handleClick('page', page.item)}
+                      >
+                        <CreateIcon />
+                      </Fab>
+                      <Fab
+                        color='primary'
+                        size='small'
+                        className={classes.hiddenButton}
+                        onClick={() => handleClick('delete', page.item)}
+                      >
+                        <CloseIcon />
+                      </Fab>
+                    </ListItem>
+                  ))*/}
+              </List>
             </Grid>
           </Paper>
         </Grid>
 
-        <Grid item xs={12} md={8} lg={9}>
-          <Paper className={profilePaper}>
-            <Grid item>
-              <Typography variant='h5' component='h5' className={classes.profileName}>
-                EDUCATION STUFdfgdfgdfgdfgdfgdfgdffffffffffffdsdvsdvsdvsdffffffffffffffffffffF
-            </Typography>
-            </Grid>
-          </Paper>
-        </Grid>
+      {/*
+       * PAGE SECTIONS
+       */}
+
+      <Grid item xs={12} md={8} lg={9}>
+        <Paper className={fixedHeightPaper}>
+          {/*
+           * PAGE CONTENT
+           */}
+          <Grid
+            item
+            xs={12}
+            container
+            direction='column'
+            justify='space-between'
+            style={{ height: '100%', overflow: 'scroll' }}
+          >
+            <form>
+              <Grid container direction='column'>
+                <PaddedFormGrid item>
+                  <TextField
+                    className={classes.formLabel}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    value={paragraph}
+                    onChange={(e) => setParagraph(e.target.value)}
+                    variant='outlined'
+                    label='Paragraph'
+                    fullWidth
+                    multiline
+                  ></TextField>
+                </PaddedFormGrid>
+              </Grid>
+            </form>
+          </Grid>
+          {/*
+           * SAVE CHANGES BUTTON
+           */}
+          <Grid item className={classes.floatingBottomContainer}>
+            <Fab color='primary' variant='extended' onClick={handleSubmit}>
+              <CursorTypography variant='button'>Save Changes</CursorTypography>
+            </Fab>
+          </Grid>
+        </Paper>
       </Grid>
-    </div>
+      {dialog}
+    </Grid>
   )
   return <Sidebar content={content} />
 }

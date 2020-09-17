@@ -1,11 +1,72 @@
-import React from 'react'
-import { Grid, Paper, ButtonBase, Typography, Fab } from '@material-ui/core'
-import clsx from 'clsx'
+import React, { useEffect, useState } from 'react'
+import { Grid, Paper, ButtonBase, Fab, makeStyles, Typography } from '@material-ui/core'
 
 import { loggedInStyles } from '../loggedInStyles'
 import { useHistory } from 'react-router-dom'
 
+import { BACKEND, USERS } from '../../Endpoints'
+
+const useStyles = makeStyles((theme) => ({
+  /* -------------------------------------------------------------------------- */
+  /*                                Home Profile                                */
+  /* -------------------------------------------------------------------------- */
+
+  changeHeightAtSmall: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      height: '100%'
+    }
+  },
+
+  profileImage: {
+    overflow: 'hidden',
+    borderRadius: '50%',
+    height: 200,
+    width: 200
+  },
+
+  profileImg: {
+    maxHeight: '100%',
+    display: 'block'
+  },
+
+  profileName: {
+    paddingTop: theme.spacing(3),
+    fontWeight: 'lighter',
+    paddingBottom: '5%',
+    textAlign: 'center'
+  },
+
+  profileOccupation: {
+    margin: '0 auto',
+    textAlign: 'center',
+    paddingRight: '5%',
+    paddingLeft: '5%',
+    borderRadius: '20px',
+    cursor: 'pointer',
+    ...theme.typography.button,
+    width: '80%',
+    backgroundColor: theme.palette.background.default
+  },
+
+  editProfileButton: {
+    width: '75px !important'
+  }
+}))
+
 export default function HomeProfile(props) {
+  /* -------------------------------------------------------------------------- */
+  /*                          States and their Setters                          */
+  /* -------------------------------------------------------------------------- */
+
+  const [profile, setProfile] = useState({ name: '' })
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Routing                                  */
+  /* -------------------------------------------------------------------------- */
+
   // Router hook to send user to some page.
   const history = useHistory()
 
@@ -14,22 +75,49 @@ export default function HomeProfile(props) {
     history.push('/profile')
   }
 
+  /* -------------------------------------------------------------------------- */
+  /*                          Fetching User's Full Name                         */
+  /* -------------------------------------------------------------------------- */
+
+  // useEffect with an empty list as its second argument works like
+  // componentDidMount, which runs once
+  useEffect(() => {
+    async function fetchUser() {
+      const emailId = window.sessionStorage.getItem('emailId')
+      const response = await fetch(BACKEND + USERS + '/' + emailId, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+          'Content-type': 'application/json'
+        }
+      })
+      const user = await response.json()
+      return user
+    }
+    fetchUser().then((user) => setProfile({ name: user.first_name + ' ' + user.last_name }))
+  }, [])
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
+
   // Contains all styling
-  const classes = loggedInStyles()
+  const classes = useStyles()
 
   // Adds flex spacing and aligning, otherwise identical to all other Paper components
-  const profilePaper = clsx(classes.paper, classes.fixedHeight, classes.profileContainer)
+  const leftPanel = loggedInStyles().leftPanel
 
   // Breakpoint sizes and click handler for profile picture and edit button
   const { xs, md, lg } = props
 
   return (
     <Grid item xs={xs} md={md} lg={lg}>
-      <Paper className={profilePaper}>
+      <Paper className={leftPanel}>
         {/**
          * PROFILE PICTURE ICON
          */}
-        <div className={classes.profileContainer}>
+        <div className={classes.changeHeightAtSmall}>
           <ButtonBase className={classes.profileImage} onClick={handleClickProfile}>
             <img
               className={classes.profileImg}
@@ -42,12 +130,12 @@ export default function HomeProfile(props) {
          * USER FULL NAME
          */}
         <Typography variant='h5' component='h5' className={classes.profileName}>
-          John Smith
+          {profile.name}
         </Typography>
         {/**
          * EDIT PROFILE BUTTON
          */}
-        <div className={classes.profileContainer}>
+        <div className={classes.changeHeightAtSmall}>
           <Fab
             className={classes.editProfileButton}
             variant='extended'
