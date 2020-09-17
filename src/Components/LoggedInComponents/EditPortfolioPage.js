@@ -229,124 +229,126 @@ export default function EditPortfolioPage() {
   /* -------------------------------------------------------------------------- */
 
   const content = (
-    
-    <Grid container direction='row' spacing={0}>
-      {/* <EditPortfolioDropdown /> */}
-      {/*
-       * LIST MENU
-       */}
-      <Grid item xs={12} md={4} lg={3}>
-        <Paper className={leftPanel}>
-          {/*
-           * LIST MENU CONTENT
-           */}
-          <Grid style={{ width: '100%', height: '100%' }}>
+    <Grid container direction='column' spacing={0}>
+      <EditPortfolioDropdown />
+      <Grid container direction='row' spacing={0}>
+        {/*
+         * LIST MENU
+         */}
+        <Grid item xs={12} md={4} lg={3}>
+          <Paper className={leftPanel}>
             {/*
-             * PORTFOLIO TITLE
+             * LIST MENU CONTENT
              */}
-            <Grid
-              container
-              direction='row'
-              justify='space-between'
-              alignItems='center'
-              className={classes.padded}
-            >
-              <CursorTypography variant='button'>{portfolio.title}</CursorTypography>
-              <Fab
-                color='primary'
-                size='small'
-                onClick={() => handleClick('title', portfolio.title)}
+            <Grid style={{ width: '100%', height: '100%' }}>
+              {/*
+               * PORTFOLIO TITLE
+               */}
+              <Grid
+                container
+                direction='row'
+                justify='space-between'
+                alignItems='center'
+                className={classes.padded}
               >
-                <CreateIcon />
-              </Fab>
-            </Grid>
-            <Divider orientation='horizontal' />
+                <CursorTypography variant='button'>{portfolio.title}</CursorTypography>
+                <Fab
+                  color='primary'
+                  size='small'
+                  onClick={() => handleClick('title', portfolio.title)}
+                >
+                  <CreateIcon />
+                </Fab>
+              </Grid>
+              <Divider orientation='horizontal' />
 
-            {/*
-             * PORTFOLIO PAGES (doesn't exist yet, a portfolio currently only has 1 page)
-             */}
+              {/*
+               * PORTFOLIO PAGES (doesn't exist yet, a portfolio currently only has 1 page)
+               */}
 
-            {/* Each Portfolio object in the DB has a pages attribute.
-             * This attribute is currently temporarily set as an object.
-             */}
+              {/* Each Portfolio object in the DB has a pages attribute.
+               * This attribute is currently temporarily set as an object.
+               */}
 
-            <Grid container direction='column' justify='space-evenly' className={classes.padded}>
-              <CursorTypography variant='overline'>Pages</CursorTypography>
-              <List>
-                {/*portfolio.pages &&
-                  portfolio.pages.map((page, idx) => (
-                    <ListItem key={idx} button className={classes.hiddenButtonItem}>
-                      <ListItemText onClick={() => {}}>{page.name}</ListItemText>
-                      <Fab
-                        color='primary'
-                        size='small'
-                        className={classes.hiddenButton}
-                        onClick={() => handleClick('page', page.item)}
-                      >
-                        <CreateIcon />
-                      </Fab>
-                      <Fab
-                        color='primary'
-                        size='small'
-                        className={classes.hiddenButton}
-                        onClick={() => handleClick('delete', page.item)}
-                      >
-                        <CloseIcon />
-                      </Fab>
-                    </ListItem>
-                  ))*/}
-              </List>
+              <Grid container direction='column' justify='space-evenly' className={classes.padded}>
+                <CursorTypography variant='overline'>Pages</CursorTypography>
+                <List>
+                  {/*portfolio.pages &&
+                    portfolio.pages.map((page, idx) => (
+                      <ListItem key={idx} button className={classes.hiddenButtonItem}>
+                        <ListItemText onClick={() => {}}>{page.name}</ListItemText>
+                        <Fab
+                          color='primary'
+                          size='small'
+                          className={classes.hiddenButton}
+                          onClick={() => handleClick('page', page.item)}
+                        >
+                          <CreateIcon />
+                        </Fab>
+                        <Fab
+                          color='primary'
+                          size='small'
+                          className={classes.hiddenButton}
+                          onClick={() => handleClick('delete', page.item)}
+                        >
+                          <CloseIcon />
+                        </Fab>
+                      </ListItem>
+                    ))*/}
+                </List>
+              </Grid>
             </Grid>
           </Paper>
         </Grid>
 
-      {/*
-       * PAGE SECTIONS
-       */}
+        {/*
+         * PAGE SECTIONS
+         */}
 
-      <Grid item xs={12} md={8} lg={9}>
-        <Paper className={fixedHeightPaper}>
-          {/*
-           * PAGE CONTENT
-           */}
-          <Grid
-            item
-            xs={12}
-            container
-            direction='column'
-            justify='space-between'
-            style={{ height: '100%', overflow: 'scroll' }}
-          >
-            <form>
-              <Grid container direction='column'>
-                <PaddedFormGrid item>
-                  <TextField
-                    className={classes.formLabel}
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    value={paragraph}
-                    onChange={(e) => setParagraph(e.target.value)}
-                    variant='outlined'
-                    label='Paragraph'
-                    fullWidth
-                    multiline
-                  ></TextField>
-                </PaddedFormGrid>
-              </Grid>
-            </form>
-          </Grid>
-          {/*
-           * SAVE CHANGES BUTTON
-           */}
-          <Grid item className={classes.floatingBottomContainer}>
-            <Fab color='primary' variant='extended' onClick={handleSubmit}>
-              <CursorTypography variant='button'>Save Changes</CursorTypography>
-            </Fab>
-          </Grid>
-        </Paper>
+        <Grid item xs={12} md={8} lg={9}>
+          <Paper className={fixedHeightPaper}>
+            {/*
+             * PAGE CONTENT
+             */}
+            <Grid
+              item
+              xs={12}
+              container
+              direction='column'
+              justify='space-between'
+              style={{ height: '100%', overflow: 'scroll' }}
+            >
+              <form>
+                <Grid container direction='column'>
+                  <PaddedFormGrid item>
+                    <TextField
+                      className={classes.formLabel}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      value={paragraph}
+                      onChange={(e) => setParagraph(e.target.value)}
+                      variant='outlined'
+                      label='Paragraph'
+                      fullWidth
+                      multiline
+                    ></TextField>
+                  </PaddedFormGrid>
+                </Grid>
+              </form>
+            </Grid>
+            {/*
+             * SAVE CHANGES BUTTON
+             */}
+            <Grid item className={classes.floatingBottomContainer}>
+              <Fab color='primary' variant='extended' onClick={handleSubmit}>
+                <CursorTypography variant='button'>Save Changes</CursorTypography>
+              </Fab>
+            </Grid>
+          </Paper>
+        </Grid>
+        {dialog}
       </Grid>
-      {dialog}
     </Grid>
   )
   return <Sidebar content={content} />

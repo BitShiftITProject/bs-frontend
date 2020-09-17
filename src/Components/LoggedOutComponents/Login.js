@@ -17,7 +17,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../loggedInStyles'
 import { loggedOutStyles } from '../loggedOutStyles'
-import Alert from '@material-ui/lab/Alert';
+import Alert from '@material-ui/lab/Alert'
 
 const styles = {
   div: {
@@ -55,7 +55,13 @@ function Login(props) {
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
-  const [state, setState] = useState({ email: '', password: '', rememberMe: false, loginFailed: false, errorMessage: 'Login FAILED' })
+  const [state, setState] = useState({
+    email: '',
+    password: '',
+    rememberMe: false,
+    loginFailed: false,
+    errorMessage: 'Login FAILED'
+  })
 
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
@@ -107,10 +113,7 @@ function Login(props) {
           window.sessionStorage.setItem('emailId', state.email)
           window.location.href = '/home'
         } else {
-          setState({...state,
-            loginFailed: true,
-            errorMessage: response.error.message
-          }
+          setState({ ...state, loginFailed: true, errorMessage: response.error.message })
         }
       })
       .catch((err) => {
@@ -150,7 +153,6 @@ function Login(props) {
           id='email'
           label='Email Address'
           name='email'
-          type='email'
           autoComplete='email'
           autoFocus
           onChange={handleChange}
@@ -171,15 +173,16 @@ function Login(props) {
           autoComplete='current-password'
           onChange={handleChange}
         />
-    
+
         {/* The error message appears iff the state is loginFailed */}
-        {state.loginFailed ?
+        {state.loginFailed ? (
           <div>
-            <Alert severity="error">{state.errorMessage}</Alert>
+            <Alert severity='error'>{state.errorMessage}</Alert>
           </div>
-          : <div></div>
-        }
-    
+        ) : (
+          <div></div>
+        )}
+
         <Grid container justify='space-between'>
           <Grid item xs={7} md={5}>
             <FormControlLabel

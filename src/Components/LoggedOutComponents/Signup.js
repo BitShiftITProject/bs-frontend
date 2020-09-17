@@ -205,7 +205,6 @@ function Signup(props) {
           label='Email Address'
           autoFocus
           id='signup__email'
-          type='email'
           placeholder='Email'
           name='email'
           value={state.email}

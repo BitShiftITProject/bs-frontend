@@ -105,8 +105,32 @@ export default function PortfolioCardList(props) {
     history.push('/portfolios/add')
   }
 
-  function handleView(portfolioId) {
-    alert(`View: ${portfolioId}`)
+  async function handleView(portfolioId) {
+    let portfolioIndex = 0
+    const emailId = window.sessionStorage.getItem('emailId')
+
+    const user = await fetch(BACKEND + USERS + '/' + emailId, {
+      method: 'GET',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+        'Content-type': 'application/json'
+      }
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json()
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+    while (portfolioId !== user.portfolios[portfolioIndex]) {
+      portfolioIndex++
+    }
+
+    history.push(`/public/${emailId}/${portfolioIndex}/0`)
   }
 
   function handleEdit(portfolioId) {

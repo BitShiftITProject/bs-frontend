@@ -67,6 +67,8 @@ class Authentication extends Component {
       return (
         <BrowserRouter>
           <Switch>
+            <Route exact path='/publicfailed' component={PublicPortfolioFailed} />
+            <Route exact path='/public/:username/:portfolio/:page' component={PublicPortfolio} />
             <Route exact path='/settings' render={() => <SettingsPage />} />
             <Route exact path='/help' render={() => <HelpPage />} />
             <Route exact path='/portfolios/edit' render={() => <EditPortfolioPage />} />
