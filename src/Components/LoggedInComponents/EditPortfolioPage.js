@@ -80,7 +80,7 @@ export default function EditPortfolioPage() {
 
   const handleEdit = (e) => {
     e.preventDefault()
-    alert(`Edited: ${dialogContent}`)
+    alert(`Edited: ${dialogContent.target}`)
     setOpen(false)
   }
 
@@ -129,6 +129,8 @@ export default function EditPortfolioPage() {
             id='portfolioName'
             label='Title'
             fullWidth
+            value={portfolio.title}
+            onChange={(e) => setPortfolio(e.target.value)}
           />
           <TextField
             className={classes.formLabel}
@@ -140,6 +142,8 @@ export default function EditPortfolioPage() {
             id='portfolioDesc'
             label='Description'
             fullWidth
+            value={portfolio.description}
+            onChange={(e) => setPortfolio(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
