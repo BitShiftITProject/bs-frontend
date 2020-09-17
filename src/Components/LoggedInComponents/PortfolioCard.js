@@ -1,5 +1,4 @@
 import React from 'react'
-import { CursorTypography } from '../loggedInStyles'
 import {
   CardMedia,
   CardContent,
@@ -8,7 +7,8 @@ import {
   Grid,
   CardActions,
   IconButton,
-  makeStyles,
+  Typography,
+  makeStyles
 } from '@material-ui/core'
 
 import ShareIcon from '@material-ui/icons/Share'
@@ -23,28 +23,33 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: 'auto',
     [theme.breakpoints.up('lg')]: {
-      height: 350,
+      height: 350
     },
     '& .MuiCardContent-root:last-child': {
-      paddingBottom: 0,
-    },
+      paddingBottom: 0
+    }
   },
 
   portfolioContent: {
     height: 'auto',
     [theme.breakpoints.up('lg')]: {
-      height: 100,
+      height: 100
     },
-    overflow: 'scroll',
+    overflow: 'scroll'
   },
 
   portfolioCardMedia: {
     height: 200,
     backgroundColor: theme.palette.background.default,
     [theme.breakpoints.down('md')]: {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
+
+  portfolioText: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1)
+  }
 }))
 
 export default function PortfolioCard(props) {
@@ -56,7 +61,7 @@ export default function PortfolioCard(props) {
   /* -------------------------------------------------------------------------- */
   // Passed down from PortfolioCardList
 
-  const { portfolioId, title, desc, viewPortfolio, editPortfolio, deletePortfolio } = props
+  const { portfolioId, title, description, viewPortfolio, editPortfolio, deletePortfolio } = props
 
   const handleView = () => {
     viewPortfolio(portfolioId)
@@ -75,12 +80,17 @@ export default function PortfolioCard(props) {
       <Grid container spacing={1} direction='column'>
         <CardMedia src='/' className={classes.portfolioCardMedia} />
         <CardContent className={classes.portfolioContent}>
-          <CursorTypography gutterBottom variant='h5' component='h2'>
+          <Typography className={classes.portfolioText} variant='h5' component='h2'>
             {title}
-          </CursorTypography>
-          <CursorTypography variant='body2' color='textSecondary' component='p'>
-            {desc}
-          </CursorTypography>
+          </Typography>
+          <Typography
+            className={classes.portfolioText}
+            variant='body2'
+            color='textSecondary'
+            component='p'
+          >
+            {description}
+          </Typography>
         </CardContent>
       </Grid>
 

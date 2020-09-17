@@ -17,44 +17,44 @@ import Sidebar from './Components/LoggedInComponents/Sidebar'
 
 async function loggedIn() {
   // Get access token from session storage
-  const accessToken = window.sessionStorage.accessToken
+  // const accessToken = window.sessionStorage.getItem('accessToken')
 
-  // If there is no access token in session storage then we are not logged in
-  if (accessToken == null) {
-    return false
-  } else {
-    /**
-     * There is an access token in session storage
-     * POST access token to the backend to check if we are logged in
-     */
+  // // If there is no access token in session storage then we are not logged in
+  // if (accessToken == null) {
+  //   return false
+  // } else {
+  //   /**
+  //    * There is an access token in session storage
+  //    * POST access token to the backend to check if we are logged in
+  //    */
+  //   return fetch(BACKEND + LOGGEDIN, {
+  //     method: 'POST',
+  //     headers: { 'Content-type': 'application/json' },
+  //     body: JSON.stringify({ access_token: accessToken })
+  //   }).then((response) => {
+  //     // If we get back status 200 we are logged in
+  //     if (response.ok) {
+  //       return true
+  //     }
+  //     // Otherwise we are not logged in
+  //     else {
+  //       return false
+  //     }
+  //   })
+  // }
 
-    return fetch(BACKEND + LOGGEDIN, {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify({ access_token: accessToken }),
-    }).then((response) => {
-      // If we get back status 200 we are logged in
-      if (response.ok) {
-        return true
-      }
-      // Otherwise we are not logged in
-      else {
-        return false
-      }
-    })
-  }
+  const emailId = window.sessionStorage.getItem('emailId') || null
+  return emailId ? true : false
 }
 
-// Keep all == as is
-
 class Authentication extends Component {
-  // state = { loggedIn: false }
-  state = { loggedIn: true }
+  state = { loggedIn: false }
+  // state = { loggedIn: true }
 
-  // async componentDidMount() {
-  //   let logincheck = await loggedIn()
-  //   this.setState({ loggedIn: logincheck })
-  // }
+  async componentDidMount() {
+    let logincheck = await loggedIn()
+    this.setState({ loggedIn: logincheck })
+  }
 
   render() {
     if (this.state.loggedIn == null) {

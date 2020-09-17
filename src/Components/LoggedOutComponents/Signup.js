@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { BACKEND, SIGNUP } from '../../Endpoints'
+import { BACKEND, SIGNUP, USERS } from '../../Endpoints'
 import { TextField, Button, Avatar, styled, withStyles, Fab } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
@@ -11,45 +11,46 @@ import { useHistory } from 'react-router-dom'
 
 const styles = {
   div: {
-    width: '100%',
+    width: '100%'
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'center'
   },
 
   span: {
-    transform: 'translateX(-25px)',
+    transform: 'translateX(-25px)'
   },
 
   fab: {
-    transform: 'scale(0.65)',
-  },
+    transform: 'scale(0.65)'
+  }
 }
 
 const PaddedTextField = styled(TextField)({
   marginTop: '5%',
-  marginBottom: '5%',
+  marginBottom: '5%'
 })
 
 function Signup(props) {
   const [state, setState] = useState({
+    username: '',
     email: '',
     password: '',
     confirm: '',
     firstName: '',
-    lastName: '',
+    lastName: ''
   })
 
   // Handles changes in text input
   function handleChange(e) {
-    setState({ [e.target.name]: e.target.value })
+    setState({ ...state, [e.target.name]: e.target.value })
   }
 
   // POST request to backend signup endpoint, sending the current state data to
   // create a user
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
 
     // Password must match
@@ -60,27 +61,51 @@ function Signup(props) {
     }
 
     const details = {
-      ...state,
+      first_name: state.firstName,
+      last_name: state.lastName,
+      email: state.email,
+      username: state.username,
+      cognito_id: 'helloworld'
+      // password: state.password,
+      // occupation: '',
+      // phone: '',
+      // address_line_1: '',
+      // address_line_2: '',
+      // town_suburb: '',
+      // state: '',
+      // country: '',
     }
 
-    fetch(BACKEND + SIGNUP, {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify(details),
-    }).then((response) => {
-      if (response.ok) {
-        window.location.href = '/login'
-      } else {
-      }
-    })
+    // fetch(BACKEND + SIGNUP, {
+    //   method: 'POST',
+    //   headers: { 'Content-type': 'application/json' },
+    //   body: JSON.stringify(details),
+    // }).then((response) => {
+    //   if (response.ok) {
+    //     window.location.href = '/login'
+    //   } else {
+    //   }
+    // })
 
-    console.log('SIGNUP')
-    console.log('Email:', state.email)
-    console.log('Username:', state.username)
-    console.log('Password:', state.password)
-    console.log('Confirm Password:', state.confirm)
-    console.log('First Name:', state.firstName)
-    console.log('Last Name:', state.lastName)
+    // Temporary no authorisation
+    fetch(BACKEND + USERS, {
+      method: 'POST',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(details)
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log(response)
+        } else {
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const style = loggedOutStyles()
@@ -97,7 +122,59 @@ function Signup(props) {
         </CursorTypography>
         <PaddedTextField
           InputLabelProps={{
-            shrink: true,
+            shrink: true
+          }}
+          className={classes.formLabel}
+          id='signup__first_name'
+          type='text'
+          placeholder='John'
+          label='First Name'
+          name='firstName'
+          value={state.firstName}
+          onChange={handleChange}
+          required
+          variant='outlined'
+          margin='normal'
+          fullWidth
+        />
+
+        <PaddedTextField
+          InputLabelProps={{
+            shrink: true
+          }}
+          className={classes.formLabel}
+          id='signup__last_name'
+          type='text'
+          placeholder='Smith'
+          label='Last Name'
+          name='lastName'
+          value={state.lastName}
+          onChange={handleChange}
+          required
+          variant='outlined'
+          margin='normal'
+          fullWidth
+        />
+        <PaddedTextField
+          InputLabelProps={{
+            shrink: true
+          }}
+          className={style.formLabel}
+          variant='outlined'
+          margin='normal'
+          required
+          fullWidth
+          label='Username'
+          autoFocus
+          id='signup__username'
+          placeholder='Username'
+          name='username'
+          value={state.username}
+          onChange={handleChange}
+        ></PaddedTextField>
+        <PaddedTextField
+          InputLabelProps={{
+            shrink: true
           }}
           className={style.formLabel}
           variant='outlined'
@@ -116,7 +193,7 @@ function Signup(props) {
 
         <PaddedTextField
           InputLabelProps={{
-            shrink: true,
+            shrink: true
           }}
           className={classes.formLabel}
           id='signup__password'
@@ -136,7 +213,7 @@ function Signup(props) {
 
         <PaddedTextField
           InputLabelProps={{
-            shrink: true,
+            shrink: true
           }}
           className={classes.formLabel}
           id='signup__confirm_password'
@@ -154,41 +231,6 @@ function Signup(props) {
           onChange={handleChange}
         ></PaddedTextField>
 
-        <PaddedTextField
-          InputLabelProps={{
-            shrink: true,
-          }}
-          className={classes.formLabel}
-          id='signup__first_name'
-          type='text'
-          placeholder='John'
-          label='First Name'
-          name='firstName'
-          value={state.firstName}
-          onChange={handleChange}
-          required
-          variant='outlined'
-          margin='normal'
-          fullWidth
-        />
-
-        <PaddedTextField
-          InputLabelProps={{
-            shrink: true,
-          }}
-          className={classes.formLabel}
-          id='signup__last_name'
-          type='text'
-          placeholder='Smith'
-          label='Last Name'
-          name='lastName'
-          value={state.lastName}
-          onChange={handleChange}
-          required
-          variant='outlined'
-          margin='normal'
-          fullWidth
-        />
         <span className={classes.span}>
           <Fab
             onClick={() => history.push('/login')}

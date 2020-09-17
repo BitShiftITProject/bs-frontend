@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { loggedInStyles, PaddedFormGrid, CursorTypography } from '../loggedInStyles'
 import CustomDialog from './CustomDialog'
@@ -16,16 +16,43 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
+  DialogTitle
 } from '@material-ui/core'
 import CreateIcon from '@material-ui/icons/Create'
 import CloseIcon from '@material-ui/icons/Close'
 import Sidebar from './Sidebar'
 
+import { BACKEND, PORTFOLIOS } from '../../Endpoints'
+import { useHistory } from 'react-router-dom'
+
 export default function EditPortfolioPage() {
-  // Test Data
-  const title = 'My Portfolio'
-  const listItems = ['About Me', 'Education', 'Contact']
+  /* -------------------------------------------------------------------------- */
+  /*                         Fetching Current Portfolio                         */
+  /* -------------------------------------------------------------------------- */
+
+  const history = useHistory()
+  const portfolioId = window.sessionStorage.getItem('portfolioId')
+  const [portfolio, setPortfolio] = useState({})
+  const [paragraph, setParagraph] = useState('')
+
+  useEffect(() => {
+    async function fetchPortfolio() {
+      const response = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+          'Content-type': 'application/json'
+        }
+      })
+      const portfolio = await response.json()
+      return portfolio
+    }
+    fetchPortfolio().then((portfolio) => {
+      setPortfolio({ ...portfolio })
+      setParagraph(portfolio.pages.content || '')
+    })
+  }, [])
 
   /* -------------------------------------------------------------------------- */
   /*                             State and Handlers                             */
@@ -53,7 +80,7 @@ export default function EditPortfolioPage() {
 
   const handleEdit = (e) => {
     e.preventDefault()
-    console.log(dialogContent)
+    alert(`Edited: ${dialogContent}`)
     setOpen(false)
   }
 
@@ -66,6 +93,27 @@ export default function EditPortfolioPage() {
     setOpen(false)
   }
 
+  async function handleSubmit() {
+    // TODO: PATCH request to /portfolios/{portfolioId}
+    /* -------------------------------------------------------------------------- */
+    // portfolioId was set in sessionStorage, either in:
+    // - AddPortfolioPage, when the add portfolio button is clicked (in
+    //   handleSubmit)
+    // - PortfolioCardList, when the edit button of the portfolio is clicked (in
+    //   handleEdit)
+    /* -------------------------------------------------------------------------- */
+    // For now the portfolio object retrieved from the GET request contains a
+    // pages attribute, which is an object.
+    // The content of the paragraph should be within a 'content' attribute in
+    // this pages object:
+    // portfolios = {<other attrs...>, pages: {content: <paragraph content
+    // here>}}
+    /* -------------------------------------------------------------------------- */
+    // I made it so that the state of the paragraph content is modified and kept in
+    // the 'paragraph' variable, updated using the 'setParagraph' method.
+    // So when sending a PATCH request, the body should be JSON.stringify({pages: {content: paragraph}})
+  }
+
   const dialogType = {
     title: (
       <form onSubmit={handleEdit}>
@@ -74,7 +122,7 @@ export default function EditPortfolioPage() {
           <TextField
             className={classes.formLabel}
             InputLabelProps={{
-              shrink: true,
+              shrink: true
             }}
             autoFocus
             margin='dense'
@@ -85,7 +133,7 @@ export default function EditPortfolioPage() {
           <TextField
             className={classes.formLabel}
             InputLabelProps={{
-              shrink: true,
+              shrink: true
             }}
             autoFocus
             margin='dense'
@@ -111,7 +159,7 @@ export default function EditPortfolioPage() {
           <TextField
             className={classes.formLabel}
             InputLabelProps={{
-              shrink: true,
+              shrink: true
             }}
             autoFocus
             label='Title'
@@ -148,7 +196,7 @@ export default function EditPortfolioPage() {
           </Button>
         </DialogActions>
       </div>
-    ),
+    )
   }
 
   const dialog = (
@@ -180,12 +228,20 @@ export default function EditPortfolioPage() {
               alignItems='center'
               className={classes.padded}
             >
-              <CursorTypography variant='button'>{title}</CursorTypography>
-              <Fab color='primary' size='small' onClick={() => handleClick('title', title)}>
+              <CursorTypography variant='button'>{portfolio.title}</CursorTypography>
+              <Fab
+                color='primary'
+                size='small'
+                onClick={() => handleClick('title', portfolio.title)}
+              >
                 <CreateIcon />
               </Fab>
             </Grid>
             <Divider orientation='horizontal' />
+
+            {/* Each Portfolio object in the DB has a pages attribute.
+             * This attribute is currently temporarily set as an object.
+             */}
 
             {/*
              * PORTFOLIO PAGES
@@ -194,27 +250,28 @@ export default function EditPortfolioPage() {
             <Grid container direction='column' justify='space-evenly' className={classes.padded}>
               <CursorTypography variant='overline'>Pages</CursorTypography>
               <List>
-                {listItems.map((item, idx) => (
-                  <ListItem key={idx} button className={classes.hiddenButtonItem}>
-                    <ListItemText onClick={() => {}}>{item}</ListItemText>
-                    <Fab
-                      color='primary'
-                      size='small'
-                      className={classes.hiddenButton}
-                      onClick={() => handleClick('page', item)}
-                    >
-                      <CreateIcon />
-                    </Fab>
-                    <Fab
-                      color='primary'
-                      size='small'
-                      className={classes.hiddenButton}
-                      onClick={() => handleClick('delete', item)}
-                    >
-                      <CloseIcon />
-                    </Fab>
-                  </ListItem>
-                ))}
+                {/*portfolio.pages &&
+                  portfolio.pages.map((page, idx) => (
+                    <ListItem key={idx} button className={classes.hiddenButtonItem}>
+                      <ListItemText onClick={() => {}}>{page.name}</ListItemText>
+                      <Fab
+                        color='primary'
+                        size='small'
+                        className={classes.hiddenButton}
+                        onClick={() => handleClick('page', page.item)}
+                      >
+                        <CreateIcon />
+                      </Fab>
+                      <Fab
+                        color='primary'
+                        size='small'
+                        className={classes.hiddenButton}
+                        onClick={() => handleClick('delete', page.item)}
+                      >
+                        <CloseIcon />
+                      </Fab>
+                    </ListItem>
+                  ))*/}
               </List>
             </Grid>
           </Grid>
@@ -244,8 +301,10 @@ export default function EditPortfolioPage() {
                   <TextField
                     className={classes.formLabel}
                     InputLabelProps={{
-                      shrink: true,
+                      shrink: true
                     }}
+                    value={paragraph}
+                    onChange={(e) => setParagraph(e.target.value)}
                     variant='outlined'
                     label='Paragraph'
                     fullWidth
@@ -259,7 +318,7 @@ export default function EditPortfolioPage() {
            * SAVE CHANGES BUTTON
            */}
           <Grid item className={classes.floatingBottomContainer}>
-            <Fab color='primary' variant='extended'>
+            <Fab color='primary' variant='extended' onClick={handleSubmit}>
               <CursorTypography variant='button'>Save Changes</CursorTypography>
             </Fab>
           </Grid>

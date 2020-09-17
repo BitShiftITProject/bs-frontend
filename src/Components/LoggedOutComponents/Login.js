@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { BACKEND, AUTHENTICATE } from '../../Endpoints'
+import { BACKEND, AUTHENTICATE, USERS } from '../../Endpoints'
 import {
   TextField,
   Button,
@@ -9,10 +9,10 @@ import {
   Grid,
   Avatar,
   styled,
-  withStyles,
+  withStyles
 } from '@material-ui/core'
 
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../loggedInStyles'
@@ -21,12 +21,12 @@ import { loggedOutStyles } from '../loggedOutStyles'
 const styles = {
   div: {
     width: '100%',
-    marginBottom: '2%',
+    marginBottom: '2%'
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   links: {
     marginTop: '5%',
@@ -34,54 +34,74 @@ const styles = {
       textDecoration: 'none',
       color: 'grey',
       '&:hover': {
-        textDecoration: 'underline',
-      },
-    },
+        textDecoration: 'underline'
+      }
+    }
   },
   rememberMe: {
     textAlign: 'justify',
-    marginLeft: '1%',
-  },
+    marginLeft: '1%'
+  }
 }
 
 const PaddedTextField = styled(TextField)({
   marginTop: '5%',
-  marginBottom: '5%',
+  marginBottom: '5%'
 })
 
 function Login(props) {
+  const history = useHistory()
   const [state, setState] = useState({ email: '', password: '', rememberMe: false })
 
   function handleChange(e) {
-    setState({ [e.target.name]: e.target.value })
+    setState({ ...state, [e.target.name]: e.target.value })
   }
 
   function handleCheckbox(e) {
-    setState((st) => ({ rememberMe: !st.rememberMe }))
+    setState((st) => ({ ...st, rememberMe: !st.rememberMe }))
   }
 
   function handleSubmit(e) {
     e.preventDefault()
 
-    const details = {
-      ...state,
-    }
+    // const details = {
+    //   ...state
+    // }
 
-    fetch(BACKEND + AUTHENTICATE, {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify(details),
-    }).then((response) => {
-      if (response.ok) {
-        window.sessionStorage.accessToken = response.body.access_token
-        window.location.href = '/'
-      } else {
+    // fetch(BACKEND + AUTHENTICATE, {
+    //   method: 'POST',
+    //   headers: { 'Content-type': 'application/json' },
+    //   body: JSON.stringify(details)
+    // }).then((response) => {
+    //   if (response.ok) {
+    //     window.sessionStorage.accessToken = response.body.access_token
+    //     window.location.href = '/'
+    //   } else {
+    //   }
+    // })
+
+    // console.log('Logged in!')
+    // console.log('Email:', state.email)
+    // console.log('Password:', state.password)
+
+    fetch(BACKEND + USERS + '/' + state.email, {
+      method: 'GET',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+        'Content-type': 'application/json'
       }
     })
-
-    console.log('Logged in!')
-    console.log('Email:', state.email)
-    console.log('Password:', state.password)
+      .then((response) => {
+        if (response.ok) {
+          console.log(response)
+          window.sessionStorage.setItem('emailId', state.email)
+          window.location.href = '/home'
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const style = loggedOutStyles()
@@ -97,7 +117,7 @@ function Login(props) {
         </CursorTypography>
         <PaddedTextField
           InputLabelProps={{
-            shrink: true,
+            shrink: true
           }}
           className={style.formLabel}
           variant='outlined'
@@ -107,13 +127,14 @@ function Login(props) {
           id='email'
           label='Email Address'
           name='email'
+          type='email'
           autoComplete='email'
           autoFocus
           onChange={handleChange}
         />
         <PaddedTextField
           InputLabelProps={{
-            shrink: true,
+            shrink: true
           }}
           className={style.formLabel}
           variant='outlined'

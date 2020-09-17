@@ -2,12 +2,12 @@ import { Grid, Typography } from '@material-ui/core'
 import { makeStyles, styled } from '@material-ui/core/styles'
 
 const CursorTypography = styled(Typography)({
-  cursor: 'default',
+  cursor: 'default'
 })
 
 const PaddedFormGrid = styled(Grid)({
   marginTop: '8px',
-  marginBottom: '8px',
+  marginBottom: '8px'
 })
 
 const loggedInStyles = makeStyles((theme) => ({
@@ -18,28 +18,29 @@ const loggedInStyles = makeStyles((theme) => ({
     overflow: 'auto',
     flexDirection: 'column',
     '&::-webkit-scrollbar': {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   fixedHeight: {
     height: '73vh',
     overflow: 'scroll',
     '&::-webkit-scrollbar': {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
 
   fixedHeightPaper: {
+    width: '100%',
     padding: theme.spacing(4),
     borderRadius: 0,
     display: 'flex',
     overflow: 'scroll',
     flexDirection: 'column',
     '&::-webkit-scrollbar': {
-      display: 'none',
+      display: 'none'
     },
 
-    height: '73vh',
+    height: '73vh'
   },
 
   leftPanel: {
@@ -53,13 +54,13 @@ const loggedInStyles = makeStyles((theme) => ({
 
     overflow: 'scroll',
     '&::-webkit-scrollbar': {
-      display: 'none',
+      display: 'none'
     },
 
     height: '73vh',
     [theme.breakpoints.down('sm')]: {
-      height: '100%',
-    },
+      height: '100%'
+    }
   },
 
   listMenu: {
@@ -71,13 +72,13 @@ const loggedInStyles = makeStyles((theme) => ({
 
     height: '73vh',
     [theme.breakpoints.down('sm')]: {
-      height: '100%',
+      height: '100%'
     },
 
     overflow: 'scroll',
     '&::-webkit-scrollbar': {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
 
   floatingTopContainer: {
@@ -85,7 +86,7 @@ const loggedInStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 30,
+    paddingBottom: 30
   },
 
   floatingBottomContainer: {
@@ -93,31 +94,31 @@ const loggedInStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 30,
+    paddingTop: 30
   },
 
   padded: {
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
+    paddingBottom: theme.spacing(3)
   },
 
   formLabel: {
     '& .Mui-focused': {
-      color: theme.palette.info.main,
-    },
+      color: theme.palette.info.main
+    }
   },
 
   hiddenButtonItem: {
     '&:hover button': {
-      visibility: 'visible',
-    },
+      visibility: 'visible'
+    }
   },
 
   hiddenButton: {
     background: 'none',
     boxShadow: 'none',
-    visibility: 'hidden',
-  },
+    visibility: 'hidden'
+  }
 }))
 
 export { loggedInStyles, PaddedFormGrid, CursorTypography }

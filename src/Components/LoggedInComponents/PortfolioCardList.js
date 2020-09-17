@@ -1,10 +1,12 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { loggedInStyles } from '../loggedInStyles'
 import { Grid, Paper, Fab, makeStyles } from '@material-ui/core'
 import PortfolioCard from './PortfolioCard'
 import AddIcon from '@material-ui/icons/Add'
+
+import { BACKEND, USERS, PORTFOLIOS } from '../../Endpoints'
 
 const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
@@ -16,53 +18,79 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 30,
+    paddingBottom: 30
   },
 
   addPortfolioFab: {
     '&:hover': {
-      backgroundColor: theme.palette.primary.dark,
-    },
+      backgroundColor: theme.palette.primary.dark
+    }
   },
   addPortfolioIcon: {
     marginLeft: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
-      marginLeft: theme.spacing(0.5),
-    },
-  },
+      marginLeft: theme.spacing(0.5)
+    }
+  }
 }))
-
-// Some test portfolios as visual guide
-const testPortfolios = [
-  { title: 'Art Portfolio', desc: 'Hobby portfolio to show case my artworks.' },
-  {
-    title: 'Work Portfolio',
-    desc:
-      'Portfolio to show my personal projects to employers. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit porro dolore facilis tempore, quasi magni quaerat nam laudantium ut perferendis vitae animi illum natus, illo voluptatibus eveniet assumenda fuga dolorum?',
-  },
-  { title: 'Art Portfolio', desc: 'Hobby portfolio to show case my artworks.' },
-]
 
 export default function PortfolioCardList(props) {
   /* -------------------------------------------------------------------------- */
   /*                       Fetching Initial Portfolio List                      */
   /* -------------------------------------------------------------------------- */
 
-  let portfoliosRef = useRef(testPortfolios)
+  const [portfolios, setPortfolios] = useState([])
 
-  // useEffect is run every time a component is updated
-
+  // Since the second argument of useEffect is empty, that means it does not have
+  // dependencies and will only run once, therefore functioning just like componentDidMount
   useEffect(() => {
-    // TODO: Set up fetch for current user's list of portfolio id's
-    let portfolios = portfoliosRef.current
-
-    async function fetchPortfolios() {
-      const accessToken = window.sessionStorage.accessToken
-      // const response = await fetch().json()
-      return []
+    // TODO: Need to make compatible with token saved in session storage after auth
+    // Fetches the current User object, temporarily using the emailId item saved in the
+    // session storage when the user logs in
+    async function fetchUser() {
+      const emailId = window.sessionStorage.getItem('emailId')
+      const response = await fetch(BACKEND + USERS + '/' + emailId, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+          'Content-type': 'application/json'
+        }
+      })
+      const user = await response.json()
+      return user
     }
 
-    portfolios = fetchPortfolios()
+    // Fetches a single Portfolio object given its portfolio ID
+    async function fetchPortfolio(portfolioId) {
+      const response = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+          'Content-type': 'application/json'
+        }
+      })
+
+      const portfolio = await response.json()
+
+      return portfolio
+    }
+
+    // To fetch a user's portfolio, we must fetch the user first then iterate
+    // through its portfolios array of portfolio ID strings. Each string will be
+    // used to fetch the corresponding Portfolio object, which will then be
+    // added to the list of portfolios to be rendered.
+    fetchUser().then((user) => {
+      if (user.portfolios) {
+        for (let i = 0; i < user.portfolios.length; i++) {
+          const portfolioId = user.portfolios[i]
+          fetchPortfolio(portfolioId).then((portfolio) => {
+            portfolios ? setPortfolios([...portfolios, portfolio]) : setPortfolios([portfolio])
+          })
+        }
+      }
+    })
   }, [])
 
   /* -------------------------------------------------------------------------- */
@@ -75,16 +103,64 @@ export default function PortfolioCardList(props) {
     history.push('/portfolios/add')
   }
 
-  const handleView = (portfolioId) => {
+  function handleView(portfolioId) {
     alert(`View: ${portfolioId}`)
   }
 
-  const handleEdit = (portfolioId) => {
-    alert(`Edit: ${portfolioId}`)
+  function handleEdit(portfolioId) {
+    // Set portfolioId in session storage so EditPortfolioPage will fetch
+    // portfolio from DB based on this ID
+    window.sessionStorage.setItem('portfolioId', portfolioId)
+    history.push('/portfolios/edit')
   }
 
-  const handleDelete = (portfolioId) => {
-    alert(`Deleted: ${portfolioId}`)
+  async function handleDelete(portfolioId) {
+    // Delete portfolio from /portfolios DB
+    const portfolioDelete = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
+      method: 'DELETE',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+        'Content-type': 'application/json'
+      }
+    }).then((response) => {
+      if (response.ok) {
+        const emailId = window.sessionStorage.getItem('emailId')
+        fetch(BACKEND + USERS + '/' + emailId, {
+          method: 'GET',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+            'Content-type': 'application/json'
+          }
+        })
+          .then((user) => {
+            return user.json()
+          })
+          .then((user) => {
+            const newPortfolios = user.portfolios.filter((p) => p !== portfolioId)
+            const patchBody = { portfolios: newPortfolios }
+
+            fetch(BACKEND + USERS + '/' + emailId, {
+              method: 'PATCH',
+              headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                'Content-type': 'application/json'
+              },
+              body: JSON.stringify(patchBody)
+            })
+              .then((response) => {
+                if (response.ok) {
+                  setPortfolios(newPortfolios)
+                }
+              })
+              .catch((error) => {
+                console.log(error)
+              })
+          })
+      }
+    })
   }
 
   /* -------------------------------------------------------------------------- */
@@ -117,15 +193,15 @@ export default function PortfolioCardList(props) {
           </Fab>
         </Grid>
         <Grid container spacing={3} style={{ overflow: 'scroll' }}>
-          {portfoliosRef.current.map((p, idx) => (
-            <Grid key={idx} item xs={12} lg={6}>
+          {portfolios.map((p) => (
+            <Grid key={p.id} item xs={12} lg={6}>
               {/*
                * PORTFOLIO CARD: Need to change portfolioId to appropriate Id
                */}
               <PortfolioCard
-                portfolioId={p.title}
+                portfolioId={p.id}
                 title={p.title}
-                desc={p.desc}
+                description={p.description}
                 viewPortfolio={handleView}
                 editPortfolio={handleEdit}
                 deletePortfolio={handleDelete}
