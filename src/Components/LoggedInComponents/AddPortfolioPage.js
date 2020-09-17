@@ -76,7 +76,7 @@ export default function AddPortfolioPage() {
             ? [...user.portfolios, portfolio.id]
             : [portfolio.id]
 
-        const patchBody = { portfolios: newPortfolios }
+        const patchDetails = { portfolios: newPortfolios }
 
         await fetch(BACKEND + USERS + '/' + emailId, {
           method: 'PATCH',
@@ -85,7 +85,7 @@ export default function AddPortfolioPage() {
             'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
             'Content-type': 'application/json'
           },
-          body: JSON.stringify(patchBody)
+          body: JSON.stringify(patchDetails)
         })
 
         window.sessionStorage.setItem('portfolioId', portfolio.id)

@@ -57,6 +57,16 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function HomeProfile(props) {
+  /* -------------------------------------------------------------------------- */
+  /*                          States and their Setters                          */
+  /* -------------------------------------------------------------------------- */
+
+  const [profile, setProfile] = useState({ name: '' })
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Routing                                  */
+  /* -------------------------------------------------------------------------- */
+
   // Router hook to send user to some page.
   const history = useHistory()
 
@@ -65,17 +75,9 @@ export default function HomeProfile(props) {
     history.push('/profile')
   }
 
-  // Contains all styling
-  const classes = useStyles()
-
-  // Adds flex spacing and aligning, otherwise identical to all other Paper components
-  const leftPanel = loggedInStyles().leftPanel
-
-  // Breakpoint sizes and click handler for profile picture and edit button
-  const { xs, md, lg } = props
-
-  // Fetching profile data
-  const [profile, setProfile] = useState({ name: '' })
+  /* -------------------------------------------------------------------------- */
+  /*                          Fetching User's Full Name                         */
+  /* -------------------------------------------------------------------------- */
 
   // useEffect with an empty list as its second argument works like
   // componentDidMount, which runs once
@@ -95,6 +97,19 @@ export default function HomeProfile(props) {
     }
     fetchUser().then((user) => setProfile({ name: user.first_name + ' ' + user.last_name }))
   }, [])
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
+
+  // Contains all styling
+  const classes = useStyles()
+
+  // Adds flex spacing and aligning, otherwise identical to all other Paper components
+  const leftPanel = loggedInStyles().leftPanel
+
+  // Breakpoint sizes and click handler for profile picture and edit button
+  const { xs, md, lg } = props
 
   return (
     <Grid item xs={xs} md={md} lg={lg}>

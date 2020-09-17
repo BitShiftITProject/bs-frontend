@@ -87,6 +87,7 @@ export default function EditProfilePage() {
   const emailId = window.sessionStorage.getItem('emailId')
   const history = useHistory()
 
+  // TODO: Set up catch block for errors
   useEffect(() => {
     async function fetchUser() {
       if (!emailId) history.push('/login')
@@ -170,6 +171,8 @@ export default function EditProfilePage() {
 
     const details = { ...about, ...contact }
 
+    // TODO: Fortify catch block
+
     fetch(BACKEND + USERS + '/' + emailId, {
       method: 'PATCH',
       headers: {
@@ -201,7 +204,9 @@ export default function EditProfilePage() {
   /*                             Form to be Rendered                            */
   /* -------------------------------------------------------------------------- */
 
-  // Switch between About Me and Contact options according to the 'page' state
+  // Switch between About Me and Contact options according to the 'page' state:
+  // - Will render the About Me form if page === 'aboutMe'
+  // - Will render the Contact form if page === 'contact'
 
   let form
 

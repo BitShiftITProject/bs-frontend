@@ -1,6 +1,6 @@
 import React from 'react'
 import { Breadcrumbs, makeStyles } from '@material-ui/core'
-import { loggedInStyles, CursorTypography } from '../loggedInStyles'
+import { CursorTypography } from '../loggedInStyles'
 import { useLocation, Link } from 'react-router-dom'
 import HomeIcon from '@material-ui/icons/Home'
 import PersonIcon from '@material-ui/icons/Person'
@@ -20,18 +20,18 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     textDecoration: 'none',
     color: theme.palette.text.primary,
-    '& a': 'pointer',
+    '& a': 'pointer'
   },
 
   '.MuiLink-root:hover': {
-    textDecoration: 'underline',
+    textDecoration: 'underline'
   },
   breadcrumbIcon: {
     marginRight: theme.spacing(1),
     marginBottom: '2px',
     width: 30,
-    height: 27,
-  },
+    height: 27
+  }
 }))
 
 // For mapping a path segment (the singular segment between /'s)
@@ -44,7 +44,7 @@ const breadcrumbNameMap = {
   help: 'Help',
   settings: 'Settings',
   add: 'Add Portfolio',
-  edit: 'Edit Portfolio',
+  edit: 'Edit Portfolio'
 }
 
 // For mapping a path segment (the singular segment between /'s) to a
@@ -54,7 +54,7 @@ const breadcrumbIconMap = {
   profile: <PersonIcon />,
   portfolios: <DescriptionIcon />,
   help: <HelpOutlineIcon />,
-  settings: <SettingsIcon />,
+  settings: <SettingsIcon />
 }
 
 export default function HeaderBreadcrumbs(props) {

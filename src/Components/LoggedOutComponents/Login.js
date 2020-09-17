@@ -12,7 +12,7 @@ import {
   withStyles
 } from '@material-ui/core'
 
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../loggedInStyles'
@@ -50,8 +50,15 @@ const PaddedTextField = styled(TextField)({
 })
 
 function Login(props) {
-  const history = useHistory()
+  /* -------------------------------------------------------------------------- */
+  /*                          States and their Setters                          */
+  /* -------------------------------------------------------------------------- */
+
   const [state, setState] = useState({ email: '', password: '', rememberMe: false })
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Handlers                                  */
+  /* -------------------------------------------------------------------------- */
 
   function handleChange(e) {
     setState({ ...state, [e.target.name]: e.target.value })
@@ -84,6 +91,7 @@ function Login(props) {
     // console.log('Email:', state.email)
     // console.log('Password:', state.password)
 
+    // TODO: Use authentication endpoint, as currently password is not functioning
     fetch(BACKEND + USERS + '/' + state.email, {
       method: 'GET',
       headers: {
@@ -104,8 +112,17 @@ function Login(props) {
       })
   }
 
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
+
   const style = loggedOutStyles()
   const { classes } = props
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Page Content                                */
+  /* -------------------------------------------------------------------------- */
+
   const content = (
     <div className={classes.div}>
       <form onSubmit={handleSubmit} className={classes.form}>

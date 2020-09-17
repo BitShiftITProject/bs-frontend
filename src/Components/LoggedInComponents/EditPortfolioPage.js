@@ -9,8 +9,8 @@ import {
   Fab,
   Divider,
   List,
-  ListItem,
-  ListItemText,
+  // ListItem,
+  // ListItemText,
   TextField,
   Button,
   DialogActions,
@@ -19,7 +19,7 @@ import {
   DialogTitle
 } from '@material-ui/core'
 import CreateIcon from '@material-ui/icons/Create'
-import CloseIcon from '@material-ui/icons/Close'
+// import CloseIcon from '@material-ui/icons/Close'
 import Sidebar from './Sidebar'
 
 import { BACKEND, PORTFOLIOS } from '../../Endpoints'
@@ -27,14 +27,24 @@ import { useHistory } from 'react-router-dom'
 
 export default function EditPortfolioPage() {
   /* -------------------------------------------------------------------------- */
+  /*                          States and their Setters                          */
+  /* -------------------------------------------------------------------------- */
+
+  const [portfolio, setPortfolio] = useState({})
+  const [paragraph, setParagraph] = useState('')
+
+  /* -------------------------------------------------------------------------- */
   /*                         Fetching Current Portfolio                         */
   /* -------------------------------------------------------------------------- */
 
   const history = useHistory()
   const portfolioId = window.sessionStorage.getItem('portfolioId')
-  const [portfolio, setPortfolio] = useState({})
-  const [paragraph, setParagraph] = useState('')
 
+  // Runs when the component is mounted for the first time, fetches the
+  // portfolio using the portfolioId item set in the sessionStorage.
+  // The portfolioId is set in the sessionStorage when:
+  // - A user clicks on the Add Portfolio button in AddPortfolioPage
+  // - A user clicks on the Edit button in PortfolioCard
   useEffect(() => {
     async function fetchPortfolio() {
       const response = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
@@ -45,6 +55,9 @@ export default function EditPortfolioPage() {
           'Content-type': 'application/json'
         }
       })
+
+      // TODO: Set up catch block for errors
+
       const portfolio = await response.json()
       return portfolio
     }
@@ -52,11 +65,7 @@ export default function EditPortfolioPage() {
       setPortfolio({ ...portfolio })
       setParagraph(portfolio.pages.content || '')
     })
-  }, [])
-
-  /* -------------------------------------------------------------------------- */
-  /*                             State and Handlers                             */
-  /* -------------------------------------------------------------------------- */
+  }, [portfolioId])
 
   /* -------------------------------------------------------------------------- */
   /*                                   Styles                                   */
@@ -73,18 +82,6 @@ export default function EditPortfolioPage() {
   const [open, setOpen] = useState(false)
   const [dialogContent, setDialogContent] = useState({ type: '', target: '' })
 
-  const patchPortfolio = (patchDetails) => {
-    fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
-        method: 'PATCH',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-          'Content-type': 'application/json'
-        },
-        body: JSON.stringify(patchDetails)
-    })
-  }
-
   const handleClick = (name, value) => {
     setDialogContent({ type: name, target: value })
     setOpen(true)
@@ -92,7 +89,7 @@ export default function EditPortfolioPage() {
 
   const handleEdit = (e) => {
     e.preventDefault()
-    patchPortfolio({"title":portfolio.title, "description":portfolio.description});
+    patchPortfolio({ title: portfolio.title, description: portfolio.description })
     setOpen(false)
   }
 
@@ -105,30 +102,28 @@ export default function EditPortfolioPage() {
     setOpen(false)
   }
 
+  const patchPortfolio = (patchDetails) => {
+    fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
+      method: 'PATCH',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(patchDetails)
+    })
+  }
+
   async function handleSubmit() {
-    // TODO: PATCH request to /portfolios/{portfolioId}
-    /* -------------------------------------------------------------------------- */
-    // portfolioId was set in sessionStorage, either in:
-    // - AddPortfolioPage, when the add portfolio button is clicked (in
-    //   handleSubmit)
-    // - PortfolioCardList, when the edit button of the portfolio is clicked (in
-    //   handleEdit)
-    /* -------------------------------------------------------------------------- */
-    // For now the portfolio object retrieved from the GET request contains a
-    // pages attribute, which is an object.
-    // The content of the paragraph should be within a 'content' attribute in
-    // this pages object:
-    // portfolios = {<other attrs...>, pages: {content: <paragraph content
-    // here>}}
-    /* -------------------------------------------------------------------------- */
-    // I made it so that the state of the paragraph content is modified and kept in
-    // the 'paragraph' variable, updated using the 'setParagraph' method.
-    // So when sending a PATCH request, the body should be JSON.stringify({pages: {content: paragraph}})
-    patchPortfolio({"pages":{"content":paragraph}});
-    history.push('/portfolios');
+    patchPortfolio({ pages: { content: paragraph } })
+    history.push('/portfolios')
   }
 
   const dialogType = {
+    // Contains the contents to be rendered when a dialog is triggered, which is
+    // to be sent to the CustomDialog component
+    /* -------------------------------------------------------------------------- */
+    // Dialog to show when the Edit button next to the portfolio title is clicked
     title: (
       <form onSubmit={handleEdit}>
         <DialogTitle id='form-dialog-title'>Edit portfolio</DialogTitle>
@@ -144,7 +139,7 @@ export default function EditPortfolioPage() {
             label='Title'
             fullWidth
             value={portfolio.title}
-            onChange={(e) => setPortfolio({...portfolio, title: e.target.value})}
+            onChange={(e) => setPortfolio({ ...portfolio, title: e.target.value })}
           />
           <TextField
             className={classes.formLabel}
@@ -157,7 +152,7 @@ export default function EditPortfolioPage() {
             label='Description'
             fullWidth
             value={portfolio.description}
-            onChange={(e) => setPortfolio({...portfolio, description: e.target.value})}
+            onChange={(e) => setPortfolio({ ...portfolio, description: e.target.value })}
           />
         </DialogContent>
         <DialogActions>
@@ -170,6 +165,9 @@ export default function EditPortfolioPage() {
         </DialogActions>
       </form>
     ),
+    /* -------------------------------------------------------------------------- */
+    // Dialog to show when the Edit button next to a page is clicked (doesn't
+    // exist yet)
     page: (
       <form onSubmit={handleEdit}>
         <DialogTitle id='form-dialog-title'>Edit page</DialogTitle>
@@ -196,6 +194,9 @@ export default function EditPortfolioPage() {
         </DialogActions>
       </form>
     ),
+    /* -------------------------------------------------------------------------- */
+    // Dialog to show when the Delete button next to a page is clicked (doesn't
+    // exist yet)
     delete: (
       <div>
         <DialogTitle id='alert-dialog-title'>{'Delete this page?'}</DialogTitle>
@@ -257,12 +258,12 @@ export default function EditPortfolioPage() {
             </Grid>
             <Divider orientation='horizontal' />
 
-            {/* Each Portfolio object in the DB has a pages attribute.
-             * This attribute is currently temporarily set as an object.
+            {/*
+             * PORTFOLIO PAGES (doesn't exist yet, a portfolio currently only has 1 page)
              */}
 
-            {/*
-             * PORTFOLIO PAGES
+            {/* Each Portfolio object in the DB has a pages attribute.
+             * This attribute is currently temporarily set as an object.
              */}
 
             <Grid container direction='column' justify='space-evenly' className={classes.padded}>

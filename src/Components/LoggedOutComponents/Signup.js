@@ -34,6 +34,12 @@ const PaddedTextField = styled(TextField)({
 })
 
 function Signup(props) {
+  const history = useHistory()
+
+  /* -------------------------------------------------------------------------- */
+  /*                          States and their Setters                          */
+  /* -------------------------------------------------------------------------- */
+
   const [state, setState] = useState({
     username: '',
     email: '',
@@ -42,6 +48,10 @@ function Signup(props) {
     firstName: '',
     lastName: ''
   })
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Handlers                                  */
+  /* -------------------------------------------------------------------------- */
 
   // Handles changes in text input
   function handleChange(e) {
@@ -60,6 +70,7 @@ function Signup(props) {
       return
     }
 
+    // TODO: Set up to use auth endpoint
     const details = {
       first_name: state.firstName,
       last_name: state.lastName,
@@ -87,7 +98,6 @@ function Signup(props) {
     //   }
     // })
 
-    // Temporary no authorisation
     fetch(BACKEND + USERS, {
       method: 'POST',
       headers: {
@@ -108,9 +118,20 @@ function Signup(props) {
       })
   }
 
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
+
   const style = loggedOutStyles()
-  const history = useHistory()
+  // Because we are using withStyles higher-order component (look at the export
+  // statement), we retrieve the styles as a prop called 'classes'. It will
+  // include all the classes we defined in the 'styles' object we defined above
   const { classes } = props
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Page Content                                */
+  /* -------------------------------------------------------------------------- */
+
   const content = (
     <div className={classes.div}>
       <form onSubmit={handleSubmit} className={classes.form}>

@@ -179,7 +179,15 @@ export default function Sidebar(props) {
         >
           <SettingsIcon />
         </IconButton>
-        <IconButton color='inherit'>
+        {/* LOGOUT: Temporarily by removing 'emailId' and 'portfolioId' */}
+        <IconButton
+          onClick={() => {
+            window.sessionStorage.removeItem('emailId')
+            window.sessionStorage.removeItem('portfolioId')
+            window.location.href = '/login'
+          }}
+          color='inherit'
+        >
           <PowerSettingsNewIcon />
         </IconButton>
       </Toolbar>

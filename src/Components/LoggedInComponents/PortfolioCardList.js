@@ -86,7 +86,9 @@ export default function PortfolioCardList(props) {
         for (let i = 0; i < user.portfolios.length; i++) {
           const portfolioId = user.portfolios[i]
           fetchPortfolio(portfolioId).then((portfolio) => {
-            portfolios ? setPortfolios([...portfolios, portfolio]) : setPortfolios([portfolio])
+            portfolios && portfolios.length
+              ? setPortfolios((p) => [...p, portfolio])
+              : setPortfolios([portfolio])
           })
         }
       }
@@ -115,8 +117,8 @@ export default function PortfolioCardList(props) {
   }
 
   async function handleDelete(portfolioId) {
-    // Delete portfolio from /portfolios DB
-    const portfolioDelete = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
+    // TODO: Fix this ugly piece of fetching block
+    fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
       method: 'DELETE',
       headers: {
         'Access-Control-Allow-Origin': '*',
@@ -139,7 +141,7 @@ export default function PortfolioCardList(props) {
           })
           .then((user) => {
             const newPortfolios = user.portfolios.filter((p) => p !== portfolioId)
-            const patchBody = { portfolios: newPortfolios }
+            const patchDetails = { portfolios: newPortfolios }
 
             fetch(BACKEND + USERS + '/' + emailId, {
               method: 'PATCH',
@@ -148,7 +150,7 @@ export default function PortfolioCardList(props) {
                 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
                 'Content-type': 'application/json'
               },
-              body: JSON.stringify(patchBody)
+              body: JSON.stringify(patchDetails)
             })
               .then((response) => {
                 if (response.ok) {
