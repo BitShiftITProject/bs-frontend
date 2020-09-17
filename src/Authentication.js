@@ -47,7 +47,7 @@ async function loggedIn() {
 // Keep all == as is
 
 class Authentication extends Component {
-  state = { loggedIn: true }
+  state = { loggedIn: false }
 
   // async componentDidMount() {
   //   let logincheck = await loggedIn()

@@ -16,6 +16,7 @@ import {
 import { Link } from 'react-router-dom'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import LandingContainer from './LandingContainer'
+import Alert from '@material-ui/lab/Alert';
 
 const styles = {
   div: {
@@ -49,7 +50,7 @@ const PaddedTextField = styled(TextField)({
 })
 
 class Login extends Component {
-  state = { email: '', password: '', rememberMe: false }
+  state = { email: '', password: '', rememberMe: false, loginFailed: false, errorMessage: 'Login FAILED' }
 
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
@@ -61,27 +62,38 @@ class Login extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-
     const details = {
-      ...this.state,
+      Email: this.state.email,
+      Password: this.state.password
     }
 
     fetch(BACKEND + AUTHENTICATE, {
+
       method: 'POST',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify(details),
+
     }).then((response) => {
       if (response.ok) {
+
+        console.log('Logged in!')
+        console.log('Email:', this.state.email)
+        console.log('Password:', this.state.password)
+
         window.sessionStorage.accessToken = response.body.access_token
         window.location.href = '/'
       } else {
+        return response.json();
       }
+    }).then(data => {
+      this.setState({
+        loginFailed: true,
+        errorMessage: data.error.message
+      });
     })
-
-    console.log('Logged in!')
-    console.log('Email:', this.state.email)
-    console.log('Password:', this.state.password)
   }
+
+
 
   render() {
     const { classes } = this.props
@@ -94,6 +106,10 @@ class Login extends Component {
           <Typography component='h1' variant='h5'>
             Log In
           </Typography>
+
+
+
+
           <PaddedTextField
             variant='outlined'
             margin='normal'
@@ -118,6 +134,15 @@ class Login extends Component {
             autoComplete='current-password'
             onChange={this.handleChange}
           />
+
+          {/* The error message appears iff the state is loginFailed */}
+          {this.state.loginFailed ?
+            <div>
+              <Alert severity="error">{this.state.errorMessage}</Alert>
+            </div>
+            : <div></div>
+          }
+
           <FormControlLabel
             className={classes.div}
             control={
