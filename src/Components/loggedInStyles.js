@@ -90,6 +90,9 @@ const loggedInStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
+    '&::-webkit-scrollbar': {
+      display: 'none',
+    },
   },
   fixedHeight: {
     height: 700,

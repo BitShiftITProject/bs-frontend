@@ -31,7 +31,7 @@ const PaddedTextField = styled(TextField)({
 })
 
 class Signup extends Component {
-  state = { email: '', username: '', password: '', confirm: '', firstName: '', lastName: '' }
+  state = { email: '', username: '', password: '', confirm: '', firstName: '', lastName: '', signupFailed: false, errorMessage: "" }
 
   // Handles changes in text input
   handleChange = (e) => {
@@ -60,18 +60,18 @@ class Signup extends Component {
       body: JSON.stringify(details),
     }).then((response) => {
       if (response.ok) {
+        console.log('SIGNUP')
+        console.log('Email:', this.state.email)
+        console.log('Username:', this.state.username)
+        console.log('Password:', this.state.password)
+        console.log('Confirm Password:', this.state.confirm)
+        console.log('First Name:', this.state.firstName)
+        console.log('Last Name:', this.state.lastName)
         window.location.href = '/login'
       } else {
+        console.log(response)
       }
     })
-
-    console.log('SIGNUP')
-    console.log('Email:', this.state.email)
-    console.log('Username:', this.state.username)
-    console.log('Password:', this.state.password)
-    console.log('Confirm Password:', this.state.confirm)
-    console.log('First Name:', this.state.firstName)
-    console.log('Last Name:', this.state.lastName)
   }
 
   render() {
