@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 
 import { loggedInStyles, PaddedFormGrid, CursorTypography } from '../loggedInStyles'
 import CustomDialog from './CustomDialog'
+import HeaderBreadcrumbs from './HeaderBreadcrumbs'
+import EditPortfolioDropdown from './EditPortfolioDropdown'
 
 import {
   Grid,
@@ -227,7 +229,9 @@ export default function EditPortfolioPage() {
   /* -------------------------------------------------------------------------- */
 
   const content = (
+    
     <Grid container direction='row' spacing={0}>
+      {/* <EditPortfolioDropdown /> */}
       {/*
        * LIST MENU
        */}
@@ -293,9 +297,8 @@ export default function EditPortfolioPage() {
                   ))*/}
               </List>
             </Grid>
-          </Grid>
-        </Paper>
-      </Grid>
+          </Paper>
+        </Grid>
 
       {/*
        * PAGE SECTIONS

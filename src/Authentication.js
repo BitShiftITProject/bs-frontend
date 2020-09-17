@@ -5,6 +5,8 @@ import { BACKEND, LOGGEDIN } from './Endpoints'
 import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
+import PublicPortfolio from './Components/LoggedOutComponents/PublicPortfolio'
+import PublicPortfolioFailed from './Components/LoggedOutComponents/PublicPortfolioFailed'
 
 import HomePage from './Components/LoggedInComponents/HomePage'
 import EditProfilePage from './Components/LoggedInComponents/EditProfilePage'
@@ -88,6 +90,9 @@ class Authentication extends Component {
             <Route exact path='/login' component={Login} />
             <Route exact path='/signup' component={Signup} />
             <Route exact path='/forgotpassword' component={ForgotPassword} />
+            <Route exact path='/publicfailed' component={PublicPortfolioFailed} />
+            <Route exact path='/public/:username/:portfolio/:page' component={PublicPortfolio} />
+            <Redirect from='/public/:username' to='/public/:username/0/0' />
 
             <Redirect to='/login' />
           </Switch>
