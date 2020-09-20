@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { loggedInStyles, PaddedFormGrid, CursorTypography } from '../loggedInStyles'
+import { loggedInStyles, PaddedFormGrid, CursorTypography } from '../../Styles/loggedInStyles'
 import CustomDialog from './CustomDialog'
 import HeaderBreadcrumbs from './HeaderBreadcrumbs'
 import EditPortfolioDropdown from './EditPortfolioDropdown'
@@ -24,7 +24,7 @@ import CreateIcon from '@material-ui/icons/Create'
 // import CloseIcon from '@material-ui/icons/Close'
 import Sidebar from './Sidebar'
 
-import { BACKEND, PORTFOLIOS } from '../../Endpoints'
+import { BACKEND, PORTFOLIOS } from '../../Backend/Endpoints'
 import { useHistory } from 'react-router-dom'
 
 export default function EditPortfolioPage() {

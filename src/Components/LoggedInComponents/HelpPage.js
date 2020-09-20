@@ -3,30 +3,30 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Sidebar from './Sidebar'
-import { CursorTypography } from '../loggedInStyles'
+import { CursorTypography } from '../../Styles/loggedInStyles'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: '100%',
+    width: '100%'
   },
   title: {
-    paddingBottom: '15px',
+    paddingBottom: '15px'
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightBold,
     '&:hover': {
       textDecoration: 'underline',
-      color: theme.palette.info.main,
-    },
-  },
+      color: theme.palette.info.main
+    }
+  }
 }))
 
 const help = {
   General: [
     { q: 'Question 1', a: 'Answer 1' },
-    { q: 'Question 2', a: 'Answer 2' },
-  ],
+    { q: 'Question 2', a: 'Answer 2' }
+  ]
 }
 
 export default function HelpPage() {

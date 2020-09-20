@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
-import { BACKEND, LOGGEDIN } from './Endpoints'
+import { BACKEND, LOGGEDIN } from './Backend/Endpoints'
 
 import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
@@ -10,7 +10,7 @@ import PublicPortfolioFailed from './Components/LoggedOutComponents/PublicPortfo
 
 import HomePage from './Components/LoggedInComponents/HomePage'
 import EditProfilePage from './Components/LoggedInComponents/EditProfilePage'
-import PortfolioCardList from './Components/LoggedInComponents/PortfolioCardList'
+import PortfolioList from './Components/LoggedInComponents/PortfolioList'
 import AddPortfolioPage from './Components/LoggedInComponents/AddPortfolioPage'
 import EditPortfolioPage from './Components/LoggedInComponents/EditPortfolioPage'
 import SettingsPage from './Components/LoggedInComponents/SettingsPage'
@@ -76,7 +76,7 @@ class Authentication extends Component {
             <Route
               exact
               path='/portfolios'
-              render={() => <Sidebar content={<PortfolioCardList xs={12} md={12} lg={12} />} />}
+              render={() => <Sidebar content={<PortfolioList xs={12} md={12} lg={12} />} />}
             />
             <Route exact path='/profile' render={() => <EditProfilePage />} />
             <Route exact path='/home' render={() => <HomePage />} />

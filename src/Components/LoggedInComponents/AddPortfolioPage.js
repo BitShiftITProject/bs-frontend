@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
 import { Grid, Paper, TextField, Button } from '@material-ui/core'
-import { loggedInStyles, PaddedFormGrid } from '../loggedInStyles'
+import { loggedInStyles, PaddedFormGrid } from '../../Styles/loggedInStyles'
 import Sidebar from './Sidebar'
 
-import { BACKEND, PORTFOLIOS, USERS } from '../../Endpoints'
+import { BACKEND, PORTFOLIOS, USERS } from '../../Backend/Endpoints'
 import { useHistory } from 'react-router-dom'
 
 export default function AddPortfolioPage() {
@@ -71,10 +71,14 @@ export default function AddPortfolioPage() {
           }
         })
 
+        // TODO: Fix portfolio adding PATCH request to Users
+
         const newPortfolios =
           user.portfolios && user.portfolios.length
             ? [...user.portfolios, portfolio.id]
             : [portfolio.id]
+
+        console.log(newPortfolios)
 
         const patchDetails = { portfolios: newPortfolios }
 

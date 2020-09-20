@@ -7,30 +7,30 @@ import LandingContainer from './LandingContainer'
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
-import { CursorTypography } from '../loggedInStyles'
-import { loggedOutStyles } from '../loggedOutStyles'
+import { CursorTypography } from '../../Styles/loggedInStyles'
+import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 
 const styles = {
   div: {
-    width: '100%',
+    width: '100%'
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   span: {
-    transform: 'translateX(-25px)',
+    transform: 'translateX(-25px)'
   },
 
   fab: {
-    transform: 'scale(0.65)',
-  },
+    transform: 'scale(0.65)'
+  }
 }
 
 const PaddedTextField = styled(TextField)({
   marginTop: '5%',
-  marginBottom: '5%',
+  marginBottom: '5%'
 })
 
 function ForgotPassword(props) {
@@ -64,7 +64,7 @@ function ForgotPassword(props) {
 
         <PaddedTextField
           InputLabelProps={{
-            shrink: true,
+            shrink: true
           }}
           className={style.formLabel}
           id='forgot_password__email'
@@ -82,7 +82,7 @@ function ForgotPassword(props) {
 
         <PaddedTextField
           InputLabelProps={{
-            shrink: true,
+            shrink: true
           }}
           className={style.formLabel}
           id='forgot_password__username'

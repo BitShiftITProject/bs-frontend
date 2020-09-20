@@ -22,20 +22,13 @@ const useStyles = makeStyles((theme) => ({
   portfolioCard: {
     width: '100%',
     height: 'auto',
-    [theme.breakpoints.up('lg')]: {
-      height: 350
-    },
     '& .MuiCardContent-root:last-child': {
       paddingBottom: 0
     }
   },
 
   portfolioContent: {
-    height: 'auto',
-    [theme.breakpoints.up('lg')]: {
-      height: 100
-    },
-    overflow: 'scroll'
+    padding: theme.spacing(3)
   },
 
   portfolioCardMedia: {
@@ -52,14 +45,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function PortfolioCard(props) {
+const PortfolioCard = (props) => {
   // Contains all styling
   const classes = useStyles()
 
   /* -------------------------------------------------------------------------- */
   /*                       Portfolio Details and Handlers                       */
   /* -------------------------------------------------------------------------- */
-  // Passed down from PortfolioCardList
+  // Passed down from PortfolioList
 
   const { portfolioId, title, description, viewPortfolio, editPortfolio, deletePortfolio } = props
 
@@ -78,7 +71,7 @@ export default function PortfolioCard(props) {
   return (
     <Card className={classes.portfolioCard}>
       <Grid container spacing={1} direction='column'>
-        <CardMedia src='/' className={classes.portfolioCardMedia} />
+        {/*<CardMedia src='/' className={classes.portfolioCardMedia} />*/}
         <CardContent className={classes.portfolioContent}>
           <Typography className={classes.portfolioText} variant='h5' component='h2'>
             {title}
@@ -117,3 +110,5 @@ export default function PortfolioCard(props) {
     </Card>
   )
 }
+
+export default PortfolioCard

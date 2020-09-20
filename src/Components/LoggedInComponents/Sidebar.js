@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import clsx from 'clsx'
-import { CursorTypography } from '../loggedInStyles'
+import { CursorTypography } from '../../Styles/loggedInStyles'
 import {
   CssBaseline,
   Drawer,
@@ -40,7 +40,10 @@ const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
 
   root: {
-    display: 'flex'
+    display: 'flex',
+    '&::-webkit-scrollbar': {
+      display: 'none'
+    }
   },
   toolbar: {
     paddingRight: 24 // keep right padding when drawer closed
