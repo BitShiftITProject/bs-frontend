@@ -1,3 +1,5 @@
+import { BACKEND, USERS, PORTFOLIOS } from './Endpoints'
+
 // Fetches the current User object, temporarily using the emailId item saved in the
 // session storage when the user logs in
 export const fetchUser = async () => {

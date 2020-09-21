@@ -3,6 +3,7 @@ import { Grid } from '@material-ui/core'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import PortfolioCard from './PortfolioCard'
 import { BACKEND, USERS, PORTFOLIOS } from '../../Backend/Endpoints'
+import { fetchPortfolio } from '../../Backend/fetch'
 import { useHistory } from 'react-router-dom'
 
 const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
@@ -13,7 +14,7 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
   const history = useHistory()
 
   async function handleView(portfolioId) {
-    let portfolioIndex = 0
+    // Get the current user
     const emailId = window.sessionStorage.getItem('emailId')
 
     const user = await fetch(BACKEND + USERS + '/' + emailId, {
@@ -33,10 +34,13 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
         console.log(error)
       })
 
+    // Get the portfolio from the user's portfolios array whose index === portfolioIndex
+    let portfolioIndex = 0
     while (portfolioId !== user.portfolios[portfolioIndex]) {
       portfolioIndex++
     }
 
+    // Go to the designated route for public portfolios
     history.push(`/public/${emailId}/${portfolioIndex}/0`)
   }
 
@@ -48,22 +52,26 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
   }
 
   async function handleDelete(portfolioId) {
+    // Get the new list of portfolio IDs to be used in PATCH request
+    const newPortfolioIds = portfolios
+      .map((portfolioObj) => portfolioObj.id)
+      .filter((id) => id !== portfolioId)
+
+    // Create a temporary Set item for it, used to filter the current portfolios
+    // state array, which consists of the portfolio objects (not just IDs)
+    const newPortfolioIdsSet = new Set(newPortfolioIds)
+    const newPortfolios = portfolios.filter((portfolioObj) =>
+      newPortfolioIdsSet.has(portfolioObj.id)
+    )
+
+    // Set the portfolios state as the new list of portfolio objects, which does
+    // not have the to-be-deleted portfolio
+    setPortfolios(newPortfolios)
+
+    // Delete the portfolio from the user's portfolios property
     const emailId = window.sessionStorage.getItem('emailId')
-    const response = await fetch(BACKEND + USERS + '/' + emailId, {
-      method: 'GET',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        'Content-type': 'application/json'
-      }
-    })
-
-    const user = await response.json()
-
-    const newPortfolios = user.portfolios.filter((p) => p !== portfolioId)
-    const patchDetails = { portfolios: newPortfolios }
-
-    fetch(BACKEND + USERS + '/' + emailId, {
+    const patchDetails = { portfolios: newPortfolioIds }
+    const patchResponse = await fetch(BACKEND + USERS + '/' + emailId, {
       method: 'PATCH',
       headers: {
         'Access-Control-Allow-Origin': '*',
@@ -71,23 +79,19 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
         'Content-type': 'application/json'
       },
       body: JSON.stringify(patchDetails)
-    })
-      .then((response) => {
-        if (response.ok) {
-          setPortfolios(newPortfolios)
-          fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
-            method: 'DELETE',
-            headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-              'Content-type': 'application/json'
-            }
-          })
+    }).catch((error) => console.log('Error: User portfolios NOT patched!'))
+
+    if (patchResponse.ok) {
+      // Delete the portfolio from the portfolio DB
+      const deleteResponse = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
+        method: 'DELETE',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+          'Content-type': 'application/json'
         }
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+      }).catch((error) => console.log('Error: Portfolio NOT deleted!', error))
+    }
   }
 
   /* -------------------------------------------------------------------------- */

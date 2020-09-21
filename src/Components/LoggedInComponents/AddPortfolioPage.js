@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Grid, Paper, TextField, Button } from '@material-ui/core'
+import { Grid, Paper, TextField, Button, FormControl, FormHelperText } from '@material-ui/core'
 import { loggedInStyles, PaddedFormGrid } from '../../Styles/loggedInStyles'
 import Sidebar from './Sidebar'
 
@@ -14,6 +14,8 @@ export default function AddPortfolioPage() {
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [error, setError] = useState(false)
+  const [helperText, setHelperText] = useState(' ')
 
   /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */
@@ -52,6 +54,8 @@ export default function AddPortfolioPage() {
       if (response.ok) {
         return response
       } else {
+        setHelperText('An error occurred. Try again.')
+        setError(true)
         return null
       }
     })
@@ -69,15 +73,9 @@ export default function AddPortfolioPage() {
             'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
             'Content-type': 'application/json'
           }
-        })
+        }).then((response) => response.json())
 
-        // TODO: Fix portfolio adding PATCH request to Users
-
-        const newPortfolios =
-          user.portfolios && user.portfolios.length
-            ? [...user.portfolios, portfolio.id]
-            : [portfolio.id]
-
+        const newPortfolios = [...user.portfolios, portfolio.id]
         console.log(newPortfolios)
 
         const patchDetails = { portfolios: newPortfolios }
@@ -90,10 +88,15 @@ export default function AddPortfolioPage() {
             'Content-type': 'application/json'
           },
           body: JSON.stringify(patchDetails)
+        }).then((response) => {
+          if (response.ok) {
+            console.log('Portfolio added to user!')
+            history.push('/home')
+          } else {
+            setHelperText('An error occurred. Try again.')
+            setError(true)
+          }
         })
-
-        window.sessionStorage.setItem('portfolioId', portfolio.id)
-        history.push('/portfolios/edit')
       }
     }
   }
@@ -114,7 +117,44 @@ export default function AddPortfolioPage() {
             alignItems='center'
           >
             <form style={{ width: '40%' }} onSubmit={handleSubmit}>
-              <Grid container spacing={2} direction='column' alignItems='stretch'>
+              <FormControl error={error} style={{ width: '100%', height: '100%' }}>
+                <Grid container spacing={2} direction='column' alignItems='stretch'>
+                  <PaddedFormGrid item>
+                    <TextField
+                      className={classes.formLabel}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      variant='outlined'
+                      label='Title'
+                      fullWidth
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      required
+                    ></TextField>
+                  </PaddedFormGrid>
+                  <PaddedFormGrid item>
+                    <TextField
+                      className={classes.formLabel}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      variant='outlined'
+                      label='Description'
+                      fullWidth
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    ></TextField>
+                  </PaddedFormGrid>
+                </Grid>
+                <FormHelperText>{helperText}</FormHelperText>
+                <PaddedFormGrid>
+                  <Button type='submit' variant='contained'>
+                    Add Portfolio
+                  </Button>
+                </PaddedFormGrid>
+              </FormControl>
+              {/*<Grid container spacing={2} direction='column' alignItems='stretch'>
                 <PaddedFormGrid item>
                   <TextField
                     className={classes.formLabel}
@@ -147,7 +187,7 @@ export default function AddPortfolioPage() {
                 <Button type='submit' variant='contained'>
                   Add Portfolio
                 </Button>
-              </PaddedFormGrid>
+              </PaddedFormGrid>*/}
             </form>
           </Grid>
         </Paper>
