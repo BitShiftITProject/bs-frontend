@@ -1,10 +1,18 @@
-import React from 'react'
-import { Grid } from '@material-ui/core'
-import { Droppable, Draggable } from 'react-beautiful-dnd'
-import PortfolioCard from './PortfolioCard'
-import { BACKEND, USERS, PORTFOLIOS } from '../../Backend/Endpoints'
-import { fetchPortfolio } from '../../Backend/fetch'
+import React, { useState } from 'react'
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid
+} from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
+import { Droppable, Draggable } from 'react-beautiful-dnd'
+
+import PortfolioCard from './PortfolioCard'
+import CustomDialog from './CustomDialog'
+import { getUser, patchUser, deletePortfolio } from '../../Backend/Fetch'
 
 const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
   /* -------------------------------------------------------------------------- */
@@ -17,22 +25,7 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
     // Get the current user
     const emailId = window.sessionStorage.getItem('emailId')
 
-    const user = await fetch(BACKEND + USERS + '/' + emailId, {
-      method: 'GET',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        'Content-type': 'application/json'
-      }
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json()
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    const user = await getUser()
 
     // Get the portfolio from the user's portfolios array whose index === portfolioIndex
     let portfolioIndex = 0
@@ -52,85 +45,118 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
   }
 
   async function handleDelete(portfolioId) {
-    // Get the new list of portfolio IDs to be used in PATCH request
-    const newPortfolioIds = portfolios
-      .map((portfolioObj) => portfolioObj.id)
-      .filter((id) => id !== portfolioId)
+    if (portfolioId) {
+      // Get the new list of portfolio IDs to be used in PATCH request
+      const newPortfolioIds = portfolios
+        .map((portfolioObj) => portfolioObj.id)
+        .filter((id) => id !== portfolioId)
 
-    // Create a temporary Set item for it, used to filter the current portfolios
-    // state array, which consists of the portfolio objects (not just IDs)
-    const newPortfolioIdsSet = new Set(newPortfolioIds)
-    const newPortfolios = portfolios.filter((portfolioObj) =>
-      newPortfolioIdsSet.has(portfolioObj.id)
-    )
+      // Create a temporary Set item for it, used to filter the current portfolios
+      // state array, which consists of the portfolio objects (not just IDs)
+      const newPortfolioIdsSet = new Set(newPortfolioIds)
+      const newPortfolios = portfolios.filter((portfolioObj) =>
+        newPortfolioIdsSet.has(portfolioObj.id)
+      )
 
-    // Set the portfolios state as the new list of portfolio objects, which does
-    // not have the to-be-deleted portfolio
-    setPortfolios(newPortfolios)
+      // Set the portfolios state as the new list of portfolio objects, which does
+      // not have the to-be-deleted portfolio
+      setPortfolios(newPortfolios)
 
-    // Delete the portfolio from the user's portfolios property
-    const emailId = window.sessionStorage.getItem('emailId')
-    const patchDetails = { portfolios: newPortfolioIds }
-    const patchResponse = await fetch(BACKEND + USERS + '/' + emailId, {
-      method: 'PATCH',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(patchDetails)
-    }).catch((error) => console.log('Error: User portfolios NOT patched!'))
+      // Delete the portfolio from the user's portfolios property
+      const patchDetails = { portfolios: newPortfolioIds }
+      const patchResponse = patchUser(patchDetails).catch((error) =>
+        console.log('Error: User portfolios NOT patched!')
+      )
 
-    if (patchResponse.ok) {
-      // Delete the portfolio from the portfolio DB
-      const deleteResponse = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
-        method: 'DELETE',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-          'Content-type': 'application/json'
-        }
-      }).catch((error) => console.log('Error: Portfolio NOT deleted!', error))
+      if (patchResponse.ok) {
+        // Delete the portfolio from the portfolio DB
+        deletePortfolio(portfolioId).catch((error) =>
+          console.log('Error: Portfolio NOT deleted!', error)
+        )
+      }
     }
+
+    setOpen(false)
   }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Dialog                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const [open, setOpen] = useState(false)
+  const [toBeDeleted, setToBeDeleted] = useState({ id: '', title: '' })
+
+  function handleClick(id, title) {
+    setToBeDeleted({ id, title })
+    setOpen(true)
+  }
+
+  function handleClose() {
+    setOpen(false)
+  }
+
+  const deleteContent = (
+    <form onSubmit={() => handleDelete(toBeDeleted.id)}>
+      <DialogTitle id='form-dialog-title'>Delete Portfolio</DialogTitle>
+      <DialogContent>
+        <DialogContentText id='alert-dialog-description'>
+          Are you sure you want to delete the portfolio{' '}
+          <span style={{ fontWeight: 'bold' }}>{toBeDeleted.title}</span>?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} variant='outlined'>
+          Cancel
+        </Button>
+        <Button onClick={() => handleDelete(toBeDeleted.id)} variant='contained'>
+          Delete
+        </Button>
+      </DialogActions>
+    </form>
+  )
+
+  const deleteDialog = <CustomDialog open={open} setOpen={setOpen} content={deleteContent} />
 
   /* -------------------------------------------------------------------------- */
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
   return (
-    <Droppable droppableId='portfoliosDroppable'>
-      {(provided, snapshot) => (
-        <Grid {...provided.droppableProps} ref={provided.innerRef} container spacing={3}>
-          {portfolios.map((portfolio, idx) => (
-            <Draggable key={portfolio.id} draggableId={portfolio.id} index={idx}>
-              {(provided, snapshot) => (
-                <Grid
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  item
-                  xs={12}
-                >
-                  {/*
-                   * PORTFOLIO CARD: Need to change portfolioId to appropriate Id
-                   */}
-                  <PortfolioCard
-                    portfolioId={portfolio.id}
-                    title={portfolio.title}
-                    description={portfolio.description}
-                    viewPortfolio={handleView}
-                    editPortfolio={handleEdit}
-                    deletePortfolio={handleDelete}
-                  />
-                </Grid>
-              )}
-            </Draggable>
-          ))}
-          {provided.placeholder}
-        </Grid>
-      )}
-    </Droppable>
+    <Grid item>
+      <Droppable droppableId='portfoliosDroppable'>
+        {(provided, snapshot) => (
+          <Grid {...provided.droppableProps} ref={provided.innerRef} container spacing={3}>
+            {portfolios.map((portfolio, idx) => (
+              <Draggable key={portfolio.id} draggableId={portfolio.id} index={idx}>
+                {(provided, snapshot) => (
+                  <Grid
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    item
+                    xs={12}
+                  >
+                    {/*
+                     * PORTFOLIO CARD: Need to change portfolioId to appropriate Id
+                     */}
+                    <PortfolioCard
+                      portfolioId={portfolio.id}
+                      title={portfolio.title}
+                      description={portfolio.description}
+                      viewPortfolio={handleView}
+                      editPortfolio={handleEdit}
+                      deletePortfolio={handleClick}
+                    />
+                  </Grid>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </Grid>
+        )}
+      </Droppable>
+      {deleteDialog}
+    </Grid>
   )
 }
 

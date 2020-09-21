@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  CardMedia,
   CardContent,
   Card,
   Button,
@@ -65,13 +64,12 @@ const PortfolioCard = (props) => {
   }
 
   const handleDelete = () => {
-    deletePortfolio(portfolioId)
+    deletePortfolio(portfolioId, title)
   }
 
   return (
     <Card className={classes.portfolioCard}>
       <Grid container spacing={1} direction='column'>
-        {/*<CardMedia src='/' className={classes.portfolioCardMedia} />*/}
         <CardContent className={classes.portfolioContent}>
           <Typography className={classes.portfolioText} variant='h5' component='h2'>
             {title}

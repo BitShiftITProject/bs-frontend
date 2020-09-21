@@ -4,7 +4,7 @@ import { Grid, Paper, ButtonBase, Fab, makeStyles, Typography } from '@material-
 import { loggedInStyles } from '../../Styles/loggedInStyles'
 import { useHistory } from 'react-router-dom'
 
-import { BACKEND, USERS } from '../../Backend/Endpoints'
+import { getUser } from '../../Backend/Fetch'
 
 const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
@@ -85,20 +85,7 @@ export default function HomeProfile(props) {
   // useEffect with an empty list as its second argument works like
   // componentDidMount, which runs once
   useEffect(() => {
-    async function fetchUser() {
-      const emailId = window.sessionStorage.getItem('emailId')
-      const response = await fetch(BACKEND + USERS + '/' + emailId, {
-        method: 'GET',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-          'Content-type': 'application/json'
-        }
-      })
-      const user = await response.json()
-      return user
-    }
-    fetchUser().then((user) => setProfile({ name: user.first_name + ' ' + user.last_name }))
+    getUser().then((user) => setProfile({ name: user.first_name + ' ' + user.last_name }))
   }, [])
 
   /* -------------------------------------------------------------------------- */

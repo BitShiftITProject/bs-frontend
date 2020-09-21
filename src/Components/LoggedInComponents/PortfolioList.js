@@ -6,7 +6,8 @@ import { loggedInStyles } from '../../Styles/loggedInStyles'
 import { Grid, Paper, Fab, makeStyles } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 
-import { BACKEND, USERS, PORTFOLIOS } from '../../Backend/Endpoints'
+import { getUser, getPortfolio, patchUser } from '../../Backend/Fetch'
+
 import DraggablePortfolioList from './DraggablePortfolioList'
 import arrayMove from 'array-move'
 
@@ -43,38 +44,6 @@ export default function PortfolioList(props) {
 
   const [portfolios, setPortfolios] = useState([])
 
-  // Fetches the current User object, temporarily using the emailId item saved in the
-  // session storage when the user logs in
-  async function fetchUser() {
-    const emailId = window.sessionStorage.getItem('emailId')
-    const response = await fetch(BACKEND + USERS + '/' + emailId, {
-      method: 'GET',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        'Content-type': 'application/json'
-      }
-    })
-    const user = await response.json()
-    return user
-  }
-
-  // Fetches a single Portfolio object given its portfolio ID
-  async function fetchPortfolio(portfolioId) {
-    const response = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
-      method: 'GET',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        'Content-type': 'application/json'
-      }
-    })
-
-    const portfolio = await response.json()
-
-    return portfolio
-  }
-
   // Since the second argument of useEffect is empty, that means it does not have
   // dependencies and will only run once, therefore functioning just like componentDidMount
   useEffect(() => {
@@ -84,11 +53,11 @@ export default function PortfolioList(props) {
     // through its portfolios array of portfolio ID strings. Each string will be
     // used to fetch the corresponding Portfolio object, which will then be
     // added to the list of portfolios to be rendered.
-    fetchUser().then((user) => {
+    getUser().then((user) => {
       if (user.portfolios) {
         for (let i = 0; i < user.portfolios.length; i++) {
           const portfolioId = user.portfolios[i]
-          fetchPortfolio(portfolioId).then((portfolio) => {
+          getPortfolio(portfolioId).then((portfolio) => {
             setPortfolios((p) => [...p, portfolio])
           })
         }
@@ -109,19 +78,10 @@ export default function PortfolioList(props) {
       setPortfolios(newPortfolios)
 
       // Patch the current user's portfolios array with the newly ordered portfolios array
-      const emailId = window.sessionStorage.getItem('emailId')
 
-      const patchDetails = JSON.stringify({ portfolios: newPortfolios.map((p) => p.id) })
+      const patchDetails = { portfolios: newPortfolios.map((p) => p.id) }
 
-      fetch(BACKEND + USERS + '/' + emailId, {
-        method: 'PATCH',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-          'Content-type': 'application/json'
-        },
-        body: patchDetails
-      })
+      patchUser(patchDetails)
     }
   }
 
@@ -164,6 +124,7 @@ export default function PortfolioList(props) {
             <AddIcon className={classes.addPortfolioIcon} />
           </Fab>
         </Grid>
+
         <DragDropContext onDragEnd={onDragEnd}>
           <DraggablePortfolioList portfolios={portfolios} setPortfolios={setPortfolios} />
         </DragDropContext>

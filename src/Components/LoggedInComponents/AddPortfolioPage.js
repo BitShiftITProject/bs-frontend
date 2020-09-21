@@ -4,7 +4,8 @@ import { Grid, Paper, TextField, Button, FormControl, FormHelperText } from '@ma
 import { loggedInStyles, PaddedFormGrid } from '../../Styles/loggedInStyles'
 import Sidebar from './Sidebar'
 
-import { BACKEND, PORTFOLIOS, USERS } from '../../Backend/Endpoints'
+import { getUser, patchUser, postPortfolio } from '../../Backend/Fetch'
+
 import { useHistory } from 'react-router-dom'
 
 export default function AddPortfolioPage() {
@@ -35,22 +36,14 @@ export default function AddPortfolioPage() {
     e.preventDefault()
     if (!emailId) history.push('/login')
 
-    const details = {
+    const postDetails = {
       title,
       description: description,
       pages: {},
       owner: emailId
     }
 
-    const response = await fetch(BACKEND + PORTFOLIOS, {
-      method: 'POST',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(details)
-    }).then((response) => {
+    const response = await postPortfolio(postDetails).then((response) => {
       if (response.ok) {
         return response
       } else {
@@ -64,31 +57,13 @@ export default function AddPortfolioPage() {
       const portfolio = await response.json()
 
       if (portfolio) {
-        console.log(portfolio)
-
-        const user = await fetch(BACKEND + USERS + '/' + emailId, {
-          method: 'GET',
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-            'Content-type': 'application/json'
-          }
-        }).then((response) => response.json())
+        const user = await getUser()
 
         const newPortfolios = [...user.portfolios, portfolio.id]
-        console.log(newPortfolios)
 
         const patchDetails = { portfolios: newPortfolios }
 
-        await fetch(BACKEND + USERS + '/' + emailId, {
-          method: 'PATCH',
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-            'Content-type': 'application/json'
-          },
-          body: JSON.stringify(patchDetails)
-        }).then((response) => {
+        patchUser(patchDetails).then((response) => {
           if (response.ok) {
             console.log('Portfolio added to user!')
             history.push('/home')
