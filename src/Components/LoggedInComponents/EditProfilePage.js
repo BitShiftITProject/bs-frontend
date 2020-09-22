@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 
 import Sidebar from './Sidebar'
 
-import { loggedInStyles, PaddedFormGrid } from '../loggedInStyles'
+import { loggedInStyles, PaddedFormGrid } from '../../Styles/loggedInStyles'
 
 import {
   Grid,
@@ -21,7 +21,7 @@ import PersonIcon from '@material-ui/icons/Person'
 import PhoneIcon from '@material-ui/icons/Phone'
 // import CloseIcon from '@material-ui/icons/Close'
 
-import { BACKEND, USERS } from '../../Endpoints'
+import { getUser, patchUser } from '../../Backend/Fetch'
 import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
@@ -87,24 +87,8 @@ export default function EditProfilePage() {
   const emailId = window.sessionStorage.getItem('emailId')
   const history = useHistory()
 
-  // TODO: Set up catch block for errors
   useEffect(() => {
-    async function fetchUser() {
-      if (!emailId) history.push('/login')
-
-      const response = await fetch(BACKEND + USERS + '/' + emailId, {
-        method: 'GET',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-          'Content-type': 'application/json'
-        }
-      })
-      const user = response.json()
-      return user
-    }
-
-    fetchUser().then((user) => {
+    getUser().then((user) => {
       setAbout({
         first_name: user.first_name || '',
         last_name: user.last_name || '',
@@ -169,19 +153,9 @@ export default function EditProfilePage() {
 
     if (!emailId) history.push('/login')
 
-    const details = { ...about, ...contact }
+    const patchDetails = { ...about, ...contact }
 
-    // TODO: Fortify catch block
-
-    fetch(BACKEND + USERS + '/' + emailId, {
-      method: 'PATCH',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(details)
-    })
+    patchUser(patchDetails)
       .then((response) => {
         if (response.ok) console.log(response)
       })

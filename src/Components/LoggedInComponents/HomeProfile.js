@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Grid, Paper, ButtonBase, Fab, makeStyles, Typography } from '@material-ui/core'
 
-import { loggedInStyles } from '../loggedInStyles'
+import { loggedInStyles } from '../../Styles/loggedInStyles'
 import { useHistory } from 'react-router-dom'
 
-import { BACKEND, USERS } from '../../Endpoints'
+import { getUser } from '../../Backend/Fetch'
 
 const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
@@ -24,7 +24,10 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     borderRadius: '50%',
     height: 200,
-    width: 200
+    width: 200,
+    [theme.breakpoints.between('xs', 'xs')]: {
+      transform: 'scale(0.7)'
+    }
   },
 
   profileImg: {
@@ -82,20 +85,7 @@ export default function HomeProfile(props) {
   // useEffect with an empty list as its second argument works like
   // componentDidMount, which runs once
   useEffect(() => {
-    async function fetchUser() {
-      const emailId = window.sessionStorage.getItem('emailId')
-      const response = await fetch(BACKEND + USERS + '/' + emailId, {
-        method: 'GET',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-          'Content-type': 'application/json'
-        }
-      })
-      const user = await response.json()
-      return user
-    }
-    fetchUser().then((user) => setProfile({ name: user.first_name + ' ' + user.last_name }))
+    getUser().then((user) => setProfile({ name: user.first_name + ' ' + user.last_name }))
   }, [])
 
   /* -------------------------------------------------------------------------- */
@@ -117,35 +107,50 @@ export default function HomeProfile(props) {
         {/**
          * PROFILE PICTURE ICON
          */}
-        <div className={classes.changeHeightAtSmall}>
-          <ButtonBase className={classes.profileImage} onClick={handleClickProfile}>
-            <img
-              className={classes.profileImg}
-              src='https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2F8%2F89%2FPortrait_Placeholder.png&f=1&nofb=1'
-              alt='placeholder'
-            />
-          </ButtonBase>
-        </div>
-        {/**
-         * USER FULL NAME
-         */}
-        <Typography variant='h5' component='h5' className={classes.profileName}>
-          {profile.name}
-        </Typography>
-        {/**
-         * EDIT PROFILE BUTTON
-         */}
-        <div className={classes.changeHeightAtSmall}>
-          <Fab
-            className={classes.editProfileButton}
-            variant='extended'
-            size='small'
-            aria-label='edit profile'
-            onClick={handleClickProfile}
+        <Grid
+          container
+          style={{ width: '100%', height: '100%' }}
+          alignItems='center'
+          justify='center'
+        >
+          <Grid container justify='center' alignItems='center' item xs={7} md={12}>
+            <ButtonBase className={classes.profileImage} onClick={handleClickProfile}>
+              <img
+                className={classes.profileImg}
+                src='https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2F8%2F89%2FPortrait_Placeholder.png&f=1&nofb=1'
+                alt='placeholder'
+              />
+            </ButtonBase>
+          </Grid>
+          {/**
+           * USER FULL NAME
+           */}
+          <Grid
+            container
+            direction='column'
+            justify='center'
+            alignItems='center'
+            item
+            xs={5}
+            md={12}
           >
-            Edit
-          </Fab>
-        </div>
+            <Typography variant='h5' component='h5' className={classes.profileName}>
+              {profile.name}
+            </Typography>
+            {/**
+             * EDIT PROFILE BUTTON
+             */}
+            <Fab
+              className={classes.editProfileButton}
+              variant='extended'
+              size='small'
+              aria-label='edit profile'
+              onClick={handleClickProfile}
+            >
+              Edit
+            </Fab>
+          </Grid>
+        </Grid>
       </Paper>
     </Grid>
   )

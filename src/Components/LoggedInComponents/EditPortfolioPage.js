@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
-import { loggedInStyles, PaddedFormGrid, CursorTypography } from '../loggedInStyles'
+import { loggedInStyles, PaddedFormGrid, CursorTypography } from '../../Styles/loggedInStyles'
 import CustomDialog from './CustomDialog'
-import HeaderBreadcrumbs from './HeaderBreadcrumbs'
 import EditPortfolioDropdown from './EditPortfolioDropdown'
 
 import {
@@ -24,7 +23,8 @@ import CreateIcon from '@material-ui/icons/Create'
 // import CloseIcon from '@material-ui/icons/Close'
 import Sidebar from './Sidebar'
 
-import { BACKEND, PORTFOLIOS } from '../../Endpoints'
+import { getPortfolio, patchPortfolio } from '../../Backend/Fetch'
+
 import { useHistory } from 'react-router-dom'
 
 export default function EditPortfolioPage() {
@@ -48,22 +48,7 @@ export default function EditPortfolioPage() {
   // - A user clicks on the Add Portfolio button in AddPortfolioPage
   // - A user clicks on the Edit button in PortfolioCard
   useEffect(() => {
-    async function fetchPortfolio() {
-      const response = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
-        method: 'GET',
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-          'Content-type': 'application/json'
-        }
-      })
-
-      // TODO: Set up catch block for errors
-
-      const portfolio = await response.json()
-      return portfolio
-    }
-    fetchPortfolio().then((portfolio) => {
+    getPortfolio(portfolioId).then((portfolio) => {
       setPortfolio({ ...portfolio })
       setParagraph(portfolio.pages.content || '')
     })
@@ -91,7 +76,7 @@ export default function EditPortfolioPage() {
 
   const handleEdit = (e) => {
     e.preventDefault()
-    patchPortfolio({ title: portfolio.title, description: portfolio.description })
+    patchPortfolio(portfolioId, { title: portfolio.title, description: portfolio.description })
     setOpen(false)
   }
 
@@ -104,20 +89,8 @@ export default function EditPortfolioPage() {
     setOpen(false)
   }
 
-  const patchPortfolio = (patchDetails) => {
-    fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
-      method: 'PATCH',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(patchDetails)
-    })
-  }
-
   async function handleSubmit() {
-    patchPortfolio({ pages: { content: paragraph } })
+    patchPortfolio(portfolioId, { pages: { content: paragraph } })
     history.push('/portfolios')
   }
 

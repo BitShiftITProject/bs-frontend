@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
-import { BACKEND, USERS, PORTFOLIOS } from '../../Endpoints'
+// import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
+import { BACKEND, USERS, PORTFOLIOS } from '../../Backend/Endpoints'
 
 class PublicPortfolio extends Component {
   // Store the details of a portfolio so that we can use it later
@@ -40,7 +40,6 @@ class PublicPortfolio extends Component {
           // If the user has the specified portfolio index
           if (user.portfolios.length > params.portfolio) {
             // Fetch the portfolio from the ID
-            console.log(user.portfolios[params.portfolio])
             return fetch(BACKEND + PORTFOLIOS + '/' + user.portfolios[params.portfolio]).then(
               (portfolioResponse) => {
                 // If we get a response, turn it into a JSON and return it
