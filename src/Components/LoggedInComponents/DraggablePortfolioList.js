@@ -5,14 +5,24 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Grid
+  Grid,
+  withStyles,
+  makeStyles
 } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
+import transitions from '../../Styles/transitions'
 import PortfolioCard from './PortfolioCard'
 import CustomDialog from './CustomDialog'
 import { getUser, patchUser, deletePortfolio } from '../../Backend/Fetch'
+
+const useStyles = makeStyles((theme) => ({
+  portfolio: {
+    margin: theme.spacing(3)
+  }
+}))
 
 const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
   /* -------------------------------------------------------------------------- */
@@ -118,6 +128,12 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
   const deleteDialog = <CustomDialog open={open} setOpen={setOpen} content={deleteContent} />
 
   /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
+
+  const classes = useStyles()
+
+  /* -------------------------------------------------------------------------- */
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
@@ -125,32 +141,37 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
     <Grid item>
       <Droppable droppableId='portfoliosDroppable'>
         {(provided, snapshot) => (
-          <Grid {...provided.droppableProps} ref={provided.innerRef} container spacing={3}>
-            {portfolios.map((portfolio, idx) => (
-              <Draggable key={portfolio.id} draggableId={portfolio.id} index={idx}>
-                {(provided, snapshot) => (
-                  <Grid
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    item
-                    xs={12}
-                  >
-                    {/*
-                     * PORTFOLIO CARD: Need to change portfolioId to appropriate Id
-                     */}
-                    <PortfolioCard
-                      portfolioId={portfolio.id}
-                      title={portfolio.title}
-                      description={portfolio.description}
-                      viewPortfolio={handleView}
-                      editPortfolio={handleEdit}
-                      deletePortfolio={handleClick}
-                    />
-                  </Grid>
-                )}
-              </Draggable>
-            ))}
+          <Grid {...provided.droppableProps} ref={provided.innerRef} container>
+            <TransitionGroup style={{ width: '100%', height: '100%' }}>
+              {portfolios.map((portfolio, idx) => (
+                <CSSTransition key={portfolio.id} classNames='fade' timeout={1000}>
+                  <Draggable draggableId={portfolio.id} index={idx}>
+                    {(provided, snapshot) => (
+                      <Grid
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        item
+                        xs={12}
+                        className={classes.portfolio}
+                      >
+                        {/*
+                         * PORTFOLIO CARD: Need to change portfolioId to appropriate Id
+                         */}
+                        <PortfolioCard
+                          portfolioId={portfolio.id}
+                          title={portfolio.title}
+                          description={portfolio.description}
+                          viewPortfolio={handleView}
+                          editPortfolio={handleEdit}
+                          deletePortfolio={handleClick}
+                        />
+                      </Grid>
+                    )}
+                  </Draggable>
+                </CSSTransition>
+              ))}
+            </TransitionGroup>
             {provided.placeholder}
           </Grid>
         )}
@@ -160,4 +181,4 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
   )
 }
 
-export default DraggablePortfolioList
+export default withStyles(transitions)(DraggablePortfolioList)

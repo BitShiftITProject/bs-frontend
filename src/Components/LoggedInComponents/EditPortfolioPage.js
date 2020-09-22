@@ -76,7 +76,7 @@ export default function EditPortfolioPage() {
 
   const handleEdit = (e) => {
     e.preventDefault()
-    patchPortfolio({ title: portfolio.title, description: portfolio.description })
+    patchPortfolio(portfolioId, { title: portfolio.title, description: portfolio.description })
     setOpen(false)
   }
 
@@ -90,7 +90,7 @@ export default function EditPortfolioPage() {
   }
 
   async function handleSubmit() {
-    patchPortfolio({ pages: { content: paragraph } })
+    patchPortfolio(portfolioId, { pages: { content: paragraph } })
     history.push('/portfolios')
   }
 

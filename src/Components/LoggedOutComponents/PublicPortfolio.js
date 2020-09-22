@@ -40,7 +40,6 @@ class PublicPortfolio extends Component {
           // If the user has the specified portfolio index
           if (user.portfolios.length > params.portfolio) {
             // Fetch the portfolio from the ID
-            console.log(user.portfolios[params.portfolio])
             return fetch(BACKEND + PORTFOLIOS + '/' + user.portfolios[params.portfolio]).then(
               (portfolioResponse) => {
                 // If we get a response, turn it into a JSON and return it

@@ -1,9 +1,10 @@
-import { BACKEND, USERS, PORTFOLIOS } from './Endpoints'
+import { BACKEND, USERS, PORTFOLIOS, PAGES } from './Endpoints'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Constants                                 */
 /* -------------------------------------------------------------------------- */
 
+// TODO: Make compatible with JWT
 const emailId = window.sessionStorage.getItem('emailId')
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -26,6 +27,7 @@ export const getUser = async () => {
   return user
 }
 
+// Fetches
 export const patchUser = async (patchDetails) => {
   const response = await fetch(BACKEND + USERS + '/' + emailId, {
     method: 'PATCH',
@@ -62,9 +64,7 @@ export const postPortfolio = async (postDetails) => {
   return response
 }
 
-export const patchPortfolio = async (patchDetails) => {
-  const portfolioId = window.sessionStorage.getItem('portfolioId')
-
+export const patchPortfolio = async (portfolioId, patchDetails) => {
   const response = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
     method: 'PATCH',
     headers,
@@ -76,6 +76,51 @@ export const patchPortfolio = async (patchDetails) => {
 
 export const deletePortfolio = async (portfolioId) => {
   const response = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId, {
+    method: 'DELETE',
+    headers
+  })
+
+  return response
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                Pages Methods                               */
+/* -------------------------------------------------------------------------- */
+
+// TODO: Use actual endpoints for pages (not created yet)
+
+export const getPage = async (pageId) => {
+  const response = await fetch(BACKEND + PAGES + '/' + pageId, {
+    method: 'GET',
+    headers
+  })
+
+  const page = await response.json()
+
+  return page
+}
+
+export const postPage = async (postDetails) => {
+  const response = await fetch(BACKEND + PAGES, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(postDetails)
+  })
+
+  return response
+}
+export const patchPage = async (pageId, patchDetails) => {
+  const response = await fetch(BACKEND + PAGES + '/' + pageId, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify(patchDetails)
+  })
+
+  return response
+}
+
+export const deletePage = async (pageId) => {
+  const response = await fetch(BACKEND + PAGES + '/' + pageId, {
     method: 'DELETE',
     headers
   })

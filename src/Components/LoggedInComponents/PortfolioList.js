@@ -16,14 +16,6 @@ const useStyles = makeStyles((theme) => ({
   /*                  Add Portfolio Button (PortfolioList)                  */
   /* -------------------------------------------------------------------------- */
 
-  floatingTopContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: 30
-  },
-
   addPortfolioFab: {
     '&:hover': {
       backgroundColor: theme.palette.primary.dark
@@ -47,8 +39,6 @@ export default function PortfolioList(props) {
   // Since the second argument of useEffect is empty, that means it does not have
   // dependencies and will only run once, therefore functioning just like componentDidMount
   useEffect(() => {
-    // TODO: Need to make compatible with token saved in session storage after auth
-
     // To fetch a user's portfolio, we must fetch the user first then iterate
     // through its portfolios array of portfolio ID strings. Each string will be
     // used to fetch the corresponding Portfolio object, which will then be
@@ -101,6 +91,7 @@ export default function PortfolioList(props) {
 
   const classes = useStyles()
   const fixedHeightPaper = loggedInStyles().fixedHeightPaper
+  const floatingTopContainer = loggedInStyles().floatingTopContainer
 
   // Breakpoint sizes for portfolio
   const { xs, md, lg } = props
@@ -112,7 +103,7 @@ export default function PortfolioList(props) {
   return (
     <Grid item container xs={xs} md={md} lg={lg} direction='row'>
       <Paper className={fixedHeightPaper}>
-        <Grid item className={classes.floatingTopContainer}>
+        <Grid item className={floatingTopContainer}>
           <Fab
             className={classes.addPortfolioFab}
             color='primary'
