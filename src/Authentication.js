@@ -79,8 +79,8 @@ class Authentication extends Component {
               render={() => <Sidebar content={<PortfolioList xs={12} md={12} lg={12} />} />}
             />
             <Route exact path='/profile' render={() => <EditProfilePage />} />
-            <Route exact path='/home' render={() => <HomePage />} />
-            <Redirect to='/home' />
+            {/* <Route exact path='/home' render={() => <HomePage />} /> */}
+            <Redirect to='/portfolios' />
           </Switch>
         </BrowserRouter>
       )

@@ -144,7 +144,7 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
           <Grid {...provided.droppableProps} ref={provided.innerRef} container>
             <TransitionGroup style={{ width: '100%', height: '100%' }}>
               {portfolios.map((portfolio, idx) => (
-                <CSSTransition key={portfolio.id} classNames='fade' timeout={1000}>
+                <CSSTransition key={portfolio.id} classNames='fade' timeout={500}>
                   <Draggable draggableId={portfolio.id} index={idx}>
                     {(provided, snapshot) => (
                       <Grid
