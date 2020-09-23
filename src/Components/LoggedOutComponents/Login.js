@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { BACKEND, AUTHENTICATE, USERS } from '../../Backend/Endpoints'
+import { BACKEND, AUTHENTICATE, USERS } from '../../backend/Endpoints'
 import {
   TextField,
   Button,
@@ -15,8 +15,8 @@ import {
 import { Link, useHistory } from 'react-router-dom'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import LandingContainer from './LandingContainer'
-import { CursorTypography } from '../../Styles/loggedInStyles'
-import { loggedOutStyles } from '../../Styles/loggedOutStyles'
+import { CursorTypography } from '../../styles/loggedInStyles'
+import { loggedOutStyles } from '../../styles/loggedOutStyles'
 import Alert from '@material-ui/lab/Alert'
 
 const styles = {

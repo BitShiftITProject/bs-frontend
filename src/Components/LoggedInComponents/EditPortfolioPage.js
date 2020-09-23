@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { loggedInStyles, PaddedFormGrid, CursorTypography } from '../../Styles/loggedInStyles'
+import { loggedInStyles, PaddedFormGrid, CursorTypography } from '../../styles/loggedInStyles'
 import CustomDialog from './CustomDialog'
 import EditPortfolioDropdown from './EditPortfolioDropdown'
 
@@ -23,7 +23,7 @@ import CreateIcon from '@material-ui/icons/Create'
 // import CloseIcon from '@material-ui/icons/Close'
 import Sidebar from './Sidebar'
 
-import { getPortfolio, patchPortfolio } from '../../Backend/Fetch'
+import { getPortfolio, patchPortfolio } from '../../backend/Fetch'
 
 import { useHistory } from 'react-router-dom'
 

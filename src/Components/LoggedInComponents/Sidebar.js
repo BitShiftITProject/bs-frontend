@@ -32,8 +32,8 @@ import ListItemText from '@material-ui/core/ListItemText'
 // import ListSubheader from '@material-ui/core/ListSubheader'
 // import AssignmentIcon from '@material-ui/icons/Assignment'
 
-import { CustomThemeContext } from '../Contexts/CustomThemeContext'
-import { CursorTypography } from '../../Styles/loggedInStyles'
+import { ThemesContext } from '../Contexts/ThemesContext'
+import { CursorTypography } from '../../styles/loggedInStyles'
 import HeaderBreadcrumbs from './HeaderBreadcrumbs'
 
 const drawerWidth = 240
@@ -149,7 +149,7 @@ export default function Sidebar(props) {
   /*                                    Theme                                   */
   /* -------------------------------------------------------------------------- */
 
-  const { currentTheme: theme, setTheme } = useContext(CustomThemeContext)
+  const { currentTheme: theme, setTheme } = useContext(ThemesContext)
 
   const toggleTheme = () => {
     theme === 'dark' ? setTheme('light') : setTheme('dark')

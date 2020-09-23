@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 // import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
-import { BACKEND, USERS, PORTFOLIOS } from '../../Backend/Endpoints'
+import { BACKEND, USERS, PORTFOLIOS } from '../../backend/Endpoints'
 
 class PublicPortfolio extends Component {
   // Store the details of a portfolio so that we can use it later

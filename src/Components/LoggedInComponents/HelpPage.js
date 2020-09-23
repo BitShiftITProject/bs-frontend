@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Sidebar from './Sidebar'
-import { CursorTypography } from '../../Styles/loggedInStyles'
+import { CursorTypography } from '../../styles/loggedInStyles'
 
 const useStyles = makeStyles((theme) => ({
   root: {

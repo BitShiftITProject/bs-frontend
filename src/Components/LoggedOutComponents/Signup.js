@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 
-import { BACKEND, SIGNUP, USERS } from '../../Backend/Endpoints'
+import { BACKEND, SIGNUP, USERS } from '../../backend/Endpoints'
 import { TextField, Button, Avatar, styled, withStyles, Fab } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import LandingContainer from './LandingContainer'
-import { CursorTypography } from '../../Styles/loggedInStyles'
-import { loggedOutStyles } from '../../Styles/loggedOutStyles'
+import { CursorTypography } from '../../styles/loggedInStyles'
+import { loggedOutStyles } from '../../styles/loggedOutStyles'
 import { useHistory } from 'react-router-dom'
 
 const styles = {

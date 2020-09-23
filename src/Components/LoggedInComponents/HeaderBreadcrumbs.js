@@ -1,6 +1,6 @@
 import React from 'react'
 import { Breadcrumbs, makeStyles } from '@material-ui/core'
-import { CursorTypography } from '../../Styles/loggedInStyles'
+import { CursorTypography } from '../../styles/loggedInStyles'
 import { useLocation, Link } from 'react-router-dom'
 import HomeIcon from '@material-ui/icons/Home'
 import PersonIcon from '@material-ui/icons/Person'

@@ -1,9 +1,19 @@
 import React, { useContext, useState } from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Grid, Switch } from '@material-ui/core'
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Grid,
+  Switch,
+  Select
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+
+import { ThemesContext } from '../Contexts/ThemesContext'
 import Sidebar from './Sidebar'
-import { CustomThemeContext } from '../Contexts/CustomThemeContext'
+import { CursorTypography } from '../../styles/loggedInStyles'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 
 const useStyles = makeStyles((theme) => ({
@@ -29,32 +39,41 @@ export default function SettingsPage() {
     setExpanded(isExpanded ? panel : false)
   }
 
-  /* ---------------------------- General Settings ---------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                              General Settings                              */
+  /* -------------------------------------------------------------------------- */
 
-  const { currentTheme: theme, setTheme } = useContext(CustomThemeContext)
+  /* ---------------------------------- Theme --------------------------------- */
+
+  const { currentTheme: theme, setTheme } = useContext(ThemesContext)
 
   const toggleTheme = () => {
     theme === 'dark' ? setTheme('light') : setTheme('dark')
   }
 
   /* ------------------------------ Personal Data ----------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                                Personal Data                               */
+  /* -------------------------------------------------------------------------- */
 
   const content = (
     <div className={classes.root}>
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <CursorTypography className={classes.heading}>General settings</CursorTypography>
+          <CursorTypography className={classes.heading}>General Settings</CursorTypography>
           <CursorTypography className={classes.secondaryHeading}></CursorTypography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid container justify='flex-start' alignItems='center'>
-            <CursorTypography>Dark Mode</CursorTypography>
-            <Switch
-              checked={theme === 'dark'}
-              onChange={toggleTheme}
-              color='primary'
-              name='theme'
-            />
+          <Grid container style={{ width: '100%', height: '100%' }}>
+            <Grid item xs={12} container justify='flex-start' alignItems='center'>
+              <CursorTypography>Dark Mode</CursorTypography>
+              <Switch
+                checked={theme === 'dark'}
+                onChange={toggleTheme}
+                color='primary'
+                name='theme'
+              />
+            </Grid>
           </Grid>
         </AccordionDetails>
       </Accordion>

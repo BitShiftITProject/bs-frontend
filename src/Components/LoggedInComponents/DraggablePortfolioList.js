@@ -13,10 +13,10 @@ import { useHistory } from 'react-router-dom'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
-import transitions from '../../Styles/transitions'
+import transitions from '../../styles/transitions'
 import PortfolioCard from './PortfolioCard'
 import CustomDialog from './CustomDialog'
-import { getUser, patchUser, deletePortfolio } from '../../Backend/Fetch'
+import { getUser, patchUser, deletePortfolio } from '../../backend/Fetch'
 
 const useStyles = makeStyles((theme) => ({
   portfolio: {
