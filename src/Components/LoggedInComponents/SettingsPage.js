@@ -1,20 +1,11 @@
 import React, { useContext, useState } from 'react'
 import { Accordion, AccordionDetails, AccordionSummary, Grid, Switch } from '@material-ui/core'
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Grid,
-  Switch,
-  Select
-} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import { ThemesContext } from '../Contexts/ThemesContext'
 import Sidebar from './Sidebar'
 import { CursorTypography } from '../../styles/loggedInStyles'
-import { CursorTypography } from '../../Styles/loggedInStyles'
 
 const useStyles = makeStyles((theme) => ({
   root: {
