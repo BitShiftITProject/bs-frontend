@@ -155,7 +155,7 @@ export default function Sidebar(props) {
     theme === 'dark' ? setTheme('light') : setTheme('dark')
   }
 
-  const themeIcon = theme === 'dark' ? <Brightness4Icon /> : <Brightness7Icon />
+  const themeIcon = theme === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />
 
   /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */
@@ -212,7 +212,7 @@ export default function Sidebar(props) {
           onClick={() => {
             window.sessionStorage.removeItem('emailId')
             window.sessionStorage.removeItem('portfolioId')
-            window.location.href = '/login'
+            history.push('/login')
           }}
           color='inherit'
         >

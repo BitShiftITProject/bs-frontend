@@ -82,18 +82,54 @@ export default function AddPortfolioPage() {
 
   const content = (
     <Grid container direction='row' spacing={0}>
-      <Grid item xs={12}>
+      <Grid item xs={12} container direction='column' justify='center' alignItems='center'>
         <Paper className={fixedHeightPaper}>
           <Grid
-            style={{ height: '100%' }}
+            style={{ height: '100%', width: '100%' }}
             container
-            direction='column'
             justify='center'
             alignItems='center'
           >
-            <form style={{ width: '40%' }} onSubmit={handleSubmit}>
-              <FormControl error={error} style={{ width: '100%', height: '100%' }}>
-                <Grid container spacing={2} direction='column' alignItems='stretch'>
+            <Grid item xs={12} sm={8}>
+              <form style={{ height: '100%', width: '100%' }} onSubmit={handleSubmit}>
+                <FormControl error={error} style={{ width: '100%', height: '100%' }}>
+                  <Grid container spacing={2} direction='column' alignItems='stretch'>
+                    <PaddedFormGrid item>
+                      <TextField
+                        className={classes.formLabel}
+                        InputLabelProps={{
+                          shrink: true
+                        }}
+                        variant='outlined'
+                        label='Title'
+                        fullWidth
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        required
+                      ></TextField>
+                    </PaddedFormGrid>
+                    <PaddedFormGrid item>
+                      <TextField
+                        className={classes.formLabel}
+                        InputLabelProps={{
+                          shrink: true
+                        }}
+                        variant='outlined'
+                        label='Description'
+                        fullWidth
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                      ></TextField>
+                    </PaddedFormGrid>
+                  </Grid>
+                  <FormHelperText>{helperText}</FormHelperText>
+                  <PaddedFormGrid>
+                    <Button type='submit' variant='contained'>
+                      Add Portfolio
+                    </Button>
+                  </PaddedFormGrid>
+                </FormControl>
+                {/*<Grid container spacing={2} direction='column' alignItems='stretch'>
                   <PaddedFormGrid item>
                     <TextField
                       className={classes.formLabel}
@@ -122,48 +158,13 @@ export default function AddPortfolioPage() {
                     ></TextField>
                   </PaddedFormGrid>
                 </Grid>
-                <FormHelperText>{helperText}</FormHelperText>
                 <PaddedFormGrid>
                   <Button type='submit' variant='contained'>
                     Add Portfolio
                   </Button>
-                </PaddedFormGrid>
-              </FormControl>
-              {/*<Grid container spacing={2} direction='column' alignItems='stretch'>
-                <PaddedFormGrid item>
-                  <TextField
-                    className={classes.formLabel}
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    variant='outlined'
-                    label='Title'
-                    fullWidth
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    required
-                  ></TextField>
-                </PaddedFormGrid>
-                <PaddedFormGrid item>
-                  <TextField
-                    className={classes.formLabel}
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    variant='outlined'
-                    label='Description'
-                    fullWidth
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  ></TextField>
-                </PaddedFormGrid>
-              </Grid>
-              <PaddedFormGrid>
-                <Button type='submit' variant='contained'>
-                  Add Portfolio
-                </Button>
-              </PaddedFormGrid>*/}
-            </form>
+                </PaddedFormGrid>*/}
+              </form>
+            </Grid>
           </Grid>
         </Paper>
       </Grid>

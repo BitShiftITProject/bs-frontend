@@ -12,7 +12,7 @@ import {
   withStyles
 } from '@material-ui/core'
 
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
@@ -63,6 +63,8 @@ function Login(props) {
     errorMessage: 'Login FAILED'
   })
 
+  const history = useHistory()
+
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
   /* -------------------------------------------------------------------------- */
@@ -111,7 +113,7 @@ function Login(props) {
         if (response.ok) {
           console.log(response)
           window.sessionStorage.setItem('emailId', state.email)
-          window.location.href = '/home'
+          history.push('/home')
         } else {
           setState({ ...state, loginFailed: true, errorMessage: response.error.message })
         }
