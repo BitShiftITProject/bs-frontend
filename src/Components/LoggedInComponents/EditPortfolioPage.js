@@ -101,7 +101,7 @@ export default function EditPortfolioPage() {
     // Dialog to show when the Edit button next to the portfolio title is clicked
     title: (
       <form onSubmit={handleEdit}>
-        <DialogTitle id='form-dialog-title'>Edit portfolio</DialogTitle>
+        <DialogTitle id='form-dialog-title'>Edit Portfolio</DialogTitle>
         <DialogContent>
           <TextField
             className={classes.formLabel}
@@ -296,13 +296,9 @@ export default function EditPortfolioPage() {
                   <PaddedFormGrid item>
                     <TextField
                       className={classes.formLabel}
-                      InputLabelProps={{
-                        shrink: true
-                      }}
                       value={paragraph}
                       onChange={(e) => setParagraph(e.target.value)}
                       variant='outlined'
-                      label='Paragraph'
                       fullWidth
                       multiline
                     ></TextField>

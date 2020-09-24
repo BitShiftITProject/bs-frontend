@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { withStyles, styled } from '@material-ui/core/styles'
 
-import { TextField, Button, Fab } from '@material-ui/core'
+import { TextField, Button, Fab, Typography } from '@material-ui/core'
 import LandingContainer from './LandingContainer'
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
 import { CursorTypography } from '../../styles/loggedInStyles'
 import { loggedOutStyles } from '../../styles/loggedOutStyles'
+import { useIntl } from 'react-intl'
 
 const styles = {
   div: {
@@ -43,24 +44,22 @@ function ForgotPassword(props) {
 
   const style = loggedOutStyles()
   const history = useHistory()
+  const intl = useIntl()
+
   const { classes } = props
   const content = (
     <div className={classes.div}>
       <form onSubmit={(e) => handleSubmit(e)} className={classes.form}>
-        <CursorTypography component='h5' variant='h5' gutterBottom>
-          Forgot Password
+        <CursorTypography component='h1' variant='h5'>
+          {intl.formatMessage({ id: 'forgotPassword' })}
         </CursorTypography>
-        <CursorTypography
-          variant='subtitle2'
-          style={{ width: '50%', textAlign: 'center' }}
-          gutterBottom
-        >
-          Please enter the email or username you use to sign up with, and we'll send you a link for
+        {/*<Typography variant='subtitle2' style={{ width: '50%', textAlign: 'center' }} gutterBottom>
+          Enter the email or username you use to sign up with, and we'll send you a link for
           a new password{' '}
           <span role='img' aria-label='smiling cowboy lol'>
             🤠
           </span>
-        </CursorTypography>
+        </Typography>*/}
 
         <PaddedTextField
           InputLabelProps={{
@@ -69,7 +68,7 @@ function ForgotPassword(props) {
           className={style.formLabel}
           id='forgot_password__email'
           type='email'
-          placeholder='email@domain.com'
+          placeholder={intl.formatMessage({ id: 'email' })}
           name='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -78,7 +77,7 @@ function ForgotPassword(props) {
           fullWidth
         />
 
-        <CursorTypography variant='button'>or</CursorTypography>
+        <CursorTypography variant='button'>{intl.formatMessage({ id: 'or' })}</CursorTypography>
 
         <PaddedTextField
           InputLabelProps={{
@@ -87,7 +86,7 @@ function ForgotPassword(props) {
           className={style.formLabel}
           id='forgot_password__username'
           type='text'
-          placeholder='Username'
+          placeholder={intl.formatMessage({ id: 'username' })}
           name='username'
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -111,7 +110,7 @@ function ForgotPassword(props) {
             variant='contained'
             color='primary'
           >
-            Reset Password
+            {intl.formatMessage({ id: 'resetPassword' })}
           </Button>
         </span>
       </form>

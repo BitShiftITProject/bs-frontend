@@ -23,6 +23,7 @@ import PhoneIcon from '@material-ui/icons/Phone'
 
 import { getUser, patchUser } from '../../backend/Fetch'
 import { useHistory } from 'react-router-dom'
+import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
@@ -71,11 +72,13 @@ const initialContact = {
 const reducer = (state, newState) => ({ ...state, ...newState })
 
 export default function EditProfilePage() {
+  const intl = useIntl()
+
   /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
-  const [page, setPage] = useState()
+  const [page, setPage] = useState('aboutMe')
   const [tagText, setTagText] = useState('')
   const [about, setAbout] = useReducer(reducer, initialAbout)
   const [contact, setContact] = useReducer(reducer, initialContact)
@@ -194,7 +197,7 @@ export default function EditProfilePage() {
               {/**
                * CONTACT DETAILS: Email, Contact Number, Address, Town, State, Country
                */}
-              <Chip label='Details' color='primary' />
+              <Chip label={intl.formatMessage({ id: 'details' })} color='primary' />
               {/**
                 <Fab size='small' aria-label='go back'>
                   <CloseIcon />
@@ -209,11 +212,11 @@ export default function EditProfilePage() {
                     shrink: true
                   }}
                   fullWidth
-                  label='Email'
+                  label={intl.formatMessage({ id: 'email' })}
                   type='email'
                   variant='outlined'
                   name='profile_email'
-                  helperText='Changing this will not change your login email address'
+                  helperText={intl.formatMessage({ id: 'emailHelperText' })}
                   value={contact.profile_email}
                   onChange={handleOnContactChange}
                 />
@@ -225,7 +228,7 @@ export default function EditProfilePage() {
                     shrink: true
                   }}
                   fullWidth
-                  label='Contact Number'
+                  label={intl.formatMessage({ id: 'phone' })}
                   variant='outlined'
                   name='phone'
                   value={contact.phone}
@@ -241,7 +244,7 @@ export default function EditProfilePage() {
                     shrink: true
                   }}
                   fullWidth
-                  label='Company'
+                  label={intl.formatMessage({ id: 'company' })}
                   variant='outlined'
                   name='company'
                   value={contact.company}
@@ -257,7 +260,7 @@ export default function EditProfilePage() {
                     shrink: true
                   }}
                   fullWidth
-                  label='Address Line 1'
+                  label={intl.formatMessage({ id: 'addressLine1' })}
                   variant='outlined'
                   name='address_line_1'
                   value={contact.address_line_1}
@@ -272,7 +275,7 @@ export default function EditProfilePage() {
                       shrink: true
                     }}
                     fullWidth
-                    label='Town / Suburb'
+                    label={intl.formatMessage({ id: 'town' })}
                     variant='outlined'
                     name='town_suburb'
                     value={contact.town_suburb}
@@ -286,7 +289,7 @@ export default function EditProfilePage() {
                       shrink: true
                     }}
                     fullWidth
-                    label='Postcode'
+                    label={intl.formatMessage({ id: 'postcode' })}
                     variant='outlined'
                     name='postcode'
                     value={contact.postcode}
@@ -300,7 +303,7 @@ export default function EditProfilePage() {
                       shrink: true
                     }}
                     fullWidth
-                    label='State'
+                    label={intl.formatMessage({ id: 'state' })}
                     variant='outlined'
                     name='state'
                     value={contact.state}
@@ -317,7 +320,7 @@ export default function EditProfilePage() {
                     shrink: true
                   }}
                   fullWidth
-                  label='Address Line 2'
+                  label={intl.formatMessage({ id: 'addressLine2' })}
                   variant='outlined'
                   name='address_line_2'
                   value={contact.address_line_2}
@@ -331,7 +334,7 @@ export default function EditProfilePage() {
                     shrink: true
                   }}
                   fullWidth
-                  label='Country'
+                  label={intl.formatMessage({ id: 'country' })}
                   variant='outlined'
                   name='country'
                   value={contact.country}
@@ -352,7 +355,7 @@ export default function EditProfilePage() {
              * ABOUT ME DETAILS: First Name, Last Name, Occupation
              */}
             <Grid item>
-              <Chip label='Details' color='primary' />
+              <Chip label={intl.formatMessage({ id: 'details' })} color='primary' />
             </Grid>
             <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
@@ -362,7 +365,7 @@ export default function EditProfilePage() {
                     shrink: true
                   }}
                   fullWidth
-                  label='First Name'
+                  label={intl.formatMessage({ id: 'firstName' })}
                   variant='outlined'
                   name='first_name'
                   value={about.first_name}
@@ -376,7 +379,7 @@ export default function EditProfilePage() {
                     shrink: true
                   }}
                   fullWidth
-                  label='Last Name'
+                  label={intl.formatMessage({ id: 'lastName' })}
                   variant='outlined'
                   name='last_name'
                   value={about.last_name}
@@ -391,7 +394,7 @@ export default function EditProfilePage() {
                   InputLabelProps={{
                     shrink: true
                   }}
-                  label='Occupation'
+                  label={intl.formatMessage({ id: 'occupation' })}
                   variant='outlined'
                   fullWidth
                   name='occupation'
@@ -406,7 +409,7 @@ export default function EditProfilePage() {
            */}
           <Grid item container spacing={0} direction='column'>
             <Grid item>
-              <Chip label='Description' color='primary' />
+              <Chip label={intl.formatMessage({ id: 'description' })} color='primary' />
             </Grid>
             <PaddedFormGrid item>
               <Grid item className={classes.padded}>
@@ -415,7 +418,7 @@ export default function EditProfilePage() {
                   InputLabelProps={{
                     shrink: true
                   }}
-                  placeholder='Type something...'
+                  placeholder={intl.formatMessage({ id: 'descriptionPlaceholder' })}
                   fullWidth
                   multiline
                   rows={7}
@@ -429,7 +432,7 @@ export default function EditProfilePage() {
 
             <Grid item container spacing={0} direction='column'>
               <Grid item>
-                <Chip label='Tags' color='primary' />
+                <Chip label={intl.formatMessage({ id: 'tags' })} color='primary' />
               </Grid>
               {/**
                * ABOUT ME TAGS
@@ -441,7 +444,7 @@ export default function EditProfilePage() {
                     InputLabelProps={{
                       shrink: true
                     }}
-                    placeholder='Type and enter to add a tag...'
+                    placeholder={intl.formatMessage({ id: 'tagsPlaceholder' })}
                     fullWidth
                     variant='outlined'
                     name='tagText'
@@ -486,13 +489,13 @@ export default function EditProfilePage() {
               <ListItemIcon>
                 <PersonIcon />
               </ListItemIcon>
-              <ListItemText primary='About Me' />
+              <ListItemText primary={intl.formatMessage({ id: 'aboutMe' })} />
             </ListItem>
             <ListItem button selected={page === 'contact'} onClick={() => setPage('contact')}>
               <ListItemIcon>
                 <PhoneIcon />
               </ListItemIcon>
-              <ListItemText primary='Contact' />
+              <ListItemText primary={intl.formatMessage({ id: 'contact' })} />
             </ListItem>
           </List>
         </Paper>
@@ -506,8 +509,12 @@ export default function EditProfilePage() {
             {form}
           </Grid>
           <Grid item className={classes.floatingBottomContainer}>
-            <Fab variant='extended' aria-label='save changes' onClick={handleSubmit}>
-              Save Changes
+            <Fab
+              variant='extended'
+              aria-label={intl.formatMessage({ id: 'saveChanges' })}
+              onClick={handleSubmit}
+            >
+              {intl.formatMessage({ id: 'saveChanges' })}
             </Fab>
           </Grid>
         </Paper>

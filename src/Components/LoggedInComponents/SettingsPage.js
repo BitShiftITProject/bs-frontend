@@ -1,11 +1,21 @@
 import React, { useContext, useState } from 'react'
-import { Accordion, AccordionDetails, AccordionSummary, Grid, Switch } from '@material-ui/core'
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Grid,
+  Select,
+  Switch
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import { ThemesContext } from '../Contexts/ThemesContext'
 import Sidebar from './Sidebar'
 import { CursorTypography } from '../../styles/loggedInStyles'
+import languages from '../../lang/languages'
+import { LocaleContext } from '../Contexts/LocaleContext'
+import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,7 +52,15 @@ export default function SettingsPage() {
     theme === 'dark' ? setTheme('light') : setTheme('dark')
   }
 
-  /* ------------------------------ Personal Data ----------------------------- */
+  /* ---------------------------- Locale / Language --------------------------- */
+
+  const intl = useIntl()
+  const { currentLocale: locale, setLocale } = useContext(LocaleContext)
+
+  function handleLocaleChange(event) {
+    setLocale(event.target.value)
+  }
+
   /* -------------------------------------------------------------------------- */
   /*                                Personal Data                               */
   /* -------------------------------------------------------------------------- */
@@ -51,13 +69,15 @@ export default function SettingsPage() {
     <div className={classes.root}>
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <CursorTypography className={classes.heading}>General Settings</CursorTypography>
+          <CursorTypography className={classes.heading}>
+            {intl.formatMessage({ id: 'generalSettings' })}
+          </CursorTypography>
           <CursorTypography className={classes.secondaryHeading}></CursorTypography>
         </AccordionSummary>
         <AccordionDetails>
           <Grid container style={{ width: '100%', height: '100%' }}>
             <Grid item xs={12} container justify='flex-start' alignItems='center'>
-              <CursorTypography>Dark Mode</CursorTypography>
+              <CursorTypography>{intl.formatMessage({ id: 'theme' })}</CursorTypography>
               <Switch
                 checked={theme === 'dark'}
                 onChange={toggleTheme}
@@ -65,20 +85,27 @@ export default function SettingsPage() {
                 name='theme'
               />
             </Grid>
+            <Grid item xs={12} container justify='flex-start' alignItems='center'>
+              <CursorTypography>{intl.formatMessage({ id: 'language' })}</CursorTypography>
+              <Select native variant='outlined' value={locale} onChange={handleLocaleChange}>
+                {Object.keys(languages).map((lang) => (
+                  <option key={lang} value={lang}>
+                    {languages[lang]}
+                  </option>
+                ))}
+              </Select>
+            </Grid>
           </Grid>
         </AccordionDetails>
       </Accordion>
       <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <CursorTypography className={classes.heading}>Login data</CursorTypography>
+          <CursorTypography className={classes.heading}>
+            {intl.formatMessage({ id: 'personalData' })}
+          </CursorTypography>
           <CursorTypography className={classes.secondaryHeading}></CursorTypography>
         </AccordionSummary>
-        <AccordionDetails>
-          <CursorTypography>
-            Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius pulvinar
-            diam eros in elit. Pellentesque convallis laoreet laoreet.
-          </CursorTypography>
-        </AccordionDetails>
+        <AccordionDetails></AccordionDetails>
       </Accordion>
     </div>
   )

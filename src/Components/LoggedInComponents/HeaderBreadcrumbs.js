@@ -7,6 +7,7 @@ import PersonIcon from '@material-ui/icons/Person'
 import DescriptionIcon from '@material-ui/icons/Description'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import SettingsIcon from '@material-ui/icons/Settings'
+import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
@@ -34,32 +35,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-// For mapping a path segment (the singular segment between /'s)
-// to a corresponding breadcrumb NAME (all segments must have a corresponding crumb)
-// TODO: Handle mutable breadcrumbs such as portfolio titles
-const breadcrumbNameMap = {
-  home: 'Home',
-  profile: 'Profile',
-  portfolios: 'Portfolios',
-  help: 'Help',
-  settings: 'Settings',
-  add: 'Add Portfolio',
-  edit: 'Edit Portfolio'
-}
-
-// For mapping a path segment (the singular segment between /'s) to a
-// corresponding breadcrumb ICON (if needed)
-const breadcrumbIconMap = {
-  home: <HomeIcon />,
-  profile: <PersonIcon />,
-  portfolios: <DescriptionIcon />,
-  help: <HelpOutlineIcon />,
-  settings: <SettingsIcon />
-}
-
 export default function HeaderBreadcrumbs(props) {
   // Contains all styling
   const classes = useStyles()
+
+  // Localisation for languages
+  const intl = useIntl()
 
   // React Router hook used to get pathname from the Location routeProp
   const { pathname } = useLocation()
@@ -82,6 +63,29 @@ export default function HeaderBreadcrumbs(props) {
     }
 
     return pathname
+  }
+
+  // For mapping a path segment (the singular segment between /'s)
+  // to a corresponding breadcrumb NAME (all segments must have a corresponding crumb)
+  // TODO: Handle mutable breadcrumbs such as portfolio titles
+  const breadcrumbNameMap = {
+    home: intl.formatMessage({ id: 'home' }),
+    profile: intl.formatMessage({ id: 'profile' }),
+    portfolios: intl.formatMessage({ id: 'portfolios' }),
+    help: intl.formatMessage({ id: 'help' }),
+    settings: intl.formatMessage({ id: 'settings' }),
+    add: intl.formatMessage({ id: 'addPortfolio' }),
+    edit: intl.formatMessage({ id: 'editPortfolio' })
+  }
+
+  // For mapping a path segment (the singular segment between /'s) to a
+  // corresponding breadcrumb ICON (if needed)
+  const breadcrumbIconMap = {
+    home: <HomeIcon />,
+    profile: <PersonIcon />,
+    portfolios: <DescriptionIcon />,
+    help: <HelpOutlineIcon />,
+    settings: <SettingsIcon />
   }
 
   return (

@@ -10,6 +10,7 @@ import { getUser, getPortfolio, patchUser } from '../../backend/Fetch'
 
 import DraggablePortfolioList from './DraggablePortfolioList'
 import arrayMove from 'array-move'
+import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
@@ -30,6 +31,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function PortfolioList(props) {
+  const intl = useIntl()
+
   /* -------------------------------------------------------------------------- */
   /*                       Fetching Initial Portfolio List                      */
   /* -------------------------------------------------------------------------- */
@@ -111,7 +114,7 @@ export default function PortfolioList(props) {
             aria-label='add portfolio'
             onClick={handleAdd}
           >
-            Add Portfolio
+            {intl.formatMessage({ id: 'addPortfolio' })}
             <AddIcon className={classes.addPortfolioIcon} />
           </Fab>
         </Grid>

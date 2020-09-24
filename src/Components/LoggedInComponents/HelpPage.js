@@ -4,6 +4,7 @@ import { Accordion, AccordionSummary, AccordionDetails, Typography } from '@mate
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Sidebar from './Sidebar'
 import { CursorTypography } from '../../styles/loggedInStyles'
+import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,15 +23,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const help = {
-  General: [
-    { q: 'Question 1', a: 'Answer 1' },
-    { q: 'Question 2', a: 'Answer 2' }
-  ]
-}
-
 export default function HelpPage() {
   const classes = useStyles()
+  const intl = useIntl()
+
+  const help = {
+    [intl.formatMessage({ id: 'general' })]: [
+      { q: intl.formatMessage({ id: 'question1' }), a: intl.formatMessage({ id: 'answer1' }) },
+      { q: intl.formatMessage({ id: 'question2' }), a: intl.formatMessage({ id: 'answer2' }) }
+    ]
+  }
 
   const content = (
     <div className={classes.root}>

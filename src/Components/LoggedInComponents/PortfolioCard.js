@@ -12,6 +12,7 @@ import {
 
 import ShareIcon from '@material-ui/icons/Share'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
+import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
@@ -47,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
 const PortfolioCard = (props) => {
   // Contains all styling
   const classes = useStyles()
+
+  // Localisation for languages
+  const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
   /*                       Portfolio Details and Handlers                       */
@@ -89,10 +93,10 @@ const PortfolioCard = (props) => {
         <Grid container justify='space-between' alignItems='center'>
           <Grid>
             <Button size='small' onClick={handleView}>
-              View
+              {intl.formatMessage({ id: 'view' })}
             </Button>
             <Button size='small' onClick={handleEdit}>
-              Edit
+              {intl.formatMessage({ id: 'edit' })}
             </Button>
           </Grid>
           <Grid>

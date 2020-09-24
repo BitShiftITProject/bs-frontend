@@ -18,6 +18,7 @@ import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../styles/loggedInStyles'
 import { loggedOutStyles } from '../../styles/loggedOutStyles'
 import Alert from '@material-ui/lab/Alert'
+import { useIntl } from 'react-intl'
 
 const styles = {
   div: {
@@ -51,6 +52,9 @@ const PaddedTextField = styled(TextField)({
 })
 
 function Login(props) {
+  const history = useHistory()
+  const intl = useIntl()
+
   /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
@@ -60,10 +64,8 @@ function Login(props) {
     password: '',
     rememberMe: false,
     loginFailed: false,
-    errorMessage: 'Login FAILED'
+    errorMessage: intl.formatMessage({ id: 'loginError' })
   })
-
-  const history = useHistory()
 
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
@@ -153,7 +155,7 @@ function Login(props) {
           required
           fullWidth
           id='email'
-          label='Email Address'
+          label={intl.formatMessage({ id: 'email' })}
           name='email'
           autoComplete='email'
           autoFocus
@@ -169,7 +171,7 @@ function Login(props) {
           required
           fullWidth
           name='password'
-          label='Password'
+          label={intl.formatMessage({ id: 'password' })}
           type='password'
           id='password'
           autoComplete='current-password'
@@ -197,7 +199,7 @@ function Login(props) {
                   className={classes.rememberMe}
                 />
               }
-              label='Remember me'
+              label={intl.formatMessage({ id: 'rememberMe' })}
             />
           </Grid>
           <Grid item xs={5} md={7}>
@@ -211,12 +213,12 @@ function Login(props) {
         <Grid container className={classes.links}>
           <Grid item xs>
             <Link to='/forgotpassword' variant='body2'>
-              Forgot password?
+              {intl.formatMessage({ id: 'forgotPasswordPrompt' })}
             </Link>
           </Grid>
           <Grid item>
             <Link to='/signup' variant='body2'>
-              {"Don't have an account?"}
+              {intl.formatMessage({ id: 'signUpPrompt' })}
             </Link>
           </Grid>
         </Grid>
