@@ -8,9 +8,9 @@ export default {
     // Login
     login: 'Log In',
     rememberMe: 'Remember Me',
-    forgotPasswordPrompt: 'Forgot password?',
-    signUpPrompt: "Don't have an account?",
-    loginError: 'Login failed. Try again.',
+    forgotPasswordPrompt: 'Forgot Password?',
+    signUpPrompt: 'Create New Account',
+    loginError: "The email or password you've entered is incorrect.",
 
     // Sign Up
     signUp: 'Sign Up',
@@ -19,6 +19,8 @@ export default {
     passwordPattern: '8 to 12 characters',
 
     // Forgot Password
+    forgotPasswordDescription:
+      'Please enter your email or username to receive the password reset link.',
     forgotPassword: 'Forgot Password',
     or: 'Or',
     resetPassword: 'Reset Password',
@@ -43,12 +45,12 @@ export default {
     editPortfolio: 'Edit Portfolio',
     editPage: 'Edit Page',
 
-    editingOptions: 'Editing Options',
+    editingOptions: 'Edit Options',
     style: 'Style',
     content: 'Content',
 
     title: 'Title',
-    description: 'Description',
+    portfolioDescription: 'Description',
 
     pages: 'Pages',
 
@@ -60,12 +62,13 @@ export default {
     firstName: 'First Name',
     lastName: 'Last Name',
     occupation: 'Occupation',
+    profileDescription: 'Description',
     descriptionPlaceholder: 'Type something...',
     tags: 'Tags',
     tagsPlaceholder: 'Type and enter to add a tag...',
 
     contact: 'Contact',
-    emailHelperText: 'Changing this will not change your login email address',
+    emailHelperText: 'Changing this will not change your login details',
     phone: 'Contact Number',
     company: 'Company',
     addressLine1: 'Address Line 1',
@@ -91,9 +94,9 @@ export default {
     settings: 'Settings',
 
     generalSettings: 'General settings',
-    theme: 'Theme',
+    theme: 'Dark Mode',
     language: 'Language',
 
-    personalData: 'Personal Data'
+    personalData: 'Personal data'
   }
 }

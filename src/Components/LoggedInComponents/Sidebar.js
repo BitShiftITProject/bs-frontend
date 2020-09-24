@@ -35,6 +35,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import { ThemesContext } from '../Contexts/ThemesContext'
 import { CursorTypography } from '../../styles/loggedInStyles'
 import HeaderBreadcrumbs from './HeaderBreadcrumbs'
+import { useIntl } from 'react-intl'
 
 const drawerWidth = 240
 
@@ -131,6 +132,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Sidebar(props) {
   // Used to send a user to some page, using history.push({pathname})
   const history = useHistory()
+  const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
   /*                             States and Handlers                            */
@@ -237,7 +239,7 @@ export default function Sidebar(props) {
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
-        <ListItemText primary='Home' />
+        <ListItemText primary={intl.formatMessage({id: 'home'})} />
       </ListItem>*/}
 
       <ListItem
@@ -249,7 +251,7 @@ export default function Sidebar(props) {
         <ListItemIcon>
           <DescriptionIcon />
         </ListItemIcon>
-        <ListItemText primary='Portfolios' />
+        <ListItemText primary={intl.formatMessage({ id: 'portfolios' })} />
       </ListItem>
 
       <ListItem
@@ -261,7 +263,7 @@ export default function Sidebar(props) {
         <ListItemIcon>
           <PersonIcon />
         </ListItemIcon>
-        <ListItemText primary='Profile' />
+        <ListItemText primary={intl.formatMessage({ id: 'profile' })} />
       </ListItem>
 
       <ListItem
@@ -273,7 +275,7 @@ export default function Sidebar(props) {
         <ListItemIcon>
           <HelpOutlineIcon />
         </ListItemIcon>
-        <ListItemText primary='Help' />
+        <ListItemText primary={intl.formatMessage({ id: 'help' })} />
       </ListItem>
 
       <ListItem
@@ -285,7 +287,7 @@ export default function Sidebar(props) {
         <ListItemIcon>
           <SettingsIcon />
         </ListItemIcon>
-        <ListItemText primary='Settings' />
+        <ListItemText primary={intl.formatMessage({ id: 'settings' })} />
       </ListItem>
     </div>
   )

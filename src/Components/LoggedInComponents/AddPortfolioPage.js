@@ -7,8 +7,11 @@ import Sidebar from './Sidebar'
 import { getUser, patchUser, postPortfolio } from '../../backend/Fetch'
 
 import { useHistory } from 'react-router-dom'
+import { useIntl } from 'react-intl'
 
 export default function AddPortfolioPage() {
+  const intl = useIntl()
+
   /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
@@ -101,7 +104,7 @@ export default function AddPortfolioPage() {
                           shrink: true
                         }}
                         variant='outlined'
-                        label='Title'
+                        label={intl.formatMessage({ id: 'title' })}
                         fullWidth
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
@@ -115,7 +118,7 @@ export default function AddPortfolioPage() {
                           shrink: true
                         }}
                         variant='outlined'
-                        label='Description'
+                        label={intl.formatMessage({ id: 'portfolioDescription' })}
                         fullWidth
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
@@ -125,7 +128,7 @@ export default function AddPortfolioPage() {
                   <FormHelperText>{helperText}</FormHelperText>
                   <PaddedFormGrid>
                     <Button type='submit' variant='contained'>
-                      Add Portfolio
+                      {intl.formatMessage({ id: 'addPortfolio' })}
                     </Button>
                   </PaddedFormGrid>
                 </FormControl>

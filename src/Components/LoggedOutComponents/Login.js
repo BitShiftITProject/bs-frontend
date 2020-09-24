@@ -143,7 +143,7 @@ function Login(props) {
           <LockOutlinedIcon />
         </Avatar>
         <CursorTypography component='h1' variant='h5'>
-          Log In
+          {intl.formatMessage({ id: 'login' })}
         </CursorTypography>
         <PaddedTextField
           InputLabelProps={{
@@ -208,7 +208,7 @@ function Login(props) {
         </Grid>
 
         <Button type='submit' fullWidth variant='contained' color='primary'>
-          Log In
+          {intl.formatMessage({ id: 'login' })}
         </Button>
         <Grid container className={classes.links}>
           <Grid item xs>

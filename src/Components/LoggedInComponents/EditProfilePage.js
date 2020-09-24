@@ -409,7 +409,7 @@ export default function EditProfilePage() {
            */}
           <Grid item container spacing={0} direction='column'>
             <Grid item>
-              <Chip label={intl.formatMessage({ id: 'description' })} color='primary' />
+              <Chip label={intl.formatMessage({ id: 'profileDescription' })} color='primary' />
             </Grid>
             <PaddedFormGrid item>
               <Grid item className={classes.padded}>

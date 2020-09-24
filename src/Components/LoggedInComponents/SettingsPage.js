@@ -29,11 +29,25 @@ const useStyles = makeStyles((theme) => ({
   secondaryHeading: {
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary
+  },
+  details: {
+    width: '100%',
+    height: '100%'
+  },
+  setting: {
+    padding: theme.spacing(1)
   }
 }))
 
 export default function SettingsPage() {
   const classes = useStyles()
+  const settingNameSize = 3
+  const settingOptionSize = 6
+
+  /* -------------------------------------------------------------------------- */
+  /*                               Setting Panels                               */
+  /* -------------------------------------------------------------------------- */
+
   const [expanded, setExpanded] = useState('panel1')
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -75,25 +89,47 @@ export default function SettingsPage() {
           <CursorTypography className={classes.secondaryHeading}></CursorTypography>
         </AccordionSummary>
         <AccordionDetails>
-          <Grid container style={{ width: '100%', height: '100%' }}>
-            <Grid item xs={12} container justify='flex-start' alignItems='center'>
-              <CursorTypography>{intl.formatMessage({ id: 'theme' })}</CursorTypography>
-              <Switch
-                checked={theme === 'dark'}
-                onChange={toggleTheme}
-                color='primary'
-                name='theme'
-              />
+          <Grid className={classes.details} container justify='center' alignItems='center'>
+            <Grid
+              className={classes.setting}
+              item
+              xs={12}
+              container
+              justify='flex-start'
+              alignItems='center'
+            >
+              <Grid item xs={settingNameSize}>
+                <CursorTypography>{intl.formatMessage({ id: 'theme' })}</CursorTypography>
+              </Grid>
+              <Grid item xs={settingOptionSize}>
+                <Switch
+                  checked={theme === 'dark'}
+                  onChange={toggleTheme}
+                  color='primary'
+                  name='theme'
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} container justify='flex-start' alignItems='center'>
-              <CursorTypography>{intl.formatMessage({ id: 'language' })}</CursorTypography>
-              <Select native variant='outlined' value={locale} onChange={handleLocaleChange}>
-                {Object.keys(languages).map((lang) => (
-                  <option key={lang} value={lang}>
-                    {languages[lang]}
-                  </option>
-                ))}
-              </Select>
+            <Grid
+              className={classes.setting}
+              item
+              xs={12}
+              container
+              justify='flex-start'
+              alignItems='center'
+            >
+              <Grid item xs={settingNameSize}>
+                <CursorTypography>{intl.formatMessage({ id: 'language' })}</CursorTypography>
+              </Grid>
+              <Grid item xs={settingOptionSize}>
+                <Select native variant='outlined' value={locale} onChange={handleLocaleChange}>
+                  {Object.keys(languages).map((lang) => (
+                    <option key={lang} value={lang}>
+                      {languages[lang]}
+                    </option>
+                  ))}
+                </Select>
+              </Grid>
             </Grid>
           </Grid>
         </AccordionDetails>

@@ -53,13 +53,12 @@ function ForgotPassword(props) {
         <CursorTypography component='h1' variant='h5'>
           {intl.formatMessage({ id: 'forgotPassword' })}
         </CursorTypography>
-        {/*<Typography variant='subtitle2' style={{ width: '50%', textAlign: 'center' }} gutterBottom>
-          Enter the email or username you use to sign up with, and we'll send you a link for
-          a new password{' '}
+        <Typography variant='subtitle2' style={{ width: '75%', textAlign: 'center' }} gutterBottom>
+          {intl.formatMessage({ id: 'forgotPasswordDescription' })}{' '}
           <span role='img' aria-label='smiling cowboy lol'>
             🤠
           </span>
-        </Typography>*/}
+        </Typography>
 
         <PaddedTextField
           InputLabelProps={{
