@@ -43,8 +43,12 @@ export default {
 
     addPortfolio: '添加博客',
     editPortfolio: '编辑博客',
+    deletePortfolio: '删除博客',
+    deletePortfolioPrompt: 'Are you sure you want to delete the portfolio {portfolio}?',
     editPage: '编辑网页',
     // 页面
+    deletePage: '删除网页',
+    deletePagePrompt: 'Are you sure you want to delete the {page} page?',
 
     editingOptions: '编辑选项',
     style: '外观',
@@ -61,8 +65,7 @@ export default {
     // 个人信息
     // 个人资料
 
-    details: '个人详细',
-
+    details: '个人资料',
     aboutMe: '简介',
     firstName: '名字',
     lastName: '姓氏',
@@ -86,12 +89,12 @@ export default {
     // Help
 
     help: '帮助',
-    general: '常规',
+    faq: '常见问题解答',
 
-    question1: '题',
+    question1: '问题',
     answer1: '答案',
 
-    question2: '题',
+    question2: '问题',
     answer2: '答案',
 
     // Settings

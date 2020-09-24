@@ -1,35 +1,87 @@
-import { BACKEND, USERS, PORTFOLIOS, PAGES } from './Endpoints'
+import { BACKEND, AUTHENTICATE, GET_USER, USERS, PORTFOLIOS, PAGES } from './Endpoints'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Constants                                 */
 /* -------------------------------------------------------------------------- */
 
-// TODO: Make compatible with JWT
-const emailId = window.sessionStorage.getItem('emailId')
+const accessToken = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-  'Content-type': 'application/json'
+  'Content-Type': 'application/json',
+  Authorization: `Bearer ${accessToken}`
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               Login / Signup                               */
+/* -------------------------------------------------------------------------- */
+
+export const authenticate = async (loginDetails) => {
+  const response = await fetch(BACKEND + AUTHENTICATE, {
+    method: 'POST',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+      'Content-Type': 'application/json',
+      accept: 'application/json'
+    },
+    body: JSON.stringify(loginDetails)
+  })
+  return response
+}
+
+export const logout = () => {
+  sessionStorage.removeItem('accessToken')
+  localStorage.removeItem('accessToken')
+  window.location.href = '/login'
 }
 
 /* -------------------------------------------------------------------------- */
 /*                                User Methods                                */
 /* -------------------------------------------------------------------------- */
 
-// Fetches the current User object, temporarily using the emailId item saved in the
+// Fetches the current User object, uses the access token saved in the
 // session storage when the user logs in
 export const getUser = async () => {
-  const response = await fetch(BACKEND + USERS + '/' + emailId, {
+  const response = await fetch(BACKEND + GET_USER, {
+    method: 'GET',
+    headers
+  }).catch((error) => {
+    return null
+  })
+
+  if (response.ok) {
+    const body = await response.json()
+    return body[0]
+  } else {
+    return null
+  }
+}
+
+export const getPublicUser = async (username) => {
+  const response = await fetch(BACKEND + USERS + '/' + username, {
     method: 'GET',
     headers
   })
-  const user = await response.json()
-  return user
+    .then((response) => {
+      if (response.ok) return response
+      return null
+    })
+    .catch(() => null)
+
+  return response
 }
 
 // Fetches
 export const patchUser = async (patchDetails) => {
-  const response = await fetch(BACKEND + USERS + '/' + emailId, {
+  const user = await getUser()
+
+  if (!user) {
+    logout()
+    return
+  }
+
+  const response = await fetch(BACKEND + USERS + '/' + user.username, {
     method: 'PATCH',
     headers,
     body: JSON.stringify(patchDetails)
@@ -48,6 +100,12 @@ export const getPortfolio = async (portfolioId) => {
     method: 'GET',
     headers
   })
+    .then((response) => (response.ok ? response : null))
+    .catch(() => {
+      return null
+    })
+
+  if (!response) return null
 
   const portfolio = await response.json()
 

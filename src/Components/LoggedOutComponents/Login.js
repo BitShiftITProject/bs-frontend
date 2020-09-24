@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 
-import { BACKEND, AUTHENTICATE, USERS } from '../../backend/Endpoints'
 import {
   TextField,
   Button,
@@ -12,13 +11,14 @@ import {
   withStyles
 } from '@material-ui/core'
 
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../styles/loggedInStyles'
 import { loggedOutStyles } from '../../styles/loggedOutStyles'
 import Alert from '@material-ui/lab/Alert'
 import { useIntl } from 'react-intl'
+import { authenticate } from '../../backend/Fetch'
 
 const styles = {
   div: {
@@ -52,7 +52,6 @@ const PaddedTextField = styled(TextField)({
 })
 
 function Login(props) {
-  const history = useHistory()
   const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
@@ -79,50 +78,39 @@ function Login(props) {
     setState((st) => ({ ...st, rememberMe: !st.rememberMe }))
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
 
-    // const details = {
-    //   ...state
-    // }
+    const loginDetails = {
+      Email: state.email,
+      Password: state.password
+    }
 
-    // fetch(BACKEND + AUTHENTICATE, {
-    //   method: 'POST',
-    //   headers: { 'Content-type': 'application/json' },
-    //   body: JSON.stringify(details)
-    // }).then((response) => {
-    //   if (response.ok) {
-    //     window.sessionStorage.accessToken = response.body.access_token
-    //     window.location.href = '/'
-    //   } else {
-    //   }
-    // })
-
-    // console.log('Logged in!')
-    // console.log('Email:', state.email)
-    // console.log('Password:', state.password)
-
-    // TODO: Use authentication endpoint, as currently password is not functioning
-    fetch(BACKEND + USERS + '/' + state.email, {
-      method: 'GET',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        'Content-type': 'application/json'
-      }
-    })
+    const response = await authenticate(loginDetails)
       .then((response) => {
         if (response.ok) {
-          console.log(response)
-          window.sessionStorage.setItem('emailId', state.email)
-          history.push('/home')
-        } else {
-          setState({ ...state, loginFailed: true, errorMessage: response.error.message })
+          return response
         }
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        console.log('Authentication error')
+        setState((st) => ({ ...st, loginFailed: true }))
       })
+
+    if (response && response.ok) {
+      const auth = await response.json()
+
+      if (state.rememberMe) {
+        console.log('Remember me!')
+        localStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
+      } else {
+        sessionStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
+      }
+      window.location.href = '/'
+    } else {
+      console.log('Response error')
+      setState((st) => ({ ...st, loginFailed: true }))
+    }
   }
 
   /* -------------------------------------------------------------------------- */

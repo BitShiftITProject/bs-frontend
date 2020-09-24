@@ -16,7 +16,8 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import transitions from '../../styles/transitions'
 import PortfolioCard from './PortfolioCard'
 import CustomDialog from './CustomDialog'
-import { getUser, patchUser, deletePortfolio } from '../../backend/Fetch'
+import { getUser, patchUser, deletePortfolio, logout } from '../../backend/Fetch'
+import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
   portfolio: {
@@ -33,9 +34,10 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
 
   async function handleView(portfolioId) {
     // Get the current user
-    const emailId = window.sessionStorage.getItem('emailId')
 
     const user = await getUser()
+
+    if (!user) logout()
 
     // Get the portfolio from the user's portfolios array whose index === portfolioIndex
     let portfolioIndex = 0
@@ -44,7 +46,7 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
     }
 
     // Go to the designated route for public portfolios
-    history.push(`/public/${emailId}/${portfolioIndex}/0`)
+    history.push(`/public/${user.username}/${portfolioIndex}/0`)
   }
 
   function handleEdit(portfolioId) {
@@ -72,18 +74,23 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
       // not have the to-be-deleted portfolio
       setPortfolios(newPortfolios)
 
-      // Delete the portfolio from the user's portfolios property
+      // Delete the portfolio from the user's portfolios property and from the
+      // portfolios DB
       const patchDetails = { portfolios: newPortfolioIds }
-      const patchResponse = patchUser(patchDetails).catch((error) =>
-        console.log('Error: User portfolios NOT patched!')
-      )
+      patchUser(patchDetails)
+        .then((response) => {
+          console.log(response)
 
-      if (patchResponse.ok) {
-        // Delete the portfolio from the portfolio DB
-        deletePortfolio(portfolioId).catch((error) =>
-          console.log('Error: Portfolio NOT deleted!', error)
-        )
-      }
+          // If delete successful
+          if (response.ok) {
+            deletePortfolio(portfolioId)
+              .then((response) => {
+                if (!response.ok) console.log('Portfolio NOT deleted from DB!')
+              })
+              .catch((error) => console.log('Error: Portfolio NOT deleted!', error))
+          }
+        })
+        .catch((error) => console.log('Error: User portfolios NOT patched!'))
     }
 
     setOpen(false)
@@ -95,6 +102,7 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
 
   const [open, setOpen] = useState(false)
   const [toBeDeleted, setToBeDeleted] = useState({ id: '', title: '' })
+  const intl = useIntl()
 
   function handleClick(id, title) {
     setToBeDeleted({ id, title })
@@ -107,19 +115,23 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
 
   const deleteContent = (
     <form onSubmit={() => handleDelete(toBeDeleted.id)}>
-      <DialogTitle id='form-dialog-title'>Delete Portfolio</DialogTitle>
+      <DialogTitle id='form-dialog-title'>
+        {intl.formatMessage({ id: 'deletePortfolio' })}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText id='alert-dialog-description'>
-          Are you sure you want to delete the portfolio{' '}
-          <span style={{ fontWeight: 'bold' }}>{toBeDeleted.title}</span>?
+          {intl.formatMessage(
+            { id: 'deletePortfolioPrompt' },
+            { portfolio: <span style={{ fontWeight: 'bold' }}>{toBeDeleted.title}</span> }
+          )}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} variant='outlined'>
-          Cancel
+          {intl.formatMessage({ id: 'cancel' })}
         </Button>
         <Button onClick={() => handleDelete(toBeDeleted.id)} variant='contained'>
-          Delete
+          {intl.formatMessage({ id: 'delete' })}
         </Button>
       </DialogActions>
     </form>

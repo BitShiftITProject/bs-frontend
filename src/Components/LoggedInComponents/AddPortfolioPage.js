@@ -4,7 +4,7 @@ import { Grid, Paper, TextField, Button, FormControl, FormHelperText } from '@ma
 import { loggedInStyles, PaddedFormGrid } from '../../styles/loggedInStyles'
 import Sidebar from './Sidebar'
 
-import { getUser, patchUser, postPortfolio } from '../../backend/Fetch'
+import { getUser, logout, patchUser, postPortfolio } from '../../backend/Fetch'
 
 import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
@@ -32,49 +32,67 @@ export default function AddPortfolioPage() {
   /*                                  Handlers                                  */
   /* -------------------------------------------------------------------------- */
 
-  const emailId = window.sessionStorage.getItem('emailId')
   const history = useHistory()
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (!emailId) history.push('/login')
 
-    const postDetails = {
-      title,
-      description: description,
-      pages: {},
-      owner: emailId
-    }
+    const user = await getUser()
 
-    const response = await postPortfolio(postDetails).then((response) => {
-      if (response.ok) {
-        return response
-      } else {
-        setHelperText('An error occurred. Try again.')
-        setError(true)
-        return null
+    if (!user) {
+      logout()
+    } else {
+      if (!user.username) {
+        console.log('No username')
+        return
       }
-    })
 
-    if (response) {
-      const portfolio = await response.json()
+      console.log(user.portfolios)
 
-      if (portfolio) {
-        const user = await getUser()
+      const postDetails = {
+        title,
+        description: description,
+        pages: {},
+        owner: user.username
+      }
 
-        const newPortfolios = [...user.portfolios, portfolio.id]
+      const response = await postPortfolio(postDetails).then((response) => {
+        if (response.ok) {
+          return response
+        } else {
+          setHelperText('An error occurred. Try again.')
+          setError(true)
+          return null
+        }
+      })
 
-        const patchDetails = { portfolios: newPortfolios }
+      if (response) {
+        const portfolio = await response.json()
 
-        patchUser(patchDetails).then((response) => {
-          if (response.ok) {
-            console.log('Portfolio added to user!')
-            history.push('/home')
+        if (portfolio) {
+          const user = await getUser()
+
+          if (user) {
+            const newPortfolios = user.portfolios
+              ? [...user.portfolios, portfolio.id]
+              : [portfolio.id]
+
+            const patchDetails = { portfolios: newPortfolios }
+
+            patchUser(patchDetails).then((response) => {
+              if (response.ok) {
+                console.log('Portfolio added to user!')
+                history.push('/portfolios')
+              } else {
+                setHelperText('An error occurred. Try again.')
+                setError(true)
+              }
+            })
           } else {
             setHelperText('An error occurred. Try again.')
             setError(true)
           }
-        })
+        }
       }
     }
   }

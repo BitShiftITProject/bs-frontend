@@ -21,7 +21,7 @@ import PersonIcon from '@material-ui/icons/Person'
 import PhoneIcon from '@material-ui/icons/Phone'
 // import CloseIcon from '@material-ui/icons/Close'
 
-import { getUser, patchUser } from '../../backend/Fetch'
+import { getUser, logout, patchUser } from '../../backend/Fetch'
 import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 
@@ -87,31 +87,42 @@ export default function EditProfilePage() {
   /*                         Fetching Initial User Data                         */
   /* -------------------------------------------------------------------------- */
 
-  const emailId = window.sessionStorage.getItem('emailId')
   const history = useHistory()
 
   useEffect(() => {
-    getUser().then((user) => {
-      setAbout({
-        first_name: user.first_name || '',
-        last_name: user.last_name || '',
-        occupation: user.occupation || '',
-        description: user.description || '',
-        tags: user.tags || []
-      })
-      setContact({
-        profile_email: user.profile_email || user.email,
-        company: user.company || '',
-        address_line_1: user.address_line_1 || '',
-        address_line_2: user.address_line_2 || '',
-        phone: user.phone || '',
-        town_suburb: user.town_suburb || '',
-        postcode: user.postcode || '',
-        state: user.state || '',
-        country: user.country || ''
-      })
+    async function grabUser() {
+      const user = await getUser()
+      if (!user) {
+        return null
+      }
+      return user
+    }
+
+    grabUser().then((user) => {
+      if (!user) {
+        logout()
+      } else {
+        setAbout({
+          first_name: user.first_name || '',
+          last_name: user.last_name || '',
+          occupation: user.occupation || '',
+          description: user.description || '',
+          tags: user.tags || []
+        })
+        setContact({
+          profile_email: user.profile_email || user.email,
+          company: user.company || '',
+          address_line_1: user.address_line_1 || '',
+          address_line_2: user.address_line_2 || '',
+          phone: user.phone || '',
+          town_suburb: user.town_suburb || '',
+          postcode: user.postcode || '',
+          state: user.state || '',
+          country: user.country || ''
+        })
+      }
     })
-  }, [emailId, history])
+  }, [history])
 
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
@@ -153,8 +164,6 @@ export default function EditProfilePage() {
 
   function handleSubmit(e) {
     e.preventDefault()
-
-    if (!emailId) history.push('/login')
 
     const patchDetails = { ...about, ...contact }
 

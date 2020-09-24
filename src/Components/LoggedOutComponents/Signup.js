@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { BACKEND, SIGNUP, USERS } from '../../backend/Endpoints'
+import { BACKEND, USERS } from '../../backend/Endpoints'
 import { TextField, Button, Avatar, styled, withStyles, Fab } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
@@ -72,7 +72,7 @@ function Signup(props) {
       return
     }
 
-    // TODO: Set up to use auth endpoint
+    // TODO: Set up to use /addUser endpoint
     const details = {
       first_name: state.firstName,
       last_name: state.lastName,

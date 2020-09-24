@@ -28,7 +28,7 @@ export default function HelpPage() {
   const intl = useIntl()
 
   const help = {
-    [intl.formatMessage({ id: 'general' })]: [
+    [intl.formatMessage({ id: 'faq' })]: [
       { q: intl.formatMessage({ id: 'question1' }), a: intl.formatMessage({ id: 'answer1' }) },
       { q: intl.formatMessage({ id: 'question2' }), a: intl.formatMessage({ id: 'answer2' }) }
     ]
@@ -41,8 +41,8 @@ export default function HelpPage() {
           <Typography variant='h6' component='h6' className={classes.title}>
             {section}
           </Typography>
-          {help[section].map((question) => (
-            <Accordion key={question.q}>
+          {help[section].map((question, idx) => (
+            <Accordion key={idx}>
               <AccordionSummary
                 className={classes.heading}
                 expandIcon={<ExpandMoreIcon />}

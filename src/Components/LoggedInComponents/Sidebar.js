@@ -17,7 +17,7 @@ import {
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 
-import HomeIcon from '@material-ui/icons/Home'
+// import HomeIcon from '@material-ui/icons/Home'
 import PersonIcon from '@material-ui/icons/Person'
 import DescriptionIcon from '@material-ui/icons/Description'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
@@ -209,12 +209,16 @@ export default function Sidebar(props) {
         >
           <SettingsIcon />
         </IconButton>
-        {/* LOGOUT: Temporarily by removing 'emailId' and 'portfolioId' */}
+        {/* LOGOUT: Temporarily by removing access token and portfolioId */}
+        {/*
+        // TODO: Properly log out (maybe delete access token from cognito?)
+        */}
         <IconButton
           onClick={() => {
-            window.sessionStorage.removeItem('emailId')
+            sessionStorage.removeItem('accessToken')
+            localStorage.removeItem('accessToken')
             window.sessionStorage.removeItem('portfolioId')
-            history.push('/login')
+            window.location.href = '/login'
           }}
           color='inherit'
         >

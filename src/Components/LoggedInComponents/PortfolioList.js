@@ -6,7 +6,7 @@ import { loggedInStyles } from '../../styles/loggedInStyles'
 import { Grid, Paper, Fab, makeStyles } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 
-import { getUser, getPortfolio, patchUser } from '../../backend/Fetch'
+import { getUser, getPortfolio, patchUser, logout } from '../../backend/Fetch'
 
 import DraggablePortfolioList from './DraggablePortfolioList'
 import arrayMove from 'array-move'
@@ -46,8 +46,20 @@ export default function PortfolioList(props) {
     // through its portfolios array of portfolio ID strings. Each string will be
     // used to fetch the corresponding Portfolio object, which will then be
     // added to the list of portfolios to be rendered.
-    getUser().then((user) => {
-      if (user.portfolios) {
+    async function grabUser() {
+      const user = await getUser()
+      if (!user) {
+        return null
+      }
+      return user
+    }
+
+    grabUser().then((user) => {
+      console.log(user)
+      if (!user) {
+        logout()
+      } else if (user.portfolios) {
+        console.log(user.portfolios)
         for (let i = 0; i < user.portfolios.length; i++) {
           const portfolioId = user.portfolios[i]
           getPortfolio(portfolioId).then((portfolio) => {

@@ -30,6 +30,7 @@ export default {
     cancel: 'Cancel',
     delete: 'Delete',
     save: 'Save',
+    view: 'View',
     edit: 'Edit',
     errorText: 'An error occurred. Try again.',
 
@@ -38,12 +39,14 @@ export default {
 
     // Portfolios
     portfolios: 'Portfolios',
-    view: 'View',
-    edit: 'Edit',
 
     addPortfolio: 'Add Portfolio',
     editPortfolio: 'Edit Portfolio',
+    deletePortfolio: 'Delete Portfolio',
+    deletePortfolioPrompt: 'Are you sure you want to delete the portfolio {portfolio}?',
     editPage: 'Edit Page',
+    deletePage: 'Delete Page',
+    deletePagePrompt: 'Are you sure you want to delete the {page} page?',
 
     editingOptions: 'Edit Options',
     style: 'Style',
@@ -81,7 +84,7 @@ export default {
     // Help
 
     help: 'Help',
-    general: 'General',
+    faq: 'Frequently Asked Questions (FAQ)',
 
     question1: 'Question 1',
     answer1: 'Answer 1',

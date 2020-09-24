@@ -25,7 +25,7 @@ import Sidebar from './Sidebar'
 
 import { getPortfolio, patchPortfolio } from '../../backend/Fetch'
 
-import { useHistory } from 'react-router-dom'
+import { useIntl } from 'react-intl'
 
 export default function EditPortfolioPage() {
   /* -------------------------------------------------------------------------- */
@@ -39,7 +39,6 @@ export default function EditPortfolioPage() {
   /*                         Fetching Current Portfolio                         */
   /* -------------------------------------------------------------------------- */
 
-  const history = useHistory()
   const portfolioId = window.sessionStorage.getItem('portfolioId')
 
   // Runs when the component is mounted for the first time, fetches the
@@ -91,8 +90,9 @@ export default function EditPortfolioPage() {
 
   async function handleSubmit() {
     patchPortfolio(portfolioId, { pages: { content: paragraph } })
-    history.push('/portfolios')
   }
+
+  const intl = useIntl()
 
   const dialogType = {
     // Contains the contents to be rendered when a dialog is triggered, which is
@@ -101,7 +101,9 @@ export default function EditPortfolioPage() {
     // Dialog to show when the Edit button next to the portfolio title is clicked
     title: (
       <form onSubmit={handleEdit}>
-        <DialogTitle id='form-dialog-title'>Edit Portfolio</DialogTitle>
+        <DialogTitle id='form-dialog-title'>
+          {intl.formatMessage({ id: 'editPortfolio' })}
+        </DialogTitle>
         <DialogContent>
           <TextField
             className={classes.formLabel}
@@ -111,7 +113,7 @@ export default function EditPortfolioPage() {
             autoFocus
             margin='dense'
             id='portfolioName'
-            label='Title'
+            label={intl.formatMessage({ id: 'title' })}
             fullWidth
             value={portfolio.title}
             onChange={(e) => setPortfolio({ ...portfolio, title: e.target.value })}
@@ -124,7 +126,7 @@ export default function EditPortfolioPage() {
             autoFocus
             margin='dense'
             id='portfolioDesc'
-            label='Description'
+            label={intl.formatMessage({ id: 'portfolioDescription' })}
             fullWidth
             value={portfolio.description}
             onChange={(e) => setPortfolio({ ...portfolio, description: e.target.value })}
@@ -132,10 +134,10 @@ export default function EditPortfolioPage() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} variant='outlined'>
-            Cancel
+            {intl.formatMessage({ id: 'cancel' })}
           </Button>
           <Button onClick={handleEdit} variant='contained'>
-            Save
+            {intl.formatMessage({ id: 'save' })}
           </Button>
         </DialogActions>
       </form>
@@ -145,7 +147,7 @@ export default function EditPortfolioPage() {
     // exist yet)
     page: (
       <form onSubmit={handleEdit}>
-        <DialogTitle id='form-dialog-title'>Edit page</DialogTitle>
+        <DialogTitle id='form-dialog-title'>{intl.formatMessage({ id: 'editPage' })}</DialogTitle>
         <DialogContent>
           <TextField
             className={classes.formLabel}
@@ -153,7 +155,7 @@ export default function EditPortfolioPage() {
               shrink: true
             }}
             autoFocus
-            label='Title'
+            label={intl.formatMessage({ id: 'title' })}
             margin='dense'
             id='pageName'
             fullWidth
@@ -161,10 +163,10 @@ export default function EditPortfolioPage() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} variant='outlined'>
-            Cancel
+            {intl.formatMessage({ id: 'cancel' })}
           </Button>
           <Button onClick={handleEdit} variant='contained'>
-            Save
+            {intl.formatMessage({ id: 'save' })}
           </Button>
         </DialogActions>
       </form>
@@ -177,16 +179,18 @@ export default function EditPortfolioPage() {
         <DialogTitle id='alert-dialog-title'>{'Delete this page?'}</DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
-            Are you sure you want to delete the{' '}
-            <span style={{ fontWeight: 'bold' }}>{dialogContent.target}</span> page?
+            {intl.formatMessage(
+              { id: 'deletePage' },
+              { page: <span style={{ fontWeight: 'bold' }}>{dialogContent.target}</span> }
+            )}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color='primary' variant='outlined'>
-            Cancel
+            {intl.formatMessage({ id: 'cancel' })}
           </Button>
           <Button onClick={handleDelete} color='error' variant='container' autoFocus>
-            Delete
+            {intl.formatMessage({ id: 'delete' })}
           </Button>
         </DialogActions>
       </div>
