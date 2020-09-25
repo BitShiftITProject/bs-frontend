@@ -12,7 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import { ThemesContext } from '../Contexts/ThemesContext'
 import Sidebar from './Sidebar'
-import { CursorTypography } from '../../styles/loggedInStyles'
+import { CursorTypography } from '../../Styles/loggedInStyles'
 import languages from '../../lang/languages'
 import { LocaleContext } from '../Contexts/LocaleContext'
 import { useIntl } from 'react-intl'

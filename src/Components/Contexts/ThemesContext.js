@@ -1,6 +1,6 @@
 import React, { useState, createContext } from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
-import getTheme from '../../themes/themes'
+import getTheme from '../../Themes/themes'
 
 // eslint-disable-next-line no-unused-vars
 export const ThemesContext = createContext({

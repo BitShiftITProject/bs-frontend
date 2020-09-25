@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { DragDropContext } from 'react-beautiful-dnd'
 
-import { loggedInStyles } from '../../styles/loggedInStyles'
+import { loggedInStyles } from '../../Styles/loggedInStyles'
 import { Grid, Paper, Fab, makeStyles } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 
-import { getUser, getPortfolio, patchUser, logout } from '../../backend/Fetch'
+import { getUser, getPortfolio, patchUser, logout } from '../../Backend/Fetch'
 
 import DraggablePortfolioList from './DraggablePortfolioList'
 import arrayMove from 'array-move'

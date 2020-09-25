@@ -2,8 +2,8 @@ import React from 'react'
 import Authentication from './Authentication'
 import { CssBaseline } from '@material-ui/core'
 
-import ThemesProvider from './components/Contexts/ThemesContext'
-import LocaleProvider from './components/Contexts/LocaleContext'
+import ThemesProvider from './Components/Contexts/ThemesContext'
+import LocaleProvider from './Components/Contexts/LocaleContext'
 
 export default function App() {
   return (

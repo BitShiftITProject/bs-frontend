@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { loggedInStyles, PaddedFormGrid, CursorTypography } from '../../styles/loggedInStyles'
+import { loggedInStyles, PaddedFormGrid, CursorTypography } from '../../Styles/loggedInStyles'
 import CustomDialog from './CustomDialog'
 import EditPortfolioDropdown from './EditPortfolioDropdown'
 
@@ -23,7 +23,7 @@ import CreateIcon from '@material-ui/icons/Create'
 // import CloseIcon from '@material-ui/icons/Close'
 import Sidebar from './Sidebar'
 
-import { getPortfolio, patchPortfolio } from '../../backend/Fetch'
+import { getPortfolio, patchPortfolio } from '../../Backend/Fetch'
 
 import { useIntl } from 'react-intl'
 
@@ -89,7 +89,10 @@ export default function EditPortfolioPage() {
   }
 
   async function handleSubmit() {
-    patchPortfolio(portfolioId, { pages: { content: paragraph } })
+    if((await patchPortfolio(portfolioId, { pages: { content: paragraph } })).ok){
+        window.location.href = '/portfolios'
+        console.log("Saved changes success")
+    }
   }
 
   const intl = useIntl()

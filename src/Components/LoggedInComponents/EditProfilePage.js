@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 
 import Sidebar from './Sidebar'
 
-import { loggedInStyles, PaddedFormGrid } from '../../styles/loggedInStyles'
+import { loggedInStyles, PaddedFormGrid } from '../../Styles/loggedInStyles'
 
 import {
   Grid,
@@ -21,7 +21,7 @@ import PersonIcon from '@material-ui/icons/Person'
 import PhoneIcon from '@material-ui/icons/Phone'
 // import CloseIcon from '@material-ui/icons/Close'
 
-import { getUser, logout, patchUser } from '../../backend/Fetch'
+import { getUser, logout, patchUser } from '../../Backend/Fetch'
 import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 
