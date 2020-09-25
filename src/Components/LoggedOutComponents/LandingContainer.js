@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { CssBaseline, Container, Paper } from '@material-ui/core'
-import { loggedOutStyles } from '../../Styles/loggedOutStyles'
+import { loggedOutStyles } from '../../styles/loggedOutStyles'
 
 export default function LandingContainer(props) {
   const classes = loggedOutStyles()

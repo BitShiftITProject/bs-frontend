@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { DragDropContext } from 'react-beautiful-dnd'
 
-import { loggedInStyles } from '../../Styles/loggedInStyles'
+import { loggedInStyles } from '../../styles/loggedInStyles'
 import { Grid, Paper, Fab, makeStyles } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 
-import { getUser, getPortfolio, patchUser } from '../../Backend/Fetch'
+import { getUser, getPortfolio, patchUser, logout } from '../../backend/Fetch'
 
 import DraggablePortfolioList from './DraggablePortfolioList'
 import arrayMove from 'array-move'
+import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
@@ -30,6 +31,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function PortfolioList(props) {
+  const intl = useIntl()
+
   /* -------------------------------------------------------------------------- */
   /*                       Fetching Initial Portfolio List                      */
   /* -------------------------------------------------------------------------- */
@@ -43,8 +46,20 @@ export default function PortfolioList(props) {
     // through its portfolios array of portfolio ID strings. Each string will be
     // used to fetch the corresponding Portfolio object, which will then be
     // added to the list of portfolios to be rendered.
-    getUser().then((user) => {
-      if (user.portfolios) {
+    async function grabUser() {
+      const user = await getUser()
+      if (!user) {
+        return null
+      }
+      return user
+    }
+
+    grabUser().then((user) => {
+      console.log(user)
+      if (!user) {
+        logout()
+      } else if (user.portfolios) {
+        console.log(user.portfolios)
         for (let i = 0; i < user.portfolios.length; i++) {
           const portfolioId = user.portfolios[i]
           getPortfolio(portfolioId).then((portfolio) => {
@@ -111,7 +126,7 @@ export default function PortfolioList(props) {
             aria-label='add portfolio'
             onClick={handleAdd}
           >
-            Add Portfolio
+            {intl.formatMessage({ id: 'addPortfolio' })}
             <AddIcon className={classes.addPortfolioIcon} />
           </Fab>
         </Grid>

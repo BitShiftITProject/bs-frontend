@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import clsx from 'clsx'
-import { CursorTypography } from '../../Styles/loggedInStyles'
+
 import {
   CssBaseline,
   Drawer,
@@ -16,12 +17,14 @@ import {
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 
-import HomeIcon from '@material-ui/icons/Home'
+// import HomeIcon from '@material-ui/icons/Home'
 import PersonIcon from '@material-ui/icons/Person'
 import DescriptionIcon from '@material-ui/icons/Description'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import SettingsIcon from '@material-ui/icons/Settings'
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
+import Brightness7Icon from '@material-ui/icons/Brightness7'
+import Brightness4Icon from '@material-ui/icons/Brightness4'
 
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
@@ -29,8 +32,10 @@ import ListItemText from '@material-ui/core/ListItemText'
 // import ListSubheader from '@material-ui/core/ListSubheader'
 // import AssignmentIcon from '@material-ui/icons/Assignment'
 
-import { useHistory } from 'react-router-dom'
+import { ThemesContext } from '../Contexts/ThemesContext'
+import { CursorTypography } from '../../styles/loggedInStyles'
 import HeaderBreadcrumbs from './HeaderBreadcrumbs'
+import { useIntl } from 'react-intl'
 
 const drawerWidth = 240
 
@@ -127,8 +132,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Sidebar(props) {
   // Used to send a user to some page, using history.push({pathname})
   const history = useHistory()
+  const intl = useIntl()
 
-  /* --------------------------- States and Handlers -------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                             States and Handlers                            */
+  /* -------------------------------------------------------------------------- */
 
   const [open, setOpen] = useState(false)
 
@@ -139,14 +147,30 @@ export default function Sidebar(props) {
     setOpen(false)
   }
 
-  /* --------------------------------- Styles --------------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                                    Theme                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const { currentTheme: theme, setTheme } = useContext(ThemesContext)
+
+  const toggleTheme = () => {
+    theme === 'dark' ? setTheme('light') : setTheme('dark')
+  }
+
+  const themeIcon = theme === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
 
   const classes = useStyles()
   const appBarStyle = clsx(classes.appBar, open && classes.appBarShift)
   const toggleMenuIconStyle = clsx(classes.menuButton, open && classes.menuButtonHidden)
   const drawerStyle = clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
 
-  /* ------------------------------ AppBar (Top) ------------------------------ */
+  /* -------------------------------------------------------------------------- */
+  /*                                AppBar (Top)                                */
+  /* -------------------------------------------------------------------------- */
 
   const appBar = (
     <AppBar position='absolute' className={appBarStyle}>
@@ -166,6 +190,9 @@ export default function Sidebar(props) {
           color='inherit'
           className={classes.title}
         ></CursorTypography>
+        <IconButton onClick={toggleTheme} color='inherit'>
+          {themeIcon}
+        </IconButton>
         <IconButton
           onClick={() => {
             history.push('/help')
@@ -182,10 +209,14 @@ export default function Sidebar(props) {
         >
           <SettingsIcon />
         </IconButton>
-        {/* LOGOUT: Temporarily by removing 'emailId' and 'portfolioId' */}
+        {/* LOGOUT: Temporarily by removing access token and portfolioId */}
+        {/*
+        // TODO: Properly log out (maybe delete access token from cognito?)
+        */}
         <IconButton
           onClick={() => {
-            window.sessionStorage.removeItem('emailId')
+            sessionStorage.removeItem('accessToken')
+            localStorage.removeItem('accessToken')
             window.sessionStorage.removeItem('portfolioId')
             window.location.href = '/login'
           }}
@@ -197,11 +228,13 @@ export default function Sidebar(props) {
     </AppBar>
   )
 
-  /* ---------------------------- Drawer Menu Items --------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                              Drawer Menu Items                             */
+  /* -------------------------------------------------------------------------- */
 
   const mainListItems = (
     <div className={classes.sidebarList}>
-      <ListItem
+      {/*<ListItem
         button
         onClick={() => {
           history.push('/home')
@@ -210,7 +243,19 @@ export default function Sidebar(props) {
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
-        <ListItemText primary='Home' />
+        <ListItemText primary={intl.formatMessage({id: 'home'})} />
+      </ListItem>*/}
+
+      <ListItem
+        button
+        onClick={() => {
+          history.push('/portfolios')
+        }}
+      >
+        <ListItemIcon>
+          <DescriptionIcon />
+        </ListItemIcon>
+        <ListItemText primary={intl.formatMessage({ id: 'portfolios' })} />
       </ListItem>
 
       <ListItem
@@ -222,19 +267,7 @@ export default function Sidebar(props) {
         <ListItemIcon>
           <PersonIcon />
         </ListItemIcon>
-        <ListItemText primary='Profile' />
-      </ListItem>
-
-      <ListItem
-        button
-        onClick={() => {
-          history.push('/portfolios')
-        }}
-      >
-        <ListItemIcon>
-          <DescriptionIcon />
-        </ListItemIcon>
-        <ListItemText primary='Portfolios' />
+        <ListItemText primary={intl.formatMessage({ id: 'profile' })} />
       </ListItem>
 
       <ListItem
@@ -246,7 +279,7 @@ export default function Sidebar(props) {
         <ListItemIcon>
           <HelpOutlineIcon />
         </ListItemIcon>
-        <ListItemText primary='Help' />
+        <ListItemText primary={intl.formatMessage({ id: 'help' })} />
       </ListItem>
 
       <ListItem
@@ -258,12 +291,14 @@ export default function Sidebar(props) {
         <ListItemIcon>
           <SettingsIcon />
         </ListItemIcon>
-        <ListItemText primary='Settings' />
+        <ListItemText primary={intl.formatMessage({ id: 'settings' })} />
       </ListItem>
     </div>
   )
 
-  /* -------------------- Drawer Menu (can open and close) -------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                      Drawer Menu (can open and close)                      */
+  /* -------------------------------------------------------------------------- */
 
   const drawer = (
     <Drawer
@@ -284,7 +319,9 @@ export default function Sidebar(props) {
     </Drawer>
   )
 
-  /* ------------------------------ Page Content ------------------------------ */
+  /* -------------------------------------------------------------------------- */
+  /*                                Page Content                                */
+  /* -------------------------------------------------------------------------- */
 
   // Content is the page component that will be rendered (e.g. HomePage, SettingsPage, etc.)
   const { content } = props

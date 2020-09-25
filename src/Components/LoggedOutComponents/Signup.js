@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 
-import { BACKEND, SIGNUP, USERS } from '../../Backend/Endpoints'
+import { BACKEND, USERS } from '../../backend/Endpoints'
 import { TextField, Button, Avatar, styled, withStyles, Fab } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import LandingContainer from './LandingContainer'
-import { CursorTypography } from '../../Styles/loggedInStyles'
-import { loggedOutStyles } from '../../Styles/loggedOutStyles'
+import { CursorTypography } from '../../styles/loggedInStyles'
+import { loggedOutStyles } from '../../styles/loggedOutStyles'
 import { useHistory } from 'react-router-dom'
+import { useIntl } from 'react-intl'
 
 const styles = {
   div: {
@@ -35,6 +36,7 @@ const PaddedTextField = styled(TextField)({
 
 function Signup(props) {
   const history = useHistory()
+  const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
@@ -65,12 +67,12 @@ function Signup(props) {
 
     // Password must match
     if (state.password !== state.confirm) {
-      alert('Password does not match!')
+      alert(intl.formatMessage({ id: 'passwordError' }))
 
       return
     }
 
-    // TODO: Set up to use auth endpoint
+    // TODO: Set up to use /addUser endpoint
     const details = {
       first_name: state.firstName,
       last_name: state.lastName,
@@ -139,7 +141,7 @@ function Signup(props) {
           <LockOutlinedIcon />
         </Avatar>
         <CursorTypography component='h1' variant='h5'>
-          Sign Up
+          {intl.formatMessage({ id: 'signUp' })}
         </CursorTypography>
         <PaddedTextField
           InputLabelProps={{
@@ -148,8 +150,8 @@ function Signup(props) {
           className={classes.formLabel}
           id='signup__first_name'
           type='text'
-          placeholder='John'
-          label='First Name'
+          placeholder={intl.formatMessage({ id: 'firstName' })}
+          label={intl.formatMessage({ id: 'firstName' })}
           name='firstName'
           value={state.firstName}
           onChange={handleChange}
@@ -166,8 +168,8 @@ function Signup(props) {
           className={classes.formLabel}
           id='signup__last_name'
           type='text'
-          placeholder='Smith'
-          label='Last Name'
+          placeholder={intl.formatMessage({ id: 'lastName' })}
+          label={intl.formatMessage({ id: 'lastName' })}
           name='lastName'
           value={state.lastName}
           onChange={handleChange}
@@ -185,10 +187,10 @@ function Signup(props) {
           margin='normal'
           required
           fullWidth
-          label='Username'
+          label={intl.formatMessage({ id: 'username' })}
           autoFocus
           id='signup__username'
-          placeholder='Username'
+          placeholder={intl.formatMessage({ id: 'username' })}
           name='username'
           value={state.username}
           onChange={handleChange}
@@ -202,10 +204,10 @@ function Signup(props) {
           margin='normal'
           required
           fullWidth
-          label='Email Address'
+          label={intl.formatMessage({ id: 'email' })}
           autoFocus
           id='signup__email'
-          placeholder='Email'
+          placeholder={intl.formatMessage({ id: 'email' })}
           name='email'
           value={state.email}
           onChange={handleChange}
@@ -220,10 +222,10 @@ function Signup(props) {
           variant='outlined'
           margin='normal'
           fullWidth
-          label='Password'
+          label={intl.formatMessage({ id: 'password' })}
           autoComplete='current-password'
           type='password'
-          placeholder='Password'
+          placeholder={intl.formatMessage({ id: 'password' })}
           pattern='.{8,12}'
           title='8 to 12 characters'
           name='password'
@@ -240,12 +242,12 @@ function Signup(props) {
           variant='outlined'
           margin='normal'
           fullWidth
-          label='Confirm Password'
+          label={intl.formatMessage({ id: 'confirmPassword' })}
           type='password'
-          placeholder='Confirm Password'
+          placeholder={intl.formatMessage({ id: 'confirmPassword' })}
           required
           pattern='.{8,12}'
-          title='8 to 12 characters'
+          title={intl.formatMessage({ id: 'passwordPattern' })}
           name='confirm'
           value={state.confirm}
           onChange={handleChange}
@@ -261,7 +263,7 @@ function Signup(props) {
             <ArrowBackIcon />
           </Fab>
           <Button className='signup_button' type='submit' variant='contained' color='primary'>
-            Sign Up
+            {intl.formatMessage({ id: 'signUp' })}
           </Button>
         </span>
       </form>

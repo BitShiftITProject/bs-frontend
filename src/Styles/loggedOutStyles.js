@@ -6,7 +6,7 @@ const loggedOutStyles = makeStyles((theme) => ({
     height: '100vh',
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   layout: {},
   paper: {
@@ -17,30 +17,34 @@ const loggedOutStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(4),
     width: '40vw',
-    [theme.breakpoints.down('md')]: {
-      width: '50vw',
+    [theme.breakpoints.down('md', 'md')]: {
+      width: '50vw'
     },
-    [theme.breakpoints.down('sm')]: {
-      width: '70vw',
+    [theme.breakpoints.between('sm', 'sm')]: {
+      width: '70vw'
     },
+    [theme.breakpoints.between('xs', 'xs')]: {
+      width: '100vw',
+      height: '100vh'
+    }
   },
   modal: {},
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.text.main,
+    backgroundColor: theme.palette.text.main
   },
   form: {
     padding: theme.spacing(4),
-    width: '100%', // Fix IE 11 issue.
+    width: '100%' // Fix IE 11 issue.
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(3, 0, 2)
   },
   formLabel: {
     '& .Mui-focused': {
-      color: theme.palette.info.main,
-    },
-  },
+      color: theme.palette.info.main
+    }
+  }
 }))
 
 export { loggedOutStyles }

@@ -1,18 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, createContext } from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
-import getTheme from '../../Themes/themes'
+import getTheme from '../../themes/themes'
 
 // eslint-disable-next-line no-unused-vars
-export const CustomThemeContext = React.createContext({
+export const ThemesContext = createContext({
   currentTheme: 'dark',
-  setTheme: null,
+  setTheme: null
 })
 
-const CustomThemeProvider = (props) => {
-  const { children } = props
-
-  // Read theme from local storage, with light theme as default
-  const currentTheme = localStorage.getItem('theme') || 'light'
+const ThemesProvider = ({ children }) => {
+  // Read theme from local storage, with dark theme as default
+  const currentTheme = localStorage.getItem('theme') || 'dark'
 
   // Theme name to get Theme object
   const [themeName, setThemeName] = useState(currentTheme)
@@ -29,14 +27,14 @@ const CustomThemeProvider = (props) => {
   // To be called upon by other components, if need to use/change the theme
   const contextValue = {
     currentTheme: themeName,
-    setTheme,
+    setTheme
   }
 
   return (
-    <CustomThemeContext.Provider value={contextValue}>
+    <ThemesContext.Provider value={contextValue}>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
-    </CustomThemeContext.Provider>
+    </ThemesContext.Provider>
   )
 }
 
-export default CustomThemeProvider
+export default ThemesProvider

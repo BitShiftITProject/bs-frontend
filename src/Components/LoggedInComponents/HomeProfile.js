@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Grid, Paper, ButtonBase, Fab, makeStyles, Typography } from '@material-ui/core'
 
-import { loggedInStyles } from '../../Styles/loggedInStyles'
+import { loggedInStyles } from '../../styles/loggedInStyles'
 import { useHistory } from 'react-router-dom'
 
-import { getUser } from '../../Backend/Fetch'
+import { getUser, logout } from '../../backend/Fetch'
 
 const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
@@ -85,7 +85,21 @@ export default function HomeProfile(props) {
   // useEffect with an empty list as its second argument works like
   // componentDidMount, which runs once
   useEffect(() => {
-    getUser().then((user) => setProfile({ name: user.first_name + ' ' + user.last_name }))
+    async function grabUser() {
+      const user = await getUser()
+      if (!user) {
+        return null
+      }
+      return user
+    }
+
+    grabUser((user) => {
+      if (!user) {
+        logout()
+      } else {
+        setProfile({ name: user.first_name + ' ' + user.last_name })
+      }
+    })
   }, [])
 
   /* -------------------------------------------------------------------------- */

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 
-import { BACKEND, AUTHENTICATE, USERS } from '../../Backend/Endpoints'
 import {
   TextField,
   Button,
@@ -15,9 +14,11 @@ import {
 import { Link } from 'react-router-dom'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import LandingContainer from './LandingContainer'
-import { CursorTypography } from '../../Styles/loggedInStyles'
-import { loggedOutStyles } from '../../Styles/loggedOutStyles'
+import { CursorTypography } from '../../styles/loggedInStyles'
+import { loggedOutStyles } from '../../styles/loggedOutStyles'
 import Alert from '@material-ui/lab/Alert'
+import { useIntl } from 'react-intl'
+import { authenticate } from '../../backend/Fetch'
 
 const styles = {
   div: {
@@ -51,6 +52,8 @@ const PaddedTextField = styled(TextField)({
 })
 
 function Login(props) {
+  const intl = useIntl()
+
   /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
@@ -60,7 +63,7 @@ function Login(props) {
     password: '',
     rememberMe: false,
     loginFailed: false,
-    errorMessage: 'Login FAILED'
+    errorMessage: intl.formatMessage({ id: 'loginError' })
   })
 
   /* -------------------------------------------------------------------------- */
@@ -75,50 +78,39 @@ function Login(props) {
     setState((st) => ({ ...st, rememberMe: !st.rememberMe }))
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
 
-    // const details = {
-    //   ...state
-    // }
+    const loginDetails = {
+      Email: state.email,
+      Password: state.password
+    }
 
-    // fetch(BACKEND + AUTHENTICATE, {
-    //   method: 'POST',
-    //   headers: { 'Content-type': 'application/json' },
-    //   body: JSON.stringify(details)
-    // }).then((response) => {
-    //   if (response.ok) {
-    //     window.sessionStorage.accessToken = response.body.access_token
-    //     window.location.href = '/'
-    //   } else {
-    //   }
-    // })
-
-    // console.log('Logged in!')
-    // console.log('Email:', state.email)
-    // console.log('Password:', state.password)
-
-    // TODO: Use authentication endpoint, as currently password is not functioning
-    fetch(BACKEND + USERS + '/' + state.email, {
-      method: 'GET',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        'Content-type': 'application/json'
-      }
-    })
+    const response = await authenticate(loginDetails)
       .then((response) => {
         if (response.ok) {
-          console.log(response)
-          window.sessionStorage.setItem('emailId', state.email)
-          window.location.href = '/home'
-        } else {
-          setState({ ...state, loginFailed: true, errorMessage: response.error.message })
+          return response
         }
       })
-      .catch((err) => {
-        console.log(err)
+      .catch(() => {
+        console.log('Authentication error')
+        setState((st) => ({ ...st, loginFailed: true }))
       })
+
+    if (response && response.ok) {
+      const auth = await response.json()
+
+      if (state.rememberMe) {
+        console.log('Remember me!')
+        localStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
+      } else {
+        sessionStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
+      }
+      window.location.href = '/'
+    } else {
+      console.log('Response error')
+      setState((st) => ({ ...st, loginFailed: true }))
+    }
   }
 
   /* -------------------------------------------------------------------------- */
@@ -139,7 +131,7 @@ function Login(props) {
           <LockOutlinedIcon />
         </Avatar>
         <CursorTypography component='h1' variant='h5'>
-          Log In
+          {intl.formatMessage({ id: 'login' })}
         </CursorTypography>
         <PaddedTextField
           InputLabelProps={{
@@ -151,7 +143,7 @@ function Login(props) {
           required
           fullWidth
           id='email'
-          label='Email Address'
+          label={intl.formatMessage({ id: 'email' })}
           name='email'
           autoComplete='email'
           autoFocus
@@ -167,7 +159,7 @@ function Login(props) {
           required
           fullWidth
           name='password'
-          label='Password'
+          label={intl.formatMessage({ id: 'password' })}
           type='password'
           id='password'
           autoComplete='current-password'
@@ -195,7 +187,7 @@ function Login(props) {
                   className={classes.rememberMe}
                 />
               }
-              label='Remember me'
+              label={intl.formatMessage({ id: 'rememberMe' })}
             />
           </Grid>
           <Grid item xs={5} md={7}>
@@ -204,17 +196,17 @@ function Login(props) {
         </Grid>
 
         <Button type='submit' fullWidth variant='contained' color='primary'>
-          Log In
+          {intl.formatMessage({ id: 'login' })}
         </Button>
         <Grid container className={classes.links}>
           <Grid item xs>
             <Link to='/forgotpassword' variant='body2'>
-              Forgot password?
+              {intl.formatMessage({ id: 'forgotPasswordPrompt' })}
             </Link>
           </Grid>
           <Grid item>
             <Link to='/signup' variant='body2'>
-              {"Don't have an account?"}
+              {intl.formatMessage({ id: 'signUpPrompt' })}
             </Link>
           </Grid>
         </Grid>
