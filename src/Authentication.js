@@ -43,7 +43,7 @@ async function loggedIn() {
 }
 
 class Authentication extends Component {
-  state = { loggedIn: false }
+  state = { loggedIn: null }
   // state = { loggedIn: true }
 
   async componentDidMount() {
