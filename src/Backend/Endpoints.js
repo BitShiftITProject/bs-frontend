@@ -1,4 +1,5 @@
-const BACKEND = `${process.env.BACKEND}`
+// const BACKEND = 'http://localhost:3000'
+const BACKEND = 'https://bitshift-backend.herokuapp.com'
 
 const AUTHENTICATE = '/cognito/authenticate'
 const SIGNUP = '/addUser'
