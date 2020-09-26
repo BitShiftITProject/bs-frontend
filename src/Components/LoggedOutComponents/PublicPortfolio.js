@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 // import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
 // import { BACKEND, USERS, PORTFOLIOS } from '../../backend/Endpoints'
-import { getPortfolio, getPublicUser } from '../../backend/Fetch'
+import { getPortfolio, getPublicUser } from '../../Backend/Fetch'
 
 class PublicPortfolio extends Component {
   // Store the details of a portfolio so that we can use it later

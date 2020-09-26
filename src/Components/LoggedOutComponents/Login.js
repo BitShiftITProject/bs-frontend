@@ -14,11 +14,11 @@ import {
 import { Link } from 'react-router-dom'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import LandingContainer from './LandingContainer'
-import { CursorTypography } from '../../styles/loggedInStyles'
-import { loggedOutStyles } from '../../styles/loggedOutStyles'
+import { CursorTypography } from '../../Styles/loggedInStyles'
+import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import Alert from '@material-ui/lab/Alert'
 import { useIntl } from 'react-intl'
-import { authenticate } from '../../backend/Fetch'
+import { authenticate } from '../../Backend/Fetch'
 
 const styles = {
   div: {

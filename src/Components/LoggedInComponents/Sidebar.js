@@ -33,7 +33,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 // import AssignmentIcon from '@material-ui/icons/Assignment'
 
 import { ThemesContext } from '../Contexts/ThemesContext'
-import { CursorTypography } from '../../styles/loggedInStyles'
+import { CursorTypography } from '../../Styles/loggedInStyles'
 import HeaderBreadcrumbs from './HeaderBreadcrumbs'
 import { useIntl } from 'react-intl'
 

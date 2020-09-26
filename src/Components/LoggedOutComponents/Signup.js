@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 
-import { BACKEND, USERS } from '../../backend/Endpoints'
+import { BACKEND, SIGNUP } from '../../Backend/Endpoints'
 import { TextField, Button, Avatar, styled, withStyles, Fab } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import LandingContainer from './LandingContainer'
-import { CursorTypography } from '../../styles/loggedInStyles'
-import { loggedOutStyles } from '../../styles/loggedOutStyles'
+import { CursorTypography } from '../../Styles/loggedInStyles'
+import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 
@@ -78,8 +78,7 @@ function Signup(props) {
       last_name: state.lastName,
       email: state.email,
       username: state.username,
-      cognito_id: 'helloworld'
-      // password: state.password,
+      password: state.password
       // occupation: '',
       // phone: '',
       // address_line_1: '',
@@ -100,7 +99,7 @@ function Signup(props) {
     //   }
     // })
 
-    fetch(BACKEND + USERS, {
+    fetch(BACKEND + SIGNUP, {
       method: 'POST',
       headers: {
         'Access-Control-Allow-Origin': '*',
@@ -112,7 +111,9 @@ function Signup(props) {
       .then((response) => {
         if (response.ok) {
           console.log(response)
+          window.location.href = '/login';
         } else {
+            // TODO: Show that user failed to signup
         }
       })
       .catch((err) => {

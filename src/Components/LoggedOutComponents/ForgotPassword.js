@@ -7,8 +7,8 @@ import LandingContainer from './LandingContainer'
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
-import { CursorTypography } from '../../styles/loggedInStyles'
-import { loggedOutStyles } from '../../styles/loggedOutStyles'
+import { CursorTypography } from '../../Styles/loggedInStyles'
+import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { useIntl } from 'react-intl'
 
 const styles = {
