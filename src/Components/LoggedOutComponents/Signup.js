@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-
-import { BACKEND, SIGNUP } from '../../Backend/Endpoints'
 import { TextField, Button, Avatar, styled, withStyles, Fab } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
@@ -9,6 +7,8 @@ import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
+import Alert from '@material-ui/lab/Alert'
+import { signupCheck } from '../../Backend/Fetch'
 
 const styles = {
   div: {
@@ -48,7 +48,9 @@ function Signup(props) {
     password: '',
     confirm: '',
     firstName: '',
-    lastName: ''
+    lastName: '',
+    signUpFailed: false,
+    errorMessage: intl.formatMessage({ id: 'loginError' })
   })
 
   /* -------------------------------------------------------------------------- */
@@ -64,61 +66,27 @@ function Signup(props) {
   // create a user
   async function handleSubmit(e) {
     e.preventDefault()
-
-    // Password must match
-    if (state.password !== state.confirm) {
-      alert(intl.formatMessage({ id: 'passwordError' }))
-
-      return
-    }
-
-    // TODO: Set up to use /addUser endpoint
     const details = {
       first_name: state.firstName,
       last_name: state.lastName,
       email: state.email,
       username: state.username,
       password: state.password
-      // occupation: '',
-      // phone: '',
-      // address_line_1: '',
-      // address_line_2: '',
-      // town_suburb: '',
-      // state: '',
-      // country: '',
     }
-
-    // fetch(BACKEND + SIGNUP, {
-    //   method: 'POST',
-    //   headers: { 'Content-type': 'application/json' },
-    //   body: JSON.stringify(details),
-    // }).then((response) => {
-    //   if (response.ok) {
-    //     window.location.href = '/login'
-    //   } else {
-    //   }
-    // })
-
-    fetch(BACKEND + SIGNUP, {
-      method: 'POST',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(details)
-    })
-      .then((response) => {
-        if (response.ok) {
-          console.log(response)
-          window.location.href = '/login';
-        } else {
-            // TODO: Show that user failed to signup
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    const response = await signupCheck(details)
+    if (response && response.ok) {
+      const auth = await response.json()
+      console.log(auth)
+      //  do the sign in thing
+      window.location.href = '/login'
+    } else {
+      const error = await response.json()
+      setState((st) => ({
+        ...st,
+        signUpFailed: true,
+        errorMessage: error.error.message
+      }))
+    }
   }
 
   /* -------------------------------------------------------------------------- */
@@ -263,6 +231,15 @@ function Signup(props) {
           >
             <ArrowBackIcon />
           </Fab>
+
+          {/* The error message appears iff the state is signUpFailed */}
+          {state.signUpFailed ? (
+            <div>
+              <Alert severity='error'>{state.errorMessage}</Alert>
+            </div>
+          ) : (
+            <div></div>
+          )}
           <Button className='signup_button' type='submit' variant='contained' color='primary'>
             {intl.formatMessage({ id: 'signUp' })}
           </Button>

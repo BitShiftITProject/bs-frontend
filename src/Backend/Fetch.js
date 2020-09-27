@@ -1,4 +1,4 @@
-import { BACKEND, AUTHENTICATE, GET_USER, USERS, PORTFOLIOS, PAGES } from './Endpoints'
+import { BACKEND, AUTHENTICATE, GET_USER, USERS, PORTFOLIOS, PAGES, SIGNUP } from './Endpoints'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Constants                                 */
@@ -15,6 +15,18 @@ const headers = {
 /* -------------------------------------------------------------------------- */
 /*                               Login / Signup                               */
 /* -------------------------------------------------------------------------- */
+export const signupCheck = async (signUpDetails) => {
+  const response = await fetch(BACKEND + SIGNUP, {
+    method: 'POST',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify(signUpDetails)
+  })
+  return response
+}
 
 export const authenticate = async (loginDetails) => {
   const response = await fetch(BACKEND + AUTHENTICATE, {
@@ -35,6 +47,8 @@ export const logout = () => {
   localStorage.removeItem('accessToken')
   window.location.href = '/login'
 }
+
+
 
 /* -------------------------------------------------------------------------- */
 /*                                User Methods                                */

@@ -80,25 +80,14 @@ function Login(props) {
 
   async function handleSubmit(e) {
     e.preventDefault()
-
     const loginDetails = {
       Email: state.email,
       Password: state.password
     }
-
     const response = await authenticate(loginDetails)
-      .then((response) => {
-        if (response.ok) {
-          return response
-        }
-      })
-      .catch(() => {
-        console.log('Authentication error')
-        setState((st) => ({ ...st, loginFailed: true }))
-      })
-
     if (response && response.ok) {
       const auth = await response.json()
+      console.log(auth)
 
       if (state.rememberMe) {
         console.log('Remember me!')
@@ -108,8 +97,13 @@ function Login(props) {
       }
       window.location.href = '/'
     } else {
-      console.log('Response error')
-      setState((st) => ({ ...st, loginFailed: true }))
+      console.log('Authentication error')
+      const error = await response.json()
+      setState((st) => ({
+        ...st,
+        loginFailed: true,
+        errorMessage: error.error.message
+      }))
     }
   }
 
