@@ -13,10 +13,7 @@ const useStyles = makeStyles((theme) => ({
   fab: {
     background: 'none',
     border: 'none',
-    boxShadow: 'none',
-    '&:hover': {
-      backgroundColor: theme.palette.grey[200]
-    }
+    boxShadow: 'none'
   },
   speedDialAction: {
     color: 'inherit'
