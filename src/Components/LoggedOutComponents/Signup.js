@@ -62,8 +62,8 @@ function Signup(props) {
     setState({ ...state, [e.target.name]: e.target.value })
   }
 
-
-
+  // POST request to backend signup endpoint, sending the current state data to
+  // create a user
   async function handleSubmit(e) {
     e.preventDefault()
     const details = {
@@ -82,67 +82,12 @@ function Signup(props) {
     } else {
       const error = await response.json()
       setState((st) => ({
-        ...st, signUpFailed: true,
+        ...st,
+        signUpFailed: true,
         errorMessage: error.error.message
       }))
     }
   }
-
-
-  // POST request to backend signup endpoint, sending the current state data to
-  // create a user
-  // async function handleSubmit(e) {
-  //   e.preventDefault()
-  //   // // Password must match. dont need to check this since the sign up fetch has a proper error message 
-  //   // if (state.password !== state.confirm) {
-  //   //   alert(intl.formatMessage({ id: 'passwordError' }))
-  //   //   return
-  //   // }
-  //   // TODO: Set up to use /addUser endpoint
-  //   const details = {
-  //     first_name: state.firstName,
-  //     last_name: state.lastName,
-  //     email: state.email,
-  //     username: state.username,
-  //     password: state.password,
-  //     // occupation: '',
-  //     // phone: '',
-  //     // address_line_1: '',
-  //     // address_line_2: '',
-  //     // town_suburb: '',
-  //     // state: '',
-  //     // country: '',
-  //   }
-
-  //   // fetch(BACKEND + SIGNUP, {
-  //   //   method: 'POST',
-  //   //   headers: { 'Content-type': 'application/json' },
-  //   //   body: JSON.stringify(details),
-  //   // }).then((response) => {
-  //   //   if (response.ok) {
-  //   //     window.location.href = '/login'
-  //   //   } else {
-  //   //   }
-  //   // })
-
-  //   const response = await signupCheck(details)
-  //     .then((response) => {
-  //       if (response.ok) {
-  //         console.log(response)
-  //         window.location.href = '/login';
-  //         return response
-  //       } else {
-  //         return response.json();
-  //       }
-  //     })
-  //     .then(data => {
-  //       console.log('Sign in error')
-  //       setState({
-  //         signUpFailed: true,
-  //         errorMessage: data.error.message
-  //       });
-  //     })
-  // }
 
   /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */
@@ -287,15 +232,14 @@ function Signup(props) {
             <ArrowBackIcon />
           </Fab>
 
-
           {/* The error message appears iff the state is signUpFailed */}
           {state.signUpFailed ? (
             <div>
               <Alert severity='error'>{state.errorMessage}</Alert>
             </div>
           ) : (
-              <div></div>
-            )}
+            <div></div>
+          )}
           <Button className='signup_button' type='submit' variant='contained' color='primary'>
             {intl.formatMessage({ id: 'signUp' })}
           </Button>
