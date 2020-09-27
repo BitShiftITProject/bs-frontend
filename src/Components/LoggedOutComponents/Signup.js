@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TextField, Button, Avatar, styled, withStyles, Fab } from '@material-ui/core'
+import { TextField, Button, Avatar, withStyles, Fab, Grid } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import LandingContainer from './LandingContainer'
@@ -21,18 +21,16 @@ const styles = {
   },
 
   span: {
-    transform: 'translateX(-25px)'
+    display: 'flex',
+    flexDirection: 'row',
+    transform: 'translateX(-25px)',
+    width: '100%'
   },
 
   fab: {
     transform: 'scale(0.65)'
   }
 }
-
-const PaddedTextField = styled(TextField)({
-  marginTop: '5%',
-  marginBottom: '5%'
-})
 
 function Signup(props) {
   const history = useHistory()
@@ -112,138 +110,147 @@ function Signup(props) {
         <CursorTypography component='h1' variant='h5'>
           {intl.formatMessage({ id: 'signUp' })}
         </CursorTypography>
-        <PaddedTextField
-          InputLabelProps={{
-            shrink: true
-          }}
-          className={classes.formLabel}
-          id='signup__first_name'
-          type='text'
-          placeholder={intl.formatMessage({ id: 'firstName' })}
-          label={intl.formatMessage({ id: 'firstName' })}
-          name='firstName'
-          value={state.firstName}
-          onChange={handleChange}
-          required
-          variant='outlined'
-          margin='normal'
-          fullWidth
-        />
+        <Grid container spacing={1} direction='column' justify='center' alignItems='center'>
+          <TextField
+            InputLabelProps={{
+              shrink: true
+            }}
+            className={classes.formLabel}
+            id='signup__first_name'
+            type='text'
+            placeholder={intl.formatMessage({ id: 'firstName' })}
+            label={intl.formatMessage({ id: 'firstName' })}
+            name='firstName'
+            value={state.firstName}
+            onChange={handleChange}
+            required
+            variant='outlined'
+            margin='normal'
+            fullWidth
+          />
 
-        <PaddedTextField
-          InputLabelProps={{
-            shrink: true
-          }}
-          className={classes.formLabel}
-          id='signup__last_name'
-          type='text'
-          placeholder={intl.formatMessage({ id: 'lastName' })}
-          label={intl.formatMessage({ id: 'lastName' })}
-          name='lastName'
-          value={state.lastName}
-          onChange={handleChange}
-          required
-          variant='outlined'
-          margin='normal'
-          fullWidth
-        />
-        <PaddedTextField
-          InputLabelProps={{
-            shrink: true
-          }}
-          className={style.formLabel}
-          variant='outlined'
-          margin='normal'
-          required
-          fullWidth
-          label={intl.formatMessage({ id: 'username' })}
-          autoFocus
-          id='signup__username'
-          placeholder={intl.formatMessage({ id: 'username' })}
-          name='username'
-          value={state.username}
-          onChange={handleChange}
-        ></PaddedTextField>
-        <PaddedTextField
-          InputLabelProps={{
-            shrink: true
-          }}
-          className={style.formLabel}
-          variant='outlined'
-          margin='normal'
-          required
-          fullWidth
-          label={intl.formatMessage({ id: 'email' })}
-          autoFocus
-          id='signup__email'
-          placeholder={intl.formatMessage({ id: 'email' })}
-          name='email'
-          value={state.email}
-          onChange={handleChange}
-        ></PaddedTextField>
+          <TextField
+            InputLabelProps={{
+              shrink: true
+            }}
+            className={classes.formLabel}
+            id='signup__last_name'
+            type='text'
+            placeholder={intl.formatMessage({ id: 'lastName' })}
+            label={intl.formatMessage({ id: 'lastName' })}
+            name='lastName'
+            value={state.lastName}
+            onChange={handleChange}
+            required
+            variant='outlined'
+            margin='normal'
+            fullWidth
+          />
+          <TextField
+            InputLabelProps={{
+              shrink: true
+            }}
+            className={style.formLabel}
+            variant='outlined'
+            margin='normal'
+            required
+            fullWidth
+            label={intl.formatMessage({ id: 'username' })}
+            autoFocus
+            id='signup__username'
+            placeholder={intl.formatMessage({ id: 'username' })}
+            name='username'
+            value={state.username}
+            onChange={handleChange}
+          ></TextField>
+          <TextField
+            InputLabelProps={{
+              shrink: true
+            }}
+            className={style.formLabel}
+            variant='outlined'
+            margin='normal'
+            required
+            fullWidth
+            label={intl.formatMessage({ id: 'email' })}
+            autoFocus
+            id='signup__email'
+            placeholder={intl.formatMessage({ id: 'email' })}
+            name='email'
+            value={state.email}
+            onChange={handleChange}
+          ></TextField>
 
-        <PaddedTextField
-          InputLabelProps={{
-            shrink: true
-          }}
-          className={classes.formLabel}
-          id='signup__password'
-          variant='outlined'
-          margin='normal'
-          fullWidth
-          label={intl.formatMessage({ id: 'password' })}
-          autoComplete='current-password'
-          type='password'
-          placeholder={intl.formatMessage({ id: 'password' })}
-          pattern='.{8,12}'
-          title='8 to 12 characters'
-          name='password'
-          value={state.password}
-          onChange={handleChange}
-        ></PaddedTextField>
+          <TextField
+            InputLabelProps={{
+              shrink: true
+            }}
+            className={classes.formLabel}
+            id='signup__password'
+            variant='outlined'
+            margin='normal'
+            fullWidth
+            label={intl.formatMessage({ id: 'password' })}
+            autoComplete='current-password'
+            type='password'
+            placeholder={intl.formatMessage({ id: 'password' })}
+            pattern='.{8,12}'
+            title='8 to 12 characters'
+            name='password'
+            value={state.password}
+            onChange={handleChange}
+          ></TextField>
 
-        <PaddedTextField
-          InputLabelProps={{
-            shrink: true
-          }}
-          className={classes.formLabel}
-          id='signup__confirm_password'
-          variant='outlined'
-          margin='normal'
-          fullWidth
-          label={intl.formatMessage({ id: 'confirmPassword' })}
-          type='password'
-          placeholder={intl.formatMessage({ id: 'confirmPassword' })}
-          required
-          pattern='.{8,12}'
-          title={intl.formatMessage({ id: 'passwordPattern' })}
-          name='confirm'
-          value={state.confirm}
-          onChange={handleChange}
-        ></PaddedTextField>
+          <TextField
+            InputLabelProps={{
+              shrink: true
+            }}
+            className={classes.formLabel}
+            id='signup__confirm_password'
+            variant='outlined'
+            margin='normal'
+            fullWidth
+            label={intl.formatMessage({ id: 'confirmPassword' })}
+            type='password'
+            placeholder={intl.formatMessage({ id: 'confirmPassword' })}
+            required
+            pattern='.{8,12}'
+            title={intl.formatMessage({ id: 'passwordPattern' })}
+            name='confirm'
+            value={state.confirm}
+            onChange={handleChange}
+          ></TextField>
 
-        <span className={classes.span}>
-          <Fab
-            onClick={() => history.push('/login')}
-            color='primary'
-            aria-label='login'
-            className={classes.fab}
+          <Grid
+            className={classes.span}
+            item
+            container
+            direction='row'
+            justify='center'
+            alignItems='center'
           >
-            <ArrowBackIcon />
-          </Fab>
+            <Fab
+              onClick={() => history.push('/login')}
+              color='primary'
+              aria-label='login'
+              className={classes.fab}
+            >
+              <ArrowBackIcon />
+            </Fab>
 
-          {/* The error message appears iff the state is signUpFailed */}
-          {state.signUpFailed ? (
-            <div>
-              <Alert severity='error'>{state.errorMessage}</Alert>
-            </div>
-          ) : (
-            <div></div>
-          )}
-          <Button className='signup_button' type='submit' variant='contained' color='primary'>
-            {intl.formatMessage({ id: 'signUp' })}
-          </Button>
-        </span>
+            {/* The error message appears iff the state is signUpFailed */}
+            {state.signUpFailed ? (
+              <div>
+                <Alert severity='error'>{state.errorMessage}</Alert>
+              </div>
+            ) : (
+              <div></div>
+            )}
+            <Button className='signup_button' type='submit' variant='contained' color='primary'>
+              {intl.formatMessage({ id: 'signUp' })}
+            </Button>
+          </Grid>
+        </Grid>
       </form>
     </div>
   )
