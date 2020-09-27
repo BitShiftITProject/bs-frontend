@@ -78,28 +78,19 @@ function Login(props) {
     setState((st) => ({ ...st, rememberMe: !st.rememberMe }))
   }
 
+
   async function handleSubmit(e) {
     e.preventDefault()
-
     const loginDetails = {
       Email: state.email,
       Password: state.password
     }
-
     const response = await authenticate(loginDetails)
-      .then((response) => {
-        if (response.ok) {
-          return response
-        }
-      })
-      .catch(() => {
-        console.log('Authentication error')
-        setState((st) => ({ ...st, loginFailed: true }))
-      })
-
     if (response && response.ok) {
       const auth = await response.json()
+      console.log(auth)
 
+      // do the logging in thing
       if (state.rememberMe) {
         console.log('Remember me!')
         localStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
@@ -108,10 +99,45 @@ function Login(props) {
       }
       window.location.href = '/'
     } else {
-      console.log('Response error')
-      setState((st) => ({ ...st, loginFailed: true }))
+      console.log('Authentication error')
+      const error = await response.json()
+      setState((st) => ({
+        ...st, loginFailed: true, errorMessage: error.error.message
+      }))
     }
   }
+
+
+
+  // async function handleSubmit(e) {
+  //   e.preventDefault()
+  //   const loginDetails = {
+  //     Email: state.email,
+  //     Password: state.password
+  //   }
+  //   await authenticate(loginDetails)
+  //     .then((response) => {
+  //       if (response.ok) {
+  //         const auth = JSON.parse(response)
+  //         if (state.rememberMe) {
+  //           console.log('Remember me!')
+  //           localStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
+  //         } else {
+  //           sessionStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
+  //         }
+  //         window.location.href = '/'
+  //       } else {
+  //         return response.json();
+  //       }
+
+  //     }).then(data => {
+  //       console.log('Authentication error')
+  //       setState({
+  //         loginFailed: true,
+  //         errorMessage: data.error.message
+  //       });
+  //     })
+  // }
 
   /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */
@@ -172,8 +198,8 @@ function Login(props) {
             <Alert severity='error'>{state.errorMessage}</Alert>
           </div>
         ) : (
-          <div></div>
-        )}
+            <div></div>
+          )}
 
         <Grid container justify='space-between'>
           <Grid item xs={7} md={5}>
