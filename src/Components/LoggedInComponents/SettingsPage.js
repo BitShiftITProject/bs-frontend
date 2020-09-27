@@ -125,7 +125,7 @@ export default function SettingsPage() {
                 <Select native variant='outlined' value={locale} onChange={handleLocaleChange}>
                   {Object.keys(languages).map((lang) => (
                     <option key={lang} value={lang}>
-                      {languages[lang]}
+                      {languages[lang].name}
                     </option>
                   ))}
                 </Select>

@@ -2,6 +2,7 @@ import React from 'react'
 
 import { CssBaseline, Paper, Grid, Box } from '@material-ui/core'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
+import LanguageButton from '../CommonComponents/LanguageButton'
 import DarkAndLightModeButton from '../CommonComponents/DarkAndLightModeButton'
 
 export default function LandingContainer(props) {
@@ -16,11 +17,13 @@ export default function LandingContainer(props) {
       <Box
         display={{ xs: 'none', sm: 'flex' }}
         style={{
+          padding: 10,
           width: '100%',
           justifyContent: 'flex-end',
           alignItems: 'center'
         }}
       >
+        <LanguageButton />
         <DarkAndLightModeButton />
       </Box>
       <Grid
