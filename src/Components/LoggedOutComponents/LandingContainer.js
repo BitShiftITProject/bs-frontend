@@ -23,8 +23,8 @@ export default function LandingContainer(props) {
           alignItems: 'center'
         }}
       >
-        <LanguageButton />
         <DarkAndLightModeButton />
+        <LanguageButton />
       </Box>
       <Grid
         style={{ height: '100%', width: '100%' }}
