@@ -97,15 +97,10 @@ function Login(props) {
     }
 
     changeLoading()
-
     const response = await authenticate(loginDetails)
-    changeLoading()
-
 
     if (response && response.ok) {
-      changeLoading()
       const auth = await response.json()
-      changeLoading()
       console.log(auth)
 
       if (state.rememberMe) {
@@ -117,10 +112,7 @@ function Login(props) {
       window.location.href = '/'
     } else {
       console.log('Authentication error')
-
-      changeLoading()
       const error = await response.json()
-      changeLoading()
 
       setState((st) => ({
         ...st,
@@ -128,6 +120,8 @@ function Login(props) {
         errorMessage: error.error.message
       }))
     }
+    changeLoading()
+
   }
 
   /* -------------------------------------------------------------------------- */

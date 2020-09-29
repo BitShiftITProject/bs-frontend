@@ -86,24 +86,23 @@ function Signup(props) {
     }
     changeLoading()
     const response = await signupCheck(details)
-    changeLoading()
+
     if (response && response.ok) {
-      changeLoading()
       const auth = await response.json()
-      changeLoading()
       console.log(auth)
       //  do the sign in thing
       window.location.href = '/login'
     } else {
-      changeLoading()
       const error = await response.json()
-      changeLoading()
       setState((st) => ({
         ...st,
         signUpFailed: true,
         errorMessage: error.error.message
       }))
+
+
     }
+    changeLoading()
   }
 
   /* -------------------------------------------------------------------------- */
@@ -266,6 +265,7 @@ function Signup(props) {
           ) : (
               <div></div>
             )}
+
           <Button className='signup_button' type='submit' variant='contained' color='primary'>
             {intl.formatMessage({ id: 'signUp' })}
           </Button>
