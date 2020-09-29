@@ -6,7 +6,7 @@ import { loggedInStyles } from '../../Styles/loggedInStyles'
 import { Grid, Paper, Fab, makeStyles } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 
-import { getUser, getPortfolio, patchUser, logout } from '../../Backend/Fetch'
+import { getUser, getUserPortfolios, patchUser, logout } from '../../Backend/Fetch'
 
 import DraggablePortfolioList from './DraggablePortfolioList'
 import arrayMove from 'array-move'
@@ -55,17 +55,12 @@ export default function PortfolioList(props) {
     }
 
     grabUser().then((user) => {
-      console.log(user)
-      if (!user) {
+      if (user) {
+        getUserPortfolios(user.username)
+          .then((response) => response.json())
+          .then((portfolios) => setPortfolios(portfolios))
+      } else {
         logout()
-      } else if (user.portfolios) {
-        console.log(user.portfolios)
-        for (let i = 0; i < user.portfolios.length; i++) {
-          const portfolioId = user.portfolios[i]
-          getPortfolio(portfolioId).then((portfolio) => {
-            setPortfolios((p) => [...p, portfolio])
-          })
-        }
       }
     })
   }, [])

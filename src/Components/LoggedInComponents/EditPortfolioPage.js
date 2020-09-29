@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
-import { loggedInStyles, PaddedFormGrid, CursorTypography } from '../../Styles/loggedInStyles'
+import {
+  loggedInStyles,
+  //PaddedFormGrid,
+  CursorTypography
+} from '../../Styles/loggedInStyles'
 import CustomDialog from './CustomDialog'
 import EditPortfolioDropdown from './EditPortfolioDropdown'
 
@@ -10,8 +14,8 @@ import {
   Fab,
   Divider,
   List,
-  // ListItem,
-  // ListItemText,
+  ListItem,
+  ListItemText,
   TextField,
   Button,
   DialogActions,
@@ -20,10 +24,10 @@ import {
   DialogTitle
 } from '@material-ui/core'
 import CreateIcon from '@material-ui/icons/Create'
-// import CloseIcon from '@material-ui/icons/Close'
+import CloseIcon from '@material-ui/icons/Close'
 import Sidebar from './Sidebar'
 
-import { getPortfolio, patchPortfolio } from '../../Backend/Fetch'
+import { getPortfolio, getPortfolioPages, patchPage, patchPortfolio } from '../../Backend/Fetch'
 
 import { useIntl } from 'react-intl'
 
@@ -33,7 +37,9 @@ export default function EditPortfolioPage() {
   /* -------------------------------------------------------------------------- */
 
   const [portfolio, setPortfolio] = useState({})
-  const [paragraph, setParagraph] = useState('')
+  const [pages, setPages] = useState([])
+  const [pageIndex, setPageIndex] = useState(0)
+  const [pageTitle, setPageTitle] = useState('')
 
   /* -------------------------------------------------------------------------- */
   /*                         Fetching Current Portfolio                         */
@@ -49,7 +55,9 @@ export default function EditPortfolioPage() {
   useEffect(() => {
     getPortfolio(portfolioId).then((portfolio) => {
       setPortfolio({ ...portfolio })
-      setParagraph(portfolio.pages.content || '')
+      getPortfolioPages(portfolioId).then((pages) => {
+        setPages(pages)
+      })
     })
   }, [portfolioId])
 
@@ -68,18 +76,30 @@ export default function EditPortfolioPage() {
   const [open, setOpen] = useState(false)
   const [dialogContent, setDialogContent] = useState({ type: '', target: '' })
 
-  const handleClick = (name, value) => {
+  const handlePortfolioClick = (name, value) => {
     setDialogContent({ type: name, target: value })
     setOpen(true)
   }
 
-  const handleEdit = (e) => {
+  const handlePageClick = (name, value) => {
+    setDialogContent({ type: name, target: value })
+    setPageTitle(pages[value].title)
+    setOpen(true)
+  }
+
+  const handlePortfolioEdit = (e) => {
     e.preventDefault()
     patchPortfolio(portfolioId, { title: portfolio.title, description: portfolio.description })
     setOpen(false)
   }
 
-  const handleDelete = () => {
+  const handlePageEdit = (e) => {
+    e.preventDefault()
+    patchPage(pages[pageIndex], {})
+    setOpen(false)
+  }
+
+  const handlePageDelete = () => {
     alert(`Deleted ${dialogContent.target}!`)
     setOpen(false)
   }
@@ -89,10 +109,10 @@ export default function EditPortfolioPage() {
   }
 
   async function handleSubmit() {
-    if((await patchPortfolio(portfolioId, { pages: { content: paragraph } })).ok){
-        window.location.href = '/portfolios'
-        console.log("Saved changes success")
-    }
+    // if((await patchPortfolio(portfolioId, { pages: { content: paragraph } })).ok){
+    //     window.location.href = '/portfolios'
+    //     console.log("Saved changes success")
+    // }
   }
 
   const intl = useIntl()
@@ -103,7 +123,7 @@ export default function EditPortfolioPage() {
     /* -------------------------------------------------------------------------- */
     // Dialog to show when the Edit button next to the portfolio title is clicked
     title: (
-      <form onSubmit={handleEdit}>
+      <form onSubmit={handlePortfolioEdit}>
         <DialogTitle id='form-dialog-title'>
           {intl.formatMessage({ id: 'editPortfolio' })}
         </DialogTitle>
@@ -139,7 +159,7 @@ export default function EditPortfolioPage() {
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
           </Button>
-          <Button onClick={handleEdit} variant='contained'>
+          <Button onClick={handlePortfolioEdit} variant='contained'>
             {intl.formatMessage({ id: 'save' })}
           </Button>
         </DialogActions>
@@ -149,7 +169,7 @@ export default function EditPortfolioPage() {
     // Dialog to show when the Edit button next to a page is clicked (doesn't
     // exist yet)
     page: (
-      <form onSubmit={handleEdit}>
+      <form onSubmit={handlePageEdit}>
         <DialogTitle id='form-dialog-title'>{intl.formatMessage({ id: 'editPage' })}</DialogTitle>
         <DialogContent>
           <TextField
@@ -162,13 +182,15 @@ export default function EditPortfolioPage() {
             margin='dense'
             id='pageName'
             fullWidth
+            value={pageTitle}
+            onChange={(e) => setPageTitle(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
           </Button>
-          <Button onClick={handleEdit} variant='contained'>
+          <Button onClick={handlePageEdit} variant='contained'>
             {intl.formatMessage({ id: 'save' })}
           </Button>
         </DialogActions>
@@ -184,7 +206,7 @@ export default function EditPortfolioPage() {
           <DialogContentText id='alert-dialog-description'>
             {intl.formatMessage(
               { id: 'deletePage' },
-              { page: <span style={{ fontWeight: 'bold' }}>{dialogContent.target}</span> }
+              { page: <span style={{ fontWeight: 'bold' }}>{pages[dialogContent.target]}</span> }
             )}
           </DialogContentText>
         </DialogContent>
@@ -192,7 +214,7 @@ export default function EditPortfolioPage() {
           <Button onClick={handleClose} color='primary' variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
           </Button>
-          <Button onClick={handleDelete} color='error' variant='container' autoFocus>
+          <Button onClick={handlePageDelete} color='error' variant='container' autoFocus>
             {intl.formatMessage({ id: 'delete' })}
           </Button>
         </DialogActions>
@@ -235,7 +257,7 @@ export default function EditPortfolioPage() {
                 <Fab
                   color='primary'
                   size='small'
-                  onClick={() => handleClick('title', portfolio.title)}
+                  onClick={() => handlePortfolioClick('title', portfolio.title)}
                 >
                   <CreateIcon />
                 </Fab>
@@ -253,15 +275,15 @@ export default function EditPortfolioPage() {
               <Grid container direction='column' justify='space-evenly' className={classes.padded}>
                 <CursorTypography variant='overline'>Pages</CursorTypography>
                 <List>
-                  {/*portfolio.pages &&
-                    portfolio.pages.map((page, idx) => (
+                  {pages &&
+                    pages.map((page, idx) => (
                       <ListItem key={idx} button className={classes.hiddenButtonItem}>
-                        <ListItemText onClick={() => {}}>{page.name}</ListItemText>
+                        <ListItemText onClick={() => setPageIndex(idx)}>{page.title}</ListItemText>
                         <Fab
                           color='primary'
                           size='small'
                           className={classes.hiddenButton}
-                          onClick={() => handleClick('page', page.item)}
+                          onClick={() => handlePageClick('page', idx)}
                         >
                           <CreateIcon />
                         </Fab>
@@ -269,12 +291,12 @@ export default function EditPortfolioPage() {
                           color='primary'
                           size='small'
                           className={classes.hiddenButton}
-                          onClick={() => handleClick('delete', page.item)}
+                          onClick={() => handlePageClick('delete', idx)}
                         >
                           <CloseIcon />
                         </Fab>
                       </ListItem>
-                    ))*/}
+                    ))}
                 </List>
               </Grid>
             </Grid>
@@ -298,20 +320,7 @@ export default function EditPortfolioPage() {
               justify='space-between'
               style={{ height: '100%', overflow: 'scroll' }}
             >
-              <form>
-                <Grid container direction='column'>
-                  <PaddedFormGrid item>
-                    <TextField
-                      className={classes.formLabel}
-                      value={paragraph}
-                      onChange={(e) => setParagraph(e.target.value)}
-                      variant='outlined'
-                      fullWidth
-                      multiline
-                    ></TextField>
-                  </PaddedFormGrid>
-                </Grid>
-              </form>
+              {JSON.stringify(pages[pageIndex])}
             </Grid>
             {/*
              * SAVE CHANGES BUTTON
