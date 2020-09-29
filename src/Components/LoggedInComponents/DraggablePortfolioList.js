@@ -10,13 +10,13 @@ import {
   makeStyles
 } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
-import { Droppable, Draggable } from 'react-beautiful-dnd'
+// import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 import transitions from '../../Styles/transitions'
 import PortfolioCard from './PortfolioCard'
 import CustomDialog from './CustomDialog'
-import { getUser, patchUser, deletePortfolio, logout } from '../../Backend/Fetch'
+import { getUser, getUserPortfolios, deletePortfolio, logout } from '../../Backend/Fetch'
 import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
@@ -34,14 +34,15 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
 
   async function handleView(portfolioId) {
     // Get the current user
-
     const user = await getUser()
 
     if (!user) logout()
 
+    const portfolios = await getUserPortfolios(user.username).then((response) => response.json())
+
     // Get the portfolio from the user's portfolios array whose index === portfolioIndex
     let portfolioIndex = 0
-    while (portfolioId !== user.portfolios[portfolioIndex]) {
+    while (portfolioId !== portfolios[portfolioIndex].id) {
       portfolioIndex++
     }
 
@@ -74,23 +75,14 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
       // not have the to-be-deleted portfolio
       setPortfolios(newPortfolios)
 
-      // Delete the portfolio from the user's portfolios property and from the
-      // portfolios DB
-      const patchDetails = { portfolios: newPortfolioIds }
-      patchUser(patchDetails)
-        .then((response) => {
-          console.log(response)
-
-          // If delete successful
-          if (response.ok) {
-            deletePortfolio(portfolioId)
-              .then((response) => {
-                if (!response.ok) console.log('Portfolio NOT deleted from DB!')
-              })
-              .catch((error) => console.log('Error: Portfolio NOT deleted!', error))
-          }
-        })
-        .catch((error) => console.log('Error: User portfolios NOT patched!'))
+      // Delete the portfolio from the portfolios DB
+      await deletePortfolio(portfolioId).then((response) => {
+        if (response.ok) {
+          console.log('Portfolio deleted!')
+        } else {
+          console.log('Portfolio NOT deleted!')
+        }
+      })
     }
 
     setOpen(false)
@@ -149,45 +141,72 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
+  // const draggable = (
+  //   <Grid item>
+  //     <Droppable droppableId='portfoliosDroppable'>
+  //       {(provided, snapshot) => (
+  //         <Grid {...provided.droppableProps} ref={provided.innerRef} container>
+  //           <TransitionGroup style={{ width: '100%', height: '100%' }}>
+  //             {portfolios.map((portfolio, idx) => (
+  //               <CSSTransition key={portfolio.id} classNames='fade' timeout={500}>
+  //                 <Draggable draggableId={portfolio.id} index={idx}>
+  //                   {(provided, snapshot) => (
+  //                     <Grid
+  //                       ref={provided.innerRef}
+  //                       {...provided.draggableProps}
+  //                       {...provided.dragHandleProps}
+  //                       item
+  //                       xs={12}
+  //                       className={classes.portfolio}
+  //                     >
+  //                       {/*
+  //                        * PORTFOLIO CARD: Need to change portfolioId to appropriate Id
+  //                        */}
+  //                       <PortfolioCard
+  //                         portfolioId={portfolio.id}
+  //                         title={portfolio.title}
+  //                         description={portfolio.description}
+  //                         viewPortfolio={handleView}
+  //                         editPortfolio={handleEdit}
+  //                         deletePortfolio={handleClick}
+  //                       />
+  //                     </Grid>
+  //                   )}
+  //                 </Draggable>
+  //               </CSSTransition>
+  //             ))}
+  //           </TransitionGroup>
+  //           {provided.placeholder}
+  //         </Grid>
+  //       )}
+  //     </Droppable>
+  //     {deleteDialog}
+  //   </Grid>
+  // )
+
   return (
     <Grid item>
-      <Droppable droppableId='portfoliosDroppable'>
-        {(provided, snapshot) => (
-          <Grid {...provided.droppableProps} ref={provided.innerRef} container>
-            <TransitionGroup style={{ width: '100%', height: '100%' }}>
-              {portfolios.map((portfolio, idx) => (
-                <CSSTransition key={portfolio.id} classNames='fade' timeout={500}>
-                  <Draggable draggableId={portfolio.id} index={idx}>
-                    {(provided, snapshot) => (
-                      <Grid
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        item
-                        xs={12}
-                        className={classes.portfolio}
-                      >
-                        {/*
-                         * PORTFOLIO CARD: Need to change portfolioId to appropriate Id
-                         */}
-                        <PortfolioCard
-                          portfolioId={portfolio.id}
-                          title={portfolio.title}
-                          description={portfolio.description}
-                          viewPortfolio={handleView}
-                          editPortfolio={handleEdit}
-                          deletePortfolio={handleClick}
-                        />
-                      </Grid>
-                    )}
-                  </Draggable>
-                </CSSTransition>
-              ))}
-            </TransitionGroup>
-            {provided.placeholder}
-          </Grid>
-        )}
-      </Droppable>
+      <Grid container>
+        <TransitionGroup style={{ width: '100%', height: '100%' }}>
+          {portfolios.map((portfolio, idx) => (
+            <CSSTransition key={portfolio.id} classNames='fade' timeout={500}>
+              <Grid key={idx} item xs={12} className={classes.portfolio}>
+                {/*
+                 * PORTFOLIO CARD: Need to change portfolioId to appropriate Id
+                 */}
+                <PortfolioCard
+                  portfolioId={portfolio.id}
+                  title={portfolio.title}
+                  description={portfolio.description}
+                  viewPortfolio={handleView}
+                  editPortfolio={handleEdit}
+                  deletePortfolio={handleClick}
+                />
+              </Grid>
+            </CSSTransition>
+          ))}
+        </TransitionGroup>
+      </Grid>
       {deleteDialog}
     </Grid>
   )

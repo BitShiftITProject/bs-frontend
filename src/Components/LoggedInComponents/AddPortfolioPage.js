@@ -4,7 +4,7 @@ import { Grid, Paper, TextField, Button, FormControl, FormHelperText } from '@ma
 import { loggedInStyles, PaddedFormGrid } from '../../Styles/loggedInStyles'
 import Sidebar from './Sidebar'
 
-import { getUser, logout, patchUser, postPortfolio } from '../../Backend/Fetch'
+import { getUser, logout, postPortfolioToUser } from '../../Backend/Fetch'
 
 import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
@@ -50,50 +50,19 @@ export default function AddPortfolioPage() {
       console.log(user.portfolios)
 
       const postDetails = {
-        title,
-        description: description,
-        pages: {},
-        owner: user.username
+        title: title,
+        description: description
       }
 
-      const response = await postPortfolio(postDetails).then((response) => {
+      await postPortfolioToUser(user.username, postDetails).then((response) => {
         if (response.ok) {
-          return response
+          history.push('/portfolios')
         } else {
           setHelperText('An error occurred. Try again.')
           setError(true)
           return null
         }
       })
-
-      if (response) {
-        const portfolio = await response.json()
-
-        if (portfolio) {
-          const user = await getUser()
-
-          if (user) {
-            const newPortfolios = user.portfolios
-              ? [...user.portfolios, portfolio.id]
-              : [portfolio.id]
-
-            const patchDetails = { portfolios: newPortfolios }
-
-            patchUser(patchDetails).then((response) => {
-              if (response.ok) {
-                console.log('Portfolio added to user!')
-                history.push('/portfolios')
-              } else {
-                setHelperText('An error occurred. Try again.')
-                setError(true)
-              }
-            })
-          } else {
-            setHelperText('An error occurred. Try again.')
-            setError(true)
-          }
-        }
-      }
     }
   }
 

@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 // import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
 // import { BACKEND, USERS, PORTFOLIOS } from '../../backend/Endpoints'
-import { getPortfolio, getPublicUser } from '../../Backend/Fetch'
+import { getUserPortfolios, getPortfolioPages } from '../../Backend/Fetch'
 
 class PublicPortfolio extends Component {
   // Store the details of a portfolio so that we can use it later
-  state = { portfolioDetails: null }
+  state = { portfolioDetails: null, portfolioPages: null, pageIndex: 0 }
 
   // Gets the url parameters
   getParams = () => {
@@ -52,24 +52,29 @@ class PublicPortfolio extends Component {
   async componentDidMount() {
     const params = this.getParams()
 
-    // Get the user using the
-    const response = await getPublicUser(params.username)
+    this.setState({ pageIndex: params.page })
 
-    if (response) {
-      const user = await response.json()
+    // Get all user portfolios
+    const portfoliosResponse = await getUserPortfolios(params.username).then((response) =>
+      response.ok ? response : null
+    )
 
-      // If the user has the specified portfolio index
-      if (user.portfolios && user.portfolios.length > params.portfolio) {
-        const portfolioId = user.portfolios[params.portfolio]
-        const portfolio = await getPortfolio(portfolioId)
+    if (portfoliosResponse) {
+      // Get the actual array of the user's portfolios back from the response
+      const portfolios = await portfoliosResponse.json()
 
-        // If we can't find the portfolio, redirect to /publicfailed
-        if (!portfolio) {
-          window.location.href = '/publicfailed'
-        }
-        // We have found a corresponding portfolio so set the state to store that data
-        else {
-          this.setState({ portfolioDetails: portfolio })
+      if (portfolios.length > params.portfolio) {
+        this.setState({ portfolioDetails: portfolios[params.portfolio] })
+
+        // Get the array of pages of the portfolio
+        const portfolioId = portfolios[params.portfolio]
+        const pagesResponse = await getPortfolioPages(portfolioId).then((response) =>
+          response.ok ? response : null
+        )
+
+        if (pagesResponse) {
+          const pages = await pagesResponse.json()
+          this.setState({ portfolioPages: pages })
         }
       } else {
         window.location.href = '/publicfailed'
@@ -84,8 +89,14 @@ class PublicPortfolio extends Component {
     if (this.state.portfolioDetails) {
       return (
         <div id='portfolio_content'>
+          {/*
+           * PORTFOLIO TITLE
+           */}
           <h1>{this.state.portfolioDetails.title}</h1>
-          <p>{this.state.portfolioDetails.pages.content}</p>
+          {/*
+           * PORTFOLIO PAGE
+           */}
+          {this.state.portfolioPages && <p>{this.state.portfolioPages[this.state.page].content}</p>}
         </div>
       )
     }

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import clsx from 'clsx'
 
@@ -23,8 +23,6 @@ import DescriptionIcon from '@material-ui/icons/Description'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import SettingsIcon from '@material-ui/icons/Settings'
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
-import Brightness7Icon from '@material-ui/icons/Brightness7'
-import Brightness4Icon from '@material-ui/icons/Brightness4'
 
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
@@ -32,10 +30,10 @@ import ListItemText from '@material-ui/core/ListItemText'
 // import ListSubheader from '@material-ui/core/ListSubheader'
 // import AssignmentIcon from '@material-ui/icons/Assignment'
 
-import { ThemesContext } from '../Contexts/ThemesContext'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import HeaderBreadcrumbs from './HeaderBreadcrumbs'
 import { useIntl } from 'react-intl'
+import DarkAndLightModeButton from '../CommonComponents/DarkAndLightModeButton'
 
 const drawerWidth = 240
 
@@ -148,18 +146,6 @@ export default function Sidebar(props) {
   }
 
   /* -------------------------------------------------------------------------- */
-  /*                                    Theme                                   */
-  /* -------------------------------------------------------------------------- */
-
-  const { currentTheme: theme, setTheme } = useContext(ThemesContext)
-
-  const toggleTheme = () => {
-    theme === 'dark' ? setTheme('light') : setTheme('dark')
-  }
-
-  const themeIcon = theme === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />
-
-  /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */
   /* -------------------------------------------------------------------------- */
 
@@ -190,9 +176,8 @@ export default function Sidebar(props) {
           color='inherit'
           className={classes.title}
         ></CursorTypography>
-        <IconButton onClick={toggleTheme} color='inherit'>
-          {themeIcon}
-        </IconButton>
+        <DarkAndLightModeButton />
+
         <IconButton
           onClick={() => {
             history.push('/help')
