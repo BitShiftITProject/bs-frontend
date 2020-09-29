@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+
+import Loading from '../CommonComponents/Loading'
+
 import { TextField, Button, Avatar, styled, withStyles, Fab } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
@@ -50,9 +53,17 @@ function Signup(props) {
     firstName: '',
     lastName: '',
     signUpFailed: false,
-    errorMessage: intl.formatMessage({ id: 'loginError' })
+    errorMessage: intl.formatMessage({ id: 'loginError' }),
+    loading: false
   })
 
+  function changeLoading() {
+    setState((st) => ({
+      ...st,
+      loading: !st.loading
+    }))
+
+  }
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
   /* -------------------------------------------------------------------------- */
@@ -73,14 +84,20 @@ function Signup(props) {
       username: state.username,
       password: state.password
     }
+    changeLoading()
     const response = await signupCheck(details)
+    changeLoading()
     if (response && response.ok) {
+      changeLoading()
       const auth = await response.json()
+      changeLoading()
       console.log(auth)
       //  do the sign in thing
       window.location.href = '/login'
     } else {
+      changeLoading()
       const error = await response.json()
+      changeLoading()
       setState((st) => ({
         ...st,
         signUpFailed: true,
@@ -238,8 +255,17 @@ function Signup(props) {
               <Alert severity='error'>{state.errorMessage}</Alert>
             </div>
           ) : (
-            <div></div>
-          )}
+              <div></div>
+            )}
+
+          {/* Loading sign up */}
+          {state.loading ? (
+            <div>
+              {<Loading message=" Hold on while we save your data" />}
+            </div>
+          ) : (
+              <div></div>
+            )}
           <Button className='signup_button' type='submit' variant='contained' color='primary'>
             {intl.formatMessage({ id: 'signUp' })}
           </Button>
