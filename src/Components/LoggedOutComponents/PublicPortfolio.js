@@ -67,13 +67,14 @@ class PublicPortfolio extends Component {
         this.setState({ portfolioDetails: portfolios[params.portfolio] })
 
         // Get the array of pages of the portfolio
-        const portfolioId = portfolios[params.portfolio]
-        const pagesResponse = await getPortfolioPages(portfolioId).then((response) =>
-          response.ok ? response : null
-        )
+        const portfolioId = portfolios[params.portfolio].id
 
-        if (pagesResponse) {
-          const pages = await pagesResponse.json()
+        // GET methods already return the JSON-parsed response
+        // so getPortfolioPages should either return null or an array of pages
+        const pages = await getPortfolioPages(portfolioId)
+        console.log(pages)
+
+        if (pages) {
           this.setState({ portfolioPages: pages })
         }
       } else {
@@ -93,10 +94,22 @@ class PublicPortfolio extends Component {
            * PORTFOLIO TITLE
            */}
           <h1>{this.state.portfolioDetails.title}</h1>
+
           {/*
-           * PORTFOLIO PAGE
+           * PORTFOLIO PAGES MENU / SIDEBAR
+           * // TODO: Show all page titles in sidebar and be able to select pages
            */}
-          {this.state.portfolioPages && <p>{this.state.portfolioPages[this.state.page].content}</p>}
+
+          <div></div>
+
+          {/*
+           * PORTFOLIO PAGE CONTENT
+           * // TODO: Show content according to selected page
+           * // can use setPageIndex
+           */}
+          {this.state.portfolioPages && (
+            <p>{JSON.stringify(this.state.portfolioPages[this.state.pageIndex])}</p>
+          )}
         </div>
       )
     }
