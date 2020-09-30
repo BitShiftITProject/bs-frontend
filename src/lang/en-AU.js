@@ -1,5 +1,9 @@
 export default {
   'en-AU': {
+    // Landing
+    product: 'Product',
+    about: 'About',
+
     // User Details
     email: 'Email Address',
     username: 'Username',

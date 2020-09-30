@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import { TextField, Button, Avatar, withStyles, Fab, Grid } from '@material-ui/core'
+import { useHistory } from 'react-router-dom'
+import { useIntl } from 'react-intl'
+
+import Alert from '@material-ui/lab/Alert'
+import { TextField, Button, Avatar, withStyles, Fab, Grid, Paper } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
-import { useHistory } from 'react-router-dom'
-import { useIntl } from 'react-intl'
-import Alert from '@material-ui/lab/Alert'
 import { signupCheck } from '../../Backend/Fetch'
 
 const styles = {
@@ -111,41 +113,47 @@ function Signup(props) {
           {intl.formatMessage({ id: 'signUp' })}
         </CursorTypography>
         <Grid container spacing={1} direction='column' justify='center' alignItems='center'>
-          <TextField
-            InputLabelProps={{
-              shrink: true
-            }}
-            className={classes.formLabel}
-            id='signup__first_name'
-            type='text'
-            placeholder={intl.formatMessage({ id: 'firstName' })}
-            label={intl.formatMessage({ id: 'firstName' })}
-            name='firstName'
-            value={state.firstName}
-            onChange={handleChange}
-            required
-            variant='outlined'
-            margin='normal'
-            fullWidth
-          />
+          <Grid item container spacing={1} direction='row' style={{ padding: 0 }}>
+            <Grid item xs={6}>
+              <TextField
+                InputLabelProps={{
+                  shrink: true
+                }}
+                className={classes.formLabel}
+                id='signup__first_name'
+                type='text'
+                placeholder={intl.formatMessage({ id: 'firstName' })}
+                label={intl.formatMessage({ id: 'firstName' })}
+                name='firstName'
+                value={state.firstName}
+                onChange={handleChange}
+                required
+                variant='outlined'
+                margin='normal'
+                fullWidth
+              />
+            </Grid>
 
-          <TextField
-            InputLabelProps={{
-              shrink: true
-            }}
-            className={classes.formLabel}
-            id='signup__last_name'
-            type='text'
-            placeholder={intl.formatMessage({ id: 'lastName' })}
-            label={intl.formatMessage({ id: 'lastName' })}
-            name='lastName'
-            value={state.lastName}
-            onChange={handleChange}
-            required
-            variant='outlined'
-            margin='normal'
-            fullWidth
-          />
+            <Grid item xs={6}>
+              <TextField
+                InputLabelProps={{
+                  shrink: true
+                }}
+                className={classes.formLabel}
+                id='signup__last_name'
+                type='text'
+                placeholder={intl.formatMessage({ id: 'lastName' })}
+                label={intl.formatMessage({ id: 'lastName' })}
+                name='lastName'
+                value={state.lastName}
+                onChange={handleChange}
+                required
+                variant='outlined'
+                margin='normal'
+                fullWidth
+              />
+            </Grid>
+          </Grid>
           <TextField
             InputLabelProps={{
               shrink: true
@@ -230,7 +238,7 @@ function Signup(props) {
             alignItems='center'
           >
             <Fab
-              onClick={() => history.push('/login')}
+              onClick={() => history.goBack()}
               color='primary'
               aria-label='login'
               className={classes.fab}
@@ -255,7 +263,21 @@ function Signup(props) {
     </div>
   )
 
-  return <LandingContainer content={content} />
+  return (
+    <LandingContainer
+      content={
+        <Grid
+          style={{ height: '100%', width: '100%' }}
+          container
+          direction='column'
+          justify='center'
+          alignItems='center'
+        >
+          <Paper className={style.paper}>{content}</Paper>
+        </Grid>
+      }
+    />
+  )
 }
 
 export default withStyles(styles)(Signup)

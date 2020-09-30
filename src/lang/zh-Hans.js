@@ -1,5 +1,9 @@
 export default {
   'zh-Hans': {
+    // Landing
+    product: '产品',
+    about: '关于',
+
     // User Details
     email: '邮箱地址',
     username: '用户名',

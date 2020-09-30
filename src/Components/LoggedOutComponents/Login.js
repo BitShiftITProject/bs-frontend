@@ -8,16 +8,18 @@ import {
   Grid,
   Avatar,
   styled,
-  withStyles
+  withStyles,
+  Paper
 } from '@material-ui/core'
 
 import { Link } from 'react-router-dom'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import Alert from '@material-ui/lab/Alert'
+import { useIntl } from 'react-intl'
+
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
-import Alert from '@material-ui/lab/Alert'
-import { useIntl } from 'react-intl'
 import { authenticate } from '../../Backend/Fetch'
 
 const styles = {
@@ -207,7 +209,21 @@ function Login(props) {
       </form>
     </div>
   )
-  return <LandingContainer content={content} />
+  return (
+    <LandingContainer
+      content={
+        <Grid
+          style={{ height: '100%', width: '100%' }}
+          container
+          direction='column'
+          justify='center'
+          alignItems='center'
+        >
+          <Paper className={style.paper}>{content}</Paper>
+        </Grid>
+      }
+    />
+  )
 }
 
 export default withStyles(styles)(Login)
