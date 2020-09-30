@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { TextField, Button, Avatar, withStyles, Fab, Grid } from '@material-ui/core'
+import Loading from '../CommonComponents/Loading'
+
+import { Grid, TextField, Button, Avatar, withStyles, Fab } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import LandingContainer from './LandingContainer'
@@ -48,9 +50,16 @@ function Signup(props) {
     firstName: '',
     lastName: '',
     signUpFailed: false,
-    errorMessage: intl.formatMessage({ id: 'loginError' })
+    errorMessage: intl.formatMessage({ id: 'loginError' }),
+    loading: false
   })
 
+  function changeLoading() {
+    setState((st) => ({
+      ...st,
+      loading: !st.loading
+    }))
+  }
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
   /* -------------------------------------------------------------------------- */
@@ -71,7 +80,9 @@ function Signup(props) {
       username: state.username,
       password: state.password
     }
+    changeLoading()
     const response = await signupCheck(details)
+
     if (response && response.ok) {
       const auth = await response.json()
       console.log(auth)
@@ -85,6 +96,7 @@ function Signup(props) {
         errorMessage: error.error.message
       }))
     }
+    changeLoading()
   }
 
   /* -------------------------------------------------------------------------- */
@@ -162,7 +174,7 @@ function Signup(props) {
             name='username'
             value={state.username}
             onChange={handleChange}
-          ></TextField>
+          />
           <TextField
             InputLabelProps={{
               shrink: true
@@ -179,7 +191,7 @@ function Signup(props) {
             name='email'
             value={state.email}
             onChange={handleChange}
-          ></TextField>
+          />
 
           <TextField
             InputLabelProps={{
@@ -199,7 +211,7 @@ function Signup(props) {
             name='password'
             value={state.password}
             onChange={handleChange}
-          ></TextField>
+          />
 
           <TextField
             InputLabelProps={{
@@ -219,7 +231,7 @@ function Signup(props) {
             name='confirm'
             value={state.confirm}
             onChange={handleChange}
-          ></TextField>
+          />
 
           <Grid
             className={classes.span}
@@ -246,6 +258,14 @@ function Signup(props) {
             ) : (
               <div></div>
             )}
+
+            {/* Loading sign up */}
+            {state.loading ? (
+              <div>{<Loading message=' Hold on while we save your data' />}</div>
+            ) : (
+              <div></div>
+            )}
+
             <Button className='signup_button' type='submit' variant='contained' color='primary'>
               {intl.formatMessage({ id: 'signUp' })}
             </Button>

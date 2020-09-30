@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Loading from '../CommonComponents/Loading'
 
 import {
   TextField,
@@ -63,9 +64,17 @@ function Login(props) {
     password: '',
     rememberMe: false,
     loginFailed: false,
-    errorMessage: intl.formatMessage({ id: 'loginError' })
+    errorMessage: intl.formatMessage({ id: 'loginError' }),
+    loading: false
   })
 
+  function changeLoading() {
+    setState((st) => ({
+      ...st,
+      loading: !st.loading
+    }))
+
+  }
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
   /* -------------------------------------------------------------------------- */
@@ -78,13 +87,18 @@ function Login(props) {
     setState((st) => ({ ...st, rememberMe: !st.rememberMe }))
   }
 
+
+
   async function handleSubmit(e) {
     e.preventDefault()
     const loginDetails = {
       Email: state.email,
       Password: state.password
     }
+
+    changeLoading()
     const response = await authenticate(loginDetails)
+
     if (response && response.ok) {
       const auth = await response.json()
       console.log(auth)
@@ -99,12 +113,15 @@ function Login(props) {
     } else {
       console.log('Authentication error')
       const error = await response.json()
+
       setState((st) => ({
         ...st,
         loginFailed: true,
         errorMessage: error.error.message
       }))
     }
+    changeLoading()
+
   }
 
   /* -------------------------------------------------------------------------- */
@@ -166,8 +183,17 @@ function Login(props) {
             <Alert severity='error'>{state.errorMessage}</Alert>
           </div>
         ) : (
-          <div></div>
-        )}
+            <div></div>
+          )}
+
+        {/* Loading message*/}
+        {state.loading ? (
+          <div>
+            {<Loading message="Authenticating log in" />}
+          </div>
+        ) : (
+            <div></div>
+          )}
 
         <Grid container justify='space-between'>
           <Grid item xs={7} md={5}>
