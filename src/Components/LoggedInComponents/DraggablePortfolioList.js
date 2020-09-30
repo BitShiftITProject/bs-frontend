@@ -59,7 +59,7 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
 
   async function handleDelete(portfolioId) {
     if (portfolioId) {
-      // Get the new list of portfolio IDs to be used in PATCH request
+      // Get the new list of portfolio IDs
       const newPortfolioIds = portfolios
         .map((portfolioObj) => portfolioObj.id)
         .filter((id) => id !== portfolioId)

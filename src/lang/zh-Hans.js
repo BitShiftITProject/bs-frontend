@@ -26,6 +26,7 @@ export default {
 
     // Editing
     saveChanges: '保存更改',
+    add: '添加',
     cancel: '取消',
     delete: '删除',
     save: '保存',
@@ -45,6 +46,7 @@ export default {
     editPortfolio: '编辑博客',
     deletePortfolio: '删除博客',
     deletePortfolioPrompt: 'Are you sure you want to delete the portfolio {portfolio}?',
+    addPage: '添加网页',
     editPage: '编辑网页',
     // 页面
     deletePage: '删除网页',
