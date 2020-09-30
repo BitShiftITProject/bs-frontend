@@ -23,7 +23,7 @@ class PublicPortfolio extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    window.location.href = '/public/' + this.state.search
+    window.location.href = '/public/' + this.state.search + '/0/0'
   }
 
   render() {

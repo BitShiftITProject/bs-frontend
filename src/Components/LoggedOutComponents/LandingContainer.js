@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { CssBaseline, Container, Paper } from '@material-ui/core'
+import { CssBaseline, Paper, Grid, Box } from '@material-ui/core'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import DarkAndLightModeButton from '../CommonComponents/DarkAndLightModeButton'
 
@@ -11,10 +11,27 @@ export default function LandingContainer(props) {
   const { content } = props
 
   return (
-    <Container component='main' className={classes.root}>
-      <DarkAndLightModeButton />
+    <div className={classes.root} style={{ flexDirection: 'column' }}>
       <CssBaseline />
-      <Paper className={classes.paper}>{content}</Paper>
-    </Container>
+      <Box
+        display={{ xs: 'none', sm: 'flex' }}
+        style={{
+          width: '100%',
+          justifyContent: 'flex-end',
+          alignItems: 'center'
+        }}
+      >
+        <DarkAndLightModeButton />
+      </Box>
+      <Grid
+        style={{ height: '100%', width: '100%' }}
+        container
+        direction='column'
+        justify='center'
+        alignItems='center'
+      >
+        <Paper className={classes.paper}>{content}</Paper>
+      </Grid>
+    </div>
   )
 }
