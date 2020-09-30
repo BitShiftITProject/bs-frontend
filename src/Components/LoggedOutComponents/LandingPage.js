@@ -1,5 +1,6 @@
 import React from 'react'
 import { useIntl } from 'react-intl'
+import { useHistory } from 'react-router-dom'
 
 import { Fab, Grid, Typography } from '@material-ui/core'
 import LandingContainer from './LandingContainer'
@@ -7,6 +8,7 @@ import EmojiHover from '../CommonComponents/EmojiHover'
 
 export default function LandingPage() {
   const intl = useIntl()
+  const history = useHistory()
   const content = (
     <Grid container direction='column' justify='center' alignItems='center'>
       <Grid
@@ -24,7 +26,14 @@ export default function LandingPage() {
           </Typography>
         </Grid>
         <Grid item>
-          <Fab size='medium' color='secondary' variant='extended'>
+          <Fab
+            size='medium'
+            color='secondary'
+            variant='extended'
+            onClick={() => {
+              history.push('/signup')
+            }}
+          >
             {intl.formatMessage({ id: 'signUp' })}
           </Fab>
         </Grid>
