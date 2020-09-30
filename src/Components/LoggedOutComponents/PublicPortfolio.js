@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-// import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
-// import { BACKEND, USERS, PORTFOLIOS } from '../../backend/Endpoints'
 import { getUserPortfolios, getPortfolioPages } from '../../Backend/Fetch'
+import PublicSidebar from './PublicSidebar'
 
 class PublicPortfolio extends Component {
   // Store the details of a portfolio so that we can use it later
@@ -15,39 +14,6 @@ class PublicPortfolio extends Component {
       page: this.props.match.params.page
     }
   }
-
-  // // Pass in the parameters from getParams() to fetch the portfolio from a given user
-  // // Returns the whole portfolio data structure if successful or null if failed
-  // getPortfolio = async (params) => {
-  //   // Fetch the user from the params argument
-
-  //   const user = await getPublicUser()
-
-  //   if (!user) {
-  //     return null
-  //   } else {
-  //     // If the user has the specified portfolio index
-  //     if (user.portfolios.length > params.portfolio) {
-  //       // Fetch the portfolio from the ID
-  //       return fetch(BACKEND + PORTFOLIOS + '/' + user.portfolios[params.portfolio]).then(
-  //         (portfolioResponse) => {
-  //           // If we get a response, turn it into a JSON and return it
-  //           if (portfolioResponse.ok) {
-  //             return portfolioResponse.json()
-  //           }
-  //           // Otherwise return null
-  //           else {
-  //             return null
-  //           }
-  //         }
-  //       )
-  //     }
-  //     // If the user does not have the specified portfolio, return null
-  //     else {
-  //       return null
-  //     }
-  //   }
-  // }
 
   async componentDidMount() {
     const params = this.getParams()
@@ -86,31 +52,32 @@ class PublicPortfolio extends Component {
   }
 
   render() {
+
     // If the portfolioDetails does not equal null then we have found one
-    if (this.state.portfolioDetails) {
+    if (this.state.portfolioPages) {
       return (
-        <div id='portfolio_content'>
-          {/*
-           * PORTFOLIO TITLE
-           */}
-          <h1>{this.state.portfolioDetails.title}</h1>
+        <PublicSidebar pages={this.state.portfolioPages} content={
+            <div id='portfolio_content'>
+                {/*
+                * PORTFOLIO TITLE
+                */}
+                <h1>{this.state.portfolioPages[this.state.pageIndex].title}</h1>
 
-          {/*
-           * PORTFOLIO PAGES MENU / SIDEBAR
-           * // TODO: Show all page titles in sidebar and be able to select pages
-           */}
+                
 
-          <div></div>
+                <div></div>
 
-          {/*
-           * PORTFOLIO PAGE CONTENT
-           * // TODO: Show content according to selected page
-           * // can use setPageIndex
-           */}
-          {this.state.portfolioPages && (
-            <p>{JSON.stringify(this.state.portfolioPages[this.state.pageIndex])}</p>
-          )}
-        </div>
+                {/*
+                * PORTFOLIO PAGE CONTENT
+                * // TODO: Show content according to selected page
+                * // can use setPageIndex
+                */}
+                {this.state.portfolioPages && (
+                    <p>{JSON.stringify(this.state.portfolioPages[this.state.pageIndex])}</p>
+                )}
+            </div>
+        }/>
+        
       )
     }
     // If portfolioDetails is null we are still fetching the portfolio
