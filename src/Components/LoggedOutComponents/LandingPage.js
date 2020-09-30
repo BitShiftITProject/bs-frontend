@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl'
 
 import { Fab, Grid, Typography } from '@material-ui/core'
 import LandingContainer from './LandingContainer'
+import EmojiHover from '../CommonComponents/EmojiHover'
 
 export default function LandingPage() {
   const intl = useIntl()
@@ -10,7 +11,7 @@ export default function LandingPage() {
     <Grid container direction='column' justify='center' alignItems='center'>
       <Grid
         item
-        xs={6}
+        xs={12}
         container
         spacing={3}
         direction='column'
@@ -19,7 +20,7 @@ export default function LandingPage() {
       >
         <Grid item>
           <Typography variant='h2' component='h1'>
-            create + share
+            create + share <EmojiHover />
           </Typography>
         </Grid>
         <Grid item>

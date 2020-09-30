@@ -29,7 +29,7 @@ export default function LandingContainer(props) {
         item
         xs={1}
         container
-        flexDirection='row'
+        direction='row'
         justify='space-between'
         className={classes.appBar}
       >
