@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
+
 import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 
 import Alert from '@material-ui/lab/Alert'
 import { TextField, Button, Avatar, withStyles, Fab, Grid, Paper } from '@material-ui/core'
+import Loading from '../CommonComponents/Loading'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
@@ -51,9 +53,15 @@ function Signup(props) {
     lastName: '',
     signUpFailed: false,
     errorMessage: intl.formatMessage({ id: 'loginError' }),
-    authenticating: false
+    loading: false
   })
 
+  function changeLoading() {
+    setState((st) => ({
+      ...st,
+      loading: !st.loading
+    }))
+  }
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
   /* -------------------------------------------------------------------------- */
@@ -74,8 +82,9 @@ function Signup(props) {
       username: state.username,
       password: state.password
     }
-    setState((st) => ({ ...st, authenticating: true }))
+    changeLoading()
     const response = await signupCheck(details)
+
     if (response && response.ok) {
       const auth = await response.json()
       console.log(auth)
@@ -86,10 +95,10 @@ function Signup(props) {
       setState((st) => ({
         ...st,
         signUpFailed: true,
-        errorMessage: error.error.message,
-        authenticating: false
+        errorMessage: error.error.message
       }))
     }
+    changeLoading()
   }
 
   /* -------------------------------------------------------------------------- */
@@ -173,7 +182,7 @@ function Signup(props) {
             name='username'
             value={state.username}
             onChange={handleChange}
-          ></TextField>
+          />
           <TextField
             InputLabelProps={{
               shrink: true
@@ -190,7 +199,7 @@ function Signup(props) {
             name='email'
             value={state.email}
             onChange={handleChange}
-          ></TextField>
+          />
 
           <TextField
             InputLabelProps={{
@@ -210,7 +219,7 @@ function Signup(props) {
             name='password'
             value={state.password}
             onChange={handleChange}
-          ></TextField>
+          />
 
           <TextField
             InputLabelProps={{
@@ -230,10 +239,13 @@ function Signup(props) {
             name='confirm'
             value={state.confirm}
             onChange={handleChange}
-          ></TextField>
+          />
 
           {/* The error message appears iff the state is signUpFailed */}
-          {state.signUpFailed ? <Alert severity='error'>{state.errorMessage}</Alert> : <div></div>}
+          {state.signUpFailed && <Alert severity='error'>{state.errorMessage}</Alert>}
+
+          {/* Loading sign up */}
+          {state.loading && <Loading message=' Hold on while we save your data' />}
 
           <Grid
             className={classes.span}
@@ -243,7 +255,7 @@ function Signup(props) {
             justify='center'
             alignItems='center'
           >
-            {!state.authenticating && (
+            {!state.loading && (
               <div>
                 <Fab
                   onClick={() => history.goBack()}
