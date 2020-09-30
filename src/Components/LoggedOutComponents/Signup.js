@@ -50,7 +50,8 @@ function Signup(props) {
     firstName: '',
     lastName: '',
     signUpFailed: false,
-    errorMessage: intl.formatMessage({ id: 'loginError' })
+    errorMessage: intl.formatMessage({ id: 'loginError' }),
+    authenticating: false
   })
 
   /* -------------------------------------------------------------------------- */
@@ -73,6 +74,7 @@ function Signup(props) {
       username: state.username,
       password: state.password
     }
+    setState((st) => ({ ...st, authenticating: true }))
     const response = await signupCheck(details)
     if (response && response.ok) {
       const auth = await response.json()
@@ -84,7 +86,8 @@ function Signup(props) {
       setState((st) => ({
         ...st,
         signUpFailed: true,
-        errorMessage: error.error.message
+        errorMessage: error.error.message,
+        authenticating: false
       }))
     }
   }
@@ -229,6 +232,9 @@ function Signup(props) {
             onChange={handleChange}
           ></TextField>
 
+          {/* The error message appears iff the state is signUpFailed */}
+          {state.signUpFailed ? <Alert severity='error'>{state.errorMessage}</Alert> : <div></div>}
+
           <Grid
             className={classes.span}
             item
@@ -237,26 +243,21 @@ function Signup(props) {
             justify='center'
             alignItems='center'
           >
-            <Fab
-              onClick={() => history.goBack()}
-              color='primary'
-              aria-label='login'
-              className={classes.fab}
-            >
-              <ArrowBackIcon />
-            </Fab>
-
-            {/* The error message appears iff the state is signUpFailed */}
-            {state.signUpFailed ? (
+            {!state.authenticating && (
               <div>
-                <Alert severity='error'>{state.errorMessage}</Alert>
+                <Fab
+                  onClick={() => history.goBack()}
+                  color='primary'
+                  aria-label='login'
+                  className={classes.fab}
+                >
+                  <ArrowBackIcon />
+                </Fab>
+                <Button className='signup_button' type='submit' variant='contained' color='primary'>
+                  {intl.formatMessage({ id: 'signUp' })}
+                </Button>
               </div>
-            ) : (
-              <div></div>
             )}
-            <Button className='signup_button' type='submit' variant='contained' color='primary'>
-              {intl.formatMessage({ id: 'signUp' })}
-            </Button>
           </Grid>
         </Grid>
       </form>
