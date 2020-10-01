@@ -9,7 +9,11 @@ const useStyles = makeStyles((theme) => ({
     border: 'none',
     boxShadow: 'none',
     height: 40,
-    width: 40
+    width: 40,
+    color: theme.palette.primary.contrastText,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.light
+    }
   }
 }))
 
@@ -33,10 +37,8 @@ export default function DarkAndLightModeButton() {
     )
 
   return (
-    <div>
-      <Fab onClick={toggleTheme} className={classes.fab} color='primary'>
-        {themeIcon}
-      </Fab>
-    </div>
+    <Fab onClick={toggleTheme} className={classes.fab} color='primary'>
+      {themeIcon}
+    </Fab>
   )
 }

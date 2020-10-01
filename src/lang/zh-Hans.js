@@ -28,6 +28,10 @@ export default {
     or: '或',
     resetPassword: '重置密码',
 
+    // Logged-in Appbar
+    toggleTheme: 'Toggle theme',
+    logout: '登出',
+
     // Editing
     saveChanges: '保存更改',
     add: '添加',

@@ -146,6 +146,12 @@ const loggedOutStyles = makeStyles((theme) => ({
   appBarIcons: {
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1)
+  },
+  input: {
+    '&.MuiOutlinedInput-input:-webkit-autofill': {
+      WebkitBoxShadow: '0 0 0 100px rgba(0,0,0,0.2) inset',
+      WebkitTextFillColor: theme.palette.secondary.contrastText
+    }
   }
 }))
 

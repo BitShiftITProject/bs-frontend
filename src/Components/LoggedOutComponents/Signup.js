@@ -128,6 +128,7 @@ function Signup(props) {
           <Grid item container spacing={1} direction='row' style={{ padding: 0 }}>
             <Grid item xs={6}>
               <TextField
+                inputProps={{ className: style.input }}
                 InputLabelProps={{
                   shrink: true
                 }}
@@ -148,6 +149,7 @@ function Signup(props) {
 
             <Grid item xs={6}>
               <TextField
+                inputProps={{ className: style.input }}
                 InputLabelProps={{
                   shrink: true
                 }}
@@ -167,6 +169,7 @@ function Signup(props) {
             </Grid>
           </Grid>
           <TextField
+            inputProps={{ className: style.input }}
             InputLabelProps={{
               shrink: true
             }}
@@ -184,6 +187,7 @@ function Signup(props) {
             onChange={handleChange}
           />
           <TextField
+            inputProps={{ className: style.input }}
             InputLabelProps={{
               shrink: true
             }}
@@ -202,6 +206,7 @@ function Signup(props) {
           />
 
           <TextField
+            inputProps={{ className: style.input }}
             InputLabelProps={{
               shrink: true
             }}
@@ -222,6 +227,7 @@ function Signup(props) {
           />
 
           <TextField
+            inputProps={{ className: style.input }}
             InputLabelProps={{
               shrink: true
             }}
@@ -242,7 +248,11 @@ function Signup(props) {
           />
 
           {/* The error message appears iff the state is signUpFailed */}
-          {state.signUpFailed && <Alert severity='error'>{state.errorMessage}</Alert>}
+          {state.signUpFailed && (
+            <Alert variant='filled' severity='error'>
+              {state.errorMessage}
+            </Alert>
+          )}
 
           {/* Loading sign up */}
           {state.loading && <Loading message=' Hold on while we save your data' />}

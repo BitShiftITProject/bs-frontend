@@ -47,6 +47,7 @@ function ForgotPassword(props) {
   const intl = useIntl()
 
   const { classes } = props
+
   const content = (
     <div className={classes.div}>
       <form onSubmit={(e) => handleSubmit(e)} className={classes.form}>
@@ -61,6 +62,7 @@ function ForgotPassword(props) {
         </Typography>
 
         <PaddedTextField
+          inputProps={{ className: style.input }}
           InputLabelProps={{
             shrink: true
           }}
@@ -79,6 +81,7 @@ function ForgotPassword(props) {
         <CursorTypography variant='button'>{intl.formatMessage({ id: 'or' })}</CursorTypography>
 
         <PaddedTextField
+          inputProps={{ className: style.input }}
           InputLabelProps={{
             shrink: true
           }}

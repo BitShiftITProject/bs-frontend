@@ -6,7 +6,7 @@ export default function Loading({ message }) {
   return (
     <Grid
       container
-      style={{ width: '100%' }}
+      style={{ width: '100%', paddingBottom: 5 }}
       direction='row'
       justify='center'
       alignItems='center'

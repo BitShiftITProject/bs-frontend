@@ -20,22 +20,35 @@ export default function LandingPage() {
         justify='center'
         alignItems='center'
       >
-        <Grid item>
+        <Grid item container direction='column' justify='center' alignItems='center'>
           <Typography variant='h2' component='h1'>
             create + share <EmojiHover />
           </Typography>
         </Grid>
-        <Grid item>
-          <Fab
-            size='medium'
-            color='secondary'
-            variant='extended'
-            onClick={() => {
-              history.push('/signup')
-            }}
-          >
-            {intl.formatMessage({ id: 'signUp' })}
-          </Fab>
+        <Grid item container spacing={2} direction='row' justify='center' alignItems='center'>
+          <Grid item>
+            <Fab
+              size='medium'
+              variant='extended'
+              onClick={() => {
+                history.push('/login')
+              }}
+            >
+              {intl.formatMessage({ id: 'login' })}
+            </Fab>
+          </Grid>
+          <Grid item>
+            <Fab
+              size='medium'
+              color='secondary'
+              variant='extended'
+              onClick={() => {
+                history.push('/signup')
+              }}
+            >
+              {intl.formatMessage({ id: 'signUp' })}
+            </Fab>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

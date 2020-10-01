@@ -29,6 +29,10 @@ export default {
     or: 'Or',
     resetPassword: 'Reset Password',
 
+    // Logged-in Appbar
+    toggleTheme: 'Toggle theme',
+    logout: 'Log out',
+
     // Editing
     saveChanges: 'Save Changes',
     cancel: 'Cancel',

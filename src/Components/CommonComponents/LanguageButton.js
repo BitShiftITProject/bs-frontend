@@ -13,10 +13,20 @@ const useStyles = makeStyles((theme) => ({
   fab: {
     background: 'none',
     border: 'none',
-    boxShadow: 'none'
+    boxShadow: 'none',
+    color: theme.palette.primary.contrastText,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.light
+    }
   },
   speedDialAction: {
-    color: 'inherit'
+    backgroundColor: theme.palette.secondary.light,
+    color: theme.palette.secondary.contrastText,
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.main
+    },
+    boxShadow:
+      '0px 3px 5px -1px rgba(0,0,0,0.5), 0px 6px 10px 0px rgba(0,0,0,0.2), 0px 1px 18px 0px rgba(0,0,0,0.2)'
   }
 }))
 
