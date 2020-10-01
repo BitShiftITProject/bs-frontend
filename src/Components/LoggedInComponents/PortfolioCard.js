@@ -7,7 +7,8 @@ import {
   CardActions,
   IconButton,
   Typography,
-  makeStyles
+  makeStyles,
+  Tooltip
 } from '@material-ui/core'
 
 import ShareIcon from '@material-ui/icons/Share'
@@ -57,7 +58,16 @@ const PortfolioCard = (props) => {
   /* -------------------------------------------------------------------------- */
   // Passed down from PortfolioList
 
-  const { portfolioId, title, description, viewPortfolio, editPortfolio, deletePortfolio } = props
+  const {
+    portfolioId,
+    title,
+    description,
+    index,
+    viewPortfolio,
+    editPortfolio,
+    sharePortfolio,
+    deletePortfolio
+  } = props
 
   const handleView = () => {
     viewPortfolio(portfolioId)
@@ -65,10 +75,6 @@ const PortfolioCard = (props) => {
 
   const handleEdit = () => {
     editPortfolio(portfolioId)
-  }
-
-  const handleDelete = () => {
-    deletePortfolio(portfolioId, title)
   }
 
   return (
@@ -100,12 +106,16 @@ const PortfolioCard = (props) => {
             </Button>
           </Grid>
           <Grid>
-            <IconButton>
-              <ShareIcon />
-            </IconButton>
-            <IconButton onClick={handleDelete}>
-              <DeleteOutlineIcon />
-            </IconButton>
+            <Tooltip title={intl.formatMessage({ id: 'share' })} placement='top'>
+              <IconButton onClick={(e) => sharePortfolio('share', portfolioId, title, index)}>
+                <ShareIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={intl.formatMessage({ id: 'delete' })} placement='top'>
+              <IconButton onClick={(e) => deletePortfolio('delete', portfolioId, title, index)}>
+                <DeleteOutlineIcon />
+              </IconButton>
+            </Tooltip>
           </Grid>
         </Grid>
       </CardActions>

@@ -38,6 +38,7 @@ export default function PortfolioList(props) {
   /* -------------------------------------------------------------------------- */
 
   const [portfolios, setPortfolios] = useState([])
+  const [user, setUser] = useState(null)
 
   // Since the second argument of useEffect is empty, that means it does not have
   // dependencies and will only run once, therefore functioning just like componentDidMount
@@ -56,6 +57,7 @@ export default function PortfolioList(props) {
 
     grabUser().then((user) => {
       if (user) {
+        setUser(user)
         getUserPortfolios(user.username)
           .then((response) => response.json())
           .then((portfolios) => setPortfolios(portfolios))
@@ -127,7 +129,11 @@ export default function PortfolioList(props) {
         </Grid>
 
         <DragDropContext onDragEnd={onDragEnd}>
-          <DraggablePortfolioList portfolios={portfolios} setPortfolios={setPortfolios} />
+          <DraggablePortfolioList
+            user={user}
+            portfolios={portfolios}
+            setPortfolios={setPortfolios}
+          />
         </DragDropContext>
       </Paper>
     </Grid>

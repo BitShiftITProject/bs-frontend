@@ -33,6 +33,9 @@ export default {
     save: 'Save',
     view: 'View',
     edit: 'Edit',
+    share: 'Share',
+    copy: 'Copy',
+    url: 'URL',
     errorText: 'An error occurred. Try again.',
 
     // Home
@@ -43,6 +46,7 @@ export default {
 
     addPortfolio: 'Add Portfolio',
     editPortfolio: 'Edit Portfolio',
+    sharePortfolio: 'Share Portfolio',
     deletePortfolio: 'Delete Portfolio',
     deletePortfolioPrompt: 'Are you sure you want to delete the portfolio {portfolio}?',
     addPage: 'Add Page',

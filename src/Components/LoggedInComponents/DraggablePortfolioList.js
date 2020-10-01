@@ -7,15 +7,19 @@ import {
   DialogTitle,
   Grid,
   withStyles,
-  makeStyles
+  makeStyles,
+  TextField,
+  IconButton,
+  Tooltip
 } from '@material-ui/core'
+import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined'
 import { useHistory } from 'react-router-dom'
 // import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
 import transitions from '../../Styles/transitions'
 import PortfolioCard from './PortfolioCard'
-import CustomDialog from './CustomDialog'
+import CustomDialog from '../CommonComponents/CustomDialog'
 import { getUser, getUserPortfolios, deletePortfolio, logout } from '../../Backend/Fetch'
 import { useIntl } from 'react-intl'
 
@@ -25,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
+const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
   /* -------------------------------------------------------------------------- */
@@ -89,15 +93,23 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
   }
 
   /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
+
+  const classes = useStyles()
+
+  /* -------------------------------------------------------------------------- */
   /*                                   Dialog                                   */
   /* -------------------------------------------------------------------------- */
 
   const [open, setOpen] = useState(false)
-  const [toBeDeleted, setToBeDeleted] = useState({ id: '', title: '' })
+  const [dialogType, setDialogType] = useState('delete')
+  const [clickedPortfolio, setClickedPortfolio] = useState({ id: '', title: '', index: 0 })
   const intl = useIntl()
 
-  function handleClick(id, title) {
-    setToBeDeleted({ id, title })
+  function handleClick(type, id, title, index) {
+    setClickedPortfolio({ id, title, index })
+    setDialogType(type)
     setOpen(true)
   }
 
@@ -105,42 +117,77 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
     setOpen(false)
   }
 
-  const deleteContent = (
-    <form onSubmit={() => handleDelete(toBeDeleted.id)}>
-      <DialogTitle id='form-dialog-title'>
-        {intl.formatMessage({ id: 'deletePortfolio' })}
-      </DialogTitle>
-      <DialogContent>
-        <DialogContentText id='alert-dialog-description'>
-          {intl.formatMessage(
-            { id: 'deletePortfolioPrompt' },
-            { portfolio: <span style={{ fontWeight: 'bold' }}>{toBeDeleted.title}</span> }
-          )}
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} variant='outlined'>
-          {intl.formatMessage({ id: 'cancel' })}
-        </Button>
-        <Button onClick={() => handleDelete(toBeDeleted.id)} variant='contained'>
-          {intl.formatMessage({ id: 'delete' })}
-        </Button>
-      </DialogActions>
-    </form>
-  )
+  function copyToClipboard(e) {
+    navigator.clipboard.writeText(
+      user ? `http://bs-frontend.herokuapp.com/${user.username}/${clickedPortfolio.index}/0` : ''
+    )
+  }
 
-  const deleteDialog = <CustomDialog open={open} setOpen={setOpen} content={deleteContent} />
+  const dialogContent = {
+    share: (
+      <div>
+        <DialogTitle id='form-dialog-title'>
+          {intl.formatMessage({ id: 'sharePortfolio' })}
+        </DialogTitle>
+        <DialogContent>
+          <Grid container direction='row' justify='center' alignItems='center' spacing={1}>
+            <Grid item>
+              <TextField
+                onFocus={(e) => e.target.select()}
+                variant='outlined'
+                label={intl.formatMessage({ id: 'url' })}
+                defaultValue={
+                  user
+                    ? `http://bs-frontend.herokuapp.com/${user.username}/${clickedPortfolio.index}/0`
+                    : ''
+                }
+                readOnly
+                className={classes.urlField}
+              />
+            </Grid>
+            <Grid item>
+              <Tooltip title={intl.formatMessage({ id: 'copy' })} placement='top'>
+                <IconButton onClick={copyToClipboard}>
+                  <FilterNoneOutlinedIcon />
+                </IconButton>
+              </Tooltip>
+            </Grid>
+          </Grid>
+        </DialogContent>
+      </div>
+    ),
+    delete: (
+      <form onSubmit={() => handleDelete(clickedPortfolio.id)}>
+        <DialogTitle id='form-dialog-title'>
+          {intl.formatMessage({ id: 'deletePortfolio' })}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            {intl.formatMessage(
+              { id: 'deletePortfolioPrompt' },
+              { portfolio: <span style={{ fontWeight: 'bold' }}>{clickedPortfolio.title}</span> }
+            )}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} variant='outlined'>
+            {intl.formatMessage({ id: 'cancel' })}
+          </Button>
+          <Button onClick={() => handleDelete(clickedPortfolio.id)} variant='contained'>
+            {intl.formatMessage({ id: 'delete' })}
+          </Button>
+        </DialogActions>
+      </form>
+    )
+  }
 
-  /* -------------------------------------------------------------------------- */
-  /*                                   Styling                                  */
-  /* -------------------------------------------------------------------------- */
-
-  const classes = useStyles()
+  const dialog = <CustomDialog open={open} setOpen={setOpen} content={dialogContent[dialogType]} />
 
   /* -------------------------------------------------------------------------- */
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
+  // !!!!!!! DO NOT DELETE !!!!!!
   // const draggable = (
   //   <Grid item>
   //     <Droppable droppableId='portfoliosDroppable'>
@@ -197,9 +244,11 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
                 <PortfolioCard
                   portfolioId={portfolio.id}
                   title={portfolio.title}
+                  index={idx}
                   description={portfolio.description}
                   viewPortfolio={handleView}
                   editPortfolio={handleEdit}
+                  sharePortfolio={handleClick}
                   deletePortfolio={handleClick}
                 />
               </Grid>
@@ -207,7 +256,7 @@ const DraggablePortfolioList = ({ portfolios, setPortfolios }) => {
           ))}
         </TransitionGroup>
       </Grid>
-      {deleteDialog}
+      {dialog}
     </Grid>
   )
 }

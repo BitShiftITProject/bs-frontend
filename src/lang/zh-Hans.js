@@ -32,6 +32,9 @@ export default {
     save: '保存',
     view: '查看',
     edit: '编辑',
+    share: 'Share',
+    copy: 'Copy',
+    url: '链接',
     errorText: '出现错误。再试一次。',
 
     // Home
@@ -44,6 +47,7 @@ export default {
 
     addPortfolio: '添加博客',
     editPortfolio: '编辑博客',
+    sharePortfolio: 'Share Portfolio',
     deletePortfolio: '删除博客',
     deletePortfolioPrompt: 'Are you sure you want to delete the portfolio {portfolio}?',
     addPage: '添加网页',

@@ -5,7 +5,7 @@ import {
   //PaddedFormGrid,
   CursorTypography
 } from '../../Styles/loggedInStyles'
-import CustomDialog from './CustomDialog'
+import CustomDialog from '../CommonComponents/CustomDialog'
 
 import {
   Grid,
