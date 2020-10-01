@@ -18,10 +18,12 @@ function MapSection (section, editting) {
     }
 }
 
-export const GetSectionJSX = (section, editting) => {
+const GetSectionJSX = (section, editting) => {
     return (
         <div id="section">
             {MapSection(section, editting)}
         </div>
     )
 }
+
+export default GetSectionJSX;

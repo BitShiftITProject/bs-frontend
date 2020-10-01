@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { getUserPortfolios, getPortfolioPages } from '../../Backend/Fetch'
 import PublicSidebar from './PublicSidebar'
+import GetSectionJSX from '../../Sections/SectionsMap'
 
 class PublicPortfolio extends Component {
   // Store the details of a portfolio so that we can use it later
@@ -52,33 +53,25 @@ class PublicPortfolio extends Component {
   }
 
   render() {
+    
+    
 
     // If the portfolioDetails does not equal null then we have found one
     if (this.state.portfolioPages) {
-      return (
-        <PublicSidebar pages={this.state.portfolioPages} content={
-            <div id='portfolio_content'>
-                {/*
-                * PORTFOLIO TITLE
-                */}
-                <h1>{this.state.portfolioPages[this.state.pageIndex].title}</h1>
-
-                
-
-                <div></div>
-
-                {/*
-                * PORTFOLIO PAGE CONTENT
-                * // TODO: Show content according to selected page
-                * // can use setPageIndex
-                */}
-                {this.state.portfolioPages && (
-                    <p>{JSON.stringify(this.state.portfolioPages[this.state.pageIndex])}</p>
-                )}
-            </div>
-        }/>
+        const sectionsJSX = []
+        if(this.state.portfolioPages[this.state.pageIndex].content.sections){
+            this.state.portfolioPages[this.state.pageIndex].content.sections.forEach(section => sectionsJSX.push(GetSectionJSX(section)));
+        }
+        const pageContent = ((this.state.portfolioPages[this.state.pageIndex].content.sections) ? sectionsJSX : <p>Nothing here sorry</p>)
         
-      )
+        return (
+            <PublicSidebar pages={this.state.portfolioPages} content={
+                <div id='sections'>
+                    {pageContent}
+                </div>
+            }/>
+            
+        )
     }
     // If portfolioDetails is null we are still fetching the portfolio
     // We don't have to be worried about getting stuck since if getPortfolio() returns null
