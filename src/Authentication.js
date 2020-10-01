@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import LandingPage from './Components/LoggedOutComponents/LandingPage'
+import { Box } from '@material-ui/core'
+
 import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
@@ -13,6 +14,7 @@ import SettingsPage from './Components/LoggedInComponents/SettingsPage'
 import HelpPage from './Components/LoggedInComponents/HelpPage'
 import Sidebar from './Components/LoggedInComponents/Sidebar'
 import { getUser, logout } from './Backend/Fetch'
+import Loading from './Components/CommonComponents/Loading'
 
 async function loggedIn() {
   // Get access token from session storage
@@ -52,7 +54,11 @@ class Authentication extends Component {
   render() {
     if (this.state.loggedIn == null) {
       // Route for loading page while getting if the user is logged in
-      return <p>Loading</p>
+      return (
+        <Box style={{ height: '110vh' }}>
+          <Loading message='Loading...' vertical />
+        </Box>
+      )
     } else if (this.state.loggedIn === true) {
       // Route for pages accessible when logged in
       console.log('Logged In!')

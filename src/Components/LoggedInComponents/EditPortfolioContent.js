@@ -28,6 +28,7 @@ import CloseIcon from '@material-ui/icons/Close'
 
 import {
   patchPage,
+  getPortfolio,
   patchPortfolio,
   postPageToPortfolio,
   deletePage,
@@ -78,7 +79,11 @@ export default function EditPortfolioContent(props) {
 
   function handlePageEvent(name, value) {
     setDialogContent({ type: name, item: value })
-    if (name !== 'addPage') setPageTitle(pages[value].title)
+    if (name === 'addPage') {
+      setPageTitle('')
+    } else {
+      setPageTitle(pages[value].title)
+    }
     setOpen(true)
   }
 
@@ -88,6 +93,7 @@ export default function EditPortfolioContent(props) {
   function handlePortfolioEdit(e) {
     e.preventDefault()
     patchPortfolio(portfolio.id, { title: portfolio.title, description: portfolio.description })
+    setPortfolio(getPortfolio(portfolio.id))
     setOpen(false)
   }
 
