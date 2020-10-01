@@ -216,6 +216,7 @@ export default function EditProfilePage() {
             <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
+                  inputProps={{ className: classes.input }}
                   className={classes.formLabel}
                   InputLabelProps={{
                     shrink: true
@@ -232,6 +233,7 @@ export default function EditProfilePage() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
+                  inputProps={{ className: classes.input }}
                   className={classes.formLabel}
                   InputLabelProps={{
                     shrink: true
@@ -248,6 +250,7 @@ export default function EditProfilePage() {
             <PaddedFormGrid item>
               <Grid item xs={12} className={classes.padded}>
                 <TextField
+                  inputProps={{ className: classes.input }}
                   className={classes.formLabel}
                   InputLabelProps={{
                     shrink: true
@@ -264,6 +267,7 @@ export default function EditProfilePage() {
             <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
+                  inputProps={{ className: classes.input }}
                   className={classes.formLabel}
                   InputLabelProps={{
                     shrink: true
@@ -279,6 +283,7 @@ export default function EditProfilePage() {
               <Grid item container spacing={0} xs={12} md={6} justify='space-between'>
                 <Grid item xs={7}>
                   <TextField
+                    inputProps={{ className: classes.input }}
                     className={classes.formLabel}
                     InputLabelProps={{
                       shrink: true
@@ -293,6 +298,7 @@ export default function EditProfilePage() {
                 </Grid>
                 <Grid item xs={2}>
                   <TextField
+                    inputProps={{ className: classes.input }}
                     className={classes.formLabel}
                     InputLabelProps={{
                       shrink: true
@@ -307,6 +313,7 @@ export default function EditProfilePage() {
                 </Grid>
                 <Grid item xs={2}>
                   <TextField
+                    inputProps={{ className: classes.input }}
                     className={classes.formLabel}
                     InputLabelProps={{
                       shrink: true
@@ -324,6 +331,7 @@ export default function EditProfilePage() {
             <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
+                  inputProps={{ className: classes.input }}
                   className={classes.formLabel}
                   InputLabelProps={{
                     shrink: true
@@ -338,6 +346,7 @@ export default function EditProfilePage() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
+                  inputProps={{ className: classes.input }}
                   className={classes.formLabel}
                   InputLabelProps={{
                     shrink: true
@@ -369,6 +378,7 @@ export default function EditProfilePage() {
             <PaddedFormGrid item container spacing={2}>
               <Grid item xs={12} md={6}>
                 <TextField
+                  inputProps={{ className: classes.input }}
                   className={classes.formLabel}
                   InputLabelProps={{
                     shrink: true
@@ -383,6 +393,7 @@ export default function EditProfilePage() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
+                  inputProps={{ className: classes.input }}
                   className={classes.formLabel}
                   InputLabelProps={{
                     shrink: true
@@ -399,6 +410,7 @@ export default function EditProfilePage() {
             <PaddedFormGrid item>
               <Grid item className={classes.padded}>
                 <TextField
+                  inputProps={{ className: classes.input }}
                   className={classes.formLabel}
                   InputLabelProps={{
                     shrink: true
@@ -423,6 +435,7 @@ export default function EditProfilePage() {
             <PaddedFormGrid item>
               <Grid item className={classes.padded}>
                 <TextField
+                  inputProps={{ className: classes.input }}
                   className={classes.formLabel}
                   InputLabelProps={{
                     shrink: true
@@ -449,6 +462,7 @@ export default function EditProfilePage() {
               <PaddedFormGrid item>
                 <Grid item className={classes.padded}>
                   <TextField
+                    inputProps={{ className: classes.input }}
                     className={classes.formLabel}
                     InputLabelProps={{
                       shrink: true
@@ -522,6 +536,7 @@ export default function EditProfilePage() {
               variant='extended'
               aria-label={intl.formatMessage({ id: 'saveChanges' })}
               onClick={handleSubmit}
+              color='secondary'
             >
               {intl.formatMessage({ id: 'saveChanges' })}
             </Fab>

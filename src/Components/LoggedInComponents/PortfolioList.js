@@ -115,10 +115,9 @@ export default function PortfolioList(props) {
       <Paper className={fixedHeightPaper}>
         <Grid item className={floatingTopContainer}>
           <Fab
-            className={classes.addPortfolioFab}
-            color='primary'
+            color='secondary'
             variant='extended'
-            aria-label='add portfolio'
+            aria-label={intl.formatMessage({ id: 'addPortfolio' })}
             onClick={handleAdd}
           >
             {intl.formatMessage({ id: 'addPortfolio' })}

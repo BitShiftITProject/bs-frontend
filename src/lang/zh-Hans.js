@@ -1,5 +1,9 @@
 export default {
   'zh-Hans': {
+    // Landing
+    product: '产品',
+    about: '关于',
+
     // User Details
     email: '邮箱地址',
     username: '用户名',
@@ -23,6 +27,10 @@ export default {
     forgotPassword: '忘记密码',
     or: '或',
     resetPassword: '重置密码',
+
+    // Logged-in Appbar
+    toggleTheme: 'Toggle theme',
+    logout: '登出',
 
     // Editing
     saveChanges: '保存更改',

@@ -11,7 +11,8 @@ import {
   Divider,
   IconButton,
   Container,
-  makeStyles
+  makeStyles,
+  Tooltip
 } from '@material-ui/core'
 
 import MenuIcon from '@material-ui/icons/Menu'
@@ -72,6 +73,15 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen
     })
+  },
+  appBarIcon: {
+    height: 40,
+    width: 40,
+    marginLeft: theme.spacing(1),
+    color: theme.palette.primary.contrastText,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.light
+    }
   },
   menuButton: {
     marginRight: 36
@@ -178,37 +188,42 @@ export default function Sidebar(props) {
         ></CursorTypography>
         <DarkAndLightModeButton />
 
-        <IconButton
-          onClick={() => {
-            history.push('/help')
-          }}
-          color='inherit'
-        >
-          <HelpOutlineIcon />
-        </IconButton>
-        <IconButton
-          onClick={() => {
-            history.push('/settings')
-          }}
-          color='inherit'
-        >
-          <SettingsIcon />
-        </IconButton>
-        {/* LOGOUT: Temporarily by removing access token and portfolioId */}
-        {/*
-        // TODO: Properly log out (maybe delete access token from cognito?)
-        */}
-        <IconButton
-          onClick={() => {
-            sessionStorage.removeItem('accessToken')
-            localStorage.removeItem('accessToken')
-            window.sessionStorage.removeItem('portfolioId')
-            window.location.href = '/login'
-          }}
-          color='inherit'
-        >
-          <PowerSettingsNewIcon />
-        </IconButton>
+        <Tooltip title={intl.formatMessage({ id: 'help' })} placement='bottom'>
+          <IconButton
+            onClick={() => {
+              history.push('/help')
+            }}
+            color='inherit'
+            className={classes.appBarIcon}
+          >
+            <HelpOutlineIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={intl.formatMessage({ id: 'settings' })} placement='bottom'>
+          <IconButton
+            onClick={() => {
+              history.push('/settings')
+            }}
+            color='inherit'
+            className={classes.appBarIcon}
+          >
+            <SettingsIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={intl.formatMessage({ id: 'logout' })} placement='bottom'>
+          <IconButton
+            onClick={() => {
+              sessionStorage.removeItem('accessToken')
+              localStorage.removeItem('accessToken')
+              window.sessionStorage.removeItem('portfolioId')
+              window.location.href = '/login'
+            }}
+            color='inherit'
+            className={classes.appBarIcon}
+          >
+            <PowerSettingsNewIcon />
+          </IconButton>
+        </Tooltip>
       </Toolbar>
     </AppBar>
   )

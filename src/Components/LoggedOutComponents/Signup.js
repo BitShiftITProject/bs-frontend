@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
-import Loading from '../CommonComponents/Loading'
 
-import { Grid, TextField, Button, Avatar, withStyles, Fab } from '@material-ui/core'
+import { useHistory } from 'react-router-dom'
+import { useIntl } from 'react-intl'
+
+import Alert from '@material-ui/lab/Alert'
+import { TextField, Button, Avatar, withStyles, Fab, Grid, Paper } from '@material-ui/core'
+import Loading from '../CommonComponents/Loading'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
-import { useHistory } from 'react-router-dom'
-import { useIntl } from 'react-intl'
-import Alert from '@material-ui/lab/Alert'
 import { signupCheck } from '../../Backend/Fetch'
 
 const styles = {
@@ -123,42 +125,51 @@ function Signup(props) {
           {intl.formatMessage({ id: 'signUp' })}
         </CursorTypography>
         <Grid container spacing={1} direction='column' justify='center' alignItems='center'>
-          <TextField
-            InputLabelProps={{
-              shrink: true
-            }}
-            className={classes.formLabel}
-            id='signup__first_name'
-            type='text'
-            placeholder={intl.formatMessage({ id: 'firstName' })}
-            label={intl.formatMessage({ id: 'firstName' })}
-            name='firstName'
-            value={state.firstName}
-            onChange={handleChange}
-            required
-            variant='outlined'
-            margin='normal'
-            fullWidth
-          />
+          <Grid item container spacing={1} direction='row' style={{ padding: 0 }}>
+            <Grid item xs={6}>
+              <TextField
+                inputProps={{ className: style.input }}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                className={classes.formLabel}
+                id='signup__first_name'
+                type='text'
+                placeholder={intl.formatMessage({ id: 'firstName' })}
+                label={intl.formatMessage({ id: 'firstName' })}
+                name='firstName'
+                value={state.firstName}
+                onChange={handleChange}
+                required
+                variant='outlined'
+                margin='normal'
+                fullWidth
+              />
+            </Grid>
 
+            <Grid item xs={6}>
+              <TextField
+                inputProps={{ className: style.input }}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                className={classes.formLabel}
+                id='signup__last_name'
+                type='text'
+                placeholder={intl.formatMessage({ id: 'lastName' })}
+                label={intl.formatMessage({ id: 'lastName' })}
+                name='lastName'
+                value={state.lastName}
+                onChange={handleChange}
+                required
+                variant='outlined'
+                margin='normal'
+                fullWidth
+              />
+            </Grid>
+          </Grid>
           <TextField
-            InputLabelProps={{
-              shrink: true
-            }}
-            className={classes.formLabel}
-            id='signup__last_name'
-            type='text'
-            placeholder={intl.formatMessage({ id: 'lastName' })}
-            label={intl.formatMessage({ id: 'lastName' })}
-            name='lastName'
-            value={state.lastName}
-            onChange={handleChange}
-            required
-            variant='outlined'
-            margin='normal'
-            fullWidth
-          />
-          <TextField
+            inputProps={{ className: style.input }}
             InputLabelProps={{
               shrink: true
             }}
@@ -176,6 +187,7 @@ function Signup(props) {
             onChange={handleChange}
           />
           <TextField
+            inputProps={{ className: style.input }}
             InputLabelProps={{
               shrink: true
             }}
@@ -194,6 +206,7 @@ function Signup(props) {
           />
 
           <TextField
+            inputProps={{ className: style.input }}
             InputLabelProps={{
               shrink: true
             }}
@@ -214,6 +227,7 @@ function Signup(props) {
           />
 
           <TextField
+            inputProps={{ className: style.input }}
             InputLabelProps={{
               shrink: true
             }}
@@ -233,6 +247,16 @@ function Signup(props) {
             onChange={handleChange}
           />
 
+          {/* The error message appears iff the state is signUpFailed */}
+          {state.signUpFailed && (
+            <Alert variant='filled' severity='error'>
+              {state.errorMessage}
+            </Alert>
+          )}
+
+          {/* Loading sign up */}
+          {state.loading && <Loading message=' Hold on while we save your data' />}
+
           <Grid
             className={classes.span}
             item
@@ -241,41 +265,42 @@ function Signup(props) {
             justify='center'
             alignItems='center'
           >
-            <Fab
-              onClick={() => history.push('/login')}
-              color='primary'
-              aria-label='login'
-              className={classes.fab}
-            >
-              <ArrowBackIcon />
-            </Fab>
-
-            {/* The error message appears iff the state is signUpFailed */}
-            {state.signUpFailed ? (
+            {!state.loading && (
               <div>
-                <Alert severity='error'>{state.errorMessage}</Alert>
+                <Fab
+                  onClick={() => history.goBack()}
+                  color='primary'
+                  aria-label='login'
+                  className={classes.fab}
+                >
+                  <ArrowBackIcon />
+                </Fab>
+                <Button className='signup_button' type='submit' variant='contained' color='primary'>
+                  {intl.formatMessage({ id: 'signUp' })}
+                </Button>
               </div>
-            ) : (
-              <div></div>
             )}
-
-            {/* Loading sign up */}
-            {state.loading ? (
-              <div>{<Loading message=' Hold on while we save your data' />}</div>
-            ) : (
-              <div></div>
-            )}
-
-            <Button className='signup_button' type='submit' variant='contained' color='primary'>
-              {intl.formatMessage({ id: 'signUp' })}
-            </Button>
           </Grid>
         </Grid>
       </form>
     </div>
   )
 
-  return <LandingContainer content={content} />
+  return (
+    <LandingContainer
+      content={
+        <Grid
+          style={{ height: '100%', width: '100%' }}
+          container
+          direction='column'
+          justify='center'
+          alignItems='center'
+        >
+          <Paper className={style.paper}>{content}</Paper>
+        </Grid>
+      }
+    />
+  )
 }
 
 export default withStyles(styles)(Signup)

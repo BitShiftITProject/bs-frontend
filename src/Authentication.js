@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
+import LandingPage from './Components/LoggedOutComponents/LandingPage'
 import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
@@ -87,9 +88,8 @@ class Authentication extends Component {
           <Route exact path='/forgotpassword' component={ForgotPassword} />
           <Route exact path='/publicfailed' component={PublicPortfolioFailed} />
           <Route exact path='/public/:username/:portfolio/:page' component={PublicPortfolio} />
-          <Redirect from='/public/:username' to='/public/:username/0/0' />
-
-          <Redirect to='/login' />
+          <Route exact path='/' component={LandingPage} />
+          <Redirect to='/' />
         </Switch>
       )
     }
