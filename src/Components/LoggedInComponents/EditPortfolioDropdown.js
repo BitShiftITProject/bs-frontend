@@ -1,13 +1,8 @@
 import React from 'react'
-// import { withStyles, styled } from '@material-ui/core/styles'
 
 import {
-  // TextField,
   Button,
-  // Typography,
-  // Fab,
   Grid,
-  // Container,
   ClickAwayListener,
   Grow,
   Paper,
@@ -39,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function EditPortfolioDropdown() {
+export default function EditPortfolioDropdown({ setEditMode }) {
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
   const anchorRef = React.useRef(null)
@@ -50,6 +45,7 @@ export default function EditPortfolioDropdown() {
 
   const handleClose = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      console.log("When you close the menu ")
       return
     }
 
@@ -104,10 +100,10 @@ export default function EditPortfolioDropdown() {
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList autoFocusItem={open} id='menu-list-grow' onKeyDown={handleListKeyDown}>
-                    <MenuItem className={classes.menuItem} onClick={handleClose}>
+                    <MenuItem className={classes.menuItem} onClick={() => { setEditMode("styles") }}>
                       <span>Style</span>
                     </MenuItem>
-                    <MenuItem className={classes.menuItem} onClick={handleClose}>
+                    <MenuItem className={classes.menuItem} onClick={() => { setEditMode("content") }}>
                       <span>Content</span>
                     </MenuItem>
                   </MenuList>
