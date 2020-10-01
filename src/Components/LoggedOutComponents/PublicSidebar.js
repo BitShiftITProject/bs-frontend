@@ -1,6 +1,6 @@
 import React from 'react'
 import {Drawer, List, ListItem, ListItemText, makeStyles} from '@material-ui/core'
-import { useHistory} from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 
 const drawerWidth = 240;
 
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
+    //backgroundColor: theme.palette.background.default,
     padding: theme.spacing(3),
   },
 }));
