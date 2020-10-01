@@ -1,5 +1,9 @@
 export default {
   'zh-Hant': {
+    // Landing
+    product: '產品',
+    about: '關於',
+
     // User Details
     email: '郵箱地址',
     username: '用戶名',
@@ -23,6 +27,10 @@ export default {
     forgotPassword: '忘記密碼',
     or: '或',
     resetPassword: '重置密碼',
+
+    // Logged-in Appbar
+    toggleTheme: 'Toggle theme',
+    logout: '登出',
 
     // Editing
     saveChanges: '保存更改',

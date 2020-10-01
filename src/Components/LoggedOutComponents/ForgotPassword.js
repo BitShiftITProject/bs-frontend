@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { withStyles, styled } from '@material-ui/core/styles'
 
-import { TextField, Button, Fab, Typography } from '@material-ui/core'
-import LandingContainer from './LandingContainer'
+import { TextField, Button, Fab, Typography, Paper, Grid } from '@material-ui/core'
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
+import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { useIntl } from 'react-intl'
@@ -47,6 +47,7 @@ function ForgotPassword(props) {
   const intl = useIntl()
 
   const { classes } = props
+
   const content = (
     <div className={classes.div}>
       <form onSubmit={(e) => handleSubmit(e)} className={classes.form}>
@@ -61,6 +62,7 @@ function ForgotPassword(props) {
         </Typography>
 
         <PaddedTextField
+          inputProps={{ className: style.input }}
           InputLabelProps={{
             shrink: true
           }}
@@ -79,6 +81,7 @@ function ForgotPassword(props) {
         <CursorTypography variant='button'>{intl.formatMessage({ id: 'or' })}</CursorTypography>
 
         <PaddedTextField
+          inputProps={{ className: style.input }}
           InputLabelProps={{
             shrink: true
           }}
@@ -116,7 +119,21 @@ function ForgotPassword(props) {
     </div>
   )
 
-  return <LandingContainer content={content} />
+  return (
+    <LandingContainer
+      content={
+        <Grid
+          style={{ height: '100%', width: '100%' }}
+          container
+          direction='column'
+          justify='center'
+          alignItems='center'
+        >
+          <Paper className={style.paper}>{content}</Paper>
+        </Grid>
+      }
+    />
+  )
 }
 
 export default withStyles(styles)(ForgotPassword)

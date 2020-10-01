@@ -1,37 +1,67 @@
 import React from 'react'
-
-import { CssBaseline, Paper, Grid, Box } from '@material-ui/core'
+import clsx from 'clsx'
+import { useIntl } from 'react-intl'
+import { Grid, Typography } from '@material-ui/core'
+import { NavLink, useHistory } from 'react-router-dom'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
+import LanguageButton from '../CommonComponents/LanguageButton'
 import DarkAndLightModeButton from '../CommonComponents/DarkAndLightModeButton'
 
 export default function LandingContainer(props) {
   const classes = loggedOutStyles()
+  const history = useHistory()
+  const intl = useIntl()
+
   // Placeholder variable for the component to be rendered (i.e. Login, Signup,
   // ForgotPassword)
   const { content } = props
 
   return (
-    <div className={classes.root} style={{ flexDirection: 'column' }}>
-      <CssBaseline />
-      <Box
-        display={{ xs: 'none', sm: 'flex' }}
-        style={{
-          width: '100%',
-          justifyContent: 'flex-end',
-          alignItems: 'center'
-        }}
-      >
-        <DarkAndLightModeButton />
-      </Box>
+    <Grid
+      container
+      spacing={0}
+      direction='column'
+      justify='flex-start'
+      alignItems='center'
+      className={classes.root}
+    >
       <Grid
-        style={{ height: '100%', width: '100%' }}
+        item
+        xs={1}
         container
-        direction='column'
-        justify='center'
-        alignItems='center'
+        direction='row'
+        justify='space-between'
+        className={classes.appBar}
       >
-        <Paper className={classes.paper}>{content}</Paper>
+        <div
+          className={classes.appBarTitle}
+          onClick={() => {
+            history.push('/')
+          }}
+        >
+          <Typography variant='h5' component='h1'>
+            bitshift
+          </Typography>
+        </div>
+        <div className={classes.appBarItems}>
+          <NavLink exact to='/' className='normal'>
+            <span>{intl.formatMessage({ id: 'home' })}</span>
+          </NavLink>
+          <NavLink exact to='/login' className='special'>
+            <span>{intl.formatMessage({ id: 'login' })}</span>
+          </NavLink>
+          <NavLink exact to='/signup' className='special'>
+            <span>{intl.formatMessage({ id: 'signUp' })}</span>
+          </NavLink>
+          <div className={clsx(classes.appBarItems, classes.appBarIcons)}>
+            <DarkAndLightModeButton />
+            <LanguageButton />
+          </div>
+        </div>
       </Grid>
-    </div>
+      <Grid item xs={11} container>
+        {content}
+      </Grid>
+    </Grid>
   )
 }

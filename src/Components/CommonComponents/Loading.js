@@ -1,12 +1,23 @@
 import React from 'react'
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from '@material-ui/core/CircularProgress'
+import { Grid } from '@material-ui/core'
 
 export default function Loading({ message }) {
-    return (
-        <div>
-            {/* need to make sure that the circular progress is indented in the middle of message  */}
-            <CircularProgress color="secondary" />
-            <p> {message} </p>
-        </div >
-    )
+  return (
+    <Grid
+      container
+      style={{ width: '100%', paddingBottom: 5 }}
+      direction='row'
+      justify='center'
+      alignItems='center'
+      spacing={2}
+    >
+      <Grid item>
+        <CircularProgress color='secondary' />
+      </Grid>
+      <Grid item>
+        <p>{message}</p>
+      </Grid>
+    </Grid>
+  )
 }

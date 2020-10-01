@@ -9,16 +9,18 @@ import {
   Grid,
   Avatar,
   styled,
-  withStyles
+  withStyles,
+  Paper
 } from '@material-ui/core'
 
 import { Link } from 'react-router-dom'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import Alert from '@material-ui/lab/Alert'
+import { useIntl } from 'react-intl'
+
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
-import Alert from '@material-ui/lab/Alert'
-import { useIntl } from 'react-intl'
 import { authenticate } from '../../Backend/Fetch'
 
 const styles = {
@@ -73,7 +75,6 @@ function Login(props) {
       ...st,
       loading: !st.loading
     }))
-
   }
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
@@ -87,10 +88,11 @@ function Login(props) {
     setState((st) => ({ ...st, rememberMe: !st.rememberMe }))
   }
 
-
-
   async function handleSubmit(e) {
     e.preventDefault()
+
+    setState((st) => ({ ...st, loginFailed: false, errorMessage: '' }))
+
     const loginDetails = {
       Email: state.email,
       Password: state.password
@@ -121,7 +123,6 @@ function Login(props) {
       }))
     }
     changeLoading()
-
   }
 
   /* -------------------------------------------------------------------------- */
@@ -145,6 +146,7 @@ function Login(props) {
           {intl.formatMessage({ id: 'login' })}
         </CursorTypography>
         <PaddedTextField
+          inputProps={{ className: style.input }}
           InputLabelProps={{
             shrink: true
           }}
@@ -161,6 +163,7 @@ function Login(props) {
           onChange={handleChange}
         />
         <PaddedTextField
+          inputProps={{ className: style.input }}
           InputLabelProps={{
             shrink: true
           }}
@@ -178,22 +181,16 @@ function Login(props) {
         />
 
         {/* The error message appears iff the state is loginFailed */}
-        {state.loginFailed ? (
-          <div>
-            <Alert severity='error'>{state.errorMessage}</Alert>
+        {state.loginFailed && (
+          <div style={{ paddingBottom: 5 }}>
+            <Alert variant='filled' severity='error'>
+              {state.errorMessage}
+            </Alert>
           </div>
-        ) : (
-            <div></div>
-          )}
+        )}
 
         {/* Loading message*/}
-        {state.loading ? (
-          <div>
-            {<Loading message="Authenticating log in" />}
-          </div>
-        ) : (
-            <div></div>
-          )}
+        {state.loading && <Loading message='Authenticating log in' />}
 
         <Grid container justify='space-between'>
           <Grid item xs={7} md={5}>
@@ -233,7 +230,21 @@ function Login(props) {
       </form>
     </div>
   )
-  return <LandingContainer content={content} />
+  return (
+    <LandingContainer
+      content={
+        <Grid
+          style={{ height: '100%', width: '100%' }}
+          container
+          direction='column'
+          justify='center'
+          alignItems='center'
+        >
+          <Paper className={style.paper}>{content}</Paper>
+        </Grid>
+      }
+    />
+  )
 }
 
 export default withStyles(styles)(Login)

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
+import LandingPage from './Components/LoggedOutComponents/LandingPage'
 import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'

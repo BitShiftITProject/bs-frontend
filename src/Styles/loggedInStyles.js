@@ -118,6 +118,12 @@ const loggedInStyles = makeStyles((theme) => ({
     background: 'none',
     boxShadow: 'none',
     visibility: 'hidden'
+  },
+  input: {
+    '&.MuiOutlinedInput-input:-webkit-autofill': {
+      WebkitBoxShadow: '0 0 0 100px rgba(0,0,0,0.2) inset',
+      WebkitTextFillColor: theme.palette.secondary.contrastText
+    }
   }
 }))
 
