@@ -1,39 +1,50 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import {
-    Grid,
-    Paper,
-    Fab,
-    Divider,
-    List,
-    TextField,
-    Button,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle
-  } from '@material-ui/core'
+  TextField,
+  Typography
+  //   Grid,
+  //   Paper,
+  //   Fab,
+  //   Divider,
+  //   List,
+  //   Button,
+  //   DialogActions,
+  //   DialogContent,
+  //   DialogContentText,
+  //   DialogTitle
+} from '@material-ui/core'
 
-export const Paragraph = (editting, content) => {
-    if(!editting){
-        return (
-            <p>{content}</p>
-        );
-    }else{
-        return (
-            <TextField value={content}/>
-        );
-    }
+export const Paragraph = ({ editing, content }) => {
+  return <div>{editing ? <TextField value={content} /> : <p>{content}</p>}</div>
 }
 
-export const Title = (editting, content) => {
-    if(!editting){
-        return (
-            <h1>{content}</h1>
-        );
-    }else{
-        return (
-            <TextField value={content}/>
-        );
-    }
+export const Title = ({ editing, content }) => {
+  return (
+    <div>
+      {editing ? (
+        <TextField value={content} />
+      ) : (
+        <Typography component='h1' variant='h3'>
+          {content}
+        </Typography>
+      )}
+    </div>
+  )
 }
+
+export const Subtitle = ({ editing, content }) => {
+  return (
+    <div>
+      {editing ? (
+        <TextField value={content} />
+      ) : (
+        <Typography component='h1' variant='h5'>
+          {content}
+        </Typography>
+      )}
+    </div>
+  )
+}
+
+// TODO: Add Media section element
