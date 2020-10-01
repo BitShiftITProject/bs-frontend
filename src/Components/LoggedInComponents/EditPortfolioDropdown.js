@@ -45,10 +45,8 @@ export default function EditPortfolioDropdown({ setEditMode }) {
 
   const handleClose = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      console.log("When you close the menu ")
       return
     }
-
     setOpen(false)
   }
 
