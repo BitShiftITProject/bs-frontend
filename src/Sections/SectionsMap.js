@@ -18,6 +18,7 @@ function MapSection (section, editting) {
     }
 }
 
+// Returns the section JSX for a given section data object
 const GetSectionJSX = (section, editting) => {
     return (
         <div id="section">
