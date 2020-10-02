@@ -185,6 +185,7 @@ export default function EditPortfolioContent(props) {
         <DialogTitle>{intl.formatMessage({ id: 'editPortfolio' })}</DialogTitle>
         <DialogContent>
           <TextField
+            inputProps={{ className: classes.input }}
             className={classes.formLabel}
             InputLabelProps={{
               shrink: true
@@ -198,6 +199,7 @@ export default function EditPortfolioContent(props) {
             onChange={(e) => setPortfolio({ ...portfolio, title: e.target.value })}
           />
           <TextField
+            inputProps={{ className: classes.input }}
             className={classes.formLabel}
             InputLabelProps={{
               shrink: true
@@ -228,6 +230,7 @@ export default function EditPortfolioContent(props) {
         <DialogTitle>{intl.formatMessage({ id: 'addPage' })}</DialogTitle>
         <DialogContent>
           <TextField
+            inputProps={{ className: classes.input }}
             className={classes.formLabel}
             InputLabelProps={{
               shrink: true
@@ -259,6 +262,7 @@ export default function EditPortfolioContent(props) {
         <DialogTitle>{intl.formatMessage({ id: 'editPage' })}</DialogTitle>
         <DialogContent>
           <TextField
+            inputProps={{ className: classes.input }}
             className={classes.formLabel}
             InputLabelProps={{
               shrink: true

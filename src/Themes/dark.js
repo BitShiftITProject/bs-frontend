@@ -4,27 +4,34 @@ import { red } from '@material-ui/core/colors'
 const theme = createMuiTheme({
   palette: {
     type: 'dark',
+    background: {
+      default: '#22223B',
+      paper: '#44475F'
+    },
     primary: {
-      main: '#26292C',
-      light: 'rgb(81, 91, 95)',
-      dark: 'rgb(26, 35, 39)',
+      main: '#161627',
+      light: '#4A4E69',
+      dark: '#161627',
       contrastText: '#ffffff'
     },
     secondary: {
-      main: '#FFB74D',
-      light: 'rgb(255, 197, 112)',
-      dark: 'rgb(200, 147, 89)',
-      contrastText: 'rgba(0, 0, 0, 0.87)'
+      main: '#C9ADA7',
+      light: '#F2E9E4',
+      dark: '#C9ADA7',
+      contrastText: '#000000'
     },
+    disabled: {},
     titleBar: {
-      main: '#555555',
+      main: '#2D2D4E',
       contrastText: '#ffffff'
     },
     error: {
-      main: red.A400
+      main: red[800],
+      contrastText: '#ffffff'
     },
     info: {
-      main: '#ffffff'
+      main: '#ffffff',
+      contrastText: '#000000'
     }
   }
 })

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
+import LandingPage from './Components/LoggedOutComponents/LandingPage'
 import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
@@ -80,8 +81,8 @@ class Authentication extends Component {
           <Route exact path='/login' component={Login} />
           <Route exact path='/signup' component={Signup} />
           <Route exact path='/forgotpassword' component={ForgotPassword} />
-
-          <Redirect to='/login' />
+          <Route exact path='/' component={LandingPage} />
+          <Redirect to='/' />
         </Switch>
       )
     }

@@ -86,6 +86,7 @@ export default function AddPortfolioPage() {
                   <Grid container spacing={2} direction='column' alignItems='stretch'>
                     <PaddedFormGrid item>
                       <TextField
+                        inputProps={{ className: classes.input }}
                         className={classes.formLabel}
                         InputLabelProps={{
                           shrink: true
@@ -100,6 +101,7 @@ export default function AddPortfolioPage() {
                     </PaddedFormGrid>
                     <PaddedFormGrid item>
                       <TextField
+                        inputProps={{ className: classes.input }}
                         className={classes.formLabel}
                         InputLabelProps={{
                           shrink: true
@@ -122,6 +124,7 @@ export default function AddPortfolioPage() {
                 {/*<Grid container spacing={2} direction='column' alignItems='stretch'>
                   <PaddedFormGrid item>
                     <TextField
+inputProps={{ className: classes.input }}
                       className={classes.formLabel}
                       InputLabelProps={{
                         shrink: true
@@ -136,6 +139,7 @@ export default function AddPortfolioPage() {
                   </PaddedFormGrid>
                   <PaddedFormGrid item>
                     <TextField
+inputProps={{ className: classes.input }}
                       className={classes.formLabel}
                       InputLabelProps={{
                         shrink: true

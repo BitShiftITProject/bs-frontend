@@ -1,5 +1,9 @@
 export default {
   'en-AU': {
+    // Landing
+    product: 'Product',
+    about: 'About',
+
     // User Details
     email: 'Email Address',
     username: 'Username',
@@ -24,6 +28,10 @@ export default {
     forgotPassword: 'Forgot Password',
     or: 'Or',
     resetPassword: 'Reset Password',
+
+    // Logged-in Appbar
+    toggleTheme: 'Toggle theme',
+    logout: 'Log out',
 
     // Editing
     saveChanges: 'Save Changes',
