@@ -23,7 +23,7 @@ export default {
     passwordPattern: '8至12个字符',
 
     // Forgot Password
-    forgotPasswordDescription: '请输入邮箱或用户名来获取密码重置链接。',
+    forgotPasswordDescription: '请输入邮箱或用户名来获取密码重置链接',
     forgotPassword: '忘记密码',
     or: '或',
     resetPassword: '重置密码',

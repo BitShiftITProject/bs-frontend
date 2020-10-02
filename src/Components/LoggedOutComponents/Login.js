@@ -1,24 +1,22 @@
 import React, { useState } from 'react'
-import Loading from '../CommonComponents/Loading'
 
 import {
   TextField,
-  Button,
+  Fab,
   Checkbox,
   FormControlLabel,
   Grid,
-  Avatar,
   styled,
   withStyles,
   Paper
 } from '@material-ui/core'
 
 import { Link } from 'react-router-dom'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Alert from '@material-ui/lab/Alert'
 import { useIntl } from 'react-intl'
 
 import LandingContainer from './LandingContainer'
+import Loading from '../CommonComponents/Loading'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { authenticate } from '../../Backend/Fetch'
@@ -139,9 +137,6 @@ function Login(props) {
   const content = (
     <div className={classes.div}>
       <form onSubmit={handleSubmit} className={classes.form}>
-        <Avatar>
-          <LockOutlinedIcon />
-        </Avatar>
         <CursorTypography component='h1' variant='h5'>
           {intl.formatMessage({ id: 'login' })}
         </CursorTypography>
@@ -212,9 +207,15 @@ function Login(props) {
           </Grid>
         </Grid>
 
-        <Button type='submit' fullWidth variant='contained' color='primary'>
+        <Fab
+          type='submit'
+          variant='extended'
+          className={style.submit}
+          color='primary'
+          style={{ width: '100%' }}
+        >
           {intl.formatMessage({ id: 'login' })}
-        </Button>
+        </Fab>
         <Grid container className={classes.links}>
           <Grid item xs>
             <Link to='/forgotpassword' variant='body2'>

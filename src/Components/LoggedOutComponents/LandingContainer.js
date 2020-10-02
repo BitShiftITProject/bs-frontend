@@ -1,11 +1,12 @@
 import React from 'react'
 import clsx from 'clsx'
 import { useIntl } from 'react-intl'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography, Box } from '@material-ui/core'
 import { NavLink, useHistory } from 'react-router-dom'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import LanguageButton from '../CommonComponents/LanguageButton'
 import DarkAndLightModeButton from '../CommonComponents/DarkAndLightModeButton'
+import EmojiHover from '../CommonComponents/EmojiHover'
 
 export default function LandingContainer(props) {
   const classes = loggedOutStyles()
@@ -17,51 +18,62 @@ export default function LandingContainer(props) {
   const { content } = props
 
   return (
-    <Grid
-      container
-      spacing={0}
-      direction='column'
-      justify='flex-start'
-      alignItems='center'
-      className={classes.root}
-    >
-      <Grid
-        item
-        xs={1}
-        container
-        direction='row'
-        justify='space-between'
-        className={classes.appBar}
-      >
-        <div
-          className={classes.appBarTitle}
-          onClick={() => {
-            history.push('/')
-          }}
+    <Grid container direction='row' className={classes.background}>
+      <Grid item xs={false} md={2}></Grid>
+      <Grid item container xs={12} md={8}>
+        <Grid
+          container
+          spacing={0}
+          direction='column'
+          justify='flex-start'
+          alignItems='center'
+          className={classes.root}
         >
-          <Typography variant='h5' component='h1'>
-            bitshift
-          </Typography>
-        </div>
-        <div className={classes.appBarItems}>
-          <NavLink exact to='/' className='normal'>
-            <span>{intl.formatMessage({ id: 'home' })}</span>
-          </NavLink>
-          <NavLink exact to='/login' className='special'>
-            <span>{intl.formatMessage({ id: 'login' })}</span>
-          </NavLink>
-          <NavLink exact to='/signup' className='special'>
-            <span>{intl.formatMessage({ id: 'signUp' })}</span>
-          </NavLink>
-          <div className={clsx(classes.appBarItems, classes.appBarIcons)}>
-            <DarkAndLightModeButton />
-            <LanguageButton />
-          </div>
-        </div>
+          <Grid
+            item
+            xs={2}
+            container
+            direction='row'
+            justify='space-between'
+            className={classes.appBar}
+          >
+            <div
+              className={classes.appBarTitle}
+              onClick={() => {
+                history.push('/')
+              }}
+            >
+              <Typography variant='h4' component='h1'>
+                bitshift
+              </Typography>
+              <Typography variant='h4' component='h2'>
+                <EmojiHover />
+              </Typography>
+            </div>
+            <div className={classes.appBarItems}>
+              <Box display='flex' className={classes.appBarItemsContainer}>
+                <NavLink exact to='/' className='normal'>
+                  <span>{intl.formatMessage({ id: 'home' })}</span>
+                </NavLink>
+                <NavLink exact to='/login' className='normal'>
+                  <span>{intl.formatMessage({ id: 'login' })}</span>
+                </NavLink>
+                <NavLink exact to='/signup' className='normal'>
+                  <span>{intl.formatMessage({ id: 'signUp' })}</span>
+                </NavLink>
+                <div className={clsx(classes.appBarItems, classes.appBarIcons)}>
+                  <DarkAndLightModeButton />
+                  <LanguageButton />
+                </div>
+              </Box>
+            </div>
+          </Grid>
+          <Grid item xs={10} container style={{ minWidth: '100%' }}>
+            {content}
+          </Grid>
+        </Grid>
       </Grid>
-      <Grid item xs={11} container>
-        {content}
-      </Grid>
+      <Grid item xs={false} md={2}></Grid>
     </Grid>
   )
 }
