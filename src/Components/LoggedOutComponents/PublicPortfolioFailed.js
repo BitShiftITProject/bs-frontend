@@ -35,7 +35,7 @@ class PublicPortfolio extends Component {
         <label>Search for another user's portfolio below</label>
         <form onSubmit={this.handleSubmit}>
           <TextField
-            variant='outlined'
+            variant='filled'
             margin='normal'
             required
             fullWidth

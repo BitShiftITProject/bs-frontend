@@ -4,7 +4,6 @@ import TextTransition, { presets } from 'react-text-transition'
 const texts = [
   'innovate',
   'inspire',
-  'communicate',
   'discover',
   'focus',
   'succeed',

@@ -2,39 +2,57 @@ import React from 'react'
 import { useIntl } from 'react-intl'
 import { useHistory } from 'react-router-dom'
 
-import { Fab, Grid, Typography, makeStyles } from '@material-ui/core'
+import { Fab, Typography, makeStyles, Grid } from '@material-ui/core'
 import LandingContainer from './LandingContainer'
 import TextShuffle from '../CommonComponents/TextShuffle'
 
 const useStyles = makeStyles((theme) => ({
-  contentContainer: {
-    [theme.breakpoints.between('lg', 'xl')]: {
-      width: '80%'
+  container: {
+    maxWidth: '100%'
+  },
+
+  heading1Container: {
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    // marginRight: theme.spacing(1.5),
+    '& h1': {
+      fontWeight: 700
     }
   },
-  contentHeading1: {
-    textAlign: 'right',
-    // fontWeight: theme.typography.fontWeightBold,
+  heading2Container: {
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
     [theme.breakpoints.only('xs')]: {
-      marginRight: theme.spacing(1.5)
-    },
-    [theme.breakpoints.only('sm')]: {
-      marginRight: theme.spacing(1.5)
+      justifyContent: 'flex-start'
     }
-    // color: theme.palette.secondary.main
+  },
+  textShuffleContainer: {
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    // marginLeft: theme.spacing(1.5),
+    [theme.breakpoints.only('xs')]: {
+      justifyContent: 'center'
+      // marginLeft: 0
+    }
   },
 
   contentHeading2: {
-    textAlign: 'center',
     // fontWeight: theme.typography.fontWeightBold,
-    [theme.breakpoints.only('xs')]: {
-      textAlign: 'left'
-    },
-    [theme.breakpoints.only('sm')]: {
-      textAlign: 'left'
-    }
-
     // color: theme.palette.secondary.light
+  },
+
+  '@global': {
+    '@keyframes hue': {
+      from: {
+        filter: 'hue-rotate(0deg)'
+      },
+      to: {
+        filter: 'hue-rotate(-360deg)'
+      }
+    }
   },
 
   textShuffle: {
@@ -45,8 +63,16 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.only('xs')]: {
       justifyContent: 'center'
     },
-    [theme.breakpoints.only('sm')]: {
-      justifyContent: 'center'
+    // [theme.breakpoints.only('sm')]: {
+    //   justifyContent: 'center'
+    // },
+
+    '& div div': {
+      color: '#f35626',
+      backgroundImage: 'linear-gradient(92deg, #f35626, #feab3a)',
+      WebkitBackgroundClip: 'text',
+      textFillColor: 'transparent',
+      animation: 'hue 10s infinite linear'
     }
   },
 
@@ -54,6 +80,19 @@ const useStyles = makeStyles((theme) => ({
     '& .MuiFab-label': {
       textTransform: 'lowercase'
     }
+  },
+
+  image: {
+    // Change size of image by changing height and width
+    minWidth: 450,
+    maxWidth: '100%',
+    height: '100%',
+
+    // Change color of image by changing backgroundColor
+    backgroundColor: theme.palette.text.primary,
+    WebkitMaskRepeat: 'no-repeat',
+    WebkitMaskSize: '100% 100%',
+    WebkitMaskImage: 'url("https://miro.medium.com/max/680/1*iqbSkjkrX-MG83gqKvfM7A.png")'
   }
 }))
 
@@ -61,44 +100,47 @@ export default function LandingPage() {
   const intl = useIntl()
   const history = useHistory()
   const classes = useStyles()
+
   const content = (
-    <Grid
-      item
-      xs={12}
-      container
-      spacing={3}
-      direction='column'
-      justify='center'
-      alignItems='center'
-    >
+    <Grid container direction='column' spacing={2}>
       <Grid
         item
+        xs={4}
+        className={classes.container}
         container
-        className={classes.contentContainer}
-        direction='row'
         justify='center'
-        alignItems='center'
-        spacing={1}
+        alignItems='flex-end'
       >
-        <Grid item xs={7} md={4}>
-          <Typography variant='h2' component='h1' className={classes.contentHeading1}>
-            share
-          </Typography>
-        </Grid>
-        <Grid item xs={5} md={1}>
-          <Typography variant='h2' component='h1' className={classes.contentHeading2}>
-            to
-          </Typography>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Typography variant='h2' component='h1'>
-            <div className={classes.textShuffle}>
-              <TextShuffle />
-            </div>
-          </Typography>
+        <Grid item xs={12} container spacing={2} justify='center' alignItems='flex-end'>
+          <Grid item xs={7} sm={4} container className={classes.heading1Container}>
+            <Typography variant='h2' component='h1'>
+              share
+            </Typography>
+          </Grid>
+          <Grid item xs={5} sm={1} container className={classes.heading2Container}>
+            <Typography variant='h2' component='h1'>
+              to
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={4} container className={classes.textShuffleContainer}>
+            <Typography variant='h2' component='h1'>
+              <div className={classes.textShuffle}>
+                <TextShuffle />
+              </div>
+            </Typography>
+          </Grid>
         </Grid>
       </Grid>
-      <Grid item container spacing={2} direction='row' justify='center' alignItems='center'>
+      <Grid
+        item
+        xs={2}
+        className={classes.container}
+        container
+        spacing={2}
+        direction='row'
+        justify='center'
+        alignItems='flex-start'
+      >
         <Grid item>
           <Fab
             className={classes.fab}
@@ -125,7 +167,18 @@ export default function LandingPage() {
           </Fab>
         </Grid>
       </Grid>
+      <Grid
+        item
+        xs={5}
+        className={classes.container}
+        container
+        justify='center'
+        alignItems='center'
+      >
+        <span className={classes.image} />
+      </Grid>
     </Grid>
   )
+
   return <LandingContainer content={content} />
 }

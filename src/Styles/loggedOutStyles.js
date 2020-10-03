@@ -36,7 +36,6 @@ const loggedOutStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 0,
-    boxShadow: theme.shadows[0],
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(4),
     width: '40vw',
@@ -49,7 +48,11 @@ const loggedOutStyles = makeStyles((theme) => ({
     [theme.breakpoints.between('xs', 'xs')]: {
       width: '100vw',
       height: '100vh'
-    }
+    },
+    boxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
+    MozBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
+    WebkitBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
+    OBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`
   },
   modal: {},
   avatar: {
@@ -63,7 +66,7 @@ const loggedOutStyles = makeStyles((theme) => ({
 
   formLabel: {
     '& .Mui-focused': {
-      color: theme.palette.info.main
+      color: theme.palette.text.secondary
     }
   },
 
@@ -71,7 +74,10 @@ const loggedOutStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
     height: '100%',
-    maxWidth: '100vw'
+    maxWidth: '100vw',
+    [theme.breakpoints.only('xs')]: {
+      paddingTop: theme.spacing(3)
+    }
     // backgroundColor: theme.palette.primary.main,
     // color: theme.palette.primary.contrastText
   },
@@ -82,7 +88,7 @@ const loggedOutStyles = makeStyles((theme) => ({
     alignItems: 'center',
     marginLeft: theme.spacing(2),
     '& h1': {
-      fontWeight: 'bold',
+      fontWeight: 900,
       flexGrow: 1,
       '&:hover': {
         textDecoration: 'underline'
@@ -109,13 +115,20 @@ const loggedOutStyles = makeStyles((theme) => ({
       paddingRight: theme.spacing(2),
       paddingBottom: theme.spacing(2),
       paddingTop: theme.spacing(2),
+      height: '100%',
       // textDecoration: 'none',
       '&.special': {
-        backgroundColor: theme.palette.secondary.main
-        // color: theme.palette.secondary.contrastText
+        backgroundColor: theme.palette.primary.light,
+        color: theme.palette.primary.contrastText
+
+        // backgroundColor: theme.palette.secondary.main,
+        // color: theme.palette.secondary.contrastText,
+        // '& span::before': {
+        //   backgroundColor: theme.palette.secondary.contrastText
+        // }
       },
       '&.normal': {
-        color: theme.palette.primary.contrastText
+        color: theme.palette.text.primary
       },
 
       // Outward underline animation
@@ -158,7 +171,7 @@ const loggedOutStyles = makeStyles((theme) => ({
           height: '2px',
           bottom: '-10px',
           left: 0,
-          backgroundColor: theme.palette.primary.contrastText,
+          backgroundColor: theme.palette.text.primary,
           visibility: 'hidden',
           transform: 'scaleX(0)',
           transition: 'all 0.2s ease-in-out 0s'
@@ -172,8 +185,10 @@ const loggedOutStyles = makeStyles((theme) => ({
     }
   },
   appBarItemsContainer: {
-    backgroundColor: theme.palette.primary.main,
-    borderRadius: 30
+    // backgroundColor: theme.palette.primary.main,
+    // borderRadius: 30,
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1)
   },
   appBarIcons: {
     paddingLeft: theme.spacing(1),
@@ -183,6 +198,19 @@ const loggedOutStyles = makeStyles((theme) => ({
     '&.MuiOutlinedInput-input:-webkit-autofill': {
       WebkitBoxShadow: '0 0 0 100px rgba(0,0,0,0.2) inset',
       WebkitTextFillColor: theme.palette.secondary.contrastText
+    },
+    '&::placeholder': {
+      textTransform: 'lowercase'
+    }
+  },
+  links: {
+    marginTop: '5%',
+    '& a': {
+      textDecoration: 'none',
+      color: theme.palette.text.primary,
+      '&:hover': {
+        textDecoration: 'underline'
+      }
     }
   },
   submit: {

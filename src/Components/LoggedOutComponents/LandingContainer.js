@@ -19,7 +19,10 @@ export default function LandingContainer(props) {
 
   return (
     <Grid container direction='row' className={classes.background}>
+      {/* LEFT Padding */}
       <Grid item xs={false} md={2}></Grid>
+
+      {/* CONTENT */}
       <Grid item container xs={12} md={8}>
         <Grid
           container
@@ -35,6 +38,7 @@ export default function LandingContainer(props) {
             container
             direction='row'
             justify='space-between'
+            alignItems='center'
             className={classes.appBar}
           >
             <div
@@ -73,6 +77,8 @@ export default function LandingContainer(props) {
           </Grid>
         </Grid>
       </Grid>
+
+      {/* RIGHT Padding */}
       <Grid item xs={false} md={2}></Grid>
     </Grid>
   )

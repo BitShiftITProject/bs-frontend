@@ -31,16 +31,7 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center'
   },
-  links: {
-    marginTop: '5%',
-    '& a': {
-      textDecoration: 'none',
-      color: 'grey',
-      '&:hover': {
-        textDecoration: 'underline'
-      }
-    }
-  },
+
   rememberMe: {
     textAlign: 'justify',
     marginLeft: '1%'
@@ -146,7 +137,7 @@ function Login(props) {
             shrink: true
           }}
           className={style.formLabel}
-          variant='outlined'
+          variant='filled'
           margin='normal'
           required
           fullWidth
@@ -163,7 +154,7 @@ function Login(props) {
             shrink: true
           }}
           className={style.formLabel}
-          variant='outlined'
+          variant='filled'
           margin='normal'
           required
           fullWidth
@@ -216,7 +207,7 @@ function Login(props) {
         >
           {intl.formatMessage({ id: 'login' })}
         </Fab>
-        <Grid container className={classes.links}>
+        <Grid container className={style.links}>
           <Grid item xs>
             <Link to='/forgotpassword' variant='body2'>
               {intl.formatMessage({ id: 'forgotPasswordPrompt' })}

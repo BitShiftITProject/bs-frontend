@@ -353,7 +353,9 @@ export default function EditPortfolioContent(props) {
              */}
 
             <Grid container direction='column' justify='space-evenly' className={classes.padded}>
-              <CursorTypography variant='overline'>Pages</CursorTypography>
+              <CursorTypography variant='overline'>
+                {intl.formatMessage({ id: 'pages' })}
+              </CursorTypography>
               <List>
                 {pages &&
                   pages.map((page, idx) => (
@@ -415,7 +417,9 @@ export default function EditPortfolioContent(props) {
            */}
           <Grid item className={classes.floatingBottomContainer}>
             <Fab color='primary' variant='extended' onClick={handlePageContentEdit}>
-              <CursorTypography variant='button'>Save Changes</CursorTypography>
+              <CursorTypography variant='button'>
+                {intl.formatMessage({ id: 'saveChanges' })}
+              </CursorTypography>
             </Fab>
           </Grid>
         </Paper>

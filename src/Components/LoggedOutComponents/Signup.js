@@ -137,7 +137,7 @@ function Signup(props) {
                 InputLabelProps={{
                   shrink: true
                 }}
-                className={classes.formLabel}
+                className={style.formLabel}
                 id='signup__first_name'
                 type='text'
                 // placeholder={intl.formatMessage({ id: 'firstName' })}
@@ -146,7 +146,7 @@ function Signup(props) {
                 value={state.firstName}
                 onChange={handleChange}
                 required
-                variant='outlined'
+                variant='filled'
                 margin='normal'
                 fullWidth
               />
@@ -158,7 +158,7 @@ function Signup(props) {
                 InputLabelProps={{
                   shrink: true
                 }}
-                className={classes.formLabel}
+                className={style.formLabel}
                 id='signup__last_name'
                 type='text'
                 // placeholder={intl.formatMessage({ id: 'lastName' })}
@@ -167,7 +167,7 @@ function Signup(props) {
                 value={state.lastName}
                 onChange={handleChange}
                 required
-                variant='outlined'
+                variant='filled'
                 margin='normal'
                 fullWidth
               />
@@ -179,7 +179,7 @@ function Signup(props) {
               shrink: true
             }}
             className={style.formLabel}
-            variant='outlined'
+            variant='filled'
             margin='normal'
             required
             fullWidth
@@ -197,7 +197,7 @@ function Signup(props) {
               shrink: true
             }}
             className={style.formLabel}
-            variant='outlined'
+            variant='filled'
             margin='normal'
             required
             fullWidth
@@ -217,7 +217,7 @@ function Signup(props) {
             }}
             className={classes.formLabel}
             id='signup__password'
-            variant='outlined'
+            variant='filled'
             margin='normal'
             fullWidth
             label={intl.formatMessage({ id: 'password' })}
@@ -238,7 +238,7 @@ function Signup(props) {
             }}
             className={classes.formLabel}
             id='signup__confirm_password'
-            variant='outlined'
+            variant='filled'
             margin='normal'
             fullWidth
             label={intl.formatMessage({ id: 'confirmPassword' })}

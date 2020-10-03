@@ -29,7 +29,7 @@ export default {
     resetPassword: '重置密碼',
 
     // Logged-in Appbar
-    toggleTheme: 'Toggle theme',
+    toggleTheme: '切换夜間模式',
     logout: '登出',
 
     // Editing
@@ -53,12 +53,12 @@ export default {
     addPortfolio: '添加博客',
     editPortfolio: '編輯博客',
     deletePortfolio: '刪除博客',
-    deletePortfolioPrompt: 'Are you sure you want to delete the portfolio {portfolio}?',
-    addPage: '添加網頁',
-    editPage: '編輯網頁',
+    deletePortfolioPrompt: ' 確定要刪除博客{portfolio}嗎？',
+    addPage: '添加頁面',
+    editPage: '編輯頁面',
     // 頁面
-    deletePage: 'Delete Page',
-    deletePagePrompt: 'Are you sure you want to delete the {page} page?',
+    deletePage: '刪除頁面',
+    deletePagePrompt: '確定要刪除頁面{page}嗎？',
 
     editingOptions: '編輯選項',
     style: '外觀',
@@ -67,7 +67,7 @@ export default {
     title: '名稱',
     portfolioDescription: '概要',
 
-    pages: '網頁',
+    pages: '頁面',
 
     // Profile
 
@@ -83,10 +83,10 @@ export default {
     profileDescription: '個人簡介',
     descriptionPlaceholder: '輸入一些東西……',
     tags: '標籤',
-    tagsPlaceholder: 'Type and enter to add a tag……',
+    tagsPlaceholder: '請輸入並確認以添加標籤……',
 
     contact: '聯繫方式',
-    emailHelperText: 'Changing this will not change your login details',
+    emailHelperText: '修改此設置不會更改您的登錄信息',
     phone: '電話號碼',
     company: '公司',
     addressLine1: '地址',
@@ -117,7 +117,7 @@ export default {
     // 主題 (theme)
     language: '語言',
 
-    personalData: '個人數據'
+    loginData: '資料數據'
     // 個人信息
     // 數據 (data)
   }

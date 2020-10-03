@@ -81,7 +81,7 @@ export default {
     tagsPlaceholder: 'Type and enter to add a tag...',
 
     contact: 'Contact',
-    emailHelperText: 'Changing this will not change your login details',
+    emailHelperText: 'Modifying this will not change your login details',
     phone: 'Contact Number',
     company: 'Company',
     addressLine1: 'Address Line 1',
@@ -110,6 +110,6 @@ export default {
     theme: 'Dark Mode',
     language: 'Language',
 
-    personalData: 'Personal data'
+    loginData: 'Login data'
   }
 }
