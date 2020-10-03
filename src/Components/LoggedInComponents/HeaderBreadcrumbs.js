@@ -12,7 +12,7 @@ import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
-  /*                                 Breadcrumbs                                */
+  /*                                 Breadcrumbs                                 */
   /* -------------------------------------------------------------------------- */
 
   breadcrumbLink: {
@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
     height: 27
   }
 }))
+
+/* -------------------------------------------------------------------------- */
+/*                         Function and Rendering                             */
+/* -------------------------------------------------------------------------- */
 
 export default function HeaderBreadcrumbs(props) {
   // Contains all styling
@@ -105,17 +109,17 @@ export default function HeaderBreadcrumbs(props) {
               {breadcrumbNameMap[segment]}
             </Link>
           ) : (
-            <CursorTypography
-              style={{ fontWeight: 'bold' }}
-              className={classes.breadcrumbLink}
-              key={segment}
-            >
-              <span className={breadcrumbIconMap[segment] ? classes.breadcrumbIcon : ''}>
-                {breadcrumbIconMap[segment]}
-              </span>
-              {breadcrumbNameMap[segment]}
-            </CursorTypography>
-          )
+              <CursorTypography
+                style={{ fontWeight: 'bold' }}
+                className={classes.breadcrumbLink}
+                key={segment}
+              >
+                <span className={breadcrumbIconMap[segment] ? classes.breadcrumbIcon : ''}>
+                  {breadcrumbIconMap[segment]}
+                </span>
+                {breadcrumbNameMap[segment]}
+              </CursorTypography>
+            )
         )}
       </Breadcrumbs>
     </div>

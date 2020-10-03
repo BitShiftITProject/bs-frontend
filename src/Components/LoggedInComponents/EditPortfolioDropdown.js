@@ -1,13 +1,8 @@
 import React from 'react'
-// import { withStyles, styled } from '@material-ui/core/styles'
 
 import {
-  // TextField,
   Button,
-  // Typography,
-  // Fab,
   Grid,
-  // Container,
   ClickAwayListener,
   Grow,
   Paper,
@@ -42,8 +37,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function EditPortfolioDropdown() {
-  const intl = useIntl()
+export default function EditPortfolioDropdown({ setEditMode }) {
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
   const anchorRef = React.useRef(null)
@@ -56,7 +50,6 @@ export default function EditPortfolioDropdown() {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return
     }
-
     setOpen(false)
   }
 
@@ -108,11 +101,11 @@ export default function EditPortfolioDropdown() {
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList autoFocusItem={open} id='menu-list-grow' onKeyDown={handleListKeyDown}>
-                    <MenuItem className={classes.menuItem} onClick={handleClose}>
-                      <span> {intl.formatMessage({ id: 'style' })}</span>
+                    <MenuItem className={classes.menuItem} onClick={() => { setEditMode("styles") }}>
+                      <span>Style</span>
                     </MenuItem>
-                    <MenuItem className={classes.menuItem} onClick={handleClose}>
-                      <span> {intl.formatMessage({ id: 'content' })}</span>
+                    <MenuItem className={classes.menuItem} onClick={() => { setEditMode("content") }}>
+                      <span>Content</span>
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
