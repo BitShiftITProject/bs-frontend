@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function EditPortfolioDropdown({ setEditMode }) {
+  const intl = useIntl()
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
   const anchorRef = React.useRef(null)
@@ -101,11 +102,21 @@ export default function EditPortfolioDropdown({ setEditMode }) {
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList autoFocusItem={open} id='menu-list-grow' onKeyDown={handleListKeyDown}>
-                    <MenuItem className={classes.menuItem} onClick={() => { setEditMode("styles") }}>
-                      <span>Style</span>
+                    <MenuItem
+                      className={classes.menuItem}
+                      onClick={() => {
+                        setEditMode('styles')
+                      }}
+                    >
+                      <span>{intl.formatMessage({ id: 'style' })}</span>
                     </MenuItem>
-                    <MenuItem className={classes.menuItem} onClick={() => { setEditMode("content") }}>
-                      <span>Content</span>
+                    <MenuItem
+                      className={classes.menuItem}
+                      onClick={() => {
+                        setEditMode('content')
+                      }}
+                    >
+                      <span>{intl.formatMessage({ id: 'content' })}</span>
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>

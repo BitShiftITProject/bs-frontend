@@ -5,8 +5,8 @@ const theme = createMuiTheme({
     background: {
       // default: '#EFF1F3',
       default: '#F7F7F8',
-      paper: '#F5F5F5',
-      paperLight: '#eeeeee',
+      paper: '#F0F0F0',
+      paperLight: '#e9e9e9',
       paperHover: '#e3e3e3'
     },
     primary: {
