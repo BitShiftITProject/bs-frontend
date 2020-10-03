@@ -137,7 +137,7 @@ export default function SettingsPage() {
       <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <CursorTypography className={classes.heading}>
-            {intl.formatMessage({ id: 'personalData' })}
+            {intl.formatMessage({ id: 'loginData' })}
           </CursorTypography>
           <CursorTypography className={classes.secondaryHeading}></CursorTypography>
         </AccordionSummary>

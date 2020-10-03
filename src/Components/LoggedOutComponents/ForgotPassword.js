@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { withStyles, styled } from '@material-ui/core/styles'
 
-import { TextField, Button, Fab, Typography, Paper, Grid } from '@material-ui/core'
+import { TextField, Fab, Typography, Paper, Grid } from '@material-ui/core'
 
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
@@ -106,14 +106,9 @@ function ForgotPassword(props) {
           >
             <ArrowBackIcon />
           </Fab>
-          <Button
-            className='forgot_password__button'
-            type='submit'
-            variant='contained'
-            color='primary'
-          >
+          <Fab type='submit' variant='extended' className={style.submit} color='primary'>
             {intl.formatMessage({ id: 'resetPassword' })}
-          </Button>
+          </Fab>
         </span>
       </form>
     </div>

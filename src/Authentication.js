@@ -55,9 +55,9 @@ class Authentication extends Component {
     if (this.state.loggedIn == null) {
       // Route for loading page while getting if the user is logged in
       return (
-        <Box style={{ height: '110vh' }}>
-          <Loading message='Loading...' vertical />
-        </Box>
+        <div style={{ height: '100vh' }}>
+          <Loading vertical />
+        </div>
       )
     } else if (this.state.loggedIn === true) {
       // Route for pages accessible when logged in

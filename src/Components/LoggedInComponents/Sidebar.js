@@ -35,6 +35,7 @@ import { CursorTypography } from '../../Styles/loggedInStyles'
 import HeaderBreadcrumbs from './HeaderBreadcrumbs'
 import { useIntl } from 'react-intl'
 import DarkAndLightModeButton from '../CommonComponents/DarkAndLightModeButton'
+// import LanguageButton from '../CommonComponents/LanguageButton'
 
 const drawerWidth = 240
 
@@ -187,6 +188,7 @@ export default function Sidebar(props) {
           className={classes.title}
         ></CursorTypography>
         <DarkAndLightModeButton />
+        {/* <LanguageButton /> */}
 
         <Tooltip title={intl.formatMessage({ id: 'help' })} placement='bottom'>
           <IconButton
@@ -216,7 +218,7 @@ export default function Sidebar(props) {
               sessionStorage.removeItem('accessToken')
               localStorage.removeItem('accessToken')
               window.sessionStorage.removeItem('portfolioId')
-              window.location.href = '/login'
+              window.location.href = '/'
             }}
             color='inherit'
             className={classes.appBarIcon}

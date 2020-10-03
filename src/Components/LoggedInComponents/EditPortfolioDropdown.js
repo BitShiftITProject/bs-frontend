@@ -17,6 +17,7 @@ import {
 } from '@material-ui/core'
 
 import { makeStyles } from '@material-ui/core/styles'
+import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function EditPortfolioDropdown() {
+  const intl = useIntl()
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
   const anchorRef = React.useRef(null)
@@ -86,7 +88,7 @@ export default function EditPortfolioDropdown() {
           color='primary'
           variant='contained'
         >
-          Editing Options
+          {intl.formatMessage({ id: 'editingOptions' })}
         </Button>
         <Popper
           className={classes.popper}
@@ -105,10 +107,10 @@ export default function EditPortfolioDropdown() {
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList autoFocusItem={open} id='menu-list-grow' onKeyDown={handleListKeyDown}>
                     <MenuItem className={classes.menuItem} onClick={handleClose}>
-                      <span>Style</span>
+                      <span> {intl.formatMessage({ id: 'style' })}</span>
                     </MenuItem>
                     <MenuItem className={classes.menuItem} onClick={handleClose}>
-                      <span>Content</span>
+                      <span> {intl.formatMessage({ id: 'content' })}</span>
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>

@@ -16,7 +16,7 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: '#C9ADA7',
-      light: '#F2E9E4',
+      light: '#968894',
       dark: '#C9ADA7',
       contrastText: '#000000'
     },
@@ -32,6 +32,9 @@ const theme = createMuiTheme({
     info: {
       main: '#ffffff',
       contrastText: '#000000'
+    },
+    gradient: {
+      default: '#22223B'
     }
   }
 })

@@ -1,9 +1,29 @@
 import { makeStyles } from '@material-ui/core/styles'
 
 const loggedOutStyles = makeStyles((theme) => ({
+  // '@global': {
+  //   '@keyframes gradient': {
+  //     '0%': {
+  //       backgroundPosition: '0% 50%'
+  //     },
+  //     '50%': {
+  //       backgroundPosition: '100% 50%'
+  //     },
+  //     '100%': {
+  //       backgroundPosition: '0% 50%'
+  //     }
+  //   }
+  // },
+  background: {
+    // background: `linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)`,
+    // backgroundSize: '400% 400%',
+    // animation: 'gradient 15s ease infinite'
+  },
   root: {
     width: '100vw',
-    height: '100vh'
+    height: '100vh',
+    textTransform: 'lowercase'
+
     // display: 'flex',
     // justifyContent: 'center',
     // alignItems: 'center',
@@ -15,6 +35,7 @@ const loggedOutStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 0,
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(4),
     width: '40vw',
@@ -27,7 +48,11 @@ const loggedOutStyles = makeStyles((theme) => ({
     [theme.breakpoints.between('xs', 'xs')]: {
       width: '100vw',
       height: '100vh'
-    }
+    },
+    boxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
+    MozBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
+    WebkitBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
+    OBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`
   },
   modal: {},
   avatar: {
@@ -38,20 +63,23 @@ const loggedOutStyles = makeStyles((theme) => ({
     padding: theme.spacing(4),
     width: '100%' // Fix IE 11 issue.
   },
-  submit: {
-    margin: theme.spacing(3, 0, 2)
-  },
+
   formLabel: {
     '& .Mui-focused': {
-      color: theme.palette.info.main
+      color: theme.palette.text.secondary
     }
   },
 
   appBar: {
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
     height: '100%',
     maxWidth: '100vw',
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText
+    [theme.breakpoints.only('xs')]: {
+      paddingTop: theme.spacing(3)
+    }
+    // backgroundColor: theme.palette.primary.main,
+    // color: theme.palette.primary.contrastText
   },
 
   appBarTitle: {
@@ -60,8 +88,14 @@ const loggedOutStyles = makeStyles((theme) => ({
     alignItems: 'center',
     marginLeft: theme.spacing(2),
     '& h1': {
-      fontWeight: 'light',
-      flexGrow: 1
+      fontWeight: 900,
+      flexGrow: 1,
+      '&:hover': {
+        textDecoration: 'underline'
+      }
+    },
+    '& h2': {
+      paddingLeft: theme.spacing(1)
     }
   },
   appBarContainer: {
@@ -73,21 +107,28 @@ const loggedOutStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-
+    textTransform: 'lowercase',
+    fontWeight: 'light',
     '& a': {
-      height: '100%',
       boxSizing: 'border-box',
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2),
       paddingBottom: theme.spacing(2),
       paddingTop: theme.spacing(2),
+      height: '100%',
       // textDecoration: 'none',
       '&.special': {
-        backgroundColor: theme.palette.secondary.main,
-        color: theme.palette.secondary.contrastText
+        backgroundColor: theme.palette.primary.light,
+        color: theme.palette.primary.contrastText
+
+        // backgroundColor: theme.palette.secondary.main,
+        // color: theme.palette.secondary.contrastText,
+        // '& span::before': {
+        //   backgroundColor: theme.palette.secondary.contrastText
+        // }
       },
       '&.normal': {
-        color: theme.palette.primary.contrastText
+        color: theme.palette.text.primary
       },
 
       // Outward underline animation
@@ -117,11 +158,11 @@ const loggedOutStyles = makeStyles((theme) => ({
       // Taken from https://tobiasahlin.com/blog/css-trick-animating-link-underlines/
 
       textDecoration: 'none',
-      display: 'table',
+      // display: 'table',
 
       '& span': {
-        display: 'table-cell',
-        verticalAlign: 'middle',
+        // display: 'table-cell',
+        // verticalAlign: 'middle',
         position: 'relative',
         '&::before': {
           content: 'attr(data-content)',
@@ -130,7 +171,7 @@ const loggedOutStyles = makeStyles((theme) => ({
           height: '2px',
           bottom: '-10px',
           left: 0,
-          backgroundColor: theme.palette.primary.contrastText,
+          backgroundColor: theme.palette.text.primary,
           visibility: 'hidden',
           transform: 'scaleX(0)',
           transition: 'all 0.2s ease-in-out 0s'
@@ -143,6 +184,12 @@ const loggedOutStyles = makeStyles((theme) => ({
       }
     }
   },
+  appBarItemsContainer: {
+    // backgroundColor: theme.palette.primary.main,
+    // borderRadius: 30,
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1)
+  },
   appBarIcons: {
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1)
@@ -151,7 +198,23 @@ const loggedOutStyles = makeStyles((theme) => ({
     '&.MuiOutlinedInput-input:-webkit-autofill': {
       WebkitBoxShadow: '0 0 0 100px rgba(0,0,0,0.2) inset',
       WebkitTextFillColor: theme.palette.secondary.contrastText
+    },
+    '&::placeholder': {
+      textTransform: 'lowercase'
     }
+  },
+  links: {
+    marginTop: '5%',
+    '& a': {
+      textDecoration: 'none',
+      color: theme.palette.text.primary,
+      '&:hover': {
+        textDecoration: 'underline'
+      }
+    }
+  },
+  submit: {
+    textTransform: 'lowercase'
   }
 }))
 

@@ -23,13 +23,13 @@ export default {
     passwordPattern: '8至12个字符',
 
     // Forgot Password
-    forgotPasswordDescription: '请输入邮箱或用户名来获取密码重置链接。',
+    forgotPasswordDescription: '请输入邮箱或用户名来获取密码重置链接',
     forgotPassword: '忘记密码',
     or: '或',
     resetPassword: '重置密码',
 
     // Logged-in Appbar
-    toggleTheme: 'Toggle theme',
+    toggleTheme: '切换夜間模式',
     logout: '登出',
 
     // Editing
@@ -57,12 +57,12 @@ export default {
     editPortfolio: '编辑博客',
     sharePortfolio: 'Share Portfolio',
     deletePortfolio: '删除博客',
-    deletePortfolioPrompt: 'Are you sure you want to delete the portfolio {portfolio}?',
-    addPage: '添加网页',
-    editPage: '编辑网页',
+    deletePortfolioPrompt: '确定要删除博客{portfolio}吗？',
+    addPage: '添加页面',
+    editPage: '编辑页面',
     // 页面
-    deletePage: '删除网页',
-    deletePagePrompt: 'Are you sure you want to delete the {page} page?',
+    deletePage: '删除页面',
+    deletePagePrompt: '确定要删除页面{page}吗？',
 
     editingOptions: '编辑选项',
     style: '外观',
@@ -71,7 +71,7 @@ export default {
     title: '名称',
     portfolioDescription: '概要',
 
-    pages: '网页',
+    pages: '页面',
 
     // Profile
 
@@ -87,10 +87,10 @@ export default {
     profileDescription: '个人简介',
     descriptionPlaceholder: '输入一些东西……',
     tags: '标签',
-    tagsPlaceholder: 'Type and enter to add a tag……',
+    tagsPlaceholder: '请输入并确认以添加标签……',
 
     contact: '联系方式',
-    emailHelperText: 'Changing this will not change your login details',
+    emailHelperText: '修改此设置不会更改您的登录信息',
     phone: '电话号码',
     company: '公司',
     addressLine1: '地址',
@@ -121,7 +121,7 @@ export default {
     // 主题 (theme)
     language: '语言',
 
-    personalData: '个人数据'
+    loginData: '登录资料'
     // 个人信息
     // 数据 (data)
   }
