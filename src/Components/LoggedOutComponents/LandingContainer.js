@@ -23,58 +23,58 @@ export default function LandingContainer(props) {
       <Grid item xs={false} md={2}></Grid>
 
       {/* CONTENT */}
-      <Grid item container xs={12} md={8}>
+      <Grid
+        item
+        container
+        xs={12}
+        md={8}
+        direction='column'
+        justify='flex-start'
+        alignItems='center'
+        className={classes.root}
+      >
         <Grid
+          item
+          xs={2}
           container
-          spacing={0}
-          direction='column'
-          justify='flex-start'
+          direction='row'
+          justify='space-between'
           alignItems='center'
-          className={classes.root}
+          className={classes.appBar}
         >
-          <Grid
-            item
-            xs={2}
-            container
-            direction='row'
-            justify='space-between'
-            alignItems='center'
-            className={classes.appBar}
+          <div
+            className={classes.appBarTitle}
+            onClick={() => {
+              history.push('/')
+            }}
           >
-            <div
-              className={classes.appBarTitle}
-              onClick={() => {
-                history.push('/')
-              }}
-            >
-              <Typography variant='h4' component='h1'>
-                bitshift
-              </Typography>
-              <Typography variant='h4' component='h2'>
-                <EmojiHover />
-              </Typography>
-            </div>
-            <div className={classes.appBarItems}>
-              <Box display='flex' className={classes.appBarItemsContainer}>
-                <NavLink exact to='/' className='normal'>
-                  <span>{intl.formatMessage({ id: 'home' })}</span>
-                </NavLink>
-                <NavLink exact to='/login' className='normal'>
-                  <span>{intl.formatMessage({ id: 'login' })}</span>
-                </NavLink>
-                <NavLink exact to='/signup' className='normal'>
-                  <span>{intl.formatMessage({ id: 'signUp' })}</span>
-                </NavLink>
-                <div className={clsx(classes.appBarItems, classes.appBarIcons)}>
-                  <DarkAndLightModeButton />
-                  <LanguageButton />
-                </div>
-              </Box>
-            </div>
-          </Grid>
-          <Grid item xs={10} container style={{ minWidth: '100%' }}>
-            {content}
-          </Grid>
+            <Typography variant='h4' component='h1'>
+              bitshift
+            </Typography>
+            <Typography variant='h4' component='h2'>
+              <EmojiHover />
+            </Typography>
+          </div>
+          <div className={classes.appBarItems}>
+            <Box display='flex' className={classes.appBarItemsContainer}>
+              <NavLink exact to='/' className='normal'>
+                <span>{intl.formatMessage({ id: 'home' })}</span>
+              </NavLink>
+              <NavLink exact to='/login' className='normal'>
+                <span>{intl.formatMessage({ id: 'login' })}</span>
+              </NavLink>
+              <NavLink exact to='/signup' className='normal'>
+                <span>{intl.formatMessage({ id: 'signUp' })}</span>
+              </NavLink>
+              <div className={clsx(classes.appBarItems, classes.appBarIcons)}>
+                <DarkAndLightModeButton />
+                <LanguageButton />
+              </div>
+            </Box>
+          </div>
+        </Grid>
+        <Grid item xs={10} container style={{ minWidth: '100%' }}>
+          {content}
         </Grid>
       </Grid>
 

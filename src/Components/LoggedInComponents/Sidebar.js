@@ -35,7 +35,7 @@ import { CursorTypography } from '../../Styles/loggedInStyles'
 import HeaderBreadcrumbs from './HeaderBreadcrumbs'
 import { useIntl } from 'react-intl'
 import DarkAndLightModeButton from '../CommonComponents/DarkAndLightModeButton'
-// import LanguageButton from '../CommonComponents/LanguageButton'
+import LanguageButton from '../CommonComponents/LanguageButton'
 
 const drawerWidth = 240
 
@@ -97,6 +97,8 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     whiteSpace: 'nowrap',
     width: drawerWidth,
+    border: 'none',
+    boxShadow: theme.shadows[50],
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen
@@ -105,6 +107,8 @@ const useStyles = makeStyles((theme) => ({
 
   drawerPaperClose: {
     overflowX: 'hidden',
+    border: 'none',
+    boxShadow: theme.shadows[50],
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -187,8 +191,9 @@ export default function Sidebar(props) {
           color='inherit'
           className={classes.title}
         ></CursorTypography>
+        <LanguageButton />
+
         <DarkAndLightModeButton />
-        {/* <LanguageButton /> */}
 
         <Tooltip title={intl.formatMessage({ id: 'help' })} placement='bottom'>
           <IconButton

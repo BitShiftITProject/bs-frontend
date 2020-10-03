@@ -16,7 +16,9 @@ import {
   MenuList
 } from '@material-ui/core'
 
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { makeStyles } from '@material-ui/core/styles'
+
 import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
@@ -88,7 +90,7 @@ export default function EditPortfolioDropdown() {
           color='primary'
           variant='contained'
         >
-          {intl.formatMessage({ id: 'editingOptions' })}
+          {intl.formatMessage({ id: 'editingOptions' })} <ArrowDropDownIcon />
         </Button>
         <Popper
           className={classes.popper}

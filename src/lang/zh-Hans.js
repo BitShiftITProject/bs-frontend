@@ -40,8 +40,8 @@ export default {
     save: '保存',
     view: '查看',
     edit: '编辑',
-    share: 'Share',
-    copy: 'Copy',
+    share: '分享',
+    copy: '复制',
     url: '链接',
     errorText: '出现错误。再试一次。',
 
@@ -55,7 +55,7 @@ export default {
 
     addPortfolio: '添加博客',
     editPortfolio: '编辑博客',
-    sharePortfolio: 'Share Portfolio',
+    sharePortfolio: '分享博客',
     deletePortfolio: '删除博客',
     deletePortfolioPrompt: '确定要删除博客{portfolio}吗？',
     addPage: '添加页面',
@@ -85,9 +85,9 @@ export default {
     lastName: '姓氏',
     occupation: '职业',
     profileDescription: '个人简介',
-    descriptionPlaceholder: '输入一些东西……',
+    descriptionPlaceholder: '输入一些东西…',
     tags: '标签',
-    tagsPlaceholder: '请输入并确认以添加标签……',
+    tagsPlaceholder: '请输入并确认以添加标签…',
 
     contact: '联系方式',
     emailHelperText: '修改此设置不会更改您的登录信息',

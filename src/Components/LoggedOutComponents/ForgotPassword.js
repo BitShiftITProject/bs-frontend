@@ -117,13 +117,7 @@ function ForgotPassword(props) {
   return (
     <LandingContainer
       content={
-        <Grid
-          style={{ height: '100%', width: '100%' }}
-          container
-          direction='column'
-          justify='center'
-          alignItems='center'
-        >
+        <Grid container direction='column' justify='center' alignItems='center'>
           <Paper className={style.paper}>{content}</Paper>
         </Grid>
       }

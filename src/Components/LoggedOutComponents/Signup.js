@@ -75,12 +75,19 @@ function Signup(props) {
   async function handleSubmit(e) {
     e.preventDefault()
 
-    if (state.password === state.confirm) {
+    setState((st) => ({
+      ...st,
+      signUpFailed: false,
+      errorMessage: ''
+    }))
+
+    if (state.password !== state.confirm) {
       setState((st) => ({
         ...st,
         signUpFailed: true,
         errorMessage: intl.formatMessage({ id: 'passwordError' })
       }))
+      return
     }
 
     const details = {
@@ -254,7 +261,7 @@ function Signup(props) {
 
           {/* The error message appears iff the state is signUpFailed */}
           {state.signUpFailed && (
-            <Alert variant='filled' severity='error'>
+            <Alert variant='filled' severity='error' style={{ marginTop: 5, marginBottom: 5 }}>
               {state.errorMessage}
             </Alert>
           )}
@@ -294,13 +301,7 @@ function Signup(props) {
   return (
     <LandingContainer
       content={
-        <Grid
-          style={{ height: '100%', width: '100%' }}
-          container
-          direction='column'
-          justify='center'
-          alignItems='center'
-        >
+        <Grid container direction='column' justify='flex-start' alignItems='center'>
           <Paper className={style.paper}>{content}</Paper>
         </Grid>
       }

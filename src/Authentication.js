@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
-import { Box } from '@material-ui/core'
 
+import Loading from './Components/CommonComponents/Loading'
+
+import LandingPage from './Components/LoggedOutComponents/LandingPage'
 import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
@@ -14,7 +16,6 @@ import SettingsPage from './Components/LoggedInComponents/SettingsPage'
 import HelpPage from './Components/LoggedInComponents/HelpPage'
 import Sidebar from './Components/LoggedInComponents/Sidebar'
 import { getUser, logout } from './Backend/Fetch'
-import Loading from './Components/CommonComponents/Loading'
 
 async function loggedIn() {
   // Get access token from session storage

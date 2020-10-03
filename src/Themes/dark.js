@@ -1,17 +1,19 @@
 import { createMuiTheme } from '@material-ui/core/styles'
-import { red } from '@material-ui/core/colors'
+// import { red } from '@material-ui/core/colors'
 
 const theme = createMuiTheme({
   palette: {
     type: 'dark',
     background: {
-      default: '#22223B',
-      paper: '#44475F'
+      default: '#32333D',
+      paper: '#373740',
+      paperLight: '#424250',
+      paperHover: 'rgba(124,124,142,0.5)'
     },
     primary: {
-      main: '#161627',
-      light: '#4A4E69',
-      dark: '#161627',
+      main: '#27272F',
+      light: '#373740',
+      dark: '#27272F',
       contrastText: '#ffffff'
     },
     secondary: {
@@ -22,19 +24,20 @@ const theme = createMuiTheme({
     },
     disabled: {},
     titleBar: {
-      main: '#2D2D4E',
-      contrastText: '#ffffff'
+      main: '#27272F',
+      contrastText: '#fff'
     },
     error: {
-      main: red[800],
-      contrastText: '#ffffff'
+      main: '#B2544D',
+      contrastText: '#fff'
     },
     info: {
-      main: '#ffffff',
-      contrastText: '#000000'
+      main: '#2BA9D4',
+      contrastText: '#fff'
     },
-    gradient: {
-      default: '#22223B'
+    portfolioBorder: {
+      hover: ' rgba(222,211,221,0.7)',
+      main: ' rgba(146,146,155,0.5)'
     }
   }
 })

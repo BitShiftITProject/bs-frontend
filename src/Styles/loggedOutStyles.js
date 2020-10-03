@@ -38,21 +38,29 @@ const loggedOutStyles = makeStyles((theme) => ({
     borderRadius: 0,
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(4),
-    width: '40vw',
-    [theme.breakpoints.down('md', 'md')]: {
-      width: '50vw'
-    },
-    [theme.breakpoints.between('sm', 'sm')]: {
-      width: '70vw'
-    },
-    [theme.breakpoints.between('xs', 'xs')]: {
-      width: '100vw',
-      height: '100vh'
-    },
+    paddingTop: 0,
+    paddingBottom: theme.spacing(2),
     boxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
     MozBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
     WebkitBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
-    OBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`
+    OBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
+
+    [theme.breakpoints.only('xs')]: {
+      width: '90vw',
+      boxShadow: `-10px 10px  ${theme.palette.secondary.light}`,
+      MozBoxShadow: `-10px 10px  ${theme.palette.secondary.light}`,
+      WebkitBoxShadow: `-10px 10px  ${theme.palette.secondary.light}`,
+      OBoxShadow: `-10px 10px  ${theme.palette.secondary.light}`
+    },
+    [theme.breakpoints.only('sm')]: {
+      width: '70vw'
+    },
+    [theme.breakpoints.only('md')]: {
+      width: '55vw'
+    },
+    [theme.breakpoints.only('lg')]: {
+      width: '40vw'
+    }
   },
   modal: {},
   avatar: {

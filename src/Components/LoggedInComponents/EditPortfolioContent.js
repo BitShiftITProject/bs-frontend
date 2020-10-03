@@ -422,7 +422,7 @@ export default function EditPortfolioContent(props) {
            * SAVE CHANGES BUTTON
            */}
           <Grid item className={classes.floatingBottomContainer}>
-            <Fab color='primary' variant='extended' onClick={handlePageContentEdit}>
+            <Fab color='secondary' variant='extended' onClick={handlePageContentEdit}>
               <CursorTypography variant='button'>
                 {intl.formatMessage({ id: 'saveChanges' })}
               </CursorTypography>

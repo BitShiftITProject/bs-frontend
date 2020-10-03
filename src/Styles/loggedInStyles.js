@@ -32,6 +32,10 @@ const loggedInStyles = makeStyles((theme) => ({
   fixedHeightPaper: {
     width: '100%',
     padding: theme.spacing(4),
+    [theme.breakpoints.only('xs')]: {
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2)
+    },
     borderRadius: 0,
     display: 'flex',
     overflow: 'scroll',
@@ -123,6 +127,18 @@ const loggedInStyles = makeStyles((theme) => ({
     '&.MuiOutlinedInput-input:-webkit-autofill': {
       WebkitBoxShadow: '0 0 0 100px rgba(0,0,0,0.2) inset',
       WebkitTextFillColor: theme.palette.secondary.contrastText
+    }
+  },
+  share: {
+    '&:hover': {
+      backgroundColor: theme.palette.info.main,
+      color: theme.palette.info.contrastText
+    }
+  },
+  delete: {
+    '&:hover': {
+      backgroundColor: theme.palette.error.main,
+      color: theme.palette.error.contrastText
     }
   }
 }))
