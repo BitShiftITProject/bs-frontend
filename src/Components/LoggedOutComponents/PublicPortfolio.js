@@ -58,13 +58,19 @@ class PublicPortfolio extends Component {
 
     // If the portfolioDetails does not equal null then we have found one
     if (this.state.portfolioPages) {
+
+        // Array for storing JSX of sections to be displayed
         const sectionsJSX = []
+        // If the sections array is present in the pages data
         if(this.state.portfolioPages[this.state.pageIndex].content.sections){
-            this.state.portfolioPages[this.state.pageIndex].content.sections.forEach(section => sectionsJSX.push(GetSectionJSX(section)));
+            // Push the section jsx to the array
+            this.state.portfolioPages[this.state.pageIndex].content.sections.forEach(section => sectionsJSX.push(GetSectionJSX(section, false)));
         }
+        // Check to see if the page has sections or is the old formatting
         const pageContent = ((this.state.portfolioPages[this.state.pageIndex].content.sections) ? sectionsJSX : <p>Nothing here sorry</p>)
         
         return (
+            // Display sidebar with pages data and section content
             <PublicSidebar pages={this.state.portfolioPages} content={
                 <div id='sections'>
                     {pageContent}

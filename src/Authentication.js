@@ -87,8 +87,8 @@ class Authentication extends Component {
           <Route exact path='/login' component={Login} />
           <Route exact path='/signup' component={Signup} />
           <Route exact path='/forgotpassword' component={ForgotPassword} />
-
-          <Redirect to='/login' />
+          <Route exact path='/' component={LandingPage} />
+          <Redirect to='/' />
         </Switch>
       )
     }
