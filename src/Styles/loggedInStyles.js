@@ -108,7 +108,7 @@ const loggedInStyles = makeStyles((theme) => ({
 
   formLabel: {
     '& .Mui-focused': {
-      color: theme.palette.info.main
+      color: theme.palette.text.primary
     }
   },
 
