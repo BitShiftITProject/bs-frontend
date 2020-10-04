@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import {Paragraph, Title} from './SectionElements'
+import { Paragraph, Title } from './SectionElements'
 
-function MapSection (section, editting) {
+function MapSection(section, editting) {
     let sectionId = section.id;
-    switch(sectionId) {
+    switch (sectionId) {
         case 0:
             // Title Section
             return (Title(editting, section.content.title));

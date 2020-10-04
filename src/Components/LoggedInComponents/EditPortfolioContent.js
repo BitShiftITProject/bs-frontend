@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import SectionsButton from './SectionsButton.js'
+import { Paragraph, Title } from '../../Sections/SectionElements'
+import GetSectionJSX from '../../Sections/SectionsMap'
 
 import {
   loggedInStyles,
@@ -27,6 +30,7 @@ import AddIcon from '@material-ui/icons/Add'
 import CloseIcon from '@material-ui/icons/Close'
 
 import {
+  // page related imports
   patchPage,
   patchPortfolio,
   postPageToPortfolio,
@@ -46,8 +50,25 @@ export default function EditPortfolioContent(props) {
   const [pageIndex, setPageIndex] = useState(0)
   const [pageTitle, setPageTitle] = useState('')
   const [pageContent, setPageContent] = useState(
-    pages && pages[pageIndex] ? pages[pageIndex].content : null
+    pages && pages[pageIndex] ? (pages[pageIndex].content.sections) : []
   )
+  /* -------------------------------------------------------------------------- */
+  /*                                Section handlers                            */
+  /* -------------------------------------------------------------------------- */
+  async function handleSectionEvent(name, section) {
+    // TO DO: ADD a section to a temporary contents object (only saved to database 
+    // if the user saves the data)
+    console.log(pageContent)
+    if (name == "addSection") {
+      // add new section
+      const newContent = pageContent.concat(section)
+      setPageContent(newContent)
+
+    } else {
+      // TO DO : remove a section from the temporary contents
+    }
+    console.log(pageContent)
+  }
 
   /* -------------------------------------------------------------------------- */
   /*                                   Styles                                   */
@@ -95,13 +116,16 @@ export default function EditPortfolioContent(props) {
     setPageIndex(idx)
     setPageContent(pages[idx].content)
     // console.log('Page', idx, 'selected')
+
   }
 
   async function handlePageAdd(e) {
     e.preventDefault()
     const postDetails = {
       title: pageTitle,
-      content: {}
+      content: {
+        sections: []
+      }
     }
     await postPageToPortfolio(portfolio.id, postDetails).then((response) => {
       if (response.ok) {
@@ -170,6 +194,9 @@ export default function EditPortfolioContent(props) {
 
     setOpen(false)
   }
+
+
+
 
   /* ----------------------------- Dialog Content ----------------------------- */
 
@@ -316,6 +343,10 @@ export default function EditPortfolioContent(props) {
   const dialog = (
     <CustomDialog open={open} setOpen={setOpen} content={dialogType[dialogContent.type]} />
   )
+
+  const sections = pageContent
+  // const sections = pages && pages[pageIndex] ? (pages[pageIndex].content.sections) : []
+
   return (
     <Grid container direction='row' spacing={0}>
       {/*
@@ -408,7 +439,9 @@ export default function EditPortfolioContent(props) {
             justify='space-between'
             style={{ height: '100%', overflow: 'scroll' }}
           >
-            {pages && pages[pageIndex] ? JSON.stringify(pages[pageIndex]) : ''}
+            {/* need to change key. cant be section.id since it might duplicate keys */}
+            {sections.map((section, index) => { return <div key={index}> {GetSectionJSX(section, true)} </div> })}
+
           </Grid>
           {/*
            * SAVE CHANGES BUTTON
@@ -416,11 +449,16 @@ export default function EditPortfolioContent(props) {
           <Grid item className={classes.floatingBottomContainer}>
             <Fab color='primary' variant='extended' onClick={handlePageContentEdit}>
               <CursorTypography variant='button'>Save Changes</CursorTypography>
+
             </Fab>
+          </Grid>
+          {/* pass in the props on click (section thats clicked on) */}
+          {/*sets the state containing sections to add section type object  */}
+          <Grid> <SectionsButton handleSectionOnClick={(section) => handleSectionEvent('addSection', section)} />
           </Grid>
         </Paper>
       </Grid>
-      {dialog}
-    </Grid>
+      { dialog}
+    </Grid >
   )
 }
