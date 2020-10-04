@@ -37,12 +37,15 @@ export default function ExpandedSectionsButton({ handleToggle, handleSectionOnCl
             {/* uses handleSectionOnClick and parses on the section type */}
 
             {/* TO DO: make it work for ALLL sections without hardcoding in the form. so that its in a grid, button and then the get section
+            I reccomend making it so that theres a (+) add button on the side or maybe onHover, it shows a (+) so that they know if they click it, itll add
+            to the screen. (can make it so that if they click the section or button itll add it, doesnt have to be JUST the button, but definately think that there should 
+                be SOME SORT of (+) so that they know if they click it itll show up)
             <Grid>
                 <Button
                     onClick={() => { handleSectionOnClick(section)}
                     }
                 >
-                    {GetSectionJSX(section, false)}
+                    {GetSectionJSX(section, false)} <button> (+) </Button>
                 </Button>
             </Grid>
             */}
