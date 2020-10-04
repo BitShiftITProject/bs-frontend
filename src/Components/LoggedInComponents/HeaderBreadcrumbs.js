@@ -72,7 +72,6 @@ export default function HeaderBreadcrumbs(props) {
 
   // For mapping a path segment (the singular segment between /'s)
   // to a corresponding breadcrumb NAME (all segments must have a corresponding crumb)
-  // TODO: Handle mutable breadcrumbs such as portfolio titles
   const breadcrumbNameMap = {
     home: intl.formatMessage({ id: 'home' }),
     profile: intl.formatMessage({ id: 'profile' }),
@@ -109,17 +108,17 @@ export default function HeaderBreadcrumbs(props) {
               {breadcrumbNameMap[segment]}
             </Link>
           ) : (
-              <CursorTypography
-                style={{ fontWeight: 'bold' }}
-                className={classes.breadcrumbLink}
-                key={segment}
-              >
-                <span className={breadcrumbIconMap[segment] ? classes.breadcrumbIcon : ''}>
-                  {breadcrumbIconMap[segment]}
-                </span>
-                {breadcrumbNameMap[segment]}
-              </CursorTypography>
-            )
+            <CursorTypography
+              style={{ fontWeight: 'bold' }}
+              className={classes.breadcrumbLink}
+              key={segment}
+            >
+              <span className={breadcrumbIconMap[segment] ? classes.breadcrumbIcon : ''}>
+                {breadcrumbIconMap[segment]}
+              </span>
+              {breadcrumbNameMap[segment]}
+            </CursorTypography>
+          )
         )}
       </Breadcrumbs>
     </div>

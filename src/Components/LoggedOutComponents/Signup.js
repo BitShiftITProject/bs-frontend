@@ -102,7 +102,7 @@ function Signup(props) {
 
     if (response && response.ok) {
       const auth = await response.json()
-      console.log(auth)
+
       //  do the sign in thing
       window.location.href = '/login'
     } else {

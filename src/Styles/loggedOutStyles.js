@@ -1,35 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles'
 
 const loggedOutStyles = makeStyles((theme) => ({
-  // '@global': {
-  //   '@keyframes gradient': {
-  //     '0%': {
-  //       backgroundPosition: '0% 50%'
-  //     },
-  //     '50%': {
-  //       backgroundPosition: '100% 50%'
-  //     },
-  //     '100%': {
-  //       backgroundPosition: '0% 50%'
-  //     }
-  //   }
-  // },
-  background: {
-    // background: `linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)`,
-    // backgroundSize: '400% 400%',
-    // animation: 'gradient 15s ease infinite'
-  },
   root: {
     width: '100vw',
-    height: '100vh',
+    height: '100%',
     textTransform: 'lowercase'
-
-    // display: 'flex',
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // flexDirection: 'column'
   },
-  layout: {},
   paper: {
     display: 'flex',
     flexDirection: 'column',
@@ -69,7 +45,7 @@ const loggedOutStyles = makeStyles((theme) => ({
   },
   form: {
     padding: theme.spacing(4),
-    width: '100%' // Fix IE 11 issue.
+    width: '100%'
   },
 
   formLabel: {
@@ -86,8 +62,6 @@ const loggedOutStyles = makeStyles((theme) => ({
     [theme.breakpoints.only('xs')]: {
       paddingTop: theme.spacing(3)
     }
-    // backgroundColor: theme.palette.primary.main,
-    // color: theme.palette.primary.contrastText
   },
 
   appBarTitle: {
@@ -124,16 +98,9 @@ const loggedOutStyles = makeStyles((theme) => ({
       paddingBottom: theme.spacing(2),
       paddingTop: theme.spacing(2),
       height: '100%',
-      // textDecoration: 'none',
       '&.special': {
         backgroundColor: theme.palette.primary.light,
         color: theme.palette.primary.contrastText
-
-        // backgroundColor: theme.palette.secondary.main,
-        // color: theme.palette.secondary.contrastText,
-        // '& span::before': {
-        //   backgroundColor: theme.palette.secondary.contrastText
-        // }
       },
       '&.normal': {
         color: theme.palette.text.primary
@@ -143,34 +110,11 @@ const loggedOutStyles = makeStyles((theme) => ({
 
       // Taken from https://codepen.io/kathykato/pen/zYYRGRQ
       // https://css-tricks.com/4-ways-to-animate-the-color-of-a-text-link-on-hover/
-
-      // position: 'relative',
-      // transition: 'clip-path 275ms ease',
-
-      // '&:hover span::before, &:focus span::before': {
-      //   clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)'
-      // },
-
-      // '& span': {
-      //   position: 'relative',
-      //   display: 'inline-block',
-      //   '&::before': {
-      //     position: 'absolute',
-      //     content: 'attr(data-content)',
-      //     textDecoration: 'underline',
-      //     clipPath: 'polygon(0 0, 0 0, 0% 100%, 0 100%)',
-      //     transition: 'clip-path 275ms ease'
-      //   }
-      // }
-
       // Taken from https://tobiasahlin.com/blog/css-trick-animating-link-underlines/
 
       textDecoration: 'none',
-      // display: 'table',
 
       '& span': {
-        // display: 'table-cell',
-        // verticalAlign: 'middle',
         position: 'relative',
         '&::before': {
           content: 'attr(data-content)',
@@ -193,8 +137,6 @@ const loggedOutStyles = makeStyles((theme) => ({
     }
   },
   appBarItemsContainer: {
-    // backgroundColor: theme.palette.primary.main,
-    // borderRadius: 30,
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1)
   },

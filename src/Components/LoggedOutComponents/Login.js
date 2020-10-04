@@ -92,17 +92,14 @@ function Login(props) {
 
     if (response && response.ok) {
       const auth = await response.json()
-      console.log(auth)
 
       if (state.rememberMe) {
-        console.log('Remember me!')
         localStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
       } else {
         sessionStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
       }
       window.location.href = '/'
     } else {
-      console.log('Authentication error')
       const error = await response.json()
 
       setState((st) => ({

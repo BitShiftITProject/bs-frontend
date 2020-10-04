@@ -43,7 +43,7 @@ export default function AddPortfolioPage() {
       logout()
     } else {
       if (!user.username) {
-        console.log('No username')
+        logout()
         return
       }
 

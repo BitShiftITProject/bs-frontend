@@ -31,17 +31,11 @@ const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
 
   editProfileForm: {
-    // '& .MuiGrid-root': {
-    //   paddingBottom: theme.spacing(0),
-    // },
     '& .MuiChip-root': {
       marginBottom: theme.spacing(0),
       marginTop: theme.spacing(0)
     },
 
-    // '& .MuiTextField-root': {
-    //   marginRight: theme.spacing(2),
-    // },
     '& .MuiInputLabel-outlined:focus-': {
       overflow: 'hidden'
     }
@@ -169,7 +163,7 @@ export default function EditProfilePage() {
 
     patchUser(patchDetails)
       .then((response) => {
-        if (response.ok) console.log(response)
+        console.log(response)
       })
       .catch((error) => {
         console.log(error)

@@ -1,19 +1,6 @@
 import React from 'react'
 
-import {
-  TextField,
-  Typography
-  //   Grid,
-  //   Paper,
-  //   Fab,
-  //   Divider,
-  //   List,
-  //   Button,
-  //   DialogActions,
-  //   DialogContent,
-  //   DialogContentText,
-  //   DialogTitle
-} from '@material-ui/core'
+import { TextField, Typography } from '@material-ui/core'
 
 export const Paragraph = ({ editing, content }) => {
   return <div>{editing ? <TextField value={content} /> : <p>{content}</p>}</div>
@@ -46,5 +33,3 @@ export const Subtitle = ({ editing, content }) => {
     </div>
   )
 }
-
-// TODO: Add Media section element

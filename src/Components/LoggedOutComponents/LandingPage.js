@@ -1,21 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import clsx from 'clsx'
 import { useIntl } from 'react-intl'
 import { useHistory } from 'react-router-dom'
 
 import { Fab, Typography, makeStyles, Grid } from '@material-ui/core'
 import LandingContainer from './LandingContainer'
 import TextShuffle from '../CommonComponents/TextShuffle'
+import { ThemesContext } from '../Contexts/ThemesContext'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    maxWidth: '100%'
+    maxWidth: '100%',
+    padding: 0
   },
 
   heading1Container: {
     textAlign: 'center',
     display: 'flex',
     justifyContent: 'flex-end',
-    // marginRight: theme.spacing(1.5),
     '& h1': {
       fontWeight: 700
     }
@@ -32,16 +34,15 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     display: 'flex',
     justifyContent: 'flex-start',
-    // marginLeft: theme.spacing(1.5),
     [theme.breakpoints.only('xs')]: {
       justifyContent: 'center'
-      // marginLeft: 0
     }
   },
 
-  contentHeading2: {
-    // fontWeight: theme.typography.fontWeightBold,
-    // color: theme.palette.secondary.light
+  buttonsContainer: {
+    [theme.breakpoints.between('sm', 'xl')]: {
+      alignItems: 'flex-start'
+    }
   },
 
   '@global': {
@@ -63,9 +64,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.only('xs')]: {
       justifyContent: 'center'
     },
-    // [theme.breakpoints.only('sm')]: {
-    //   justifyContent: 'center'
-    // },
 
     '& div div': {
       color: '#f35626',
@@ -83,34 +81,35 @@ const useStyles = makeStyles((theme) => ({
   },
 
   image: {
-    // Change size of image by changing height and width
-    minWidth: 450,
     maxWidth: '100%',
-    height: '100%',
+    height: 'auto'
+  },
 
-    // Change color of image by changing backgroundColor
-    backgroundColor: theme.palette.text.primary,
-    WebkitMaskRepeat: 'no-repeat',
-    WebkitMaskSize: '100% 100%',
-    WebkitMaskImage: 'url("https://miro.medium.com/max/680/1*iqbSkjkrX-MG83gqKvfM7A.png")'
+  lightImage: {
+    filter:
+      'invert(99%) sepia(4%) saturate(239%) hue-rotate(249deg) brightness(117%) contrast(100%)'
   }
 }))
 
 export default function LandingPage() {
+  const { currentTheme: theme } = useContext(ThemesContext)
   const intl = useIntl()
   const history = useHistory()
   const classes = useStyles()
 
   const content = (
-    <Grid container direction='column' spacing={2}>
-      <Grid
-        item
-        xs={4}
-        className={classes.container}
-        container
-        justify='center'
-        alignItems='flex-end'
-      >
+    /* -------------------------------------------------------------------------- */
+    /*                                Page Content                                */
+    /* -------------------------------------------------------------------------- */
+
+    // Encloses 3 things currently: Heading, Buttons, Picture (each in
+    // grids for responsive sizing and spacing)
+
+    <Grid container style={{ flex: 1 }} direction='column' justify='center' spacing={2}>
+      {/*
+       * HEADING
+       */}
+      <Grid item className={classes.container} container justify='center' alignItems='flex-end'>
         <Grid item xs={12} container spacing={2} justify='center' alignItems='flex-end'>
           <Grid item xs={7} sm={4} container className={classes.heading1Container}>
             <Typography variant='h2' component='h1'>
@@ -131,15 +130,17 @@ export default function LandingPage() {
           </Grid>
         </Grid>
       </Grid>
+      {/*
+       * BUTTONS
+       */}
       <Grid
         item
-        xs={2}
-        className={classes.container}
+        className={clsx(classes.container, classes.buttonsContainer)}
         container
         spacing={2}
         direction='row'
         justify='center'
-        alignItems='flex-start'
+        alignItems='center'
       >
         <Grid item>
           <Fab
@@ -167,15 +168,15 @@ export default function LandingPage() {
           </Fab>
         </Grid>
       </Grid>
-      <Grid
-        item
-        xs={5}
-        className={classes.container}
-        container
-        justify='center'
-        alignItems='center'
-      >
-        <span className={classes.image} />
+      {/*
+       * PICTURE
+       */}
+      <Grid item className={classes.container} container justify='center' alignItems='center'>
+        <img
+          className={theme === 'dark' ? clsx(classes.image, classes.lightImage) : classes.image}
+          src='https://miro.medium.com/max/680/1*iqbSkjkrX-MG83gqKvfM7A.png'
+          alt='bitshift'
+        />
       </Grid>
     </Grid>
   )

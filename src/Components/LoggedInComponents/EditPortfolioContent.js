@@ -100,7 +100,6 @@ export default function EditPortfolioContent(props) {
   function handlePageSelect(idx) {
     setPageIndex(idx)
     setPageContent(pages[idx].content)
-    // console.log('Page', idx, 'selected')
   }
 
   async function handlePageAdd(e) {
@@ -109,13 +108,7 @@ export default function EditPortfolioContent(props) {
       title: pageTitle,
       content: {}
     }
-    await postPageToPortfolio(portfolio.id, postDetails).then((response) => {
-      if (response.ok) {
-        console.log('Page added!')
-      } else {
-        console.log('Page NOT added!')
-      }
-    })
+    await postPageToPortfolio(portfolio.id, postDetails)
 
     await getPortfolioPages(portfolio.id).then((pages) => setPages(pages))
     setOpen(false)
@@ -123,28 +116,14 @@ export default function EditPortfolioContent(props) {
 
   async function handlePageTitleEdit(e) {
     e.preventDefault()
-    await patchPage(pages[dialogContent.item].id, { title: pageTitle }).then((response) => {
-      if (response.ok) {
-        console.log('Page title edited!')
-      } else {
-        console.log('Page title NOT edited!')
-      }
-    })
-
+    await patchPage(pages[dialogContent.item].id, { title: pageTitle })
     await getPortfolioPages(portfolio.id).then((pages) => setPages(pages))
     setOpen(false)
   }
 
   async function handlePageContentEdit(e) {
     e.preventDefault()
-    await patchPage(pages[pageIndex].id, { content: pageContent }).then((response) => {
-      if (response.ok) {
-        console.log('Page content edited!')
-      } else {
-        console.log('Page content NOT edited!')
-      }
-    })
-
+    await patchPage(pages[pageIndex].id, { content: pageContent })
     await getPortfolioPages(portfolio.id).then((pages) => setPages(pages))
     setOpen(false)
   }
@@ -166,13 +145,7 @@ export default function EditPortfolioContent(props) {
     setPages(newPages)
 
     // Delete the portfolio from the portfolios DB
-    await deletePage(pageId).then((response) => {
-      if (response.ok) {
-        console.log('Page deleted!')
-      } else {
-        console.log('Page NOT deleted!')
-      }
-    })
+    await deletePage(pageId)
 
     setOpen(false)
   }
@@ -354,14 +327,16 @@ export default function EditPortfolioContent(props) {
             </Grid>
             <Divider orientation='horizontal' />
 
-            {/*
-             * PORTFOLIO PAGES
-             */}
+            {/* PORTFOLIO PAGES */}
 
             <Grid container direction='column' justify='space-evenly' className={classes.padded}>
               <CursorTypography variant='overline'>
                 {intl.formatMessage({ id: 'pages' })}
               </CursorTypography>
+
+              {/* Each list item corresponds to a page. It shows the page's title, and when
+               * hovered has an edit button (Pen icon) and a delete button (Trash icon). */}
+
               <List>
                 {pages &&
                   pages.map((page, idx) => (
@@ -391,6 +366,9 @@ export default function EditPortfolioContent(props) {
                     </ListItem>
                   ))}
               </List>
+
+              {/* ADD PAGE BUTTON */}
+
               <Fab color='primary' size='small' onClick={() => handlePageEvent('addPage', '')}>
                 <AddIcon />
               </Fab>
@@ -418,9 +396,9 @@ export default function EditPortfolioContent(props) {
           >
             {pages && pages[pageIndex] ? JSON.stringify(pages[pageIndex]) : ''}
           </Grid>
-          {/*
-           * SAVE CHANGES BUTTON
-           */}
+
+          {/* SAVE CHANGES BUTTON */}
+
           <Grid item className={classes.floatingBottomContainer}>
             <Fab color='secondary' variant='extended' onClick={handlePageContentEdit}>
               <CursorTypography variant='button'>

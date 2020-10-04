@@ -18,7 +18,12 @@ export default function LandingContainer(props) {
   const { content } = props
 
   return (
-    <Grid container direction='row' className={classes.background}>
+    <Grid
+      container
+      direction='row'
+      className={classes.background}
+      style={{ height: '100%', flex: 1, flexWrap: 1, overflow: 'scroll' }}
+    >
       {/* LEFT Padding */}
       <Grid item xs={false} md={2}></Grid>
 

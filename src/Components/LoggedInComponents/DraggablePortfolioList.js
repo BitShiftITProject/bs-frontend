@@ -80,13 +80,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
       setPortfolios(newPortfolios)
 
       // Delete the portfolio from the portfolios DB
-      await deletePortfolio(portfolioId).then((response) => {
-        if (response.ok) {
-          console.log('Portfolio deleted!')
-        } else {
-          console.log('Portfolio NOT deleted!')
-        }
-      })
+      await deletePortfolio(portfolioId)
     }
 
     setOpen(false)
@@ -124,6 +118,8 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   }
 
   const dialogContent = {
+    /* -------------------------------------------------------------------------- */
+    // Dialog to show when share button is pressed, shows URL and copy URL button
     share: (
       <div>
         <DialogTitle id='form-dialog-title'>
@@ -156,6 +152,9 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
         </DialogContent>
       </div>
     ),
+    /* -------------------------------------------------------------------------- */
+    // Dialog to show when delete icon (trash can) is pressed, shows
+    // confirmation to delete
     delete: (
       <form onSubmit={() => handleDelete(clickedPortfolio.id)}>
         <DialogTitle id='form-dialog-title'>
@@ -186,50 +185,6 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   /* -------------------------------------------------------------------------- */
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
-
-  // !!!!!!! DO NOT DELETE !!!!!!
-  // const draggable = (
-  //   <Grid item>
-  //     <Droppable droppableId='portfoliosDroppable'>
-  //       {(provided, snapshot) => (
-  //         <Grid {...provided.droppableProps} ref={provided.innerRef} container>
-  //           <TransitionGroup style={{ width: '100%', height: '100%' }}>
-  //             {portfolios.map((portfolio, idx) => (
-  //               <CSSTransition key={portfolio.id} classNames='fade' timeout={500}>
-  //                 <Draggable draggableId={portfolio.id} index={idx}>
-  //                   {(provided, snapshot) => (
-  //                     <Grid
-  //                       ref={provided.innerRef}
-  //                       {...provided.draggableProps}
-  //                       {...provided.dragHandleProps}
-  //                       item
-  //                       xs={12}
-  //                       className={classes.portfolio}
-  //                     >
-  //                       {/*
-  //                        * PORTFOLIO CARD: Need to change portfolioId to appropriate Id
-  //                        */}
-  //                       <PortfolioCard
-  //                         portfolioId={portfolio.id}
-  //                         title={portfolio.title}
-  //                         description={portfolio.description}
-  //                         viewPortfolio={handleView}
-  //                         editPortfolio={handleEdit}
-  //                         deletePortfolio={handleClick}
-  //                       />
-  //                     </Grid>
-  //                   )}
-  //                 </Draggable>
-  //               </CSSTransition>
-  //             ))}
-  //           </TransitionGroup>
-  //           {provided.placeholder}
-  //         </Grid>
-  //       )}
-  //     </Droppable>
-  //     {deleteDialog}
-  //   </Grid>
-  // )
 
   return (
     <Grid item>

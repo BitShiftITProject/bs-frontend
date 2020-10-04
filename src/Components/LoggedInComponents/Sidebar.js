@@ -48,7 +48,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     '&::-webkit-scrollbar': {
       display: 'none'
-    }
+    },
+    width: '100vw'
   },
   toolbar: {
     paddingRight: 24 // keep right padding when drawer closed

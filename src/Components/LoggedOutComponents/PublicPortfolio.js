@@ -40,7 +40,6 @@ class PublicPortfolio extends Component {
         // GET methods already return the JSON-parsed response
         // so getPortfolioPages should either return null or an array of pages
         const pages = await getPortfolioPages(portfolioId)
-        console.log(pages)
 
         if (pages) {
           this.setState({ portfolioPages: pages })
