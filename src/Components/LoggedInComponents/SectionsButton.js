@@ -10,10 +10,10 @@ export default function SectionsButton({ handleSectionOnClick }) {
     return (
         <Grid
         >
+            {/* when clicked, itll show the types of sections avaliable with an image of how the section would look overall*/}
             {!expanded && (
                 <div>
-                    {/* for now will just show a default section, later when its clicked, itll expand and show the
-                    types of sections avaliable like the dropdown bar but with an image of how the section would look  */}
+
                     <Button
                         onClick={handleToggle}
                     >
@@ -22,19 +22,16 @@ export default function SectionsButton({ handleSectionOnClick }) {
                 </div>
             )}
 
-            {/* if its true for expand then show the expanded version */}
-
+            {/* Show the expanded version of sections*/}
             {expanded && (
                 <div>
                     <ExpandedSectionsButton
                         handleToggle={handleToggle}
                         handleSectionOnClick={handleSectionOnClick}
                     />
-
                 </div>
             )
             }
-
         </Grid >
     )
 }

@@ -49,6 +49,7 @@ export default function EditPortfolioContent(props) {
   const { portfolio, setPortfolio, pages, setPages } = props
   const [pageIndex, setPageIndex] = useState(0)
   const [pageTitle, setPageTitle] = useState('')
+  // TO DO: add a comment here
   const [pageContent, setPageContent] = useState(
     pages && pages[pageIndex] ? (pages[pageIndex].content.sections) : []
   )
@@ -56,18 +57,16 @@ export default function EditPortfolioContent(props) {
   /*                                Section handlers                            */
   /* -------------------------------------------------------------------------- */
   async function handleSectionEvent(name, section) {
-    // TO DO: ADD a section to a temporary contents object (only saved to database 
-    // if the user saves the data)
-    console.log(pageContent)
+    // TO DO: ADD a section to a temporary contents object (only saved to database if the user saves the data)
+
     if (name == "addSection") {
-      // add new section
+      // add new section to the current page content 
       const newContent = pageContent.concat(section)
       setPageContent(newContent)
 
     } else {
-      // TO DO : remove a section from the temporary contents
+      //TO DO: remove the section from the pageContents
     }
-    console.log(pageContent)
   }
 
   /* -------------------------------------------------------------------------- */
@@ -439,8 +438,27 @@ export default function EditPortfolioContent(props) {
             justify='space-between'
             style={{ height: '100%', overflow: 'scroll' }}
           >
-            {/* need to change key. cant be section.id since it might duplicate keys */}
-            {sections.map((section, index) => { return <div key={index}> {GetSectionJSX(section, true)} </div> })}
+            {/*go over the sections array and render them as section components*/}
+            {/* TO DO:  discuss with the others. make a SectionComponent(not sure on name) which holds
+           
+           grid    section    edit button   delete button   grid 
+
+            and then map it that way  
+
+                        {sections.map((section, index) => { return <div key={index}> {SectionComponent(GetSectionJSX(section, true), editSectionHandler = {}, deleteSectionHandler{})} </div> })}
+                        
+                        or maybe
+
+                        {sections.map((section, index) => { return <div key={index}> {SectionComponent(editing = false, editSectionHandler = {}, deleteSectionHandler{})} </div> })}
+                        and in the component, thats where you do the editing and deleting
+
+*/}
+
+
+            {sections.map((section, index) => {
+              return <div key={index}> {GetSectionJSX(section, true)} </div>
+            })}
+
 
           </Grid>
           {/*
@@ -452,8 +470,8 @@ export default function EditPortfolioContent(props) {
 
             </Fab>
           </Grid>
-          {/* pass in the props on click (section thats clicked on) */}
-          {/*sets the state containing sections to add section type object  */}
+
+          {/* when a section is clicked, it adds the section to the overall sections component */}
           <Grid> <SectionsButton handleSectionOnClick={(section) => handleSectionEvent('addSection', section)} />
           </Grid>
         </Paper>

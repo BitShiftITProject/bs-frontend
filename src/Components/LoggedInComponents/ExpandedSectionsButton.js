@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { Grid, Button } from '@material-ui/core'
 import GetSectionJSX from '../../Sections/SectionsMap'
 import { Paragraph, Title } from '../../Sections/SectionElements'
-
+import CloseIcon from '@material-ui/icons/Close';
 export default function ExpandedSectionsButton({ handleToggle, handleSectionOnClick }) {
+    // TO DO: remove this later. temporary hardcoded sections 
     const section = {
         "id": 0,
         "content": {
@@ -14,10 +15,12 @@ export default function ExpandedSectionsButton({ handleToggle, handleSectionOnCl
     const section1 = {
         "id": 0,
         "content": {
-            "title": "OMG TITILE"
+            "title": "OMG TITLE2"
         }
     }
 
+    // TO DO: go over the sections in section maps and map them all with default sections data (use loreum ipsum). 
+    // Might need to hardcore each section (IN A SEPERATE FILE called defaultSections.js) so that we can render it all in one go. 
     // const sectionIds = [title1, title2]
     return (
         <Grid
@@ -26,18 +29,30 @@ export default function ExpandedSectionsButton({ handleToggle, handleSectionOnCl
                 <Button
                     onClick={handleToggle}
                 >
-                    (X)
+                    <CloseIcon />
                 </Button>
             </Grid>
 
-            {/* needs to go through all the sections in section maps and then render them all*/}
-            {/*uses handle sections on click and parse on the section type */}
+            {/* goes through all sections in section maps and then renders them all*/}
+            {/* uses handleSectionOnClick and parses on the section type */}
+
+            {/* TO DO: make it work for ALLL sections without hardcoding in the form. so that its in a grid, button and then the get section
+            <Grid>
+                <Button
+                    onClick={() => { handleSectionOnClick(section)}
+                    }
+                >
+                    {GetSectionJSX(section, false)}
+                </Button>
+            </Grid>
+            */}
 
             <Grid>
                 <Button
                     onClick={() => { handleSectionOnClick(section) }
                     }
                 >
+                    {/*  */}
                     {GetSectionJSX(section, false)}
                 </Button>
             </Grid>
@@ -50,16 +65,6 @@ export default function ExpandedSectionsButton({ handleToggle, handleSectionOnCl
                     {GetSectionJSX(section1, false)}
                 </Button>
             </Grid>
-
-
-
-
-
-
-
-
-
-
 
         </Grid>
     )
