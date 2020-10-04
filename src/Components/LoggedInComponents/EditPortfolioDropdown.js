@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 import {
   Button,
@@ -15,6 +15,10 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useIntl } from 'react-intl'
+
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,11 +42,22 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function EditPortfolioDropdown({ setEditMode }) {
-  const intl = useIntl()
   const classes = useStyles()
-  const [open, setOpen] = React.useState(false)
-  const anchorRef = React.useRef(null)
 
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const intl = useIntl()
+
+  /* -------------------------------------------------------------------------- */
+  /*                    Popper/Button State and its Handlers                    */
+  /* -------------------------------------------------------------------------- */
+
+  const [open, setOpen] = useState(false)
+  const anchorRef = useRef(null)
+
+  // Toggles it to false if true, and vice versa
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen)
   }
@@ -63,8 +78,8 @@ export default function EditPortfolioDropdown({ setEditMode }) {
   }
 
   // return focus to the button when we transitioned from !open -> open
-  const prevOpen = React.useRef(open)
-  React.useEffect(() => {
+  const prevOpen = useRef(open)
+  useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus()
     }

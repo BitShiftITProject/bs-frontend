@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
 
-import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 
 import Alert from '@material-ui/lab/Alert'
 import { TextField, withStyles, Fab, Grid, Paper } from '@material-ui/core'
 import Loading from '../CommonComponents/Loading'
-import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { signupCheck } from '../../Backend/Fetch'
+
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
 
 const styles = {
   div: {
@@ -25,8 +27,7 @@ const styles = {
 
   span: {
     display: 'flex',
-    flexDirection: 'row',
-    transform: 'translateX(-25px)',
+    flexDirection: 'column',
     width: '100%'
   },
 
@@ -36,7 +37,10 @@ const styles = {
 }
 
 function Signup(props) {
-  const history = useHistory()
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
   const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
@@ -75,12 +79,14 @@ function Signup(props) {
   async function handleSubmit(e) {
     e.preventDefault()
 
+    // Reset error state to hide the error alert
     setState((st) => ({
       ...st,
       signUpFailed: false,
       errorMessage: ''
     }))
 
+    // Password field must be same as Confirm Password field, otherwise toggle error
     if (state.password !== state.confirm) {
       setState((st) => ({
         ...st,
@@ -90,6 +96,8 @@ function Signup(props) {
       return
     }
 
+    // Call the user creation endpoint using the details in the text fields
+    // The keys must be exact with the endpoint
     const details = {
       first_name: state.firstName,
       last_name: state.lastName,
@@ -97,14 +105,17 @@ function Signup(props) {
       username: state.username,
       password: state.password
     }
+
     changeLoading()
+
     const response = await signupCheck(details)
 
+    // If user signup was successful, redirect to '/login'
     if (response && response.ok) {
-      const auth = await response.json()
-
-      //  do the sign in thing
       window.location.href = '/login'
+
+      // Otherwise get the error message from the response and show the message in
+      // the error alert
     } else {
       const error = await response.json()
       setState((st) => ({
@@ -121,6 +132,7 @@ function Signup(props) {
   /* -------------------------------------------------------------------------- */
 
   const style = loggedOutStyles()
+
   // Because we are using withStyles higher-order component (look at the export
   // statement), we retrieve the styles as a prop called 'classes'. It will
   // include all the classes we defined in the 'styles' object we defined above
@@ -133,11 +145,21 @@ function Signup(props) {
   const content = (
     <div className={classes.div}>
       <form onSubmit={handleSubmit} className={classes.form}>
+        {/*
+         * HEADING
+         */}
         <CursorTypography component='h1' variant='h5'>
           {intl.formatMessage({ id: 'signUp' })}
         </CursorTypography>
         <Grid container spacing={1} direction='column' justify='center' alignItems='center'>
           <Grid item container spacing={1} direction='row' style={{ padding: 0 }}>
+            {/* -------------------------------------------------------------------------- */}
+
+            {/*
+             * TEXT FIELDS
+             */}
+
+            {/* First Name */}
             <Grid item xs={6}>
               <TextField
                 inputProps={{ className: style.input }}
@@ -159,6 +181,7 @@ function Signup(props) {
               />
             </Grid>
 
+            {/* Last Name */}
             <Grid item xs={6}>
               <TextField
                 inputProps={{ className: style.input }}
@@ -180,6 +203,8 @@ function Signup(props) {
               />
             </Grid>
           </Grid>
+
+          {/* Username */}
           <TextField
             inputProps={{ className: style.input }}
             InputLabelProps={{
@@ -198,6 +223,8 @@ function Signup(props) {
             value={state.username}
             onChange={handleChange}
           />
+
+          {/* Email Address */}
           <TextField
             inputProps={{ className: style.input }}
             InputLabelProps={{
@@ -217,6 +244,7 @@ function Signup(props) {
             onChange={handleChange}
           />
 
+          {/* Password */}
           <TextField
             inputProps={{ className: style.input }}
             InputLabelProps={{
@@ -238,6 +266,7 @@ function Signup(props) {
             onChange={handleChange}
           />
 
+          {/* Confirm Password */}
           <TextField
             inputProps={{ className: style.input }}
             InputLabelProps={{
@@ -269,6 +298,8 @@ function Signup(props) {
           {/* Loading sign up */}
           {state.loading && <Loading message=' Hold on while we save your data' />}
 
+          {/* SIGN UP BUTTON */}
+
           <Grid
             className={classes.span}
             item
@@ -279,14 +310,6 @@ function Signup(props) {
           >
             {!state.loading && (
               <div>
-                <Fab
-                  onClick={() => history.goBack()}
-                  color='primary'
-                  aria-label='login'
-                  className={classes.fab}
-                >
-                  <ArrowBackIcon />
-                </Fab>
                 <Fab type='submit' variant='extended' className={style.submit} color='primary'>
                   {intl.formatMessage({ id: 'signUp' })}
                 </Fab>

@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
 
-import {
-  loggedInStyles,
-  //PaddedFormGrid,
-  CursorTypography
-} from '../../Styles/loggedInStyles'
+import { loggedInStyles, CursorTypography } from '../../Styles/loggedInStyles'
 import CustomDialog from '../CommonComponents/CustomDialog'
 
 import {
@@ -31,24 +27,26 @@ import {
   getPortfolio,
   patchPortfolio,
   postPageToPortfolio,
-  deletePage,
-  getPortfolioPages
+  deletePage
 } from '../../Backend/Fetch'
 
 import { useIntl } from 'react-intl'
 
 export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const intl = useIntl()
+
+  /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
-  // TODO: Use setPages when updating a page's contents
   const { portfolio, setPortfolio, pages, setPages } = props
   const [pageIndex, setPageIndex] = useState(0)
   const [pageTitle, setPageTitle] = useState('')
-  const [pageContent, setPageContent] = useState(
-    pages && pages[pageIndex] ? pages[pageIndex].content : null
-  )
+  const [pageContent, setPageContent] = useState(null)
 
   /* -------------------------------------------------------------------------- */
   /*                                   Styles                                   */
@@ -59,7 +57,7 @@ export default function EditPortfolioContent(props) {
   const leftPanel = classes.leftPanel
 
   /* -------------------------------------------------------------------------- */
-  /*                                   Dialog                                   */
+  /*                                Dialog State                                */
   /* -------------------------------------------------------------------------- */
 
   const [open, setOpen] = useState(false)
@@ -69,8 +67,9 @@ export default function EditPortfolioContent(props) {
     setOpen(false)
   }
 
-  /* -------------------------- Dialog Open Handlers -------------------------- */
-  // Handlers for when a dialog open event is triggered
+  /* -------------------------------------------------------------------------- */
+  /*                         Dialog Open Event Handlers                         */
+  /* -------------------------------------------------------------------------- */
 
   function handlePortfolioEvent(name, value) {
     setDialogContent({ type: name, item: value })
@@ -87,44 +86,85 @@ export default function EditPortfolioContent(props) {
     setOpen(true)
   }
 
-  /* -------------------------- Dialog Close Handlers ------------------------- */
-  // Handlers for when a dialog close event is triggered
+  /* -------------------------------------------------------------------------- */
+  /*                         Dialog Close Event Handlers                        */
+  /* -------------------------------------------------------------------------- */
 
   function handlePortfolioEdit(e) {
     e.preventDefault()
+    // Edits the current portfolio's title and description
     patchPortfolio(portfolio.id, { title: portfolio.title, description: portfolio.description })
+    // Sets the currently shown portfolio as the updated portfolio
     setPortfolio(getPortfolio(portfolio.id))
     setOpen(false)
   }
 
   function handlePageSelect(idx) {
+    // Updates the page index and page content to be those of the selected page
     setPageIndex(idx)
     setPageContent(pages[idx].content)
   }
 
   async function handlePageAdd(e) {
     e.preventDefault()
+
+    // Creates a new page with the user-updated pageTitle (basically the content
+    // of the text field) as its title and no content
     const postDetails = {
       title: pageTitle,
       content: {}
     }
-    await postPageToPortfolio(portfolio.id, postDetails)
 
-    await getPortfolioPages(portfolio.id).then((pages) => setPages(pages))
+    // Adds the new page to the Page DB, and saving the actual details of the
+    // newly-added page
+    const newPage = await postPageToPortfolio(portfolio.id, postDetails).then((response) =>
+      response.json()
+    )
+
+    // Updates the pages to included the newly added page in the frontend,
+    // without messing with the other pages' unsaved changes
+    setPages((pages) => [...pages, newPage])
+
     setOpen(false)
   }
 
   async function handlePageTitleEdit(e) {
     e.preventDefault()
+
+    // Edit the page title of the Page in the DB
     await patchPage(pages[dialogContent.item].id, { title: pageTitle })
-    await getPortfolioPages(portfolio.id).then((pages) => setPages(pages))
+
+    // Replace the title of the changed page manually to show the change in
+    // frontend, to avoid deleting any unsaved changes in the other pages'
+    setPages((pages) =>
+      pages.map((page) => {
+        if (page.id === pages[dialogContent.item].id) {
+          return { ...page, title: pageTitle }
+        } else {
+          return page
+        }
+      })
+    )
     setOpen(false)
   }
 
   async function handlePageContentEdit(e) {
     e.preventDefault()
+
+    // Edit the page content of the Page in the DB
     await patchPage(pages[pageIndex].id, { content: pageContent })
-    await getPortfolioPages(portfolio.id).then((pages) => setPages(pages))
+
+    // Replace the content of the changed page manually to show the change in
+    // frontend, to avoid deleting any unsaved changes in the other pages'
+    setPages((pages) =>
+      pages.map((page) => {
+        if (page.id === pages[pageIndex].id) {
+          return { ...page, content: pageContent }
+        } else {
+          return page
+        }
+      })
+    )
     setOpen(false)
   }
 
@@ -152,8 +192,6 @@ export default function EditPortfolioContent(props) {
 
   /* ----------------------------- Dialog Content ----------------------------- */
 
-  const intl = useIntl()
-
   const dialogType = {
     // Contains the contents to be rendered when a dialog is triggered, which is
     // to be sent to the CustomDialog component
@@ -161,7 +199,13 @@ export default function EditPortfolioContent(props) {
     // Dialog to show when the Edit button next to the portfolio title is clicked
     editPortfolio: (
       <form onSubmit={handlePortfolioEdit}>
+        {/*
+         * TITLE
+         */}
         <DialogTitle>{intl.formatMessage({ id: 'editPortfolio' })}</DialogTitle>
+        {/*
+         * TEXT FIELDS
+         */}
         <DialogContent>
           <TextField
             inputProps={{ className: classes.input }}
@@ -192,6 +236,9 @@ export default function EditPortfolioContent(props) {
             onChange={(e) => setPortfolio({ ...portfolio, description: e.target.value })}
           />
         </DialogContent>
+        {/*
+         * BUTTONS
+         */}
         <DialogActions>
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
@@ -206,7 +253,13 @@ export default function EditPortfolioContent(props) {
     // Dialog to show when the (+) button below pages is clicked to add a page
     addPage: (
       <form onSubmit={handlePageAdd}>
+        {/*
+         * TITLE
+         */}
         <DialogTitle>{intl.formatMessage({ id: 'addPage' })}</DialogTitle>
+        {/*
+         * TEXT FIELDS
+         */}
         <DialogContent>
           <TextField
             inputProps={{ className: classes.input }}
@@ -223,6 +276,9 @@ export default function EditPortfolioContent(props) {
             onChange={(e) => setPageTitle(e.target.value)}
           />
         </DialogContent>
+        {/*
+         * BUTTONS
+         */}
         <DialogActions>
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
@@ -238,7 +294,13 @@ export default function EditPortfolioContent(props) {
     // Dialog to show when the Edit button next to a page is clicked
     editPage: (
       <form onSubmit={handlePageTitleEdit}>
+        {/*
+         * TITLE
+         */}
         <DialogTitle>{intl.formatMessage({ id: 'editPage' })}</DialogTitle>
+        {/*
+         * TEXT FIELDS
+         */}
         <DialogContent>
           <TextField
             inputProps={{ className: classes.input }}
@@ -255,6 +317,9 @@ export default function EditPortfolioContent(props) {
             onChange={(e) => setPageTitle(e.target.value)}
           />
         </DialogContent>
+        {/*
+         * BUTTONS
+         */}
         <DialogActions>
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
@@ -269,9 +334,15 @@ export default function EditPortfolioContent(props) {
     // Dialog to show when the Delete button next to a page is clicked
     deletePage: (
       <div>
+        {/*
+         * TITLE
+         */}
         <DialogTitle id='alert-dialog-title'>
           {intl.formatMessage({ id: 'deletePage' })}
         </DialogTitle>
+        {/*
+         * CONTENT
+         */}
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
             {intl.formatMessage(
@@ -280,6 +351,9 @@ export default function EditPortfolioContent(props) {
             )}
           </DialogContentText>
         </DialogContent>
+        {/*
+         * BUTTONS
+         */}
         <DialogActions>
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
@@ -327,7 +401,7 @@ export default function EditPortfolioContent(props) {
             </Grid>
             <Divider orientation='horizontal' />
 
-            {/* PORTFOLIO PAGES */}
+            {/* PORTFOLIO PAGES (List) */}
 
             <Grid container direction='column' justify='space-evenly' className={classes.padded}>
               <CursorTypography variant='overline'>
@@ -346,7 +420,9 @@ export default function EditPortfolioContent(props) {
                       button
                       className={classes.hiddenButtonItem}
                     >
+                      {/* PAGE TITLE */}
                       <ListItemText>{page.title}</ListItemText>
+                      {/* EDIT PAGE BUTTON */}
                       <Fab
                         color='primary'
                         size='small'
@@ -355,6 +431,7 @@ export default function EditPortfolioContent(props) {
                       >
                         <CreateIcon />
                       </Fab>
+                      {/* DELETE PAGE BUTTON */}
                       <Fab
                         color='primary'
                         size='small'

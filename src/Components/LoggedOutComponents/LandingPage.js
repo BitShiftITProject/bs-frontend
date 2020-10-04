@@ -8,6 +8,10 @@ import LandingContainer from './LandingContainer'
 import TextShuffle from '../CommonComponents/TextShuffle'
 import { ThemesContext } from '../Contexts/ThemesContext'
 
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
+
 const useStyles = makeStyles((theme) => ({
   container: {
     maxWidth: '100%',
@@ -92,22 +96,37 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function LandingPage() {
-  const { currentTheme: theme } = useContext(ThemesContext)
-  const intl = useIntl()
-  const history = useHistory()
   const classes = useStyles()
 
-  const content = (
-    /* -------------------------------------------------------------------------- */
-    /*                                Page Content                                */
-    /* -------------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
 
+  const intl = useIntl()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   History                                  */
+  /* -------------------------------------------------------------------------- */
+
+  const history = useHistory()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    Theme                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const { currentTheme: theme } = useContext(ThemesContext)
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Page Content                                */
+  /* -------------------------------------------------------------------------- */
+
+  const content = (
     // Encloses 3 things currently: Heading, Buttons, Picture (each in
     // grids for responsive sizing and spacing)
 
     <Grid container style={{ flex: 1 }} direction='column' justify='center' spacing={2}>
       {/*
-       * HEADING
+       * CENTER TEXT
        */}
       <Grid item className={classes.container} container justify='center' alignItems='flex-end'>
         <Grid item xs={12} container spacing={2} justify='center' alignItems='flex-end'>
@@ -131,7 +150,7 @@ export default function LandingPage() {
         </Grid>
       </Grid>
       {/*
-       * BUTTONS
+       * BUTTONS (Login and Signup)
        */}
       <Grid
         item

@@ -12,11 +12,11 @@ import DraggablePortfolioList from './DraggablePortfolioList'
 import arrayMove from 'array-move'
 import { useIntl } from 'react-intl'
 
-const useStyles = makeStyles((theme) => ({
-  /* -------------------------------------------------------------------------- */
-  /*                  Add Portfolio Button (PortfolioList)                  */
-  /* -------------------------------------------------------------------------- */
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
 
+const useStyles = makeStyles((theme) => ({
   addPortfolioFab: {
     '&:hover': {
       backgroundColor: theme.palette.primary.dark
@@ -31,10 +31,27 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function PortfolioList(props) {
+  const classes = useStyles()
+  const fixedHeightPaper = loggedInStyles().fixedHeightPaper
+  const floatingTopContainer = loggedInStyles().floatingTopContainer
+
+  // Breakpoint sizes for portfolio
+  const { xs, md, lg } = props
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
   const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
-  /*                       Fetching Initial Portfolio List                      */
+  /*                                   History                                  */
+  /* -------------------------------------------------------------------------- */
+
+  const history = useHistory()
+
+  /* -------------------------------------------------------------------------- */
+  /*                     Fetching Initial List of Portfolios                    */
   /* -------------------------------------------------------------------------- */
 
   const [portfolios, setPortfolios] = useState([])
@@ -58,9 +75,7 @@ export default function PortfolioList(props) {
     grabUser().then((user) => {
       if (user) {
         setUser(user)
-        getUserPortfolios(user.username)
-          .then((response) => response.json())
-          .then((portfolios) => setPortfolios(portfolios))
+        getUserPortfolios(user.username).then((portfolios) => setPortfolios(portfolios))
       } else {
         logout()
       }
@@ -91,22 +106,9 @@ export default function PortfolioList(props) {
   /*                                  Handlers                                  */
   /* -------------------------------------------------------------------------- */
 
-  const history = useHistory()
-
   const handleAdd = (details) => {
     history.push('/portfolios/add')
   }
-
-  /* -------------------------------------------------------------------------- */
-  /*                                   Styling                                  */
-  /* -------------------------------------------------------------------------- */
-
-  const classes = useStyles()
-  const fixedHeightPaper = loggedInStyles().fixedHeightPaper
-  const floatingTopContainer = loggedInStyles().floatingTopContainer
-
-  // Breakpoint sizes for portfolio
-  const { xs, md, lg } = props
 
   /* -------------------------------------------------------------------------- */
   /*                               Portfolio List                               */
@@ -115,6 +117,9 @@ export default function PortfolioList(props) {
   return (
     <Grid item container xs={xs} md={md} lg={lg} direction='row'>
       <Paper className={fixedHeightPaper}>
+        {/*
+         * ADD PORTFOLIO BUTTON
+         */}
         <Grid item className={floatingTopContainer}>
           <Fab
             color='secondary'
@@ -126,7 +131,9 @@ export default function PortfolioList(props) {
             <AddIcon className={classes.addPortfolioIcon} />
           </Fab>
         </Grid>
-
+        {/*
+         * PORTFOLIO LIST
+         */}
         <DragDropContext onDragEnd={onDragEnd}>
           <DraggablePortfolioList
             user={user}

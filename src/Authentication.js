@@ -45,7 +45,6 @@ async function loggedIn() {
 
 class Authentication extends Component {
   state = { loggedIn: null }
-  // state = { loggedIn: true }
 
   async componentDidMount() {
     let logincheck = await loggedIn()
@@ -62,7 +61,6 @@ class Authentication extends Component {
       )
     } else if (this.state.loggedIn === true) {
       // Route for pages accessible when logged in
-      console.log('Logged In!')
       return (
         <Switch>
           <Route exact path='/settings' render={() => <SettingsPage />} />
@@ -82,7 +80,6 @@ class Authentication extends Component {
     } else if (this.state.loggedIn === false) {
       // Route for pages accessible when not logged in
 
-      console.log('Not logged in!')
       return (
         <Switch>
           <Route exact path='/login' component={Login} />

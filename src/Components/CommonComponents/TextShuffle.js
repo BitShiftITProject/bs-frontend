@@ -20,6 +20,7 @@ export default class TextShuffle extends Component {
     this.state = { index: 0 }
   }
 
+  // Taken from https://www.npmjs.com/package/react-text-transition
   componentDidMount() {
     this.timeout = setInterval(() => {
       let currentIdx = this.state.index

@@ -3,6 +3,10 @@ import React, { useContext } from 'react'
 import { Fab, makeStyles } from '@material-ui/core'
 import { ThemesContext } from '../Contexts/ThemesContext'
 
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
+
 const useStyles = makeStyles((theme) => ({
   fab: {
     background: 'none',
@@ -18,12 +22,23 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function DarkAndLightModeButton() {
-  const { currentTheme: theme, setTheme } = useContext(ThemesContext)
   const classes = useStyles()
 
+  /* -------------------------------------------------------------------------- */
+  /*                                    Theme                                   */
+  /* -------------------------------------------------------------------------- */
+
+  // Context passed down from ThemeProvider
+  const { currentTheme: theme, setTheme } = useContext(ThemesContext)
+
+  // Toggle between light and dark
   const toggleTheme = () => {
     theme === 'dark' ? setTheme('light') : setTheme('dark')
   }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Fab Icon                                  */
+  /* -------------------------------------------------------------------------- */
 
   const themeIcon =
     theme === 'dark' ? (

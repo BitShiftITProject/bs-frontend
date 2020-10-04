@@ -21,6 +21,10 @@ import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { authenticate } from '../../Backend/Fetch'
 
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
+
 const styles = {
   div: {
     width: '100%',
@@ -44,6 +48,13 @@ const PaddedTextField = styled(TextField)({
 })
 
 function Login(props) {
+  const style = loggedOutStyles()
+  const { classes } = props
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
   const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
@@ -59,6 +70,7 @@ function Login(props) {
     loading: false
   })
 
+  // Toggle between currently loading (true) or not currently loading (false)
   function changeLoading() {
     setState((st) => ({
       ...st,
@@ -69,14 +81,18 @@ function Login(props) {
   /*                                  Handlers                                  */
   /* -------------------------------------------------------------------------- */
 
+  // Change the current attribute in the state that is currently being changed
   function handleChange(e) {
     setState({ ...state, [e.target.name]: e.target.value })
   }
 
+  // Toggle the checkbox from being checked (true) or not (false)
   function handleCheckbox(e) {
     setState((st) => ({ ...st, rememberMe: !st.rememberMe }))
   }
 
+  // Authenticates login details through authenticate(),
+  // otherwise an error alert is shown
   async function handleSubmit(e) {
     e.preventDefault()
 
@@ -88,8 +104,11 @@ function Login(props) {
     }
 
     changeLoading()
+
+    // Authenticate login details
     const response = await authenticate(loginDetails)
 
+    // Save access token in local/session storage
     if (response && response.ok) {
       const auth = await response.json()
 
@@ -99,6 +118,8 @@ function Login(props) {
         sessionStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
       }
       window.location.href = '/'
+
+      // Toggle error alert
     } else {
       const error = await response.json()
 
@@ -112,22 +133,22 @@ function Login(props) {
   }
 
   /* -------------------------------------------------------------------------- */
-  /*                                   Styling                                  */
-  /* -------------------------------------------------------------------------- */
-
-  const style = loggedOutStyles()
-  const { classes } = props
-
-  /* -------------------------------------------------------------------------- */
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
   const content = (
     <div className={classes.div}>
       <form onSubmit={handleSubmit} className={classes.form}>
+        {/*
+         * HEADING
+         */}
         <CursorTypography component='h1' variant='h5'>
           {intl.formatMessage({ id: 'login' })}
         </CursorTypography>
+
+        {/* TEXT FIELDS */}
+
+        {/* Email */}
         <PaddedTextField
           inputProps={{ className: style.input }}
           InputLabelProps={{
@@ -145,6 +166,8 @@ function Login(props) {
           autoFocus
           onChange={handleChange}
         />
+
+        {/* Password */}
         <PaddedTextField
           inputProps={{ className: style.input }}
           InputLabelProps={{
@@ -172,8 +195,10 @@ function Login(props) {
           </div>
         )}
 
-        {/* Loading message*/}
+        {/* Loading message */}
         {state.loading && <Loading message='Authenticating log in' />}
+
+        {/* REMEMBER ME CHECKBOX */}
 
         <Grid container justify='space-between'>
           <Grid item xs={7} md={5}>
@@ -195,6 +220,8 @@ function Login(props) {
           </Grid>
         </Grid>
 
+        {/* LOGIN BUTTON */}
+
         <Fab
           type='submit'
           variant='extended'
@@ -204,6 +231,9 @@ function Login(props) {
         >
           {intl.formatMessage({ id: 'login' })}
         </Fab>
+
+        {/* FORGOT PASSWORD AND SIGN UP LINKS */}
+
         <Grid container className={style.links}>
           <Grid item xs>
             <Link to='/forgotpassword' variant='body2'>

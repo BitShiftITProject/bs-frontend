@@ -40,7 +40,12 @@ export default function EditPortfolioPage() {
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
+  /* ------------------------------- Edit Style ------------------------------- */
+
   const editStylePage = <EditPortfolioStyle portfolio={portfolio} setPortfolio={setPortfolio} />
+
+  /* ------------------------------ Edit Content ------------------------------ */
+
   const editContentPage = (
     <EditPortfolioContent
       portfolio={portfolio}
@@ -49,6 +54,8 @@ export default function EditPortfolioPage() {
       setPages={setPages}
     />
   )
+
+  /* ------------------------------ Rendered Page ----------------------------- */
 
   const pageContent = (
     <Grid container direction='column' spacing={0}>

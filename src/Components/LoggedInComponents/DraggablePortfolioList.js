@@ -20,8 +20,12 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import transitions from '../../Styles/transitions'
 import PortfolioCard from './PortfolioCard'
 import CustomDialog from '../CommonComponents/CustomDialog'
-import { getUser, getUserPortfolios, deletePortfolio, logout } from '../../Backend/Fetch'
+import { getUser, deletePortfolio, logout } from '../../Backend/Fetch'
 import { useIntl } from 'react-intl'
+
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
 
 const useStyles = makeStyles((theme) => ({
   portfolio: {
@@ -30,30 +34,29 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
-  /* -------------------------------------------------------------------------- */
-  /*                                  Handlers                                  */
-  /* -------------------------------------------------------------------------- */
+  const classes = useStyles()
 
   const history = useHistory()
 
-  async function handleView(portfolioId) {
-    // Get the current user
-    const user = await getUser()
+  /* -------------------------------------------------------------------------- */
+  /*                          Portfolio Event Handlers                          */
+  /* -------------------------------------------------------------------------- */
 
+  /* ----------------------------- View Portfolio ----------------------------- */
+
+  // Redirects user to the public link of the portfolio whose index is at portfolioIndex
+  async function handleView(portfolioIndex) {
+    // Get the current user, logs out if access token no longer valid
+    const user = await getUser()
     if (!user) logout()
 
-    const portfolios = await getUserPortfolios(user.username).then((response) => response.json())
-
-    // Get the portfolio from the user's portfolios array whose index === portfolioIndex
-    let portfolioIndex = 0
-    while (portfolioId !== portfolios[portfolioIndex].id) {
-      portfolioIndex++
-    }
-
-    // Go to the designated route for public portfolios
+    // Go to the designated route for the public portfolio
     history.push(`/public/${user.username}/${portfolioIndex}/0`)
   }
 
+  /* ----------------------------- Edit Portfolio ----------------------------- */
+
+  // Redirects user to EditPortfolioPage to edit the portfolio whose ID is portfolioId
   function handleEdit(portfolioId) {
     // Set portfolioId in session storage so EditPortfolioPage will fetch
     // portfolio from DB based on this ID
@@ -61,6 +64,9 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
     history.push('/portfolios/edit')
   }
 
+  /* ---------------------------- Delete Portfolio ---------------------------- */
+
+  // Deletes the portfolio at whose ID is portfolioID, and closes the dialog
   async function handleDelete(portfolioId) {
     if (portfolioId) {
       // Get the new list of portfolio IDs
@@ -87,12 +93,6 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   }
 
   /* -------------------------------------------------------------------------- */
-  /*                                   Styling                                  */
-  /* -------------------------------------------------------------------------- */
-
-  const classes = useStyles()
-
-  /* -------------------------------------------------------------------------- */
   /*                                   Dialog                                   */
   /* -------------------------------------------------------------------------- */
 
@@ -101,32 +101,45 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   const [clickedPortfolio, setClickedPortfolio] = useState({ id: '', title: '', index: 0 })
   const intl = useIntl()
 
+  // Opens the dialog according to the dialog type, for the portfolio with the
+  // id parameter as its portfolio ID, as well as its title and index
   function handleClick(type, id, title, index) {
     setClickedPortfolio({ id, title, index })
     setDialogType(type)
     setOpen(true)
   }
 
+  // Closes the dialog, called on the Close event triggered by the Dialog
   function handleClose() {
     setOpen(false)
   }
 
+  // Clicking the Copy button copies the public link to the clicked portfolio
   function copyToClipboard(e) {
     navigator.clipboard.writeText(
       user ? `http://bs-frontend.herokuapp.com/${user.username}/${clickedPortfolio.index}/0` : ''
     )
   }
 
+  // Object with the dialog type as the key, and the corresponding JSX contents
+  // to be shown
   const dialogContent = {
     /* -------------------------------------------------------------------------- */
     // Dialog to show when share button is pressed, shows URL and copy URL button
     share: (
       <div>
+        {/*
+         * TITLE
+         */}
         <DialogTitle id='form-dialog-title'>
           {intl.formatMessage({ id: 'sharePortfolio' })}
         </DialogTitle>
+
         <DialogContent>
           <Grid container direction='row' justify='center' alignItems='center' spacing={1}>
+            {/*
+             * URL LINK
+             */}
             <Grid item>
               <TextField
                 onFocus={(e) => e.target.select()}
@@ -141,6 +154,9 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
                 className={classes.urlField}
               />
             </Grid>
+            {/*
+             * COPY URL BUTTON
+             */}
             <Grid item>
               <Tooltip title={intl.formatMessage({ id: 'copy' })} placement='top'>
                 <IconButton onClick={copyToClipboard}>
@@ -153,13 +169,19 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
       </div>
     ),
     /* -------------------------------------------------------------------------- */
-    // Dialog to show when delete icon (trash can) is pressed, shows
+    // Dialog to show when delete (trash can) icon  is pressed, shows
     // confirmation to delete
     delete: (
       <form onSubmit={() => handleDelete(clickedPortfolio.id)}>
+        {/*
+         * TITLE
+         */}
         <DialogTitle id='form-dialog-title'>
           {intl.formatMessage({ id: 'deletePortfolio' })}
         </DialogTitle>
+        {/*
+         * CONTENT
+         */}
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
             {intl.formatMessage(
@@ -168,6 +190,9 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
             )}
           </DialogContentText>
         </DialogContent>
+        {/*
+         * BUTTONS
+         */}
         <DialogActions>
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
@@ -189,12 +214,15 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   return (
     <Grid item>
       <Grid container>
+        {/*
+         * LIST OF PORTFOLIO CARDS
+         */}
         <TransitionGroup style={{ width: '100%', height: '100%' }}>
           {portfolios.map((portfolio, idx) => (
             <CSSTransition key={portfolio.id} classNames='fade' timeout={500}>
               <Grid key={idx} item xs={12} className={classes.portfolio}>
                 {/*
-                 * PORTFOLIO CARD: Need to change portfolioId to appropriate Id
+                 * PORTFOLIO CARD
                  */}
                 <PortfolioCard
                   portfolioId={portfolio.id}
@@ -211,6 +239,8 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
           ))}
         </TransitionGroup>
       </Grid>
+
+      {/* DIALOG */}
       {dialog}
     </Grid>
   )

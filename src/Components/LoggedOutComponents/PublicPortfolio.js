@@ -22,15 +22,10 @@ class PublicPortfolio extends Component {
 
     this.setState({ pageIndex: params.page })
 
-    // Get all user portfolios
-    const portfoliosResponse = await getUserPortfolios(params.username).then((response) =>
-      response.ok ? response : null
-    )
+    // Get the actual array of the user's portfolios
+    const portfolios = await getUserPortfolios(params.username)
 
-    if (portfoliosResponse) {
-      // Get the actual array of the user's portfolios back from the response
-      const portfolios = await portfoliosResponse.json()
-
+    if (portfolios) {
       if (portfolios.length > params.portfolio) {
         this.setState({ portfolioDetails: portfolios[params.portfolio] })
 

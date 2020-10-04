@@ -10,6 +10,10 @@ export default function EditPortfolioStyle() {
   const classes = loggedInStyles()
   const fixedHeightPaper = classes.fixedHeightPaper
 
+  /* -------------------------------------------------------------------------- */
+  /*                                Page Content                                */
+  /* -------------------------------------------------------------------------- */
+
   return (
     <Grid container direction='row' spacing={0}>
       <Grid item xs={12}>

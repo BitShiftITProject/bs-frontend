@@ -9,9 +9,27 @@ import DarkAndLightModeButton from '../CommonComponents/DarkAndLightModeButton'
 import EmojiHover from '../CommonComponents/EmojiHover'
 
 export default function LandingContainer(props) {
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
+
   const classes = loggedOutStyles()
-  const history = useHistory()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
   const intl = useIntl()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   History                                  */
+  /* -------------------------------------------------------------------------- */
+
+  const history = useHistory()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Page Content                                */
+  /* -------------------------------------------------------------------------- */
 
   // Placeholder variable for the component to be rendered (i.e. Login, Signup,
   // ForgotPassword)
@@ -24,7 +42,7 @@ export default function LandingContainer(props) {
       className={classes.background}
       style={{ height: '100%', flex: 1, flexWrap: 1, overflow: 'scroll' }}
     >
-      {/* LEFT Padding */}
+      {/* LEFT PADDING */}
       <Grid item xs={false} md={2}></Grid>
 
       {/* CONTENT */}
@@ -38,6 +56,10 @@ export default function LandingContainer(props) {
         alignItems='center'
         className={classes.root}
       >
+        {/* -------------------------------------------------------------------------- */}
+
+        {/* NAVBAR (TOP) */}
+
         <Grid
           item
           xs={2}
@@ -47,6 +69,9 @@ export default function LandingContainer(props) {
           alignItems='center'
           className={classes.appBar}
         >
+          {/*
+           * LOGO
+           */}
           <div
             className={classes.appBarTitle}
             onClick={() => {
@@ -60,6 +85,9 @@ export default function LandingContainer(props) {
               <EmojiHover />
             </Typography>
           </div>
+          {/*
+           * BUTTONS AND ICONS
+           */}
           <div className={classes.appBarItems}>
             <Box display='flex' className={classes.appBarItemsContainer}>
               <NavLink exact to='/' className='normal'>
@@ -78,12 +106,15 @@ export default function LandingContainer(props) {
             </Box>
           </div>
         </Grid>
+
+        {/* PAGE CONTENT (Below Navbar) */}
+
         <Grid item xs={10} container style={{ minWidth: '100%' }}>
           {content}
         </Grid>
       </Grid>
 
-      {/* RIGHT Padding */}
+      {/* RIGHT PADDING */}
       <Grid item xs={false} md={2}></Grid>
     </Grid>
   )

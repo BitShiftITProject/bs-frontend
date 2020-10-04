@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useIntl } from 'react-intl'
 import { withStyles, styled } from '@material-ui/core/styles'
-
 import { TextField, Fab, Typography, Paper, Grid } from '@material-ui/core'
-
-import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
-import { useIntl } from 'react-intl'
+
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
 
 const styles = {
   div: {
@@ -20,10 +20,6 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center'
   },
-  span: {
-    transform: 'translateX(-25px)'
-  },
-
   fab: {
     transform: 'scale(0.65)'
   }
@@ -35,6 +31,19 @@ const PaddedTextField = styled(TextField)({
 })
 
 function ForgotPassword(props) {
+  const { classes } = props
+  const style = loggedOutStyles()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const intl = useIntl()
+
+  /* -------------------------------------------------------------------------- */
+  /*                          States and their Setters                          */
+  /* -------------------------------------------------------------------------- */
+
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
 
@@ -42,15 +51,12 @@ function ForgotPassword(props) {
     e.preventDefault()
   }
 
-  const style = loggedOutStyles()
-  const history = useHistory()
-  const intl = useIntl()
-
-  const { classes } = props
-
   const content = (
     <div className={classes.div}>
       <form onSubmit={(e) => handleSubmit(e)} className={classes.form}>
+        {/*
+         * HEADING
+         */}
         <CursorTypography component='h1' variant='h5'>
           {intl.formatMessage({ id: 'forgotPassword' })}
         </CursorTypography>
@@ -60,6 +66,8 @@ function ForgotPassword(props) {
             🤠
           </span>
         </Typography>
+
+        {/* EMAIL */}
 
         <PaddedTextField
           inputProps={{ className: style.input }}
@@ -80,6 +88,8 @@ function ForgotPassword(props) {
 
         <CursorTypography variant='button'>{intl.formatMessage({ id: 'or' })}</CursorTypography>
 
+        {/* USERNAME */}
+
         <PaddedTextField
           inputProps={{ className: style.input }}
           InputLabelProps={{
@@ -97,15 +107,9 @@ function ForgotPassword(props) {
           fullWidth
         />
 
-        <span className={classes.span}>
-          <Fab
-            onClick={() => history.push('/login')}
-            color='primary'
-            aria-label='login'
-            className={classes.fab}
-          >
-            <ArrowBackIcon />
-          </Fab>
+        {/* RESET PASSWORD BUTTON */}
+
+        <span>
           <Fab type='submit' variant='extended' className={style.submit} color='primary'>
             {intl.formatMessage({ id: 'resetPassword' })}
           </Fab>
