@@ -14,7 +14,7 @@ import {
 import ShareIcon from '@material-ui/icons/Share'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 import { useIntl } from 'react-intl'
-import { loggedInStyles } from '../../Styles/loggedInStyles'
+import { loggedInStyles } from '../../../Styles/loggedInStyles'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */

@@ -75,6 +75,10 @@ export default {
 
     pages: '頁面',
 
+    chooseATemplate: 'Choose a template',
+    headings: 'Headings',
+    textAndMultimedia: 'Text and Multimedia',
+
     // Profile
 
     profile: '個人信息',

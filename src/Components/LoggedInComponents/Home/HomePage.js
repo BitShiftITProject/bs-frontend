@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid } from '@material-ui/core'
 import PortfolioList from './PortfolioList'
 import HomeProfile from './HomeProfile'
-import Sidebar from './Sidebar'
+import Sidebar from '../Sidebar'
 
 export default function HomePage() {
   const content = (

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid, Paper, Typography } from '@material-ui/core'
-import { loggedInStyles } from '../../Styles/loggedInStyles'
+import { loggedInStyles } from '../../../Styles/loggedInStyles'
 
 export default function EditPortfolioStyle() {
   /* -------------------------------------------------------------------------- */

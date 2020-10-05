@@ -25,6 +25,3 @@ yarn-error.log*
 .env
 list.md
 list2.md
-src/Components/LoggedInComponents/DraggableCard.js
-src/Components/LoggedInComponents/HomePage.js
-src/Components/LoggedInComponents/HomeProfile.js

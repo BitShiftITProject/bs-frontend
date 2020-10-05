@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { getUserPortfolios, getPortfolioPages } from '../../Backend/Fetch'
 import Loading from '../CommonComponents/Loading'
 import PublicSidebar from './PublicSidebar'
-import GetSectionJSX from '../../Sections/SectionsMap'
+import GetSectionJSX from '../Sections/SectionsMap'
 
 class PublicPortfolio extends Component {
   // Store the details of a portfolio so that we can use it later

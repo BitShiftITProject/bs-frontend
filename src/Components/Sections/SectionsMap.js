@@ -5,7 +5,7 @@ import { Paragraph, Title, Subtitle } from './SectionElements'
 function MapSection(section, editing) {
   let sectionId = section.id
 
-  // TODO: Look up on Quill.js for Rich-text Editing and React-DnD for modular
+  // TODO: Look up Quill.js for Rich-text Editing and React-DnD for modular
 
   /* -------------------------------------------------------------------------- */
   /*                                  Sections                                  */
@@ -24,18 +24,23 @@ function MapSection(section, editing) {
   switch (sectionId) {
     /* -------------------------------- Headings -------------------------------- */
 
-    // TODO: Agree on a section ID naming convention
     case 'headingTitle':
       return (
         <Grid container alignItems='center'>
-          <Title editing={editing} section={section.content.title} />
+          <Title
+            editing={editing}
+            content={section && section.content ? section.content.title : null}
+          />
         </Grid>
       )
 
-    case 'headingSub':
+    case 'headingSubtitle':
       return (
         <Grid container alignItems='center'>
-          <Subtitle editing={editing} section={section.content.title} />
+          <Subtitle
+            editing={editing}
+            content={section && section.content ? section.content.subtitle : null}
+          />
         </Grid>
       )
 
@@ -44,24 +49,33 @@ function MapSection(section, editing) {
     case 'singleText':
       return (
         <Grid container>
-          <Paragraph editing={editing} section={section.content.paragraph} />
+          <Paragraph
+            editing={editing}
+            content={section && section.content ? section.content.paragraph : null}
+          />
         </Grid>
       )
 
     case 'doubleText':
       return (
-        <Grid container direction='row' spacing={2}>
+        <Grid container direction='row' spacing={2} justify='center' alignItems='center'>
           <Grid item xs={6}>
-            <Paragraph editing={editing} section={section.content.paragraph1} />
+            <Paragraph
+              editing={editing}
+              content={section && section.content ? section.content.paragraph1 : null}
+            />
           </Grid>
           <Grid item xs={6}>
-            <Paragraph editing={editing} section={section.content.paragraph2} />
+            <Paragraph
+              editing={editing}
+              content={section && section.content ? section.content.paragraph2 : null}
+            />
           </Grid>
         </Grid>
       )
 
     // TODO: Add more section templates
-    
+
     /* --------------------- Blank for Unmapped Section IDs --------------------- */
 
     default:
@@ -70,9 +84,12 @@ function MapSection(section, editing) {
   }
 }
 
-const GetSectionJSX = (section, editing) => {
+export const sectionIdsByCategory = {
+  headings: ['headingTitle', 'headingSubtitle'],
+  textAndMultimedia: ['singleText', 'doubleText']
+}
+
+export default function GetSectionJSX(section, editing) {
   // Might do extra stuff here later on, otherwise can just export MapSection
   return MapSection(section, editing)
 }
-
-export default GetSectionJSX

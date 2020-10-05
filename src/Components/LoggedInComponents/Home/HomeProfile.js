@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Grid, Paper, ButtonBase, Fab, makeStyles, Typography } from '@material-ui/core'
 
-import { loggedInStyles } from '../../styles/loggedInStyles'
+import { loggedInStyles } from '../../../styles/loggedInStyles'
 import { useHistory } from 'react-router-dom'
 
-import { getUser, logout } from '../../backend/Fetch'
+import { getUser, logout } from '../../../backend/Fetch'
 
 const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */

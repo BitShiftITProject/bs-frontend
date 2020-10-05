@@ -1,10 +1,4 @@
 import React, { useState } from 'react'
-import SectionsButton from './SectionsButton.js'
-import { Paragraph, Title } from '../../Sections/SectionElements'
-import GetSectionJSX from '../../Sections/SectionsMap'
-
-import { loggedInStyles, CursorTypography } from '../../Styles/loggedInStyles'
-import CustomDialog from '../CommonComponents/CustomDialog'
 
 import {
   Grid,
@@ -25,6 +19,12 @@ import CreateIcon from '@material-ui/icons/Create'
 import AddIcon from '@material-ui/icons/Add'
 import CloseIcon from '@material-ui/icons/Close'
 
+import SectionsList from '../../Sections/SectionsList'
+import SectionsButton from '../../Sections/SectionAdd/SectionsButton'
+
+import { loggedInStyles, CursorTypography } from '../../../Styles/loggedInStyles'
+import CustomDialog from '../../CommonComponents/CustomDialog'
+
 import {
   // page related imports
   patchPage,
@@ -32,7 +32,7 @@ import {
   patchPortfolio,
   postPageToPortfolio,
   deletePage
-} from '../../Backend/Fetch'
+} from '../../../Backend/Fetch'
 
 import { useIntl } from 'react-intl'
 
@@ -48,25 +48,23 @@ export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */
 
   const { portfolio, setPortfolio, pages, setPages } = props
+  const [portfolioTitle, setPortfolioTitle] = useState('')
   const [pageIndex, setPageIndex] = useState(0)
   const [pageTitle, setPageTitle] = useState('')
-  // TO DO: add a comment here
-  const [pageContent, setPageContent] = useState(
-    pages && pages[pageIndex] ? (pages[pageIndex].content.sections) : []
-  )
+  const [sections, setSections] = useState([])
+
   /* -------------------------------------------------------------------------- */
-  /*                                Section handlers                            */
+  /*                                Section Handlers                            */
   /* -------------------------------------------------------------------------- */
   async function handleSectionEvent(name, section) {
-    // TO DO: ADD a section to a temporary contents object (only saved to database if the user saves the data)
+    // TODO: ADD a section to a temporary contents object (only saved to database if the user saves the data)
 
-    if (name == "addSection") {
-      // add new section to the current page content 
-      const newContent = pageContent.concat(section)
-      setPageContent(newContent)
-
+    if (name === 'addSection') {
+      // add new section to the current page content
+      const newContent = sections.concat(section)
+      setSections(newContent)
     } else {
-      //TO DO: remove the section from the pageContents
+      //TODO: remove the section from the sections
     }
   }
 
@@ -83,7 +81,7 @@ export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */
 
   const [open, setOpen] = useState(false)
-  const [dialogContent, setDialogContent] = useState({ type: '', item: '' })
+  const [dialogContent, setDialogContent] = useState({ type: '', component: '' })
 
   const handleClose = () => {
     setOpen(false)
@@ -93,18 +91,43 @@ export default function EditPortfolioContent(props) {
   /*                         Dialog Open Event Handlers                         */
   /* -------------------------------------------------------------------------- */
 
+  // These two functions set the type of the event (which matches the key
+  // strings of the dialogType object) as well as the target component of the current event.
+
+  /* -------------------------------------------------------------------------- */
+
+  // Portfolio event types include:
+  // - editPortfolio: To edit the title and/or description of the portfolio
+
   function handlePortfolioEvent(name, value) {
-    setDialogContent({ type: name, item: value })
+    // The name variable must match a dialogType key
+    // The value variable is the portfolio title
+    setDialogContent({ type: name, component: value })
+    setPortfolioTitle(value)
     setOpen(true)
   }
 
+  /* -------------------------------------------------------------------------- */
+
+  // Page event types include:
+  // - addPage: To add a page with the user-typed title
+  // - editPage: To edit the title of the page
+  // - deletePage: To completely delete the page and its contents from the
+  //   portfolio
+
   function handlePageEvent(name, value) {
-    setDialogContent({ type: name, item: value })
+    // The name variable must match a dialogType key
+    // The value variable is the page index
+    setDialogContent({ type: name, component: value })
+
+    // Set the page title text field's default value as empty for adding a page,
+    // and the to-be-edited page's title for editing a page
     if (name === 'addPage') {
       setPageTitle('')
     } else {
       setPageTitle(pages[value].title)
     }
+
     setOpen(true)
   }
 
@@ -112,20 +135,31 @@ export default function EditPortfolioContent(props) {
   /*                         Dialog Close Event Handlers                        */
   /* -------------------------------------------------------------------------- */
 
-  function handlePortfolioEdit(e) {
+  /* -------------------------------------------------------------------------- */
+
+  // Edits the current portfolio's title and description
+  async function handlePortfolioEdit(e) {
     e.preventDefault()
-    // Edits the current portfolio's title and description
-    patchPortfolio(portfolio.id, { title: portfolio.title, description: portfolio.description })
+    await patchPortfolio(portfolio.id, {
+      title: portfolioTitle,
+      description: portfolio.description
+    })
     // Sets the currently shown portfolio as the updated portfolio
-    setPortfolio(getPortfolio(portfolio.id))
+    const updatedPortfolio = await getPortfolio(portfolio.id)
+    setPortfolio(updatedPortfolio)
     setOpen(false)
   }
 
+  /* -------------------------------------------------------------------------- */
+
+  // Updates the page index and page content to be those of the selected page
   function handlePageSelect(idx) {
-    // Updates the page index and page content to be those of the selected page
     setPageIndex(idx)
-    setPageContent(pages[idx].content)
+    // console.log(pages[idx].content.sections)
+    setSections(pages[idx].content.sections)
   }
+
+  /* -------------------------------------------------------------------------- */
 
   async function handlePageAdd(e) {
     e.preventDefault()
@@ -152,17 +186,19 @@ export default function EditPortfolioContent(props) {
     setOpen(false)
   }
 
+  /* -------------------------------------------------------------------------- */
+
+  // Edit the PAGE TITLE of the Page in the DB
   async function handlePageTitleEdit(e) {
     e.preventDefault()
 
-    // Edit the page title of the Page in the DB
-    await patchPage(pages[dialogContent.item].id, { title: pageTitle })
+    await patchPage(pages[dialogContent.component].id, { title: pageTitle })
 
     // Replace the title of the changed page manually to show the change in
     // frontend, to avoid deleting any unsaved changes in the other pages'
     setPages((pages) =>
       pages.map((page) => {
-        if (page.id === pages[dialogContent.item].id) {
+        if (page.id === pages[dialogContent.component].id) {
           return { ...page, title: pageTitle }
         } else {
           return page
@@ -172,18 +208,20 @@ export default function EditPortfolioContent(props) {
     setOpen(false)
   }
 
-  async function handlePageContentEdit(e) {
+  /* -------------------------------------------------------------------------- */
+
+  // Edit the PAGE CONTENT of the Page in the DB
+  async function handleSectionsEdit(e) {
     e.preventDefault()
 
-    // Edit the page content of the Page in the DB
-    await patchPage(pages[pageIndex].id, { content: pageContent })
+    await patchPage(pages[pageIndex].id, { content: { sections } })
 
     // Replace the content of the changed page manually to show the change in
     // frontend, to avoid deleting any unsaved changes in the other pages'
     setPages((pages) =>
       pages.map((page) => {
         if (page.id === pages[pageIndex].id) {
-          return { ...page, content: pageContent }
+          return { ...page, content: sections }
         } else {
           return page
         }
@@ -192,9 +230,12 @@ export default function EditPortfolioContent(props) {
     setOpen(false)
   }
 
+  /* -------------------------------------------------------------------------- */
+
+  // Removes a Page (and any reference to it) from the DB
   async function handlePageDelete(e) {
     e.preventDefault()
-    const pageId = pages[dialogContent.item].id
+    const pageId = pages[dialogContent.component].id
 
     // Get the new list of page IDs
     const newPageIds = pages.map((pageObj) => pageObj.id).filter((id) => id !== pageId)
@@ -214,10 +255,9 @@ export default function EditPortfolioContent(props) {
     setOpen(false)
   }
 
-
-
-
-  /* ----------------------------- Dialog Content ----------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                               Dialog Content                               */
+  /* -------------------------------------------------------------------------- */
 
   const dialogType = {
     // Contains the contents to be rendered when a dialog is triggered, which is
@@ -245,8 +285,8 @@ export default function EditPortfolioContent(props) {
             id='portfolioName'
             label={intl.formatMessage({ id: 'title' })}
             fullWidth
-            value={portfolio.title}
-            onChange={(e) => setPortfolio({ ...portfolio, title: e.target.value })}
+            value={portfolioTitle}
+            onChange={(e) => setPortfolioTitle(e.target.value)}
           />
           <TextField
             inputProps={{ className: classes.input }}
@@ -397,8 +437,9 @@ export default function EditPortfolioContent(props) {
     <CustomDialog open={open} setOpen={setOpen} content={dialogType[dialogContent.type]} />
   )
 
-  const sections = pageContent
-  // const sections = pages && pages[pageIndex] ? (pages[pageIndex].content.sections) : []
+  /* -------------------------------------------------------------------------- */
+  /*                                Rendered Page                               */
+  /* -------------------------------------------------------------------------- */
 
   return (
     <Grid container direction='row' spacing={0}>
@@ -489,59 +530,50 @@ export default function EditPortfolioContent(props) {
        * PAGE CONTENT
        */}
 
-      <Grid item xs={12} md={8} lg={9}>
+      <Grid item xs={12} md={8} lg={9} id='page-content'>
         <Paper className={fixedHeightPaper}>
           {/*
            * PAGE SECTIONS
            */}
+
           <Grid
             item
-            xs={12}
+            xs={10}
+            style={{ minWidth: '100%', overflow: 'scroll' }}
             container
             direction='column'
             justify='space-between'
-            style={{ height: '100%', overflow: 'scroll' }}
           >
-            {/*go over the sections array and render them as section components*/}
-            {/* TO DO:  discuss with the others. make a SectionComponent(not sure on name) which holds
-           
-           grid    section    edit button   delete button   grid 
-
-            and then map it that way  
-
-                        {sections.map((section, index) => { return <div key={index}> {SectionComponent(GetSectionJSX(section, true), editSectionHandler = {}, deleteSectionHandler{})} </div> })}
-                        
-                        or maybe
-
-                        {sections.map((section, index) => { return <div key={index}> {SectionComponent(editing = false, editSectionHandler = {}, deleteSectionHandler{})} </div> })}
-                        and in the component, thats where you do the editing and deleting
-
-*/}
-
-
-            {sections.map((section, index) => {
-              return <div key={index}> {GetSectionJSX(section, true)} </div>
-            })}
-
-
+            <SectionsList sections={sections} editing />
           </Grid>
 
           {/* SAVE CHANGES BUTTON */}
 
-          <Grid item className={classes.floatingBottomContainer}>
-            <Fab color='secondary' variant='extended' onClick={handlePageContentEdit}>
-              <CursorTypography variant='button'>
-                {intl.formatMessage({ id: 'saveChanges' })}
-              </CursorTypography>
-            </Fab>
-          </Grid>
+          <Grid
+            item
+            xs={2}
+            style={{ minWidth: '100%' }}
+            container
+            className={classes.floatingBottomContainer}
+          >
+            <Grid item xs={6} container justify='center'>
+              <Fab color='secondary' variant='extended' onClick={handleSectionsEdit}>
+                <CursorTypography variant='button'>
+                  {intl.formatMessage({ id: 'saveChanges' })}
+                </CursorTypography>
+              </Fab>
+            </Grid>
 
-          {/* when a section is clicked, it adds the section to the overall sections component */}
-          <Grid> <SectionsButton handleSectionOnClick={(section) => handleSectionEvent('addSection', section)} />
+            {/* ADD SECTION BUTTON */}
+            {/* When a section is clicked, it adds the section to the overall sections component */}
+
+            <Grid item xs={6} container justify='flex-end'>
+              <SectionsButton handleSectionClick={handleSectionEvent} />
+            </Grid>
           </Grid>
         </Paper>
       </Grid>
-      { dialog}
-    </Grid >
+      {dialog}
+    </Grid>
   )
 }

@@ -73,6 +73,10 @@ export default {
 
     pages: 'Pages',
 
+    chooseATemplate: 'Choose a template',
+    headings: 'Headings',
+    textAndMultimedia: 'Text and Multimedia',
+
     // Profile
     profile: 'Profile',
     details: 'Details',

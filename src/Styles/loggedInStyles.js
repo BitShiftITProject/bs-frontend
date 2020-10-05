@@ -87,7 +87,7 @@ const loggedInStyles = makeStyles((theme) => ({
 
   floatingTopContainer: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 30
@@ -95,7 +95,7 @@ const loggedInStyles = makeStyles((theme) => ({
 
   floatingBottomContainer: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 30
