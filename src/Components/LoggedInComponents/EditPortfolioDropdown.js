@@ -119,16 +119,18 @@ export default function EditPortfolioDropdown({ setEditMode }) {
                   <MenuList autoFocusItem={open} id='menu-list-grow' onKeyDown={handleListKeyDown}>
                     <MenuItem
                       className={classes.menuItem}
-                      onClick={() => {
+                      onClick={(e) => {
                         setEditMode('styles')
+                        handleClose(e)
                       }}
                     >
                       <span>{intl.formatMessage({ id: 'style' })}</span>
                     </MenuItem>
                     <MenuItem
                       className={classes.menuItem}
-                      onClick={() => {
+                      onClick={(e) => {
                         setEditMode('content')
+                        handleClose(e)
                       }}
                     >
                       <span>{intl.formatMessage({ id: 'content' })}</span>

@@ -21,6 +21,7 @@ export default {
     confirmPassword: 'Confirm Password',
     passwordError: 'Passwords must match',
     passwordPattern: '8 to 12 characters',
+    loginPromptSignUp: 'Already have an account? Log in.',
 
     // Forgot Password
     forgotPasswordDescription:
@@ -28,6 +29,7 @@ export default {
     forgotPassword: 'Forgot Password',
     or: 'Or',
     resetPassword: 'Reset Password',
+    loginPromptForgotPassword: 'Back to Log In',
 
     // Logged-in Appbar
     toggleTheme: 'Toggle theme',
@@ -78,6 +80,12 @@ export default {
     aboutMe: 'About Me',
     firstName: 'First Name',
     lastName: 'Last Name',
+    birthdate: 'Date of Birth',
+    dateFormat: 'DD/MM/YYYY',
+    gender: 'Gender',
+    male: 'Male',
+    female: 'Female',
+    other: 'Other',
     occupation: 'Occupation',
     profileDescription: 'Description',
     descriptionPlaceholder: 'Type something...',

@@ -21,12 +21,14 @@ export default {
     confirmPassword: '再次输入密码',
     passwordError: '密码必须匹配',
     passwordPattern: '8至12个字符',
+    loginPromptSignUp: '登录现有帐号',
 
     // Forgot Password
     forgotPasswordDescription: '请输入邮箱或用户名来获取密码重置链接',
     forgotPassword: '忘记密码',
     or: '或',
     resetPassword: '重置密码',
+    loginPromptForgotPassword: 'Back to Log In',
 
     // Logged-in Appbar
     toggleTheme: '切换夜間模式',
@@ -83,6 +85,12 @@ export default {
     aboutMe: '简介',
     firstName: '名字',
     lastName: '姓氏',
+    birthdate: '出生日期',
+    dateFormat: '日/月/年',
+    gender: '性別',
+    male: '男',
+    female: '女',
+    other: '自定义',
     occupation: '职业',
     profileDescription: '个人简介',
     descriptionPlaceholder: '输入一些东西…',

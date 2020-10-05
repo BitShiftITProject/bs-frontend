@@ -10,17 +10,19 @@ export default {
     password: '密碼',
 
     // Login
-    login: '登錄',
+    login: '登入',
     rememberMe: '記住我',
     forgotPasswordPrompt: '忘記密碼？',
     signUpPrompt: '新建帳戶',
     loginError: '郵箱或密碼有誤。 ',
+    loginPromptSignUp: '登入現有帳戶',
 
     // Sign Up
     signUp: '註冊',
     confirmPassword: '再次輸入密碼',
     passwordError: '密碼必須匹配',
     passwordPattern: '8至12個字符',
+    loginPromptForgotPassword: 'Back to Log In',
 
     // Forgot Password
     forgotPasswordDescription: '請輸入郵箱或用戶名來獲取密碼重置鏈接',
@@ -83,6 +85,12 @@ export default {
     aboutMe: '簡介',
     firstName: '名字',
     lastName: '姓氏',
+    birthdate: '出生日期',
+    dateFormat: '日/月/年',
+    gender: '性別',
+    male: '男',
+    female: '女',
+    other: '自定義',
     occupation: '職業',
     profileDescription: '個人簡介',
     descriptionPlaceholder: '輸入一些東西…',

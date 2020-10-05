@@ -9,9 +9,9 @@ const theme = createMuiTheme({
       paperHover: '#e3e3e3'
     },
     primary: {
-      main: '#223843',
+      main: '#294451',
       light: '#375B6D',
-      dark: '#223843',
+      dark: '#294451',
       contrastText: '#ffffff'
     },
     secondary: {

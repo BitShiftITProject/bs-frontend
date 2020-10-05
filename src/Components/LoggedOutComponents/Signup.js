@@ -1,10 +1,22 @@
 import React, { useState } from 'react'
 
 import { useIntl } from 'react-intl'
+import { Link } from 'react-router-dom'
 
 import Alert from '@material-ui/lab/Alert'
-import { TextField, withStyles, Fab, Grid, Paper } from '@material-ui/core'
+import {
+  TextField,
+  withStyles,
+  Fab,
+  Grid,
+  Paper,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel
+} from '@material-ui/core'
 import Loading from '../CommonComponents/Loading'
+import DateInput from '../CommonComponents/DateInput'
 
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
@@ -52,6 +64,8 @@ function Signup(props) {
     email: '',
     password: '',
     confirm: '',
+    birthdate: '',
+    gender: 'male',
     firstName: '',
     lastName: '',
     signUpFailed: false,
@@ -176,7 +190,7 @@ function Signup(props) {
                 onChange={handleChange}
                 required
                 variant='filled'
-                margin='normal'
+                margin='dense'
                 fullWidth
               />
             </Grid>
@@ -198,7 +212,7 @@ function Signup(props) {
                 onChange={handleChange}
                 required
                 variant='filled'
-                margin='normal'
+                margin='dense'
                 fullWidth
               />
             </Grid>
@@ -212,7 +226,7 @@ function Signup(props) {
             }}
             className={style.formLabel}
             variant='filled'
-            margin='normal'
+            margin='dense'
             required
             fullWidth
             label={intl.formatMessage({ id: 'username' })}
@@ -232,7 +246,7 @@ function Signup(props) {
             }}
             className={style.formLabel}
             variant='filled'
-            margin='normal'
+            margin='dense'
             required
             fullWidth
             label={intl.formatMessage({ id: 'email' })}
@@ -244,49 +258,100 @@ function Signup(props) {
             onChange={handleChange}
           />
 
-          {/* Password */}
-          <TextField
-            inputProps={{ className: style.input }}
-            InputLabelProps={{
-              shrink: true
-            }}
-            className={classes.formLabel}
-            id='signup__password'
-            variant='filled'
-            margin='normal'
-            fullWidth
-            label={intl.formatMessage({ id: 'password' })}
-            autoComplete='current-password'
-            type='password'
-            // placeholder={intl.formatMessage({ id: 'password' })}
-            pattern='.{8,12}'
-            title='8 to 12 characters'
-            name='password'
-            value={state.password}
-            onChange={handleChange}
-          />
+          <Grid item container spacing={1} direction='row' style={{ padding: 0 }}>
+            {/* Password */}
+            <Grid item xs={6}>
+              <TextField
+                inputProps={{ className: style.input }}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                className={classes.formLabel}
+                id='signup__password'
+                variant='filled'
+                margin='dense'
+                fullWidth
+                label={intl.formatMessage({ id: 'password' })}
+                autoComplete='current-password'
+                type='password'
+                // placeholder={intl.formatMessage({ id: 'password' })}
+                pattern='.{8,12}'
+                title='8 to 12 characters'
+                name='password'
+                value={state.password}
+                onChange={handleChange}
+              />
+            </Grid>
 
-          {/* Confirm Password */}
-          <TextField
-            inputProps={{ className: style.input }}
-            InputLabelProps={{
-              shrink: true
-            }}
-            className={classes.formLabel}
-            id='signup__confirm_password'
-            variant='filled'
-            margin='normal'
-            fullWidth
-            label={intl.formatMessage({ id: 'confirmPassword' })}
-            type='password'
-            // placeholder={intl.formatMessage({ id: 'confirmPassword' })}
-            required
-            pattern='.{8,12}'
-            title={intl.formatMessage({ id: 'passwordPattern' })}
-            name='confirm'
-            value={state.confirm}
-            onChange={handleChange}
-          />
+            {/* Confirm Password */}
+            <Grid item xs={6}>
+              <TextField
+                inputProps={{ className: style.input }}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                className={classes.formLabel}
+                id='signup__confirm_password'
+                variant='filled'
+                margin='dense'
+                fullWidth
+                label={intl.formatMessage({ id: 'confirmPassword' })}
+                type='password'
+                // placeholder={intl.formatMessage({ id: 'confirmPassword' })}
+                required
+                pattern='.{8,12}'
+                title={intl.formatMessage({ id: 'passwordPattern' })}
+                name='confirm'
+                value={state.confirm}
+                onChange={handleChange}
+                style={{ marginBottom: '2%' }}
+              />
+            </Grid>
+          </Grid>
+
+          <Grid item container spacing={1} direction='row' style={{ padding: 0 }}>
+            {/* Birthdate */}
+            <Grid item xs={6}>
+              <TextField
+                // inputProps={{ className: style.input }}
+                InputLabelProps={{
+                  shrink: true
+                }}
+                InputProps={{
+                  inputComponent: DateInput
+                }}
+                className={classes.formLabel}
+                variant='filled'
+                margin='dense'
+                fullWidth
+                label={intl.formatMessage({ id: 'birthdate' })}
+                // placeholder={intl.formatMessage({ id: 'password' })}
+                name='birthdate'
+                value={state.birthdate}
+                onChange={handleChange}
+              />
+            </Grid>
+
+            {/* Gender */}
+            <Grid item xs={6}>
+              <FormControl
+                required
+                variant='filled'
+                margin='dense'
+                style={{ minWidth: '100%' }}
+                className={classes.formLabel}
+              >
+                <InputLabel shrink>{intl.formatMessage({ id: 'gender' })}</InputLabel>
+                <Select name='gender' value={state.gender} onChange={handleChange}>
+                  <MenuItem value={'male'} selected>
+                    {intl.formatMessage({ id: 'male' })}
+                  </MenuItem>
+                  <MenuItem value={'female'}>{intl.formatMessage({ id: 'female' })}</MenuItem>
+                  <MenuItem value={'other'}>{intl.formatMessage({ id: 'other' })}</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
 
           {/* The error message appears iff the state is signUpFailed */}
           {state.signUpFailed && (
@@ -309,12 +374,30 @@ function Signup(props) {
             alignItems='center'
           >
             {!state.loading && (
-              <div>
-                <Fab type='submit' variant='extended' className={style.submit} color='primary'>
-                  {intl.formatMessage({ id: 'signUp' })}
-                </Fab>
-              </div>
+              <Fab
+                type='submit'
+                variant='extended'
+                className={style.submit}
+                style={{ width: '100%' }}
+                color='primary'
+              >
+                {intl.formatMessage({ id: 'signUp' })}
+              </Fab>
             )}
+          </Grid>
+          <Grid
+            container
+            direction='row'
+            justify='center'
+            alignItems='baseline'
+            className={style.links}
+            style={{ marginBottom: '2%' }}
+          >
+            <Grid item>
+              <Link to='/login' variant='body2'>
+                {intl.formatMessage({ id: 'loginPromptSignUp' })}
+              </Link>
+            </Grid>
           </Grid>
         </Grid>
       </form>
@@ -324,8 +407,12 @@ function Signup(props) {
   return (
     <LandingContainer
       content={
-        <Grid container direction='column' justify='flex-start' alignItems='center'>
-          <Paper className={style.paper}>{content}</Paper>
+        <Grid container direction='row' justify='center' alignItems='center'>
+          <Grid item xs={1} sm={2} lg={3}></Grid>
+          <Grid item xs={10} sm={8} lg={6}>
+            <Paper className={style.paper}>{content}</Paper>
+          </Grid>
+          <Grid item xs={1} sm={2} lg={3}></Grid>
         </Grid>
       }
     />

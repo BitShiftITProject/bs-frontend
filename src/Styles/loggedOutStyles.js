@@ -19,24 +19,7 @@ const loggedOutStyles = makeStyles((theme) => ({
     boxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
     MozBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
     WebkitBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
-    OBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`,
-
-    [theme.breakpoints.only('xs')]: {
-      width: '90vw',
-      boxShadow: `-10px 10px  ${theme.palette.secondary.light}`,
-      MozBoxShadow: `-10px 10px  ${theme.palette.secondary.light}`,
-      WebkitBoxShadow: `-10px 10px  ${theme.palette.secondary.light}`,
-      OBoxShadow: `-10px 10px  ${theme.palette.secondary.light}`
-    },
-    [theme.breakpoints.only('sm')]: {
-      width: '70vw'
-    },
-    [theme.breakpoints.only('md')]: {
-      width: '55vw'
-    },
-    [theme.breakpoints.only('lg')]: {
-      width: '40vw'
-    }
+    OBoxShadow: `-20px 20px  ${theme.palette.secondary.light}`
   },
   modal: {},
   avatar: {
@@ -164,7 +147,9 @@ const loggedOutStyles = makeStyles((theme) => ({
     }
   },
   submit: {
-    textTransform: 'lowercase'
+    textTransform: 'lowercase',
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1)
   }
 }))
 

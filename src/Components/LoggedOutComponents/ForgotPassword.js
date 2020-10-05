@@ -6,6 +6,7 @@ import { TextField, Fab, Typography, Paper, Grid } from '@material-ui/core'
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
+import { Link } from 'react-router-dom'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -27,7 +28,8 @@ const styles = {
 
 const PaddedTextField = styled(TextField)({
   marginTop: '5%',
-  marginBottom: '5%'
+  marginBottom: '5%',
+  backgroundColor: 'rgba(255, 255, 255, 0.09)'
 })
 
 function ForgotPassword(props) {
@@ -78,6 +80,7 @@ function ForgotPassword(props) {
           id='forgot_password__email'
           type='email'
           placeholder={intl.formatMessage({ id: 'email' })}
+          // label={intl.formatMessage({ id: 'email' })}
           name='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -99,6 +102,7 @@ function ForgotPassword(props) {
           id='forgot_password__username'
           type='text'
           placeholder={intl.formatMessage({ id: 'username' })}
+          // label={intl.formatMessage({ id: 'username' })}
           name='username'
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -114,6 +118,22 @@ function ForgotPassword(props) {
             {intl.formatMessage({ id: 'resetPassword' })}
           </Fab>
         </span>
+
+        <span
+          className={style.links}
+          style={{
+            display: 'flex',
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'baseline',
+            marginBottom: '2%'
+          }}
+        >
+          <Link to='/login' variant='body2'>
+            {intl.formatMessage({ id: 'loginPromptForgotPassword' })}
+          </Link>
+        </span>
       </form>
     </div>
   )
@@ -121,8 +141,12 @@ function ForgotPassword(props) {
   return (
     <LandingContainer
       content={
-        <Grid container direction='column' justify='center' alignItems='center'>
-          <Paper className={style.paper}>{content}</Paper>
+        <Grid container direction='row' justify='center' alignItems='center'>
+          <Grid item xs={1} sm={2} lg={3}></Grid>
+          <Grid item xs={10} sm={8} lg={6}>
+            <Paper className={style.paper}>{content}</Paper>
+          </Grid>
+          <Grid item xs={1} sm={2} lg={3}></Grid>
         </Grid>
       }
     />

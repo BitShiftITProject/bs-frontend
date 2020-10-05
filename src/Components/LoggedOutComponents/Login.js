@@ -252,8 +252,12 @@ function Login(props) {
   return (
     <LandingContainer
       content={
-        <Grid container direction='column' justify='center' alignItems='center'>
-          <Paper className={style.paper}>{content}</Paper>
+        <Grid container direction='row' justify='center' alignItems='center'>
+          <Grid item xs={1} sm={2} lg={3}></Grid>
+          <Grid item xs={10} sm={8} lg={6}>
+            <Paper className={style.paper}>{content}</Paper>
+          </Grid>
+          <Grid item xs={1} sm={2} lg={3}></Grid>
         </Grid>
       }
     />
