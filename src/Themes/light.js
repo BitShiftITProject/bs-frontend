@@ -3,18 +3,20 @@ import { createMuiTheme } from '@material-ui/core/styles'
 const theme = createMuiTheme({
   palette: {
     background: {
-      default: '#EFF1F3',
-      paper: '#DCE0E5'
+      default: '#F7F7F8',
+      paper: '#F0F0F0',
+      paperLight: '#e9e9e9',
+      paperHover: '#e3e3e3'
     },
     primary: {
-      main: '#223843',
+      main: '#294451',
       light: '#375B6D',
-      dark: '#223843',
+      dark: '#294451',
       contrastText: '#ffffff'
     },
     secondary: {
       main: '#D8B4A0',
-      light: '#DBD3D8',
+      light: '#F3D6CE',
       dark: '#D8B4A0',
       contrastText: '#000000'
     },
@@ -28,8 +30,12 @@ const theme = createMuiTheme({
       contrastText: '#ffffff'
     },
     info: {
-      main: '#3E667A',
+      main: '#4CAFA5',
       contrastText: '#ffffff'
+    },
+    portfolioBorder: {
+      hover: ' rgba(55,91,109,1)',
+      main: ' rgba(55,91,109,0.5)'
     }
   }
 })

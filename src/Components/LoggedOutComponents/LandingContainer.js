@@ -1,16 +1,35 @@
 import React from 'react'
 import clsx from 'clsx'
 import { useIntl } from 'react-intl'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography, Box } from '@material-ui/core'
 import { NavLink, useHistory } from 'react-router-dom'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import LanguageButton from '../CommonComponents/LanguageButton'
 import DarkAndLightModeButton from '../CommonComponents/DarkAndLightModeButton'
+import EmojiHover from '../CommonComponents/EmojiHover'
 
 export default function LandingContainer(props) {
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
+
   const classes = loggedOutStyles()
-  const history = useHistory()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
   const intl = useIntl()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   History                                  */
+  /* -------------------------------------------------------------------------- */
+
+  const history = useHistory()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Page Content                                */
+  /* -------------------------------------------------------------------------- */
 
   // Placeholder variable for the component to be rendered (i.e. Login, Signup,
   // ForgotPassword)
@@ -19,49 +38,84 @@ export default function LandingContainer(props) {
   return (
     <Grid
       container
-      spacing={0}
-      direction='column'
-      justify='flex-start'
-      alignItems='center'
-      className={classes.root}
+      direction='row'
+      className={classes.background}
+      style={{ height: '100%', flex: 1, flexWrap: 1, overflow: 'scroll' }}
     >
+      {/* LEFT PADDING */}
+      <Grid item xs={false} md={2}></Grid>
+
+      {/* CONTENT */}
       <Grid
         item
-        xs={1}
         container
-        direction='row'
-        justify='space-between'
-        className={classes.appBar}
+        xs={12}
+        md={8}
+        direction='column'
+        justify='flex-start'
+        alignItems='center'
+        className={classes.root}
       >
-        <div
-          className={classes.appBarTitle}
-          onClick={() => {
-            history.push('/')
-          }}
+        {/* -------------------------------------------------------------------------- */}
+
+        {/* NAVBAR (TOP) */}
+
+        <Grid
+          item
+          xs={2}
+          container
+          direction='row'
+          justify='space-between'
+          alignItems='center'
+          className={classes.appBar}
         >
-          <Typography variant='h5' component='h1'>
-            bitshift
-          </Typography>
-        </div>
-        <div className={classes.appBarItems}>
-          <NavLink exact to='/' className='normal'>
-            <span>{intl.formatMessage({ id: 'home' })}</span>
-          </NavLink>
-          <NavLink exact to='/login' className='special'>
-            <span>{intl.formatMessage({ id: 'login' })}</span>
-          </NavLink>
-          <NavLink exact to='/signup' className='special'>
-            <span>{intl.formatMessage({ id: 'signUp' })}</span>
-          </NavLink>
-          <div className={clsx(classes.appBarItems, classes.appBarIcons)}>
-            <DarkAndLightModeButton />
-            <LanguageButton />
+          {/*
+           * LOGO
+           */}
+          <div
+            className={classes.appBarTitle}
+            onClick={() => {
+              history.push('/')
+            }}
+          >
+            <Typography variant='h4' component='h1'>
+              bitshift
+            </Typography>
+            <Typography variant='h4' component='h2'>
+              <EmojiHover />
+            </Typography>
           </div>
-        </div>
+          {/*
+           * BUTTONS AND ICONS
+           */}
+          <div className={classes.appBarItems}>
+            <Box display='flex' className={classes.appBarItemsContainer}>
+              <NavLink exact to='/' className='normal'>
+                <span>{intl.formatMessage({ id: 'home' })}</span>
+              </NavLink>
+              <NavLink exact to='/login' className='normal'>
+                <span>{intl.formatMessage({ id: 'login' })}</span>
+              </NavLink>
+              <NavLink exact to='/signup' className='normal'>
+                <span>{intl.formatMessage({ id: 'signUp' })}</span>
+              </NavLink>
+              <div className={clsx(classes.appBarItems, classes.appBarIcons)}>
+                <DarkAndLightModeButton />
+                <LanguageButton />
+              </div>
+            </Box>
+          </div>
+        </Grid>
+
+        {/* PAGE CONTENT (Below Navbar) */}
+
+        <Grid item xs={10} container style={{ minWidth: '100%' }}>
+          {content}
+        </Grid>
       </Grid>
-      <Grid item xs={11} container>
-        {content}
-      </Grid>
+
+      {/* RIGHT PADDING */}
+      <Grid item xs={false} md={2}></Grid>
     </Grid>
   )
 }

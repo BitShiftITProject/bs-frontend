@@ -4,6 +4,10 @@ import languages from '../../lang/languages'
 import { SpeedDial, SpeedDialAction } from '@material-ui/lab'
 import { makeStyles } from '@material-ui/core'
 
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
+
 const useStyles = makeStyles((theme) => ({
   speedDial: {
     zIndex: theme.zIndex.speedDial,
@@ -31,19 +35,30 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function LanguageButton() {
+  /* -------------------------------------------------------------------------- */
+  /*                              Locale / Language                             */
+  /* -------------------------------------------------------------------------- */
+
   const { currentLocale: locale, setLocale } = useContext(LocaleContext)
 
   function handleLocaleChange(value) {
     setLocale(value)
     setOpen(false)
-    // console.log(value)
   }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Fab Icon                                  */
+  /* -------------------------------------------------------------------------- */
 
   const currentLanguageIcon = (
     <span role='img' aria-label='current language'>
       {locale ? languages[locale].emoji : <span></span>}
     </span>
   )
+
+  /* -------------------------------------------------------------------------- */
+  /*                      Open / Closed State of Speed Dial                     */
+  /* -------------------------------------------------------------------------- */
 
   const [open, setOpen] = useState(false)
 

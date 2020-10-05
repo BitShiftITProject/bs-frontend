@@ -35,19 +35,21 @@ import { CursorTypography } from '../../Styles/loggedInStyles'
 import HeaderBreadcrumbs from './HeaderBreadcrumbs'
 import { useIntl } from 'react-intl'
 import DarkAndLightModeButton from '../CommonComponents/DarkAndLightModeButton'
+import LanguageButton from '../CommonComponents/LanguageButton'
+
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
 
 const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => ({
-  /* -------------------------------------------------------------------------- */
-  /*                          Sidebar / AppBar / Paper                          */
-  /* -------------------------------------------------------------------------- */
-
   root: {
     display: 'flex',
     '&::-webkit-scrollbar': {
       display: 'none'
-    }
+    },
+    width: '100vw'
   },
   toolbar: {
     paddingRight: 24 // keep right padding when drawer closed
@@ -96,6 +98,8 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     whiteSpace: 'nowrap',
     width: drawerWidth,
+    border: 'none',
+    boxShadow: theme.shadows[50],
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen
@@ -104,6 +108,8 @@ const useStyles = makeStyles((theme) => ({
 
   drawerPaperClose: {
     overflowX: 'hidden',
+    border: 'none',
+    boxShadow: theme.shadows[50],
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -138,10 +144,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Sidebar(props) {
-  // Used to send a user to some page, using history.push({pathname})
-  const history = useHistory()
-  const intl = useIntl()
-
   /* -------------------------------------------------------------------------- */
   /*                             States and Handlers                            */
   /* -------------------------------------------------------------------------- */
@@ -160,17 +162,39 @@ export default function Sidebar(props) {
   /* -------------------------------------------------------------------------- */
 
   const classes = useStyles()
+
+  // AppBar, MenuIcon, and Drawer styles are different depending on if
+  // the drawer is open or closed
   const appBarStyle = clsx(classes.appBar, open && classes.appBarShift)
   const toggleMenuIconStyle = clsx(classes.menuButton, open && classes.menuButtonHidden)
   const drawerStyle = clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
 
   /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const intl = useIntl()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   History                                  */
+  /* -------------------------------------------------------------------------- */
+
+  // Used to send a user to some page, using history.push({pathname})
+  const history = useHistory()
+
+  /* -------------------------------------------------------------------------- */
   /*                                AppBar (Top)                                */
   /* -------------------------------------------------------------------------- */
+
+  // When logged in, the page has this appbar at all times (except when viewing
+  // public portfolio
 
   const appBar = (
     <AppBar position='absolute' className={appBarStyle}>
       <Toolbar className={classes.toolbar}>
+        {/*
+         * TOP-LEFT MENU ICON: To open the drawer
+         */}
         <IconButton
           edge='start'
           color='inherit'
@@ -180,12 +204,24 @@ export default function Sidebar(props) {
         >
           <MenuIcon />
         </IconButton>
+
+        {/*
+         * TITLE (Currently empty)
+         */}
+
         <CursorTypography
           component='h1'
           variant='h6'
           color='inherit'
           className={classes.title}
         ></CursorTypography>
+
+        {/* -------------------------------------------------------------------------- */}
+
+        {/* TOP-RIGHT APPBAR ICONS: Language, Theme, Help, Settings, Log Out Buttons (in that order) */}
+
+        <LanguageButton />
+
         <DarkAndLightModeButton />
 
         <Tooltip title={intl.formatMessage({ id: 'help' })} placement='bottom'>
@@ -199,6 +235,7 @@ export default function Sidebar(props) {
             <HelpOutlineIcon />
           </IconButton>
         </Tooltip>
+
         <Tooltip title={intl.formatMessage({ id: 'settings' })} placement='bottom'>
           <IconButton
             onClick={() => {
@@ -210,13 +247,14 @@ export default function Sidebar(props) {
             <SettingsIcon />
           </IconButton>
         </Tooltip>
+
         <Tooltip title={intl.formatMessage({ id: 'logout' })} placement='bottom'>
           <IconButton
             onClick={() => {
               sessionStorage.removeItem('accessToken')
               localStorage.removeItem('accessToken')
               window.sessionStorage.removeItem('portfolioId')
-              window.location.href = '/login'
+              window.location.href = '/'
             }}
             color='inherit'
             className={classes.appBarIcon}
@@ -234,18 +272,13 @@ export default function Sidebar(props) {
 
   const mainListItems = (
     <div className={classes.sidebarList}>
-      {/*<ListItem
-        button
-        onClick={() => {
-          history.push('/home')
-        }}
-      >
-        <ListItemIcon>
-          <HomeIcon />
-        </ListItemIcon>
-        <ListItemText primary={intl.formatMessage({id: 'home'})} />
-      </ListItem>*/}
+      {/*
+       * SIDEBAR CONTENT
+       */}
 
+      {/* -------------------------------------------------------------------------- */}
+
+      {/* Portfolios */}
       <ListItem
         button
         onClick={() => {
@@ -258,6 +291,9 @@ export default function Sidebar(props) {
         <ListItemText primary={intl.formatMessage({ id: 'portfolios' })} />
       </ListItem>
 
+      {/* -------------------------------------------------------------------------- */}
+
+      {/* Profile */}
       <ListItem
         button
         onClick={() => {
@@ -270,6 +306,9 @@ export default function Sidebar(props) {
         <ListItemText primary={intl.formatMessage({ id: 'profile' })} />
       </ListItem>
 
+      {/* -------------------------------------------------------------------------- */}
+
+      {/* Help */}
       <ListItem
         button
         onClick={() => {
@@ -282,6 +321,9 @@ export default function Sidebar(props) {
         <ListItemText primary={intl.formatMessage({ id: 'help' })} />
       </ListItem>
 
+      {/* -------------------------------------------------------------------------- */}
+
+      {/* Settings */}
       <ListItem
         button
         onClick={() => {
@@ -308,13 +350,21 @@ export default function Sidebar(props) {
       }}
       open={open}
     >
+      {/*
+       * DRAWER ICON BUTTON: To close the drawer
+       */}
       <div className={classes.toolbarIcon}>
         <IconButton onClick={handleDrawerClose}>
           <ChevronLeftIcon />
         </IconButton>
       </div>
+
       <Divider />
+
+      {/* SIDEBAR CONTENT: Goes here */}
+
       <List>{mainListItems}</List>
+
       <Divider />
     </Drawer>
   )
@@ -323,7 +373,7 @@ export default function Sidebar(props) {
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
-  // Content is the page component that will be rendered (e.g. HomePage, SettingsPage, etc.)
+  // Content is the page component that will be rendered (e.g. PortfolioList, SettingsPage, etc.)
   const { content } = props
 
   const pageContent = (

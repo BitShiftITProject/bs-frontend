@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
+
+import Loading from './Components/CommonComponents/Loading'
+
 import LandingPage from './Components/LoggedOutComponents/LandingPage'
 import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
@@ -42,7 +45,6 @@ async function loggedIn() {
 
 class Authentication extends Component {
   state = { loggedIn: null }
-  // state = { loggedIn: true }
 
   async componentDidMount() {
     let logincheck = await loggedIn()
@@ -52,10 +54,13 @@ class Authentication extends Component {
   render() {
     if (this.state.loggedIn == null) {
       // Route for loading page while getting if the user is logged in
-      return <p>Loading</p>
+      return (
+        <div style={{ height: '100vh' }}>
+          <Loading vertical />
+        </div>
+      )
     } else if (this.state.loggedIn === true) {
       // Route for pages accessible when logged in
-      console.log('Logged In!')
       return (
         <Switch>
           <Route exact path='/settings' render={() => <SettingsPage />} />
@@ -75,7 +80,6 @@ class Authentication extends Component {
     } else if (this.state.loggedIn === false) {
       // Route for pages accessible when not logged in
 
-      console.log('Not logged in!')
       return (
         <Switch>
           <Route exact path='/login' component={Login} />

@@ -21,13 +21,15 @@ export default {
     confirmPassword: 'Confirm Password',
     passwordError: 'Passwords must match',
     passwordPattern: '8 to 12 characters',
+    loginPromptSignUp: 'Already have an account? Log in.',
 
     // Forgot Password
     forgotPasswordDescription:
-      'Please enter your email or username to receive the password reset link.',
+      'Please enter your email or username to receive the password reset link',
     forgotPassword: 'Forgot Password',
     or: 'Or',
     resetPassword: 'Reset Password',
+    loginPromptForgotPassword: 'Back to Log In',
 
     // Logged-in Appbar
     toggleTheme: 'Toggle theme',
@@ -41,6 +43,9 @@ export default {
     save: 'Save',
     view: 'View',
     edit: 'Edit',
+    share: 'Share',
+    copy: 'Copy',
+    url: 'URL',
     errorText: 'An error occurred. Try again.',
 
     // Home
@@ -51,6 +56,7 @@ export default {
 
     addPortfolio: 'Add Portfolio',
     editPortfolio: 'Edit Portfolio',
+    sharePortfolio: 'Share Portfolio',
     deletePortfolio: 'Delete Portfolio',
     deletePortfolioPrompt: 'Are you sure you want to delete the portfolio {portfolio}?',
     addPage: 'Add Page',
@@ -74,6 +80,12 @@ export default {
     aboutMe: 'About Me',
     firstName: 'First Name',
     lastName: 'Last Name',
+    birthdate: 'Date of Birth',
+    dateFormat: 'DD/MM/YYYY',
+    gender: 'Gender',
+    male: 'Male',
+    female: 'Female',
+    other: 'Other',
     occupation: 'Occupation',
     profileDescription: 'Description',
     descriptionPlaceholder: 'Type something...',
@@ -81,7 +93,7 @@ export default {
     tagsPlaceholder: 'Type and enter to add a tag...',
 
     contact: 'Contact',
-    emailHelperText: 'Changing this will not change your login details',
+    emailHelperText: 'Modifying this will not change your login details',
     phone: 'Contact Number',
     company: 'Company',
     addressLine1: 'Address Line 1',
@@ -110,6 +122,6 @@ export default {
     theme: 'Dark Mode',
     language: 'Language',
 
-    personalData: 'Personal data'
+    loginData: 'Login data'
   }
 }

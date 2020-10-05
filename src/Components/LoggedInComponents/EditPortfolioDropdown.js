@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 import {
   Button,
@@ -11,7 +11,14 @@ import {
   MenuList
 } from '@material-ui/core'
 
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { makeStyles } from '@material-ui/core/styles'
+
+import { useIntl } from 'react-intl'
+
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,9 +43,21 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EditPortfolioDropdown({ setEditMode }) {
   const classes = useStyles()
-  const [open, setOpen] = React.useState(false)
-  const anchorRef = React.useRef(null)
 
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const intl = useIntl()
+
+  /* -------------------------------------------------------------------------- */
+  /*                    Popper/Button State and its Handlers                    */
+  /* -------------------------------------------------------------------------- */
+
+  const [open, setOpen] = useState(false)
+  const anchorRef = useRef(null)
+
+  // Toggles it to false if true, and vice versa
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen)
   }
@@ -59,8 +78,8 @@ export default function EditPortfolioDropdown({ setEditMode }) {
   }
 
   // return focus to the button when we transitioned from !open -> open
-  const prevOpen = React.useRef(open)
-  React.useEffect(() => {
+  const prevOpen = useRef(open)
+  useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus()
     }
@@ -80,7 +99,7 @@ export default function EditPortfolioDropdown({ setEditMode }) {
           color='primary'
           variant='contained'
         >
-          Editing Options
+          {intl.formatMessage({ id: 'editingOptions' })} <ArrowDropDownIcon />
         </Button>
         <Popper
           className={classes.popper}
@@ -98,11 +117,23 @@ export default function EditPortfolioDropdown({ setEditMode }) {
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList autoFocusItem={open} id='menu-list-grow' onKeyDown={handleListKeyDown}>
-                    <MenuItem className={classes.menuItem} onClick={() => { setEditMode("styles") }}>
-                      <span>Style</span>
+                    <MenuItem
+                      className={classes.menuItem}
+                      onClick={(e) => {
+                        setEditMode('styles')
+                        handleClose(e)
+                      }}
+                    >
+                      <span>{intl.formatMessage({ id: 'style' })}</span>
                     </MenuItem>
-                    <MenuItem className={classes.menuItem} onClick={() => { setEditMode("content") }}>
-                      <span>Content</span>
+                    <MenuItem
+                      className={classes.menuItem}
+                      onClick={(e) => {
+                        setEditMode('content')
+                        handleClose(e)
+                      }}
+                    >
+                      <span>{intl.formatMessage({ id: 'content' })}</span>
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
