@@ -73,6 +73,7 @@ export default {
 
     pages: 'Pages',
 
+    addSection: 'Add Section',
     chooseATemplate: 'Choose a template',
     headings: 'Headings',
     textAndMultimedia: 'Text and Multimedia',
