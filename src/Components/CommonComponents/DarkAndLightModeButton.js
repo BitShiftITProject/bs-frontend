@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 
-import { Fab, makeStyles } from '@material-ui/core'
+import { Fab, makeStyles, Tooltip } from '@material-ui/core'
 import { ThemesContext } from '../Contexts/ThemesContext'
+import { useIntl } from 'react-intl'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -14,15 +15,18 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: 'none',
     height: 40,
     width: 40,
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.iconButton.contrastText,
+    backgroundColor: theme.palette.iconButton.main,
     '&:hover': {
-      backgroundColor: theme.palette.primary.light
+      backgroundColor: theme.palette.iconButton.hover
     }
   }
 }))
 
 export default function DarkAndLightModeButton() {
   const classes = useStyles()
+
+  const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
   /*                                    Theme                                   */
@@ -52,8 +56,10 @@ export default function DarkAndLightModeButton() {
     )
 
   return (
-    <Fab onClick={toggleTheme} className={classes.fab} color='primary'>
-      {themeIcon}
-    </Fab>
+    <Tooltip title={intl.formatMessage({ id: 'toggleTheme' })}>
+      <Fab onClick={toggleTheme} className={classes.fab} color='primary'>
+        {themeIcon}
+      </Fab>
+    </Tooltip>
   )
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid, Button } from '@material-ui/core'
-import GetSectionJSX from '../SectionsMap'
+import { GetSectionJSX } from '../SectionsMap'
 import CloseIcon from '@material-ui/icons/Close'
 export default function ExpandedSectionsButton({ handleToggle, handleSectionOnClick }) {
   // TODO: remove this later. temporary hardcoded sections

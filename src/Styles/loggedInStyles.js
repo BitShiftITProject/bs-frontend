@@ -94,10 +94,10 @@ const loggedInStyles = makeStyles((theme) => ({
   },
 
   floatingBottomContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    // display: 'flex',
+    // flexDirection: 'row',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     paddingTop: 30
   },
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
   Grid,
@@ -49,23 +49,59 @@ export default function EditPortfolioContent(props) {
 
   const { portfolio, setPortfolio, pages, setPages } = props
   const [portfolioTitle, setPortfolioTitle] = useState('')
-  const [pageIndex, setPageIndex] = useState(0)
+  const [pageId, setPageId] = useState(null)
   const [pageTitle, setPageTitle] = useState('')
-  const [sections, setSections] = useState([])
+  const [sections, setSections] = useState({})
+
+  useEffect(() => {
+    setSections((currentSections) => {
+      const newSections = pages
+        .map((page) => {
+          if (Object.keys(currentSections).includes(page.id)) {
+            return {}
+          }
+          return { [page.id]: page.content.sections }
+        })
+        .reduce((prev, curr) => ({ ...prev, ...curr }), currentSections)
+
+      console.log('Sections:', newSections)
+
+      return newSections
+
+      // return Object.assign(
+      //   currentSections,
+      // ...pages.map((page) => {
+      //   if (Object.keys(currentSections).includes(page.id)) {
+      //     return {}
+      //   }
+      //   return { [page.id]: page.content.sections }
+      // })
+      // )
+    })
+  }, [pages])
 
   /* -------------------------------------------------------------------------- */
   /*                                Section Handlers                            */
   /* -------------------------------------------------------------------------- */
-  async function handleSectionEvent(name, section) {
-    // TODO: ADD a section to a temporary contents object (only saved to database if the user saves the data)
 
-    if (name === 'addSection') {
-      // add new section to the current page content
-      const newContent = sections.concat(section)
-      setSections(newContent)
-    } else {
-      //TODO: remove the section from the sections
-    }
+  function handleSectionAdd(newSection) {
+    // console.log(newSection)
+    setSections((currentSections) => {
+      const newSections = {
+        ...currentSections,
+        [pageId]: currentSections[pageId] ? [...currentSections[pageId], newSection] : [newSection]
+      }
+      console.log(newSections)
+      return newSections
+    })
+  }
+
+  function handleSectionEdit(sectionIndex) {
+    console.log(`Editing section ${sectionIndex} in page ${pageId}`)
+  }
+
+  function handleSectionDelete(sectionIndex) {
+    console.log(`Deleting section ${sectionIndex} in page ${pageId}`)
   }
 
   /* -------------------------------------------------------------------------- */
@@ -102,6 +138,7 @@ export default function EditPortfolioContent(props) {
   function handlePortfolioEvent(name, value) {
     // The name variable must match a dialogType key
     // The value variable is the portfolio title
+
     setDialogContent({ type: name, component: value })
     setPortfolioTitle(value)
     setOpen(true)
@@ -118,6 +155,7 @@ export default function EditPortfolioContent(props) {
   function handlePageEvent(name, value) {
     // The name variable must match a dialogType key
     // The value variable is the page index
+
     setDialogContent({ type: name, component: value })
 
     // Set the page title text field's default value as empty for adding a page,
@@ -135,7 +173,7 @@ export default function EditPortfolioContent(props) {
   /*                         Dialog Close Event Handlers                        */
   /* -------------------------------------------------------------------------- */
 
-  /* -------------------------------------------------------------------------- */
+  /* ---------------------------- Portfolio Events ---------------------------- */
 
   // Edits the current portfolio's title and description
   async function handlePortfolioEdit(e) {
@@ -150,13 +188,15 @@ export default function EditPortfolioContent(props) {
     setOpen(false)
   }
 
-  /* -------------------------------------------------------------------------- */
+  /* ------------------------------- Page Events ------------------------------ */
 
   // Updates the page index and page content to be those of the selected page
-  function handlePageSelect(idx) {
-    setPageIndex(idx)
-    // console.log(pages[idx].content.sections)
-    setSections(pages[idx].content.sections)
+  function handlePageSelect(id) {
+    if (pageId === id) {
+      setPageId(null)
+    } else {
+      setPageId(id)
+    }
   }
 
   /* -------------------------------------------------------------------------- */
@@ -182,7 +222,6 @@ export default function EditPortfolioContent(props) {
     // Updates the pages to included the newly added page in the frontend,
     // without messing with the other pages' unsaved changes
     setPages((pages) => [...pages, newPage])
-
     setOpen(false)
   }
 
@@ -211,22 +250,22 @@ export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */
 
   // Edit the PAGE CONTENT of the Page in the DB
-  async function handleSectionsEdit(e) {
+  async function handleSaveSections(e) {
     e.preventDefault()
 
-    await patchPage(pages[pageIndex].id, { content: { sections } })
+    await patchPage(pageId, { content: { sections: sections[pageId] } })
 
-    // Replace the content of the changed page manually to show the change in
-    // frontend, to avoid deleting any unsaved changes in the other pages'
-    setPages((pages) =>
-      pages.map((page) => {
-        if (page.id === pages[pageIndex].id) {
-          return { ...page, content: sections }
-        } else {
-          return page
-        }
-      })
-    )
+    // // Replace the content of the changed page manually to show the change in
+    // // frontend, to avoid deleting any unsaved changes in the other pages'
+    // setPages((pages) =>
+    //   pages.map((page) => {
+    //     if (page.id === pageId) {
+    //       return { ...page, content: { sections: sections[pageId] } }
+    //     } else {
+    //       return page
+    //     }
+    //   })
+    // )
     setOpen(false)
   }
 
@@ -235,10 +274,10 @@ export default function EditPortfolioContent(props) {
   // Removes a Page (and any reference to it) from the DB
   async function handlePageDelete(e) {
     e.preventDefault()
-    const pageId = pages[dialogContent.component].id
+    const toBeDeletedPageId = pages[dialogContent.component].id
 
     // Get the new list of page IDs
-    const newPageIds = pages.map((pageObj) => pageObj.id).filter((id) => id !== pageId)
+    const newPageIds = pages.map((pageObj) => pageObj.id).filter((id) => id !== toBeDeletedPageId)
 
     // Create a temporary Set item for it, used to filter the current pages
     // state array, which consists of the page objects (not just IDs)
@@ -250,7 +289,7 @@ export default function EditPortfolioContent(props) {
     setPages(newPages)
 
     // Delete the portfolio from the portfolios DB
-    await deletePage(pageId)
+    await deletePage(toBeDeletedPageId)
 
     setOpen(false)
   }
@@ -463,15 +502,19 @@ export default function EditPortfolioContent(props) {
               className={classes.padded}
             >
               <CursorTypography variant='button'>{portfolio.title}</CursorTypography>
+
+              {/* EDIT PORTFOLIO BUTTON */}
+
               <Fab
-                color='primary'
+                color='secondary'
                 size='small'
                 onClick={() => handlePortfolioEvent('editPortfolio', portfolio.title)}
               >
                 <CreateIcon />
               </Fab>
             </Grid>
-            <Divider orientation='horizontal' />
+
+            <Divider />
 
             {/* PORTFOLIO PAGES (List) */}
 
@@ -487,9 +530,10 @@ export default function EditPortfolioContent(props) {
                 {pages &&
                   pages.map((page, idx) => (
                     <ListItem
-                      onClick={() => handlePageSelect(idx)}
-                      key={idx}
+                      onClick={() => handlePageSelect(page.id)}
+                      key={page.id}
                       button
+                      selected={page.id === pageId}
                       className={classes.hiddenButtonItem}
                     >
                       {/* PAGE TITLE */}
@@ -518,10 +562,19 @@ export default function EditPortfolioContent(props) {
 
               {/* ADD PAGE BUTTON */}
 
-              <Fab color='primary' size='small' onClick={() => handlePageEvent('addPage', '')}>
-                <AddIcon />
+              <Fab
+                color='primary'
+                size='small'
+                variant='extended'
+                onClick={() => handlePageEvent('addPage', '')}
+                style={{ marginLeft: 5, marginRight: 5 }}
+              >
+                {intl.formatMessage({ id: 'addPage' })}
+                <AddIcon style={{ paddingLeft: 5 }} />
               </Fab>
             </Grid>
+
+            <Divider />
           </Grid>
         </Paper>
       </Grid>
@@ -536,16 +589,38 @@ export default function EditPortfolioContent(props) {
            * PAGE SECTIONS
            */}
 
-          <Grid
-            item
-            xs={10}
-            style={{ minWidth: '100%', overflow: 'scroll' }}
-            container
-            direction='column'
-            justify='space-between'
-          >
-            <SectionsList sections={sections} editing />
-          </Grid>
+          {!pageId && (
+            <Grid
+              item
+              xs={10}
+              style={{ minWidth: '100%', overflow: 'scroll' }}
+              container
+              justify='center'
+              alignItems='center'
+            >
+              <CursorTypography variant='subtitle2'>
+                Select a page to start editing your portfolio
+              </CursorTypography>
+            </Grid>
+          )}
+
+          {pageId && (
+            <Grid
+              item
+              xs={10}
+              style={{ minWidth: '100%', overflow: 'scroll' }}
+              container
+              direction='column'
+              justify='space-between'
+            >
+              <SectionsList
+                sections={sections ? sections[pageId] : []}
+                editing
+                handleSectionEdit={handleSectionEdit}
+                handleSectionDelete={handleSectionDelete}
+              />
+            </Grid>
+          )}
 
           {/* SAVE CHANGES BUTTON */}
 
@@ -554,22 +629,29 @@ export default function EditPortfolioContent(props) {
             xs={2}
             style={{ minWidth: '100%' }}
             container
+            spacing={2}
+            direction='row'
+            justify='flex-end'
+            alignItems='center'
             className={classes.floatingBottomContainer}
           >
-            <Grid item xs={6} container justify='center'>
-              <Fab color='secondary' variant='extended' onClick={handleSectionsEdit}>
+            <Grid item>
+              <Fab
+                style={!pageId ? { visibility: 'hidden' } : {}}
+                color='secondary'
+                variant='extended'
+                onClick={handleSaveSections}
+              >
                 <CursorTypography variant='button'>
-                  {intl.formatMessage({ id: 'saveChanges' })}
+                  {intl.formatMessage({ id: 'saveSections' })}
                 </CursorTypography>
               </Fab>
             </Grid>
 
             {/* ADD SECTION BUTTON */}
             {/* When a section is clicked, it adds the section to the overall sections component */}
-
-            <Grid item xs={6} container justify='flex-end'>
-              <SectionsButton handleSectionClick={handleSectionEvent} />
-            </Grid>
+            <Grid item></Grid>
+            <SectionsButton pageId={pageId} handleSectionAdd={handleSectionAdd} />
           </Grid>
         </Paper>
       </Grid>

@@ -1,46 +1,70 @@
 import React from 'react'
-import { Typography, Container, Grid } from '@material-ui/core'
+import { Typography, Grid } from '@material-ui/core'
 import { useIntl } from 'react-intl'
 
-import GetSectionJSX, { sectionIdsByCategory } from './SectionsMap'
+import { GetSectionJSX, sectionIdsByCategory } from './SectionsMap'
+import SectionContainer from './SectionEdit/SectionContainer'
 import SectionTemplate from './SectionAdd/SectionTemplate'
 
-export default function SectionsList({ sections, editing, handleSectionClick }) {
+export default function SectionsList({
+  sections,
+  editing,
+  handleSectionAdd,
+  handleSectionEdit,
+  handleSectionDelete
+}) {
   const intl = useIntl()
-  const sectionList = sections ? (
+
+  const sectionList =
     /* -------------------------------------------------------------------------- */
     /*               ACTUAL SECTIONS (Has content from Page object)               */
     /* -------------------------------------------------------------------------- */
 
-    <div>
-      {sections.map((section, idx) => (
-        <Container key={idx}>{GetSectionJSX(section, editing)}</Container>
-      ))}
-    </div>
-  ) : (
-    /* -------------------------------------------------------------------------- */
-    /*                              SECTION TEMPLATES                             */
-    /* -------------------------------------------------------------------------- */
+    sections ? (
+      /* ---------------------------- Editable Sections --------------------------- */
 
-    <div>
-      {Object.keys(sectionIdsByCategory).map((category) => (
-        <div key={category}>
-          <Grid container style={{ padding: 8 }}>
-            <Typography variant='overline'>{intl.formatMessage({ id: category })}</Typography>
-          </Grid>
-          {sectionIdsByCategory[category].map((id, idx) => {
-            const exampleSection = { id }
-            const editing = true
-            return (
-              <SectionTemplate key={id} sectionId={id} handleSectionClick={handleSectionClick}>
-                {GetSectionJSX(exampleSection, editing)}
-              </SectionTemplate>
-            )
-          })}
+      handleSectionEdit ? (
+        <div>
+          {sections.map((section, idx) => (
+            <SectionContainer
+              key={idx}
+              index={idx}
+              handleSectionEdit={handleSectionEdit}
+              handleSectionDelete={handleSectionDelete}
+            >
+              {GetSectionJSX(section, editing)}
+            </SectionContainer>
+          ))}
         </div>
-      ))}
-    </div>
-  )
+      ) : (
+        /* ------------------------ Public Portfolio Sections ----------------------- */
+
+        <div>{sections.map((section) => GetSectionJSX(section, editing))}</div>
+      )
+    ) : (
+      /* -------------------------------------------------------------------------- */
+      /*                   SECTION TEMPLATES IN ADD SECTIONS MENU                   */
+      /* -------------------------------------------------------------------------- */
+
+      <div>
+        {Object.keys(sectionIdsByCategory).map((category) => (
+          <div key={category}>
+            <Grid container style={{ padding: 8 }}>
+              <Typography variant='overline'>{intl.formatMessage({ id: category })}</Typography>
+            </Grid>
+            {sectionIdsByCategory[category].map((id, idx) => {
+              const exampleSection = { id }
+              const editing = true
+              return (
+                <SectionTemplate key={id} sectionId={id} handleSectionAdd={handleSectionAdd}>
+                  {GetSectionJSX(exampleSection, editing)}
+                </SectionTemplate>
+              )
+            })}
+          </div>
+        ))}
+      </div>
+    )
 
   return sectionList
 }

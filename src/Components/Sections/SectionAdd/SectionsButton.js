@@ -1,6 +1,7 @@
-import React from 'react'
-import { Grid, Fab, Typography, Divider } from '@material-ui/core'
+import React, { useState } from 'react'
+import { Grid, Fab, Typography, Divider, makeStyles } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
+import CloseIcon from '@material-ui/icons/Close'
 
 import { useIntl } from 'react-intl'
 
@@ -19,8 +20,43 @@ const contentStyle = {
   backdropFilter: 'blur(5px)'
 }
 
-export default function SectionsButton({ handleSectionClick }) {
+const useStyles = makeStyles((theme) => ({
+  container: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2)
+  },
+  closeIcon: {
+    boxShadow: 'none',
+    minHeight: theme.spacing(4),
+    backgroundColor: theme.palette.primary.lighter,
+    color: theme.palette.primary.contrastText,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.lightest,
+      transition: 'background-color 0.2s ease-in-out'
+    },
+    '&:active': {
+      boxShadow: 'none'
+    }
+  }
+}))
+
+export default function SectionsButton({ pageId, handleSectionAdd }) {
+  const classes = useStyles()
+
   const intl = useIntl()
+
+  const [open, setOpen] = useState(false)
+
+  function handleToggle() {
+    setOpen((o) => !o)
+  }
+  function handleClose() {
+    setOpen(false)
+  }
+
+  // function handleToggle() {
+  //   setOpen((o) => !o)
+  // }
 
   /* -------------------------------------------------------------------------- */
   /*                        Section Templates Popup Menu                        */
@@ -32,35 +68,52 @@ export default function SectionsButton({ handleSectionClick }) {
 
   const popup = (
     <Popup
-      trigger={
-        <Fab variant='extended'>
-          <AddIcon />
-          {intl.formatMessage({ id: 'addSection' })}
-        </Fab>
-      }
-      on={['click', 'focus']}
+      trigger={<span></span>}
+      open={open}
       position='top right'
-      closeOnEscape
       contentStyle={contentStyle}
       offsetY={20}
       arrow={false}
     >
       {/* SECTIONS */}
 
-      <div style={{ paddingTop: 8, paddingBottom: 8 }}>
-        <Typography variant='h6' component='h4'>
-          {intl.formatMessage({ id: 'chooseATemplate' })}
-        </Typography>
-      </div>
+      <Grid
+        container
+        direction='row'
+        justify='space-between'
+        alignItems='center'
+        className={classes.container}
+      >
+        <div>
+          <Typography variant='h6' component='h4'>
+            {intl.formatMessage({ id: 'chooseATemplate' })}
+          </Typography>
+        </div>
+        <div>
+          <Fab size='small' className={classes.closeIcon} onClick={handleClose}>
+            <CloseIcon />
+          </Fab>
+        </div>
+      </Grid>
 
       <Divider />
 
-      <SectionsList editing />
+      <SectionsList editing handleSectionAdd={handleSectionAdd} />
     </Popup>
   )
   return (
     <Grid>
-      <div>{popup}</div>
+      <div>
+        <Fab
+          style={!pageId ? { visibility: 'hidden' } : {}}
+          variant='extended'
+          onClick={handleToggle}
+        >
+          <AddIcon style={{ paddingRight: 5 }} />
+          {intl.formatMessage({ id: 'addSection' })}
+        </Fab>
+        {popup}
+      </div>
     </Grid>
   )
 }

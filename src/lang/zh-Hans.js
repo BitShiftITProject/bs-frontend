@@ -75,6 +75,7 @@ export default {
 
     pages: '页面',
 
+    saveSections: 'Save Sections',
     addSection: 'Add Section',
     chooseATemplate: 'Choose a template',
     headings: 'Headings',

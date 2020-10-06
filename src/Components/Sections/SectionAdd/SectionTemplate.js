@@ -1,13 +1,14 @@
 import React from 'react'
-import { makeStyles, Icon, Grid } from '@material-ui/core'
+import { makeStyles, Grid, Fab } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
+import { GetNewSectionObject } from '../SectionsMap'
 
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: theme.spacing(1),
     '&:hover': {
       backgroundColor: 'rgba(0,0,0,0.1)',
-      '& #addIconGrid .MuiIcon-root': {
+      '& #addIconGrid span .MuiButtonBase-root': {
         backgroundColor: theme.palette.info.main,
         color: theme.palette.info.contrastText,
         transition: 'background-color 0.2s ease-in-out'
@@ -15,8 +16,8 @@ const useStyles = makeStyles((theme) => ({
     },
 
     '&:active': {
-      backgroundColor: 'rgba(255,255,255,0.1)',
-      '& #addIconGrid .MuiIcon-root': {
+      backgroundColor: 'rgba(0,0,0,0.15)',
+      '& #addIconGrid span .MuiButtonBase-root': {
         opacity: 0.8,
         backgroundColor: theme.palette.info.main,
         color: theme.palette.info.contrastText,
@@ -33,27 +34,41 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      height: theme.spacing(4),
-      width: theme.spacing(4),
-      borderRadius: '50%',
-      transition: 'background-color 0.2s ease-in-out'
+      '& .MuiButtonBase-root': {
+        background: 'none',
+        color: theme.palette.text.primary,
+        transform: 'scale(0.7)',
+        transition: 'background-color 0.2s ease-in-out'
+      }
     }
   }
 }))
 
-export default function SectionTemplate({ sectionId, children }) {
+export default function SectionTemplate({ children, sectionId, handleSectionAdd }) {
   const classes = useStyles()
+
+  function addSection() {
+    const newSection = GetNewSectionObject(sectionId)
+    handleSectionAdd(newSection)
+  }
+
   return (
-    <Grid container justify='center' alignItems='center' className={classes.container}>
+    <Grid
+      container
+      justify='center'
+      alignItems='center'
+      className={classes.container}
+      onClick={addSection}
+    >
       <Grid item xs={10}>
         {children}
       </Grid>
 
       <Grid item xs={2} container className={classes.addIcon} id='addIconGrid'>
         <span>
-          <Icon>
+          <Fab size='small'>
             <AddIcon />
-          </Icon>
+          </Fab>
         </span>
       </Grid>
     </Grid>

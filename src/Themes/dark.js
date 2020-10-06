@@ -12,6 +12,8 @@ const theme = createMuiTheme({
     primary: {
       main: '#27272F',
       light: '#373740',
+      lighter: '#5E5E6E',
+      lightest: '#868698',
       dark: '#27272F',
       contrastText: '#ffffff'
     },
@@ -37,6 +39,11 @@ const theme = createMuiTheme({
     portfolioBorder: {
       hover: ' rgba(222,211,221,0.7)',
       main: ' rgba(146,146,155,0.5)'
+    },
+    iconButton: {
+      main: '#5E5E6E',
+      hover: '#868698',
+      contrastText: '#fff'
     }
   }
 })

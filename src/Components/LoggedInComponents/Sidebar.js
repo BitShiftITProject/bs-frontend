@@ -12,7 +12,8 @@ import {
   IconButton,
   Container,
   makeStyles,
-  Tooltip
+  Tooltip,
+  Grid
 } from '@material-ui/core'
 
 import MenuIcon from '@material-ui/icons/Menu'
@@ -220,9 +221,15 @@ export default function Sidebar(props) {
 
         {/* TOP-RIGHT APPBAR ICONS: Language, Theme, Help, Settings, Log Out Buttons (in that order) */}
 
-        <LanguageButton />
+        <Grid container spacing={1} justify='flex-end'>
+          <Grid item>
+            <LanguageButton />
+          </Grid>
 
-        <DarkAndLightModeButton />
+          <Grid item>
+            <DarkAndLightModeButton />
+          </Grid>
+        </Grid>
 
         <Tooltip title={intl.formatMessage({ id: 'help' })} placement='bottom'>
           <IconButton

@@ -39,62 +39,62 @@ const ExampleSection = styled(Grid)({
 // a single Title section element:
 //
 // - If it was rendered in the non-editing mode (i.e. in a public portfolio),
-//   it is shown as a Typography component with the section's content.
+//   it is shown as a Typography component with the section's data.
 //
 // - If it was rendered in the editing mode, it may either be shown as:
-//   - An actual section with the actual contents from the Page object
-//     such that the 'content' attribute is non-null
-//   - A section template, wrapped in the ExampleSection, where the 'content'
+//   - An actual section with the actual datas from the Page object
+//     such that the 'data' attribute is non-null
+//   - A section template, wrapped in the ExampleSection, where the 'data'
 //     attribute is null
 
-export const Paragraph = ({ editing, content }) => {
+export const Paragraph = ({ name, editing, data }) => {
   const rendered = editing ? (
-    !content ? (
+    !data ? (
       <ExampleSection container>
         <Typography variant='caption' component='p'>
           {lorem}
         </Typography>
       </ExampleSection>
     ) : (
-      <TextField value={content} />
+      <TextField id={name} variant='outlined' defaultValue={data} />
     )
   ) : (
-    <Typography>{content}</Typography>
+    <Typography>{data}</Typography>
   )
 
   return rendered
 }
 
-export const Title = ({ editing, content }) => {
+export const Title = ({ name, editing, data }) => {
   const rendered = editing ? (
-    !content ? (
+    !data ? (
       <ExampleSection container>
         <Typography variant='h5'>{title}</Typography>
       </ExampleSection>
     ) : (
-      <TextField value={content} />
+      <TextField id={name} variant='outlined' defaultValue={data} />
     )
   ) : (
     <Typography component='h1' variant='h5'>
-      {content}
+      {data}
     </Typography>
   )
 
   return rendered
 }
 
-export const Subtitle = ({ editing, content }) => {
+export const Subtitle = ({ name, editing, data }) => {
   const rendered = editing ? (
-    !content ? (
+    !data ? (
       <ExampleSection container>
         <Typography variant='h6'>{subtitle}</Typography>
       </ExampleSection>
     ) : (
-      <TextField value={content} />
+      <TextField id={name} variant='outlined' defaultValue={data} />
     )
   ) : (
     <Typography component='h1' variant='h5'>
-      {content}
+      {data}
     </Typography>
   )
 
