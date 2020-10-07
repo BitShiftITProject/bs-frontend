@@ -81,13 +81,14 @@ const useStyles = makeStyles((theme) => ({
     height: 40,
     width: 40,
     marginLeft: theme.spacing(1),
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.iconButton.contrastText,
+    backgroundColor: theme.palette.iconButton.main,
     '&:hover': {
-      backgroundColor: theme.palette.primary.light
+      backgroundColor: theme.palette.iconButton.hover
     }
   },
   menuButton: {
-    marginRight: 36
+    marginRight: theme.spacing(1)
   },
   menuButtonHidden: {
     display: 'none'
@@ -229,46 +230,50 @@ export default function Sidebar(props) {
           <Grid item>
             <DarkAndLightModeButton />
           </Grid>
+          <Grid item>
+            <Tooltip title={intl.formatMessage({ id: 'help' })} placement='bottom'>
+              <IconButton
+                onClick={() => {
+                  history.push('/help')
+                }}
+                color='inherit'
+                className={classes.appBarIcon}
+              >
+                <HelpOutlineIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+          <Grid item>
+            <Tooltip title={intl.formatMessage({ id: 'settings' })} placement='bottom'>
+              <IconButton
+                onClick={() => {
+                  history.push('/settings')
+                }}
+                color='inherit'
+                className={classes.appBarIcon}
+              >
+                <SettingsIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+
+          <Grid item>
+            <Tooltip title={intl.formatMessage({ id: 'logout' })} placement='bottom'>
+              <IconButton
+                onClick={() => {
+                  sessionStorage.removeItem('accessToken')
+                  localStorage.removeItem('accessToken')
+                  window.sessionStorage.removeItem('portfolioId')
+                  window.location.href = '/'
+                }}
+                color='inherit'
+                className={classes.appBarIcon}
+              >
+                <PowerSettingsNewIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
         </Grid>
-
-        <Tooltip title={intl.formatMessage({ id: 'help' })} placement='bottom'>
-          <IconButton
-            onClick={() => {
-              history.push('/help')
-            }}
-            color='inherit'
-            className={classes.appBarIcon}
-          >
-            <HelpOutlineIcon />
-          </IconButton>
-        </Tooltip>
-
-        <Tooltip title={intl.formatMessage({ id: 'settings' })} placement='bottom'>
-          <IconButton
-            onClick={() => {
-              history.push('/settings')
-            }}
-            color='inherit'
-            className={classes.appBarIcon}
-          >
-            <SettingsIcon />
-          </IconButton>
-        </Tooltip>
-
-        <Tooltip title={intl.formatMessage({ id: 'logout' })} placement='bottom'>
-          <IconButton
-            onClick={() => {
-              sessionStorage.removeItem('accessToken')
-              localStorage.removeItem('accessToken')
-              window.sessionStorage.removeItem('portfolioId')
-              window.location.href = '/'
-            }}
-            color='inherit'
-            className={classes.appBarIcon}
-          >
-            <PowerSettingsNewIcon />
-          </IconButton>
-        </Tooltip>
       </Toolbar>
     </AppBar>
   )

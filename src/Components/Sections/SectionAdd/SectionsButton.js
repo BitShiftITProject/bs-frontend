@@ -16,8 +16,8 @@ const contentStyle = {
   minWidth: 300,
   overflow: 'scroll',
   border: 'none',
-  backgroundColor: 'rgba(0, 0, 0, 0.2)',
-  backdropFilter: 'blur(5px)'
+  backgroundColor: 'rgba(0, 0, 0, 0.05)',
+  backdropFilter: 'blur(10px)'
 }
 
 const useStyles = makeStyles((theme) => ({

@@ -16,6 +16,7 @@ import SettingsPage from './Components/LoggedInComponents/SettingsPage'
 import HelpPage from './Components/LoggedInComponents/HelpPage'
 import Sidebar from './Components/LoggedInComponents/Sidebar'
 import { getUser, logout } from './Backend/Fetch'
+import PortfolioProvider from './Components/Contexts/PortfolioContext'
 
 async function loggedIn() {
   // Get access token from session storage
@@ -62,20 +63,22 @@ class Authentication extends Component {
     } else if (this.state.loggedIn === true) {
       // Route for pages accessible when logged in
       return (
-        <Switch>
-          <Route exact path='/settings' render={() => <SettingsPage />} />
-          <Route exact path='/help' render={() => <HelpPage />} />
-          <Route exact path='/portfolios/edit' render={() => <EditPortfolioPage />} />
-          <Route exact path='/portfolios/add' render={() => <AddPortfolioPage />} />
-          <Route
-            exact
-            path='/portfolios'
-            render={() => <Sidebar content={<PortfolioList xs={12} md={12} lg={12} />} />}
-          />
-          <Route exact path='/profile' render={() => <EditProfilePage />} />
-          {/* <Route exact path='/home' render={() => <HomePage />} /> */}
-          <Redirect to='/portfolios' />
-        </Switch>
+        <PortfolioProvider>
+          <Switch>
+            <Route exact path='/settings' render={() => <SettingsPage />} />
+            <Route exact path='/help' render={() => <HelpPage />} />
+            <Route exact path='/portfolios/edit' render={() => <EditPortfolioPage />} />
+            <Route exact path='/portfolios/add' render={() => <AddPortfolioPage />} />
+            <Route
+              exact
+              path='/portfolios'
+              render={() => <Sidebar content={<PortfolioList xs={12} md={12} lg={12} />} />}
+            />
+            <Route exact path='/profile' render={() => <EditProfilePage />} />
+            {/* <Route exact path='/home' render={() => <HomePage />} /> */}
+            <Redirect to='/portfolios' />
+          </Switch>
+        </PortfolioProvider>
       )
     } else if (this.state.loggedIn === false) {
       // Route for pages accessible when not logged in

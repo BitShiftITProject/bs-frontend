@@ -6,13 +6,7 @@ import { GetSectionJSX, sectionIdsByCategory } from './SectionsMap'
 import SectionContainer from './SectionEdit/SectionContainer'
 import SectionTemplate from './SectionAdd/SectionTemplate'
 
-export default function SectionsList({
-  sections,
-  editing,
-  handleSectionAdd,
-  handleSectionEdit,
-  handleSectionDelete
-}) {
+export default function SectionsList({ sections, editing, handleSectionAdd, handleSectionDelete }) {
   const intl = useIntl()
 
   const sectionList =
@@ -23,23 +17,25 @@ export default function SectionsList({
     sections ? (
       /* ---------------------------- Editable Sections --------------------------- */
 
-      handleSectionEdit ? (
+      handleSectionDelete ? (
         <div>
-          {sections.map((section, idx) => (
-            <SectionContainer
-              key={idx}
-              index={idx}
-              handleSectionEdit={handleSectionEdit}
-              handleSectionDelete={handleSectionDelete}
-            >
-              {GetSectionJSX(section, editing)}
-            </SectionContainer>
-          ))}
+          {sections.map((section, idx) => {
+            return (
+              <SectionContainer
+                key={idx}
+                sectionId={section.id}
+                index={idx}
+                handleSectionDelete={handleSectionDelete}
+              >
+                {GetSectionJSX(section, editing, idx)}
+              </SectionContainer>
+            )
+          })}
         </div>
       ) : (
         /* ------------------------ Public Portfolio Sections ----------------------- */
 
-        <div>{sections.map((section) => GetSectionJSX(section, editing))}</div>
+        <div>{sections.map((section, idx) => GetSectionJSX(section, editing, idx))}</div>
       )
     ) : (
       /* -------------------------------------------------------------------------- */
@@ -57,7 +53,7 @@ export default function SectionsList({
               const editing = true
               return (
                 <SectionTemplate key={id} sectionId={id} handleSectionAdd={handleSectionAdd}>
-                  {GetSectionJSX(exampleSection, editing)}
+                  {GetSectionJSX(exampleSection, editing, idx)}
                 </SectionTemplate>
               )
             })}

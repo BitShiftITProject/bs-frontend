@@ -195,9 +195,6 @@ function Login(props) {
           </div>
         )}
 
-        {/* Loading message */}
-        {state.loading && <Loading message='Authenticating log in' />}
-
         {/* REMEMBER ME CHECKBOX */}
 
         <Grid container justify='space-between'>
@@ -206,6 +203,7 @@ function Login(props) {
               className={classes.div}
               control={
                 <Checkbox
+                  disabled={state.loading}
                   value='remember'
                   color='primary'
                   onClick={handleCheckbox}
@@ -220,17 +218,22 @@ function Login(props) {
           </Grid>
         </Grid>
 
+        {/* Loading message */}
+        {state.loading && <Loading message='Authenticating log in' />}
+
         {/* LOGIN BUTTON */}
 
-        <Fab
-          type='submit'
-          variant='extended'
-          className={style.submit}
-          color='primary'
-          style={{ width: '100%' }}
-        >
-          {intl.formatMessage({ id: 'login' })}
-        </Fab>
+        {!state.loading && (
+          <Fab
+            type='submit'
+            variant='extended'
+            className={style.submit}
+            color='primary'
+            style={{ width: '100%' }}
+          >
+            {intl.formatMessage({ id: 'login' })}
+          </Fab>
+        )}
 
         {/* FORGOT PASSWORD AND SIGN UP LINKS */}
 

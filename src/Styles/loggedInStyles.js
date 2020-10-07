@@ -56,7 +56,6 @@ const loggedInStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
 
-    overflow: 'scroll',
     '&::-webkit-scrollbar': {
       display: 'none'
     },
@@ -112,17 +111,63 @@ const loggedInStyles = makeStyles((theme) => ({
     }
   },
 
+  pageList: {
+    overflow: 'scroll',
+    height: 325,
+    [theme.breakpoints.between('xs, sm')]: {
+      height: 125
+    }
+  },
+
+  selectedIndicator: {
+    height: theme.spacing(1),
+    width: theme.spacing(1),
+    marginRight: theme.spacing(3),
+    borderRadius: '50%',
+    backgroundColor: 'rgba(0,0,0,0.3)'
+  },
+
   hiddenButtonItem: {
-    '&:hover button': {
-      visibility: 'visible'
+    padding: theme.spacing(1),
+    background: 'none',
+
+    '&:hover': {
+      '& button': {
+        visibility: 'visible'
+      },
+      backgroundColor: 'rgba(0,0,0, 0.05)'
+    },
+
+    '&.Mui-selected': {
+      background: 'none',
+
+      '&:hover': {
+        backgroundColor: 'rgba(0,0,0, 0.05)'
+      },
+
+      '& $selectedIndicator': {
+        backgroundColor: theme.palette.secondary.main
+      },
+
+      '& .MuiTypography-root': {
+        fontWeight: 'bold'
+      }
     }
   },
 
   hiddenButton: {
+    transform: 'scale(0.7)',
     background: 'none',
     boxShadow: 'none',
-    visibility: 'hidden'
+    visibility: 'hidden',
+
+    backgroundColor: theme.palette.iconButton.main,
+    color: theme.palette.iconButton.contrastText,
+    '&:hover': {
+      backgroundColor: theme.palette.iconButton.hover
+    }
   },
+
   input: {
     '&.MuiOutlinedInput-input:-webkit-autofill': {
       WebkitBoxShadow: '0 0 0 100px rgba(0,0,0,0.2) inset',

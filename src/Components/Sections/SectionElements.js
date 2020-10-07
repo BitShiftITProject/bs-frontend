@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { PortfolioContext } from '../Contexts/PortfolioContext'
 
 import { Grid, TextField, Typography, styled } from '@material-ui/core'
 
@@ -47,16 +48,26 @@ const ExampleSection = styled(Grid)({
 //   - A section template, wrapped in the ExampleSection, where the 'data'
 //     attribute is null
 
-export const Paragraph = ({ name, editing, data }) => {
+export const Paragraph = ({ name, editing, data, index }) => {
+  const { editableSections, sections, pageId, modifySection } = useContext(PortfolioContext)
+
   const rendered = editing ? (
-    !data ? (
+    data === null ? (
       <ExampleSection container>
         <Typography variant='caption' component='p'>
           {lorem}
         </Typography>
       </ExampleSection>
     ) : (
-      <TextField id={name} variant='outlined' defaultValue={data} />
+      <TextField
+        value={sections[pageId][index]['data'][name]}
+        onChange={(e) => modifySection(index, name, e.target.value)}
+        disabled={!editableSections.has(index)}
+        fullWidth
+        multiline
+        id={name}
+        variant='outlined'
+      />
     )
   ) : (
     <Typography>{data}</Typography>
@@ -65,17 +76,27 @@ export const Paragraph = ({ name, editing, data }) => {
   return rendered
 }
 
-export const Title = ({ name, editing, data }) => {
+export const Title = ({ name, editing, data, index }) => {
+  const { editableSections, sections, pageId, modifySection } = useContext(PortfolioContext)
+
   const rendered = editing ? (
-    !data ? (
+    data === null ? (
       <ExampleSection container>
         <Typography variant='h5'>{title}</Typography>
       </ExampleSection>
     ) : (
-      <TextField id={name} variant='outlined' defaultValue={data} />
+      <TextField
+        value={sections[pageId][index]['data'][name]}
+        onChange={(e) => modifySection(index, name, e.target.value)}
+        disabled={!editableSections.has(index)}
+        fullWidth
+        multiline
+        id={name}
+        variant='outlined'
+      />
     )
   ) : (
-    <Typography component='h1' variant='h5'>
+    <Typography component='h2' variant='h5'>
       {data}
     </Typography>
   )
@@ -83,17 +104,27 @@ export const Title = ({ name, editing, data }) => {
   return rendered
 }
 
-export const Subtitle = ({ name, editing, data }) => {
+export const Subtitle = ({ name, editing, data, index }) => {
+  const { editableSections, sections, pageId, modifySection } = useContext(PortfolioContext)
+
   const rendered = editing ? (
-    !data ? (
+    data === null ? (
       <ExampleSection container>
         <Typography variant='h6'>{subtitle}</Typography>
       </ExampleSection>
     ) : (
-      <TextField id={name} variant='outlined' defaultValue={data} />
+      <TextField
+        value={sections[pageId][index]['data'][name]}
+        onChange={(e) => modifySection(index, name, e.target.value)}
+        disabled={!editableSections.has(index)}
+        fullWidth
+        multiline
+        id={name}
+        variant='outlined'
+      />
     )
   ) : (
-    <Typography component='h1' variant='h5'>
+    <Typography component='h4' variant='h6'>
       {data}
     </Typography>
   )
