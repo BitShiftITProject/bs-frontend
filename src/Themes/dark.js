@@ -1,6 +1,12 @@
-import { createMuiTheme } from '@material-ui/core/styles'
-
-const theme = createMuiTheme({
+const theme = {
+  overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        //override the pseudo-classes
+        '.Mui-disabled': { color: 'rgb(222,211,221)' }
+      }
+    }
+  },
   palette: {
     type: 'dark',
     background: {
@@ -12,22 +18,31 @@ const theme = createMuiTheme({
     primary: {
       main: '#27272F',
       light: '#373740',
+      lighter: '#5E5E6E',
+      lightest: '#868698',
       dark: '#27272F',
-      contrastText: '#ffffff'
+      contrastText: '#fff'
     },
     secondary: {
       main: '#C9ADA7',
       light: '#968894',
       dark: '#C9ADA7',
-      contrastText: '#000000'
+      contrastText: '#000'
     },
-    disabled: {},
     titleBar: {
       main: '#27272F',
       contrastText: '#fff'
     },
+    success: {
+      light: '#55BA81',
+      main: '#387D52',
+      dark: '#295F35',
+      contrastText: '#fff'
+    },
     error: {
+      dark: '#89322b',
       main: '#B2544D',
+      light: '#c17671',
       contrastText: '#fff'
     },
     info: {
@@ -37,8 +52,13 @@ const theme = createMuiTheme({
     portfolioBorder: {
       hover: ' rgba(222,211,221,0.7)',
       main: ' rgba(146,146,155,0.5)'
+    },
+    iconButton: {
+      main: '#5E5E6E',
+      hover: '#868698',
+      contrastText: '#fff'
     }
   }
-})
+}
 
 export default theme

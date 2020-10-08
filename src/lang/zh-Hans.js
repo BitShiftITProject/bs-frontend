@@ -39,7 +39,9 @@ export default {
     add: '添加',
     cancel: '取消',
     delete: '删除',
+    confirmDelete: 'Confirm Delete',
     save: '保存',
+    done: 'Done',
     view: '查看',
     edit: '编辑',
     share: '分享',
@@ -74,6 +76,12 @@ export default {
     portfolioDescription: '概要',
 
     pages: '页面',
+
+    saveSections: 'Save Sections',
+    addSection: 'Add Section',
+    chooseATemplate: 'Choose a template',
+    headings: 'Headings',
+    textAndMultimedia: 'Text and Multimedia',
 
     // Profile
 

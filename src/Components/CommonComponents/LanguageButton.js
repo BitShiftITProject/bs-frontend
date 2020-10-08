@@ -15,12 +15,13 @@ const useStyles = makeStyles((theme) => ({
     height: 40
   },
   fab: {
-    background: 'none',
+    // background: 'none',
     border: 'none',
     boxShadow: 'none',
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.iconButton.contrastText,
+    backgroundColor: theme.palette.iconButton.main,
     '&:hover': {
-      backgroundColor: theme.palette.primary.light
+      backgroundColor: theme.palette.iconButton.hover
     }
   },
   speedDialAction: {
@@ -53,6 +54,7 @@ function LanguageButton() {
   const currentLanguageIcon = (
     <span role='img' aria-label='current language'>
       {locale ? languages[locale].emoji : <span></span>}
+      {/* {locale ? locale : <span></span>} */}
     </span>
   )
 
@@ -62,12 +64,16 @@ function LanguageButton() {
 
   const [open, setOpen] = useState(false)
 
-  const handleClose = () => {
-    setOpen(false)
-  }
+  // const handleClose = () => {
+  //   setOpen(false)
+  // }
 
-  const handleOpen = () => {
-    setOpen(true)
+  // const handleOpen = () => {
+  //   setOpen(true)
+  // }
+
+  const handleToggle = () => {
+    setOpen(!open)
   }
 
   const classes = useStyles()
@@ -77,8 +83,9 @@ function LanguageButton() {
       <SpeedDial
         ariaLabel='language select'
         icon={currentLanguageIcon}
-        onClose={handleClose}
-        onOpen={handleOpen}
+        onClose={() => {}}
+        onOpen={() => {}}
+        onClick={handleToggle}
         open={open}
         direction='down'
         FabProps={{ size: 'small', className: classes.fab }}

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 // import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
-import LandingContainer from './LandingContainer'
 
 import {
   TextField,
@@ -52,7 +51,7 @@ class PublicPortfolio extends Component {
       </div>
     )
 
-    return <LandingContainer content={content} />
+    return content
   }
 }
 

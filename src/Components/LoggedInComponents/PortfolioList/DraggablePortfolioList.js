@@ -17,10 +17,10 @@ import { useHistory } from 'react-router-dom'
 // import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 
-import transitions from '../../Styles/transitions'
+import transitions from '../../../Styles/transitions'
 import PortfolioCard from './PortfolioCard'
-import CustomDialog from '../CommonComponents/CustomDialog'
-import { getUser, deletePortfolio, logout } from '../../Backend/Fetch'
+import CustomDialog from '../../CommonComponents/CustomDialog'
+import { getUser, deletePortfolio, logout } from '../../../Backend/Fetch'
 import { useIntl } from 'react-intl'
 
 /* -------------------------------------------------------------------------- */
@@ -60,7 +60,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   function handleEdit(portfolioId) {
     // Set portfolioId in session storage so EditPortfolioPage will fetch
     // portfolio from DB based on this ID
-    window.sessionStorage.setItem('portfolioId', portfolioId)
+    localStorage.setItem('portfolioId', portfolioId)
     history.push('/portfolios/edit')
   }
 

@@ -5,23 +5,51 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 
 import ThemesProvider from './Components/Contexts/ThemesContext'
 import LocaleProvider from './Components/Contexts/LocaleContext'
+import PortfolioProvider from './Components/Contexts/PortfolioContext'
+import PublicThemesProvider from './Components/Contexts/PublicThemesContext'
 
 import PublicPortfolio from './Components/LoggedOutComponents/PublicPortfolio'
 import PublicPortfolioFailed from './Components/LoggedOutComponents/PublicPortfolioFailed'
 
 export default function App() {
   return (
-    <ThemesProvider>
-      <LocaleProvider>
-        <CssBaseline>
-          <Switch>
-            <Route exact path='/publicfailed' component={PublicPortfolioFailed} />
-            <Route exact path='/public/:username/:portfolio/:page' component={PublicPortfolio} />
-            <Redirect from='/public/:username' to='/public/:username/0/0' />
-            <Route component={Authentication} />
-          </Switch>
-        </CssBaseline>
-      </LocaleProvider>
-    </ThemesProvider>
+    <LocaleProvider>
+      <PortfolioProvider>
+        <Switch>
+          <Route
+            exact
+            path='/publicfailed'
+            render={() => (
+              <ThemesProvider>
+                <CssBaseline>
+                  <PublicPortfolioFailed />
+                </CssBaseline>
+              </ThemesProvider>
+            )}
+          />
+          <Route
+            exact
+            path='/public/:username/:portfolio/:page'
+            render={(routeProps) => (
+              <PublicThemesProvider>
+                <CssBaseline>
+                  <PublicPortfolio {...routeProps}/>
+                </CssBaseline>
+              </PublicThemesProvider>
+            )}
+          />
+          <Redirect from='/public/:username' to='/public/:username/0/0' />
+          <Route
+            render={() => (
+              <ThemesProvider>
+                <CssBaseline>
+                  <Authentication />
+                </CssBaseline>
+              </ThemesProvider>
+            )}
+          />
+        </Switch>
+      </PortfolioProvider>
+    </LocaleProvider>
   )
 }

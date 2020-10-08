@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { getUserPortfolios, getPortfolioPages } from '../../Backend/Fetch'
 import Loading from '../CommonComponents/Loading'
 import PublicSidebar from './PublicSidebar'
-import GetSectionJSX from '../../Sections/SectionsMap'
+import SectionsList from '../Sections/SectionsList'
 
 class PublicPortfolio extends Component {
   // Store the details of a portfolio so that we can use it later
@@ -50,21 +50,8 @@ class PublicPortfolio extends Component {
   render() {
     // If the portfolioDetails does not equal null then we have found one
     if (this.state.portfolioPages) {
-      // Array for storing JSX of sections to be displayed
-      const sectionsJSX = []
-      // If the sections array is present in the pages data
-      if (this.state.portfolioPages[this.state.pageIndex].content.sections) {
-        // Push the section jsx to the array
-        this.state.portfolioPages[this.state.pageIndex].content.sections.forEach((section) =>
-          sectionsJSX.push(GetSectionJSX(section, false))
-        )
-      }
-      // Check to see if the page has sections or is the old formatting
-      const pageContent = this.state.portfolioPages[this.state.pageIndex].content.sections ? (
-        sectionsJSX
-      ) : (
-        <p>Nothing here sorry</p>
-      )
+      const sections = this.state.portfolioPages[this.getParams().page].content.sections
+      const pageContent = <SectionsList sections={sections} />
 
       return (
         // Display sidebar with pages data and section content

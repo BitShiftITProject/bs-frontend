@@ -65,7 +65,7 @@ function Signup(props) {
     password: '',
     confirm: '',
     birthdate: '',
-    gender: 'male',
+    gender: 'other',
     firstName: '',
     lastName: '',
     signUpFailed: false,
@@ -343,11 +343,11 @@ function Signup(props) {
               >
                 <InputLabel shrink>{intl.formatMessage({ id: 'gender' })}</InputLabel>
                 <Select name='gender' value={state.gender} onChange={handleChange}>
+                  <MenuItem value={'other'}>{intl.formatMessage({ id: 'other' })}</MenuItem>
+                  <MenuItem value={'female'}>{intl.formatMessage({ id: 'female' })}</MenuItem>
                   <MenuItem value={'male'} selected>
                     {intl.formatMessage({ id: 'male' })}
                   </MenuItem>
-                  <MenuItem value={'female'}>{intl.formatMessage({ id: 'female' })}</MenuItem>
-                  <MenuItem value={'other'}>{intl.formatMessage({ id: 'other' })}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

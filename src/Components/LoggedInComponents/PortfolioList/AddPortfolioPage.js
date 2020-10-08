@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
 import { Grid, Paper, TextField, Button, FormControl, FormHelperText } from '@material-ui/core'
-import { loggedInStyles, PaddedFormGrid } from '../../Styles/loggedInStyles'
-import Sidebar from './Sidebar'
+import { loggedInStyles, PaddedFormGrid } from '../../../Styles/loggedInStyles'
+import Sidebar from '../Sidebar'
 
-import { getUser, logout, postPortfolioToUser } from '../../Backend/Fetch'
+import { getUser, logout, postPortfolioToUser } from '../../../Backend/Fetch'
 
 import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'

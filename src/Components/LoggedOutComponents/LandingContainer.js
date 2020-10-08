@@ -100,8 +100,14 @@ export default function LandingContainer(props) {
                 <span>{intl.formatMessage({ id: 'signUp' })}</span>
               </NavLink>
               <div className={clsx(classes.appBarItems, classes.appBarIcons)}>
-                <DarkAndLightModeButton />
-                <LanguageButton />
+                <Grid container spacing={1}>
+                  <Grid item>
+                    <DarkAndLightModeButton />
+                  </Grid>
+                  <Grid item>
+                    <LanguageButton />
+                  </Grid>
+                </Grid>
               </div>
             </Box>
           </div>

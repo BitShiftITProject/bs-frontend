@@ -9,9 +9,9 @@ import Signup from './Components/LoggedOutComponents/Signup'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
 
 import EditProfilePage from './Components/LoggedInComponents/EditProfilePage'
-import PortfolioList from './Components/LoggedInComponents/PortfolioList'
-import AddPortfolioPage from './Components/LoggedInComponents/AddPortfolioPage'
-import EditPortfolioPage from './Components/LoggedInComponents/EditPortfolioPage'
+import PortfolioList from './Components/LoggedInComponents/PortfolioList/PortfolioList'
+import AddPortfolioPage from './Components/LoggedInComponents/PortfolioList/AddPortfolioPage'
+import EditPortfolioPage from './Components/LoggedInComponents/PortfolioEdit/EditPortfolioPage'
 import SettingsPage from './Components/LoggedInComponents/SettingsPage'
 import HelpPage from './Components/LoggedInComponents/HelpPage'
 import Sidebar from './Components/LoggedInComponents/Sidebar'
@@ -82,10 +82,10 @@ class Authentication extends Component {
 
       return (
         <Switch>
-          <Route exact path='/login' component={Login} />
-          <Route exact path='/signup' component={Signup} />
-          <Route exact path='/forgotpassword' component={ForgotPassword} />
-          <Route exact path='/' component={LandingPage} />
+          <Route exact path='/login' render={() => <Login />} />
+          <Route exact path='/signup' render={() => <Signup />} />
+          <Route exact path='/forgotpassword' render={() => <ForgotPassword />} />
+          <Route exact path='/' render={() => <LandingPage />} />
           <Redirect to='/' />
         </Switch>
       )

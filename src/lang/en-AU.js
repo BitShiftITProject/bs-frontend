@@ -39,8 +39,10 @@ export default {
     saveChanges: 'Save Changes',
     cancel: 'Cancel',
     delete: 'Delete',
+    confirmDelete: 'Confirm Delete',
     add: 'Add',
     save: 'Save',
+    done: 'Done',
     view: 'View',
     edit: 'Edit',
     share: 'Share',
@@ -72,6 +74,12 @@ export default {
     portfolioDescription: 'Description',
 
     pages: 'Pages',
+
+    saveSections: 'Save Sections',
+    addSection: 'Add Section',
+    chooseATemplate: 'Choose a template',
+    headings: 'Headings',
+    textAndMultimedia: 'Text and Multimedia',
 
     // Profile
     profile: 'Profile',
