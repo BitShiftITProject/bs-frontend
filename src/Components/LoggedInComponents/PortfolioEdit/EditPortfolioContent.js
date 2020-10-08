@@ -86,7 +86,7 @@ export default function EditPortfolioContent(props) {
     // anymore
 
     return () => {
-      setPageId(null)
+      // setPageId(null)
       setSections([])
     }
   }, [setPageId, setSections])

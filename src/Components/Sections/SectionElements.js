@@ -49,7 +49,7 @@ const ExampleSection = styled(Grid)({
 //     attribute is null
 
 export const Paragraph = ({ name, editing, data, index }) => {
-  const { editableSections, sections, pageId, modifySection } = useContext(PortfolioContext)
+  const { sections, pageId, modifySection } = useContext(PortfolioContext)
 
   const rendered = editing ? (
     data === null ? (
@@ -62,7 +62,6 @@ export const Paragraph = ({ name, editing, data, index }) => {
       <TextField
         value={sections[pageId][index]['data'][name]}
         onChange={(e) => modifySection(index, name, e.target.value)}
-        disabled={!editableSections.has(index)}
         fullWidth
         multiline
         id={name}
@@ -70,14 +69,14 @@ export const Paragraph = ({ name, editing, data, index }) => {
       />
     )
   ) : (
-    <Typography>{data}</Typography>
+    <Typography style={{ whiteSpace: 'pre-line' }}>{data}</Typography>
   )
 
   return rendered
 }
 
 export const Title = ({ name, editing, data, index }) => {
-  const { editableSections, sections, pageId, modifySection } = useContext(PortfolioContext)
+  const { sections, pageId, modifySection } = useContext(PortfolioContext)
 
   const rendered = editing ? (
     data === null ? (
@@ -88,7 +87,6 @@ export const Title = ({ name, editing, data, index }) => {
       <TextField
         value={sections[pageId][index]['data'][name]}
         onChange={(e) => modifySection(index, name, e.target.value)}
-        disabled={!editableSections.has(index)}
         fullWidth
         multiline
         id={name}
@@ -105,7 +103,7 @@ export const Title = ({ name, editing, data, index }) => {
 }
 
 export const Subtitle = ({ name, editing, data, index }) => {
-  const { editableSections, sections, pageId, modifySection } = useContext(PortfolioContext)
+  const { sections, pageId, modifySection } = useContext(PortfolioContext)
 
   const rendered = editing ? (
     data === null ? (
@@ -116,7 +114,6 @@ export const Subtitle = ({ name, editing, data, index }) => {
       <TextField
         value={sections[pageId][index]['data'][name]}
         onChange={(e) => modifySection(index, name, e.target.value)}
-        disabled={!editableSections.has(index)}
         fullWidth
         multiline
         id={name}

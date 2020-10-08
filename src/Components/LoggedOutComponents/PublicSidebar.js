@@ -6,11 +6,15 @@ import { useHistory } from 'react-router-dom'
 /*                                   Styling                                  */
 /* -------------------------------------------------------------------------- */
 
-const drawerWidth = 240
+const drawerWidth = 210
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex'
+    display: 'flex',
+    height: '100%',
+    width: `100vw`
+    // backgroundColor: theme.palette.background.default,
+    // color: theme.palette.text.primary
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -18,7 +22,9 @@ const useStyles = makeStyles((theme) => ({
   },
   drawer: {
     width: drawerWidth,
-    flexShrink: 0
+    flexShrink: 0,
+    backgroundColor: theme.palette.titleBar.main,
+    color: theme.palette.titleBar.contrastText
   },
   drawerPaper: {
     width: drawerWidth
@@ -27,8 +33,9 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    //backgroundColor: theme.palette.background.default,
-    padding: theme.spacing(3)
+    width: '100%',
+    height: '100%',
+    padding: theme.spacing(5)
   }
 }))
 

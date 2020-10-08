@@ -263,7 +263,7 @@ export default function Sidebar(props) {
                 onClick={() => {
                   sessionStorage.removeItem('accessToken')
                   localStorage.removeItem('accessToken')
-                  window.sessionStorage.removeItem('portfolioId')
+                  localStorage.removeItem('portfolioId')
                   window.location.href = '/'
                 }}
                 color='inherit'

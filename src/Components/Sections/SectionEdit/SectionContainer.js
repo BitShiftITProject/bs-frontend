@@ -1,15 +1,11 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 
 import { Grid, makeStyles, Fab, Tooltip, InputLabel } from '@material-ui/core'
-import EditTwoToneIcon from '@material-ui/icons/EditTwoTone'
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone'
 import CloseTwoToneIcon from '@material-ui/icons/CloseTwoTone'
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone'
-import DoneTwoToneIcon from '@material-ui/icons/DoneTwoTone'
 
 import { useIntl } from 'react-intl'
-
-import { PortfolioContext } from '../../Contexts/PortfolioContext'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -100,22 +96,7 @@ export default function SectionContainer({ children, sectionId, index, handleSec
 
   /* -------------------------- Edit and Delete Modes ------------------------- */
 
-  const [isEditMode, setEditMode] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
-
-  const { startSectionEdit, finishSectionEdit } = useContext(PortfolioContext)
-
-  // Make the current section editable
-  function handleStartEdit() {
-    setEditMode(true)
-    startSectionEdit(index)
-  }
-
-  // Make the current section non-editable
-  function handleFinishEdit() {
-    setEditMode(false)
-    finishSectionEdit(index)
-  }
 
   // Actually delete the section
   function deleteSection() {
@@ -129,19 +110,7 @@ export default function SectionContainer({ children, sectionId, index, handleSec
 
       {/* SECTION LABEL AND SECTION ELEMENTS */}
 
-      <Grid
-        item
-        xs={10}
-        lg={11}
-        container
-        direction='column'
-        onKeyDown={(e) => {
-          if (e.key === 'Escape') {
-            handleFinishEdit()
-          }
-        }}
-        onClick={handleStartEdit}
-      >
+      <Grid item xs={10} lg={11} container direction='column'>
         <Grid item container>
           <InputLabel className={classes.inputLabel}>{inputLabel}</InputLabel>
         </Grid>
@@ -165,45 +134,6 @@ export default function SectionContainer({ children, sectionId, index, handleSec
         spacing={3}
         className={classes.sectionIcons}
       >
-        {/* START EDITING & DONE EDITING BUTTONS */}
-        {/* Can also start editing by clicking twice on the section,
-         * and finish editing by clicking the Escape button */}
-        {/* TODO: Find out why must click twice to edit section */}
-
-        {!confirmDelete &&
-          (isEditMode ? (
-            <Tooltip
-              PopperProps={{ className: classes.tooltip }}
-              title={intl.formatMessage({ id: 'done' })}
-              placement='right'
-            >
-              {/* DONE EDITING BUTTON */}
-              <Fab
-                size='small'
-                color='primary'
-                onClick={handleFinishEdit}
-                className={classes.doneIcon}
-              >
-                <DoneTwoToneIcon />
-              </Fab>
-            </Tooltip>
-          ) : (
-            <Tooltip
-              PopperProps={{ className: classes.tooltip }}
-              title={intl.formatMessage({ id: 'edit' })}
-              placement='right'
-            >
-              {/* START EDITING BUTTON */}
-              <Fab
-                size='small'
-                color='primary'
-                onClick={handleStartEdit}
-                className={classes.editIcon}
-              >
-                <EditTwoToneIcon />
-              </Fab>
-            </Tooltip>
-          ))}
         {/* DELETE BUTTON */}
         {!confirmDelete && (
           <Tooltip

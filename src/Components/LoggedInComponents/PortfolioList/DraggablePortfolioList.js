@@ -60,7 +60,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   function handleEdit(portfolioId) {
     // Set portfolioId in session storage so EditPortfolioPage will fetch
     // portfolio from DB based on this ID
-    window.sessionStorage.setItem('portfolioId', portfolioId)
+    localStorage.setItem('portfolioId', portfolioId)
     history.push('/portfolios/edit')
   }
 
