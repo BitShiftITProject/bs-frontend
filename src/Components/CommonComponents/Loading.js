@@ -2,12 +2,12 @@ import React from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { Grid } from '@material-ui/core'
 
-export default function Loading({ message }) {
+export default function Loading({ message, vertical }) {
   return (
     <Grid
       container
-      style={{ width: '100%', paddingBottom: 5 }}
-      direction='row'
+      style={{ width: '100%', height: '100%' }}
+      direction={vertical ? 'column' : 'row'}
       justify='center'
       alignItems='center'
       spacing={2}

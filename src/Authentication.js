@@ -1,18 +1,22 @@
 import React, { Component } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
+
+import Loading from './Components/CommonComponents/Loading'
+
 import LandingPage from './Components/LoggedOutComponents/LandingPage'
 import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
 
 import EditProfilePage from './Components/LoggedInComponents/EditProfilePage'
-import PortfolioList from './Components/LoggedInComponents/PortfolioList'
-import AddPortfolioPage from './Components/LoggedInComponents/AddPortfolioPage'
-import EditPortfolioPage from './Components/LoggedInComponents/EditPortfolioPage'
+import PortfolioList from './Components/LoggedInComponents/PortfolioList/PortfolioList'
+import AddPortfolioPage from './Components/LoggedInComponents/PortfolioList/AddPortfolioPage'
+import EditPortfolioPage from './Components/LoggedInComponents/PortfolioEdit/EditPortfolioPage'
 import SettingsPage from './Components/LoggedInComponents/SettingsPage'
 import HelpPage from './Components/LoggedInComponents/HelpPage'
 import Sidebar from './Components/LoggedInComponents/Sidebar'
 import { getUser, logout } from './Backend/Fetch'
+import PortfolioProvider from './Components/Contexts/PortfolioContext'
 
 async function loggedIn() {
   // Get access token from session storage
@@ -42,7 +46,6 @@ async function loggedIn() {
 
 class Authentication extends Component {
   state = { loggedIn: null }
-  // state = { loggedIn: true }
 
   async componentDidMount() {
     let logincheck = await loggedIn()
@@ -52,30 +55,34 @@ class Authentication extends Component {
   render() {
     if (this.state.loggedIn == null) {
       // Route for loading page while getting if the user is logged in
-      return <p>Loading</p>
+      return (
+        <div style={{ height: '100vh' }}>
+          <Loading vertical />
+        </div>
+      )
     } else if (this.state.loggedIn === true) {
       // Route for pages accessible when logged in
-      console.log('Logged In!')
       return (
-        <Switch>
-          <Route exact path='/settings' render={() => <SettingsPage />} />
-          <Route exact path='/help' render={() => <HelpPage />} />
-          <Route exact path='/portfolios/edit' render={() => <EditPortfolioPage />} />
-          <Route exact path='/portfolios/add' render={() => <AddPortfolioPage />} />
-          <Route
-            exact
-            path='/portfolios'
-            render={() => <Sidebar content={<PortfolioList xs={12} md={12} lg={12} />} />}
-          />
-          <Route exact path='/profile' render={() => <EditProfilePage />} />
-          {/* <Route exact path='/home' render={() => <HomePage />} /> */}
-          <Redirect to='/portfolios' />
-        </Switch>
+        <PortfolioProvider>
+          <Switch>
+            <Route exact path='/settings' render={() => <SettingsPage />} />
+            <Route exact path='/help' render={() => <HelpPage />} />
+            <Route exact path='/portfolios/edit' render={() => <EditPortfolioPage />} />
+            <Route exact path='/portfolios/add' render={() => <AddPortfolioPage />} />
+            <Route
+              exact
+              path='/portfolios'
+              render={() => <Sidebar content={<PortfolioList xs={12} md={12} lg={12} />} />}
+            />
+            <Route exact path='/profile' render={() => <EditProfilePage />} />
+            {/* <Route exact path='/home' render={() => <HomePage />} /> */}
+            <Redirect to='/portfolios' />
+          </Switch>
+        </PortfolioProvider>
       )
     } else if (this.state.loggedIn === false) {
       // Route for pages accessible when not logged in
 
-      console.log('Not logged in!')
       return (
         <Switch>
           <Route exact path='/login' component={Login} />

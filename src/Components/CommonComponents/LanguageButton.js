@@ -4,6 +4,10 @@ import languages from '../../lang/languages'
 import { SpeedDial, SpeedDialAction } from '@material-ui/lab'
 import { makeStyles } from '@material-ui/core'
 
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
+
 const useStyles = makeStyles((theme) => ({
   speedDial: {
     zIndex: theme.zIndex.speedDial,
@@ -11,12 +15,13 @@ const useStyles = makeStyles((theme) => ({
     height: 40
   },
   fab: {
-    background: 'none',
+    // background: 'none',
     border: 'none',
     boxShadow: 'none',
-    color: theme.palette.primary.contrastText,
+    color: theme.palette.iconButton.contrastText,
+    backgroundColor: theme.palette.iconButton.main,
     '&:hover': {
-      backgroundColor: theme.palette.primary.light
+      backgroundColor: theme.palette.iconButton.hover
     }
   },
   speedDialAction: {
@@ -31,28 +36,44 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 function LanguageButton() {
+  /* -------------------------------------------------------------------------- */
+  /*                              Locale / Language                             */
+  /* -------------------------------------------------------------------------- */
+
   const { currentLocale: locale, setLocale } = useContext(LocaleContext)
 
   function handleLocaleChange(value) {
     setLocale(value)
     setOpen(false)
-    // console.log(value)
   }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Fab Icon                                  */
+  /* -------------------------------------------------------------------------- */
 
   const currentLanguageIcon = (
     <span role='img' aria-label='current language'>
       {locale ? languages[locale].emoji : <span></span>}
+      {/* {locale ? locale : <span></span>} */}
     </span>
   )
 
+  /* -------------------------------------------------------------------------- */
+  /*                      Open / Closed State of Speed Dial                     */
+  /* -------------------------------------------------------------------------- */
+
   const [open, setOpen] = useState(false)
 
-  const handleClose = () => {
-    setOpen(false)
-  }
+  // const handleClose = () => {
+  //   setOpen(false)
+  // }
 
-  const handleOpen = () => {
-    setOpen(true)
+  // const handleOpen = () => {
+  //   setOpen(true)
+  // }
+
+  const handleToggle = () => {
+    setOpen(!open)
   }
 
   const classes = useStyles()
@@ -62,8 +83,9 @@ function LanguageButton() {
       <SpeedDial
         ariaLabel='language select'
         icon={currentLanguageIcon}
-        onClose={handleClose}
-        onOpen={handleOpen}
+        onClose={() => {}}
+        onOpen={() => {}}
+        onClick={handleToggle}
         open={open}
         direction='down'
         FabProps={{ size: 'small', className: classes.fab }}

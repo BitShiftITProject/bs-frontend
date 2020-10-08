@@ -25,29 +25,6 @@ import { getUser, logout, patchUser } from '../../Backend/Fetch'
 import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 
-const useStyles = makeStyles((theme) => ({
-  /* -------------------------------------------------------------------------- */
-  /*                              Edit Profile Page                             */
-  /* -------------------------------------------------------------------------- */
-
-  editProfileForm: {
-    // '& .MuiGrid-root': {
-    //   paddingBottom: theme.spacing(0),
-    // },
-    '& .MuiChip-root': {
-      marginBottom: theme.spacing(0),
-      marginTop: theme.spacing(0)
-    },
-
-    // '& .MuiTextField-root': {
-    //   marginRight: theme.spacing(2),
-    // },
-    '& .MuiInputLabel-outlined:focus-': {
-      overflow: 'hidden'
-    }
-  }
-}))
-
 // Initial About Me and Contact data, will be fetched from database for the
 // currently authenticated user as the initial data in the states of the forms
 const initialAbout = {
@@ -71,7 +48,33 @@ const initialContact = {
 // Reducer to update the state object
 const reducer = (state, newState) => ({ ...state, ...newState })
 
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
+
+const useStyles = makeStyles((theme) => ({
+  editProfileForm: {
+    '& .MuiChip-root': {
+      marginBottom: theme.spacing(0),
+      marginTop: theme.spacing(0)
+    },
+
+    '& .MuiInputLabel-outlined:focus-': {
+      overflow: 'hidden'
+    }
+  }
+}))
+
+// TODO: Refactor the ever-living soul out of this component
 export default function EditProfilePage() {
+  // Used for general styles
+  const classes = loggedInStyles()
+  const editProfileForm = useStyles().editProfileForm
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
   const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
@@ -138,8 +141,10 @@ export default function EditProfilePage() {
   // Handles tag addition when Enter key is pressed in the Tags text input
   const handleAddTag = (event) => {
     if (event.key === 'Enter') {
+      // Gets the content of the Tags text field
       const { value } = event.target
 
+      // Adds the tag to the current list of tags
       const newTags = about.tags.length
         ? [...about.tags, { id: uuid(), label: value }]
         : [{ id: uuid(), label: value }]
@@ -169,22 +174,12 @@ export default function EditProfilePage() {
 
     patchUser(patchDetails)
       .then((response) => {
-        if (response.ok) console.log(response)
+        console.log(response)
       })
       .catch((error) => {
         console.log(error)
       })
   }
-
-  /* -------------------------------------------------------------------------- */
-  /*                                   Styling                                  */
-  /* -------------------------------------------------------------------------- */
-
-  // Used for general styles
-  const classes = loggedInStyles()
-  const editProfileForm = useStyles().editProfileForm
-
-  // Used for the list menu containing the About Me and Contact options
 
   /* -------------------------------------------------------------------------- */
   /*                             Form to be Rendered                            */

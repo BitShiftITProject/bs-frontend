@@ -1,27 +1,29 @@
 import React, { useState } from 'react'
-import Loading from '../CommonComponents/Loading'
 
 import {
   TextField,
-  Button,
+  Fab,
   Checkbox,
   FormControlLabel,
   Grid,
-  Avatar,
   styled,
   withStyles,
   Paper
 } from '@material-ui/core'
 
 import { Link } from 'react-router-dom'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Alert from '@material-ui/lab/Alert'
 import { useIntl } from 'react-intl'
 
 import LandingContainer from './LandingContainer'
+import Loading from '../CommonComponents/Loading'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { authenticate } from '../../Backend/Fetch'
+
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
 
 const styles = {
   div: {
@@ -33,16 +35,7 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center'
   },
-  links: {
-    marginTop: '5%',
-    '& a': {
-      textDecoration: 'none',
-      color: 'grey',
-      '&:hover': {
-        textDecoration: 'underline'
-      }
-    }
-  },
+
   rememberMe: {
     textAlign: 'justify',
     marginLeft: '1%'
@@ -55,6 +48,13 @@ const PaddedTextField = styled(TextField)({
 })
 
 function Login(props) {
+  const style = loggedOutStyles()
+  const { classes } = props
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
   const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
@@ -70,6 +70,7 @@ function Login(props) {
     loading: false
   })
 
+  // Toggle between currently loading (true) or not currently loading (false)
   function changeLoading() {
     setState((st) => ({
       ...st,
@@ -80,14 +81,18 @@ function Login(props) {
   /*                                  Handlers                                  */
   /* -------------------------------------------------------------------------- */
 
+  // Change the current attribute in the state that is currently being changed
   function handleChange(e) {
     setState({ ...state, [e.target.name]: e.target.value })
   }
 
+  // Toggle the checkbox from being checked (true) or not (false)
   function handleCheckbox(e) {
     setState((st) => ({ ...st, rememberMe: !st.rememberMe }))
   }
 
+  // Authenticates login details through authenticate(),
+  // otherwise an error alert is shown
   async function handleSubmit(e) {
     e.preventDefault()
 
@@ -99,21 +104,23 @@ function Login(props) {
     }
 
     changeLoading()
+
+    // Authenticate login details
     const response = await authenticate(loginDetails)
 
+    // Save access token in local/session storage
     if (response && response.ok) {
       const auth = await response.json()
-      console.log(auth)
 
       if (state.rememberMe) {
-        console.log('Remember me!')
         localStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
       } else {
         sessionStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
       }
       window.location.href = '/'
+
+      // Toggle error alert
     } else {
-      console.log('Authentication error')
       const error = await response.json()
 
       setState((st) => ({
@@ -126,32 +133,29 @@ function Login(props) {
   }
 
   /* -------------------------------------------------------------------------- */
-  /*                                   Styling                                  */
-  /* -------------------------------------------------------------------------- */
-
-  const style = loggedOutStyles()
-  const { classes } = props
-
-  /* -------------------------------------------------------------------------- */
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
   const content = (
     <div className={classes.div}>
       <form onSubmit={handleSubmit} className={classes.form}>
-        <Avatar>
-          <LockOutlinedIcon />
-        </Avatar>
+        {/*
+         * HEADING
+         */}
         <CursorTypography component='h1' variant='h5'>
           {intl.formatMessage({ id: 'login' })}
         </CursorTypography>
+
+        {/* TEXT FIELDS */}
+
+        {/* Email */}
         <PaddedTextField
           inputProps={{ className: style.input }}
           InputLabelProps={{
             shrink: true
           }}
           className={style.formLabel}
-          variant='outlined'
+          variant='filled'
           margin='normal'
           required
           fullWidth
@@ -162,13 +166,15 @@ function Login(props) {
           autoFocus
           onChange={handleChange}
         />
+
+        {/* Password */}
         <PaddedTextField
           inputProps={{ className: style.input }}
           InputLabelProps={{
             shrink: true
           }}
           className={style.formLabel}
-          variant='outlined'
+          variant='filled'
           margin='normal'
           required
           fullWidth
@@ -189,8 +195,7 @@ function Login(props) {
           </div>
         )}
 
-        {/* Loading message*/}
-        {state.loading && <Loading message='Authenticating log in' />}
+        {/* REMEMBER ME CHECKBOX */}
 
         <Grid container justify='space-between'>
           <Grid item xs={7} md={5}>
@@ -198,6 +203,7 @@ function Login(props) {
               className={classes.div}
               control={
                 <Checkbox
+                  disabled={state.loading}
                   value='remember'
                   color='primary'
                   onClick={handleCheckbox}
@@ -212,10 +218,26 @@ function Login(props) {
           </Grid>
         </Grid>
 
-        <Button type='submit' fullWidth variant='contained' color='primary'>
-          {intl.formatMessage({ id: 'login' })}
-        </Button>
-        <Grid container className={classes.links}>
+        {/* Loading message */}
+        {state.loading && <Loading message='Authenticating log in' />}
+
+        {/* LOGIN BUTTON */}
+
+        {!state.loading && (
+          <Fab
+            type='submit'
+            variant='extended'
+            className={style.submit}
+            color='primary'
+            style={{ width: '100%' }}
+          >
+            {intl.formatMessage({ id: 'login' })}
+          </Fab>
+        )}
+
+        {/* FORGOT PASSWORD AND SIGN UP LINKS */}
+
+        <Grid container className={style.links}>
           <Grid item xs>
             <Link to='/forgotpassword' variant='body2'>
               {intl.formatMessage({ id: 'forgotPasswordPrompt' })}
@@ -233,14 +255,12 @@ function Login(props) {
   return (
     <LandingContainer
       content={
-        <Grid
-          style={{ height: '100%', width: '100%' }}
-          container
-          direction='column'
-          justify='center'
-          alignItems='center'
-        >
-          <Paper className={style.paper}>{content}</Paper>
+        <Grid container direction='row' justify='center' alignItems='center'>
+          <Grid item xs={1} sm={2} lg={3}></Grid>
+          <Grid item xs={10} sm={8} lg={6}>
+            <Paper className={style.paper}>{content}</Paper>
+          </Grid>
+          <Grid item xs={1} sm={2} lg={3}></Grid>
         </Grid>
       }
     />
