@@ -95,7 +95,7 @@ const PortfolioCard = (props) => {
   } = props
 
   const handleView = () => {
-    viewPortfolio(index)
+    viewPortfolio(portfolioId)
   }
 
   const handleEdit = () => {

@@ -16,8 +16,8 @@ export default function App() {
         <CssBaseline>
           <Switch>
             <Route exact path='/publicfailed' component={PublicPortfolioFailed} />
-            <Route exact path='/public/:username/:portfolio/:page' component={PublicPortfolio} />
-            <Redirect from='/public/:username' to='/public/:username/0/0' />
+            <Route exact path='/public/:portfolio/:page' component={PublicPortfolio} />
+            <Redirect from='/public/:portfolio' to='/public/:portfolio/0' />
             <Route component={Authentication} />
           </Switch>
         </CssBaseline>

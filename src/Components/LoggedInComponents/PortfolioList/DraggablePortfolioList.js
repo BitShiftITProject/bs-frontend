@@ -45,13 +45,13 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   /* ----------------------------- View Portfolio ----------------------------- */
 
   // Redirects user to the public link of the portfolio whose index is at portfolioIndex
-  async function handleView(portfolioIndex) {
+  async function handleView(portfolioId) {
     // Get the current user, logs out if access token no longer valid
     const user = await getUser()
     if (!user) logout()
 
     // Go to the designated route for the public portfolio
-    history.push(`/public/${user.username}/${portfolioIndex}/0`)
+    history.push(`/public/${portfolioId}`)
   }
 
   /* ----------------------------- Edit Portfolio ----------------------------- */
