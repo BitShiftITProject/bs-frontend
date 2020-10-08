@@ -31,12 +31,16 @@ export default function EditPortfolioPage() {
   // - A user clicks on the Edit button in PortfolioCard
 
   useEffect(() => {
-    getPortfolio(portfolioId).then((portfolio) => {
-      setPortfolio({ ...portfolio })
-      getPortfolioPages(portfolioId).then((pages) => {
-        setPages(pages)
+    if (portfolioId) {
+      getPortfolio(portfolioId).then((portfolio) => {
+        setPortfolio({ ...portfolio })
+        getPortfolioPages(portfolioId).then((pages) => {
+          setPages(pages)
+        })
       })
-    })
+    } else {
+      window.location.href = '/portfolios'
+    }
   }, [portfolioId])
 
   /* -------------------------------------------------------------------------- */

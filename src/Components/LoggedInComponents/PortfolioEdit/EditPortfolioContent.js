@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-
+import { useSnackbar } from 'notistack'
 import {
   Grid,
   Paper,
@@ -13,7 +13,8 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  CircularProgress
 } from '@material-ui/core'
 import CreateIcon from '@material-ui/icons/Create'
 import AddIcon from '@material-ui/icons/Add'
@@ -51,10 +52,10 @@ export default function EditPortfolioContent(props) {
   const { portfolio, setPortfolio, pages, setPages } = props
   const [portfolioTitle, setPortfolioTitle] = useState('')
   const [pageTitle, setPageTitle] = useState('')
+  const [loading, setLoading] = useState(false)
 
   // The PortfolioContext stores all details about:
   // - The ID of the currently-selected page (pageId) whose sections are shown,
-  // - The indexes of the currently-editable (non-disabled) sections (editableSections)
   // - The current portfolio's section objects by page ID (sections),
   //   stored like the following example:
   //
@@ -96,7 +97,6 @@ export default function EditPortfolioContent(props) {
   // to the sections within it are saved
   useEffect(() => {
     // console.log('Pages:', pages)
-
     setSections((currentSections) => {
       //
       const newSections = pages
@@ -119,7 +119,7 @@ export default function EditPortfolioContent(props) {
 
   // Adds a new correctly-formatted section object into the current page's list
   // of sections (Note: Does not save to the backend)
-  function handleSectionAdd(newSection) {
+  function handleSectionAdd(newSection, sectionName) {
     setSections((currentSections) => {
       // If this is the first section of the page, just set it as [newSection],
       // otherwise just add newSection to the end of the current list of sections
@@ -129,10 +129,42 @@ export default function EditPortfolioContent(props) {
       }
       return newSections
     })
+
+    const pageTitle = pages.filter((page) => page.id === pageId)[0].title
+
+    // Shows a notification that the section has been added
+    enqueueSnackbar(`Added ${sectionName} to ${pageTitle}`, {
+      variant: 'info',
+      hideIconVariant: true
+    })
+  }
+
+  // Saves all the sections of the currently-selected page
+  async function handleSaveSections(e) {
+    e.preventDefault()
+    const savedPage = { content: { sections: sections[pageId] } }
+    // console.log(savedPage)
+
+    // Start showing loading animation
+    setLoading(true)
+
+    // Patch the page with the current sections on the screen
+    await patchPage(pageId, savedPage)
+
+    setTimeout(() => {
+      const pageTitle = pages.filter((page) => page.id === pageId)[0].title
+
+      // Show a notification that all sections have been saved
+      enqueueSnackbar(`Saved all sections in ${pageTitle}`, {
+        variant: 'success'
+      })
+
+      setLoading(false)
+    }, 1000)
   }
 
   // Deletes the section at a given index among the sections of the current page
-  function handleSectionDelete(sectionIndex) {
+  function handleSectionDelete(sectionIndex, sectionName) {
     setSections((currentSections) => {
       // Ensure that the current page has a section at the specified index
       if (currentSections[pageId].length >= sectionIndex + 1) {
@@ -146,6 +178,18 @@ export default function EditPortfolioContent(props) {
           [pageId]: pageIdSections
         }
 
+        // const pageTitle = pages.filter((page) => page.id === pageId)[0].title
+
+        // Show a notification that the section has been deleted from the page
+        const key = enqueueSnackbar(`Deleted ${sectionName} from ${pageTitle}`, {
+          variant: 'error',
+          persist: true
+        })
+
+        setTimeout(() => {
+          closeSnackbar(key)
+        }, 2500)
+
         return newSections
       }
 
@@ -154,12 +198,18 @@ export default function EditPortfolioContent(props) {
   }
 
   /* -------------------------------------------------------------------------- */
-  /*                                   Styles                                   */
+  /*                                   Styling                                  */
   /* -------------------------------------------------------------------------- */
 
   const classes = loggedInStyles()
   const fixedHeightPaper = classes.fixedHeightPaper
   const leftPanel = classes.leftPanel
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Snackbars                                 */
+  /* -------------------------------------------------------------------------- */
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
   /* -------------------------------------------------------------------------- */
   /*                                Dialog State                                */
@@ -299,20 +349,11 @@ export default function EditPortfolioContent(props) {
 
   /* -------------------------------------------------------------------------- */
 
-  // Edit the PAGE CONTENT of the Page in the DB
-  async function handleSaveSections(e) {
-    e.preventDefault()
-    const savedPage = { content: { sections: sections[pageId] } }
-    // console.log(savedPage)
-    await patchPage(pageId, savedPage)
-  }
-
-  /* -------------------------------------------------------------------------- */
-
   // Removes a Page (and any reference to it) from the DB
   async function handlePageDelete(e) {
     e.preventDefault()
     const toBeDeletedPageId = pages[dialogContent.component].id
+    const toBeDeletedPageTitle = pages[dialogContent.component].title
 
     // Get the new list of page IDs
     const newPageIds = pages.map((pageObj) => pageObj.id).filter((id) => id !== toBeDeletedPageId)
@@ -340,7 +381,13 @@ export default function EditPortfolioContent(props) {
     })
 
     // Delete the portfolio from the portfolios DB
-    await deletePage(toBeDeletedPageId)
+    deletePage(toBeDeletedPageId).then(() => {
+      // Show the notification after deleting the page
+      enqueueSnackbar(`Deleted ${toBeDeletedPageTitle}`, {
+        variant: 'error',
+        autoHideDuration: 3000
+      })
+    })
 
     setOpen(false)
   }
@@ -541,118 +588,129 @@ export default function EditPortfolioContent(props) {
           {/*
            * LIST MENU CONTENT
            */}
-          <Grid style={{ width: '100%', height: '100%' }}>
-            {/*
-             * PORTFOLIO TITLE
-             */}
-            <Grid
-              container
-              direction='row'
-              justify='space-between'
-              alignItems='center'
-              className={classes.padded}
-            >
-              <CursorTypography variant='button'>{portfolio.title}</CursorTypography>
-
-              {/* EDIT PORTFOLIO BUTTON */}
-
-              <Fab
-                color='secondary'
-                size='small'
-                onClick={() => handlePortfolioEvent('editPortfolio', portfolio.title)}
-              >
-                <CreateIcon />
-              </Fab>
-            </Grid>
-
-            <Divider />
-
-            {/* PORTFOLIO PAGES (List) */}
-
-            <Grid
-              style={{ width: '100%', paddingTop: 16 }}
-              container
-              direction='column'
-              justify='flex-start'
-            >
-              <CursorTypography variant='overline'>
-                {intl.formatMessage({ id: 'pages' })}
-              </CursorTypography>
-
-              {/* Each list item corresponds to a page. It shows the page's title, and when
-               * hovered has an edit button (Pen icon) and a delete button (Trash icon). */}
-
-              <List className={classes.pageList}>
-                {pages &&
-                  pages.map((page, idx) => (
-                    <ListItem
-                      onClick={() => handlePageSelect(page.id)}
-                      key={page.id}
-                      button
-                      selected={page.id === pageId}
-                      className={classes.hiddenButtonItem}
-                    >
-                      {/* PAGE TITLE */}
-
-                      <Grid
-                        item
-                        xs={2}
-                        container
-                        direction='row'
-                        justify='center'
-                        alignItems='center'
-                      >
-                        <div className={classes.selectedIndicator}></div>
-                      </Grid>
-
-                      <Grid item xs={5} container justify='flex-start' alignItems='center'>
-                        <ListItemText>{page.title}</ListItemText>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={5}
-                        container
-                        direction='row'
-                        justify='flex-end'
-                        alignItems='center'
-                        spacing={1}
-                      >
-                        {/* EDIT PAGE BUTTON */}
-
-                        <Fab
-                          size='small'
-                          className={classes.hiddenButton}
-                          onClick={() => handlePageEvent('editPage', idx)}
-                        >
-                          <CreateIcon />
-                        </Fab>
-                        {/* DELETE PAGE BUTTON */}
-                        <Fab
-                          size='small'
-                          className={classes.hiddenButton}
-                          onClick={() => handlePageEvent('deletePage', idx)}
-                        >
-                          <CloseIcon />
-                        </Fab>
-                      </Grid>
-                    </ListItem>
-                  ))}
-              </List>
-            </Grid>
-          </Grid>
-          {/* ADD PAGE BUTTON */}
-
-          <Fab
-            className={classes.floatingBottomContainer}
-            color='primary'
-            size='medium'
-            variant='extended'
-            onClick={() => handlePageEvent('addPage', '')}
-            style={{ width: '100%', marginLeft: 5, marginRight: 5 }}
+          <Grid
+            container
+            direction='column'
+            justify='flex-start'
+            alignItems='center'
+            style={{ height: '100%', margin: 0, padding: 0 }}
           >
-            {intl.formatMessage({ id: 'addPage' })}
-            <AddIcon style={{ paddingLeft: 5 }} />
-          </Fab>
+            <Grid style={{ width: '100%' }}>
+              {/*
+               * PORTFOLIO TITLE
+               */}
+              <Grid
+                container
+                direction='row'
+                justify='space-between'
+                alignItems='center'
+                className={classes.padded}
+              >
+                <CursorTypography variant='button'>{portfolio.title}</CursorTypography>
+
+                {/* EDIT PORTFOLIO BUTTON */}
+
+                <Fab
+                  color='secondary'
+                  size='small'
+                  onClick={() => handlePortfolioEvent('editPortfolio', portfolio.title)}
+                >
+                  <CreateIcon />
+                </Fab>
+              </Grid>
+
+              <Divider />
+
+              {/* PORTFOLIO PAGES (List) */}
+
+              <Grid
+                style={{ width: '100%', paddingTop: 16 }}
+                container
+                direction='column'
+                justify='flex-start'
+              >
+                <CursorTypography variant='overline'>
+                  {intl.formatMessage({ id: 'pages' })}
+                </CursorTypography>
+
+                {/* Each list item corresponds to a page. It shows the page's title, and when
+                 * hovered has an edit button (Pen icon) and a delete button (Trash icon). */}
+
+                <List className={classes.pageList}>
+                  {pages &&
+                    pages.map((page, idx) => (
+                      <ListItem
+                        onClick={() => handlePageSelect(page.id)}
+                        key={page.id}
+                        button
+                        selected={page.id === pageId}
+                        className={classes.hiddenButtonItem}
+                      >
+                        {/* PAGE TITLE */}
+
+                        <Grid container justify='space-between'>
+                          <Grid
+                            item
+                            xs={1}
+                            container
+                            direction='row'
+                            justify='center'
+                            alignItems='center'
+                          >
+                            <div className={classes.selectedIndicator}></div>
+                          </Grid>
+
+                          <Grid item xs={5} container justify='flex-start' alignItems='center'>
+                            <ListItemText>{page.title}</ListItemText>
+                          </Grid>
+                          <Grid
+                            item
+                            xs={5}
+                            container
+                            direction='row'
+                            justify='flex-end'
+                            alignItems='center'
+                            spacing={1}
+                          >
+                            {/* EDIT PAGE BUTTON */}
+
+                            <Fab
+                              size='small'
+                              className={classes.hiddenButton}
+                              onClick={() => handlePageEvent('editPage', idx)}
+                            >
+                              <CreateIcon />
+                            </Fab>
+                            {/* DELETE PAGE BUTTON */}
+                            <Fab
+                              size='small'
+                              className={classes.hiddenButton}
+                              onClick={() => handlePageEvent('deletePage', idx)}
+                            >
+                              <CloseIcon />
+                            </Fab>
+                          </Grid>
+                        </Grid>
+                      </ListItem>
+                    ))}
+                </List>
+              </Grid>
+            </Grid>
+
+            {/* ADD PAGE BUTTON */}
+
+            <Fab
+              className={classes.floatingBottomContainer}
+              color='primary'
+              size='medium'
+              variant='extended'
+              onClick={() => handlePageEvent('addPage', '')}
+              style={{ width: '100%', marginLeft: 5, marginRight: 5 }}
+            >
+              {intl.formatMessage({ id: 'addPage' })}
+              <AddIcon style={{ paddingLeft: 5 }} />
+            </Fab>
+          </Grid>
         </Paper>
       </Grid>
 
@@ -711,9 +769,9 @@ export default function EditPortfolioContent(props) {
             alignItems='center'
             className={classes.floatingBottomContainer}
           >
-            <Grid item>
+            <Grid item className={classes.fabProgressContainer}>
               <Fab
-                // disabled
+                disabled={loading}
                 style={!pageId ? { visibility: 'hidden' } : {}}
                 color='secondary'
                 variant='extended'
@@ -723,6 +781,7 @@ export default function EditPortfolioContent(props) {
                   {intl.formatMessage({ id: 'saveSections' })}
                 </CursorTypography>
               </Fab>
+              {loading && <CircularProgress size={24} className={classes.fabProgress} />}
             </Grid>
 
             {/* ADD SECTION BUTTON */}

@@ -48,7 +48,9 @@ const loggedInStyles = makeStyles((theme) => ({
   },
 
   leftPanel: {
-    padding: theme.spacing(4),
+    padding: theme.spacing(2),
+    paddingRight: theme.spacing(3),
+    paddingLeft: theme.spacing(3),
     borderRadius: 0,
 
     display: 'flex',
@@ -111,9 +113,22 @@ const loggedInStyles = makeStyles((theme) => ({
     }
   },
 
+  fabProgressContainer: {
+    position: 'relative'
+  },
+
+  fabProgress: {
+    // color: theme.palette.info.main,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12
+  },
+
   pageList: {
     overflow: 'scroll',
-    height: 325,
+    height: 200,
     [theme.breakpoints.between('xs, sm')]: {
       height: 125
     }
@@ -122,7 +137,7 @@ const loggedInStyles = makeStyles((theme) => ({
   selectedIndicator: {
     height: theme.spacing(1),
     width: theme.spacing(1),
-    marginRight: theme.spacing(3),
+    // marginRight: theme.spacing(3),
     borderRadius: '50%',
     backgroundColor: 'rgba(0,0,0,0.3)'
   },

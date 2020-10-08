@@ -24,21 +24,22 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.background.paperHover
     }
   },
-  inputLabel: {
+  sectionName: {
     paddingBottom: theme.spacing(1)
   },
   sectionIcons: {
     margin: 0,
-    [theme.breakpoints.only('md')]: {
-      marginLeft: -theme.spacing(2)
-    },
+    marginRight: -theme.spacing(0.7),
+    // [theme.breakpoints.only('md')]: {
+    //   marginLeft: -theme.spacing(2)
+    // },
     '& .MuiFab-root': {
       transform: 'scale(0.7)'
     }
   },
   tooltip: {
-    marginLeft: -theme.spacing(0.75),
-    '& .MuiTooltip-tooltipPlacementRight': {
+    // marginLeft: -theme.spacing(0.75),
+    '& .MuiTooltip-tooltip': {
       [theme.breakpoints.between('xs', 'sm')]: {
         display: 'none'
       },
@@ -92,7 +93,7 @@ export default function SectionContainer({ children, sectionId, index, handleSec
   /* ------------------------------ Section Label ----------------------------- */
 
   const titleCase = sectionId.replace(/([A-Z])/g, ' $1')
-  const inputLabel = titleCase.charAt(0).toUpperCase() + titleCase.slice(1)
+  const sectionName = titleCase.charAt(0).toUpperCase() + titleCase.slice(1)
 
   /* -------------------------- Edit and Delete Modes ------------------------- */
 
@@ -101,18 +102,18 @@ export default function SectionContainer({ children, sectionId, index, handleSec
   // Actually delete the section
   function deleteSection() {
     setConfirmDelete(false)
-    handleSectionDelete(index)
+    handleSectionDelete(index, sectionName)
   }
 
   return (
-    <Grid container direction='row' className={classes.container}>
+    <Grid container direction='row' justify='space-between' className={classes.container}>
       {/* -------------------------------------------------------------------------- */}
 
       {/* SECTION LABEL AND SECTION ELEMENTS */}
 
-      <Grid item xs={10} lg={11} container direction='column'>
+      <Grid item xs={10} md={11} container direction='column'>
         <Grid item container>
-          <InputLabel className={classes.inputLabel}>{inputLabel}</InputLabel>
+          <InputLabel className={classes.sectionName}>{sectionName}</InputLabel>
         </Grid>
         <Grid item container>
           {children}
@@ -126,11 +127,11 @@ export default function SectionContainer({ children, sectionId, index, handleSec
       <Grid
         item
         xs={2}
-        lg={1}
+        md={1}
         container
         direction='column'
         justify='flex-start'
-        alignItems='center'
+        alignItems='flex-end'
         spacing={3}
         className={classes.sectionIcons}
       >
@@ -139,7 +140,7 @@ export default function SectionContainer({ children, sectionId, index, handleSec
           <Tooltip
             PopperProps={{ className: classes.tooltip }}
             title={intl.formatMessage({ id: 'delete' })}
-            placement='right'
+            placement='bottom'
           >
             <Fab
               size='small'
@@ -161,7 +162,7 @@ export default function SectionContainer({ children, sectionId, index, handleSec
             <Tooltip
               PopperProps={{ className: classes.tooltip }}
               title={intl.formatMessage({ id: 'cancel' })}
-              placement='right'
+              placement='top'
             >
               {/* CANCEL DELETE BUTTON */}
               <Fab size='small' onClick={() => setConfirmDelete(false)}>
@@ -171,7 +172,7 @@ export default function SectionContainer({ children, sectionId, index, handleSec
             <Tooltip
               PopperProps={{ className: classes.tooltip }}
               title={intl.formatMessage({ id: 'confirmDelete' })}
-              placement='right'
+              placement='bottom'
             >
               {/* CONFIRM DELETE BUTTON */}
               <Fab size='small' onClick={deleteSection} className={classes.confirmDeleteIcon}>

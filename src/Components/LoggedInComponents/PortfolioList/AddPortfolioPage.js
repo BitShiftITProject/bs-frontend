@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useSnackbar } from 'notistack'
 
 import { Grid, Paper, TextField, Button, FormControl, FormHelperText } from '@material-ui/core'
 import { loggedInStyles, PaddedFormGrid } from '../../../Styles/loggedInStyles'
@@ -20,6 +21,7 @@ export default function AddPortfolioPage() {
   const [description, setDescription] = useState('')
   const [error, setError] = useState(false)
   const [helperText, setHelperText] = useState(' ')
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
   /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */
@@ -61,6 +63,15 @@ export default function AddPortfolioPage() {
     // if error, show an error helper text.
     await postPortfolioToUser(user.username, postDetails).then((response) => {
       if (response.ok) {
+        const key = enqueueSnackbar(`${title} added`, {
+          variant: 'success',
+        
+        })
+
+        setTimeout(() => {
+          closeSnackbar(key)
+        }, 2000)
+
         history.push('/portfolios')
       } else {
         setHelperText('An error occurred. Try again.')

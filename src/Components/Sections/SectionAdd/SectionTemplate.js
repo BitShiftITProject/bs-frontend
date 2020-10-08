@@ -46,10 +46,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SectionTemplate({ children, sectionId, handleSectionAdd }) {
   const classes = useStyles()
+  const titleCase = sectionId.replace(/([A-Z])/g, ' $1')
+  const sectionName = titleCase.charAt(0).toUpperCase() + titleCase.slice(1)
 
   function addSection() {
     const newSection = GetNewSectionObject(sectionId)
-    handleSectionAdd(newSection)
+    handleSectionAdd(newSection, sectionName)
   }
 
   return (

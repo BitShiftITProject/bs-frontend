@@ -33,7 +33,7 @@ export default function App() {
             render={(routeProps) => (
               <PublicThemesProvider>
                 <CssBaseline>
-                  <PublicPortfolio {...routeProps}/>
+                  <PublicPortfolio {...routeProps} />
                 </CssBaseline>
               </PublicThemesProvider>
             )}
