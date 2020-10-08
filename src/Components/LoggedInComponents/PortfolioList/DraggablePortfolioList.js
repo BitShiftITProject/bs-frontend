@@ -21,7 +21,7 @@ import { useSnackbar } from 'notistack'
 import transitions from '../../../Styles/transitions'
 import PortfolioCard from './PortfolioCard'
 import CustomDialog from '../../CommonComponents/CustomDialog'
-import { deletePortfolio } from '../../../Backend/Fetch'
+import { getUser, deletePortfolio, logout } from '../../../Backend/Fetch'
 import { useIntl } from 'react-intl'
 
 /* -------------------------------------------------------------------------- */
@@ -64,9 +64,11 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   // Redirects user to the public link of the portfolio whose index is at portfolioIndex
   async function handleView(portfolioIndex) {
     // Get the current user, logs out if access token no longer valid
+    const user = await getUser()
+    if (!user) logout()
 
     // Go to the designated route for the public portfolio
-    history.push(`/public/${portfolios[portfolioIndex].id}/0`)
+    history.push(`/public/${user.username}/${portfolioIndex}/0`)
   }
 
   /* ----------------------------- Edit Portfolio ----------------------------- */

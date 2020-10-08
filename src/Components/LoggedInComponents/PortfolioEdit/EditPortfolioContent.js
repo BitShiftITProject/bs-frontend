@@ -16,7 +16,6 @@ import {
   DialogTitle,
   CircularProgress
 } from '@material-ui/core'
-import VisibilityIcon from '@material-ui/icons/Visibility'
 import CreateIcon from '@material-ui/icons/Create'
 import AddIcon from '@material-ui/icons/Add'
 import CloseIcon from '@material-ui/icons/Close'
@@ -584,7 +583,7 @@ export default function EditPortfolioContent(props) {
       {/*
        * LIST MENU
        */}
-      <Grid item xs={12} md={3}>
+      <Grid item xs={12} md={4} lg={3}>
         <Paper className={leftPanel}>
           {/*
            * LIST MENU CONTENT
@@ -607,43 +606,17 @@ export default function EditPortfolioContent(props) {
                 alignItems='center'
                 className={classes.padded}
               >
-                <Grid item xs={6}>
-                  <CursorTypography variant='button'>{portfolio.title}</CursorTypography>
-                </Grid>
+                <CursorTypography variant='button'>{portfolio.title}</CursorTypography>
 
                 {/* EDIT PORTFOLIO BUTTON */}
 
-                <Grid
-                  item
-                  xs={5}
-                  container
-                  direction='row'
-                  justify='space-evenly'
-                  alignItems='center'
+                <Fab
+                  color='secondary'
+                  size='small'
+                  onClick={() => handlePortfolioEvent('editPortfolio', portfolio.title)}
                 >
-                  <Fab
-                    color='secondary'
-                    size='small'
-                    onClick={() => {
-                      window.location.href = `/public/${portfolio.id}/0`
-                    }}
-                    style={{
-                      transform: 'scale(0.8)'
-                    }}
-                  >
-                    <VisibilityIcon />
-                  </Fab>
-                  <Fab
-                    color='secondary'
-                    size='small'
-                    onClick={() => handlePortfolioEvent('editPortfolio', portfolio.title)}
-                    style={{
-                      transform: 'scale(0.8)'
-                    }}
-                  >
-                    <CreateIcon />
-                  </Fab>
-                </Grid>
+                  <CreateIcon />
+                </Fab>
               </Grid>
 
               <Divider />
@@ -679,7 +652,6 @@ export default function EditPortfolioContent(props) {
                           <Grid
                             item
                             xs={1}
-                            lg={1}
                             container
                             direction='row'
                             justify='center'
@@ -688,22 +660,12 @@ export default function EditPortfolioContent(props) {
                             <div className={classes.selectedIndicator}></div>
                           </Grid>
 
-                          <Grid
-                            item
-                            xs={5}
-                            md={7}
-                            lg={6}
-                            container
-                            justify='flex-start'
-                            alignItems='center'
-                          >
+                          <Grid item xs={5} container justify='flex-start' alignItems='center'>
                             <ListItemText>{page.title}</ListItemText>
                           </Grid>
                           <Grid
                             item
                             xs={5}
-                            md={3}
-                            lg={4}
                             container
                             direction='row'
                             justify='flex-end'
@@ -756,7 +718,7 @@ export default function EditPortfolioContent(props) {
        * PAGE CONTENT
        */}
 
-      <Grid item xs={12} md={9} id='page-content'>
+      <Grid item xs={12} md={8} lg={9} id='page-content'>
         <Paper className={fixedHeightPaper}>
           {/*
            * PAGE SECTIONS
@@ -801,21 +763,13 @@ export default function EditPortfolioContent(props) {
             xs={2}
             style={{ minWidth: '100%' }}
             container
-            spacing={1}
+            spacing={2}
             direction='row'
             justify='flex-end'
             alignItems='center'
             className={classes.floatingBottomContainer}
           >
-            <Grid
-              item
-              xs={6}
-              sm={5}
-              md={3}
-              className={classes.fabProgressContainer}
-              container
-              justify='flex-end'
-            >
+            <Grid item className={classes.fabProgressContainer}>
               <Fab
                 disabled={loading}
                 style={!pageId ? { visibility: 'hidden' } : {}}
@@ -832,9 +786,8 @@ export default function EditPortfolioContent(props) {
 
             {/* ADD SECTION BUTTON */}
             {/* When a section is clicked, it adds the section to the overall sections component */}
-            <Grid item xs={6} sm={5} md={3} container justify='flex-end'>
-              <SectionsButton pageId={pageId} handleSectionAdd={handleSectionAdd} />
-            </Grid>
+            <Grid item></Grid>
+            <SectionsButton pageId={pageId} handleSectionAdd={handleSectionAdd} />
           </Grid>
         </Paper>
       </Grid>

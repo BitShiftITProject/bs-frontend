@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { SnackbarProvider } from 'notistack'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core'
 
 import Loading from './Components/CommonComponents/Loading'
 
@@ -48,21 +48,15 @@ async function isLoggedIn() {
 
 const useStyles = makeStyles((theme) => ({
   success: {
-    backgroundColor: `${theme.palette.success.main} !important`,
-    color: `${theme.palette.success.contrastText} !important`
+    backgroundColor: theme.palette.success.main,
+    color: theme.palette.success.contrastText
   },
-  error: {
-    backgroundColor: `${theme.palette.error.main} !important`,
-    color: `${theme.palette.error.contrastText} !important`
-  },
+  error: { backgroundColor: theme.palette.error.main, color: theme.palette.error.contrastText },
   warning: {
-    backgroundColor: `${theme.palette.warning.main} !important`,
-    color: `${theme.palette.warning.contrastText} !important`
+    backgroundColor: theme.palette.warning.main,
+    color: theme.palette.warning.contrastText
   },
-  info: {
-    backgroundColor: `${theme.palette.info.main} !important`,
-    color: `${theme.palette.info.contrastText} !important`
-  }
+  info: { backgroundColor: theme.palette.info.main, color: theme.palette.info.contrastText }
 }))
 
 function Authentication() {
