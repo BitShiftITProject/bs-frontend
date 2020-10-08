@@ -1,59 +1,31 @@
-import React, { Component } from 'react'
+import React from 'react'
 // import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
 import LandingContainer from './LandingContainer'
+import {Typography, makeStyles} from '@material-ui/core'
 
-import {
-  TextField,
-  Button,
-  //   Checkbox,
-  //   FormControlLabel,
-  //   Grid,
-  //   Avatar,
-  Typography
-  //   styled,
-  //   withStyles
-} from '@material-ui/core'
+const useStyles = makeStyles((theme) => ({
+    content: {
+        flexGrow: 1,
+        height: '100%',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        //backgroundColor: theme.palette.background.default,
+        padding: theme.spacing(3)
+    }
+  }))
 
-class PublicPortfolio extends Component {
-  state = { search: '' }
+export default function PublicPortfolioFailed(props) {
+  const classes = useStyles()
 
-  handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value })
-  }
+  const content = (
+    <div className={classes.content}>
+      <Typography align='center' variant='h3' >Sorry! We could not find the specified portfolio</Typography>
+      <Typography align='center' variant='h5' >Please make sure you have the correct portfolio link before trying again</Typography>
+    </div>
+  )
 
-  handleSubmit = (e) => {
-    e.preventDefault()
-    window.location.href = '/public/' + this.state.search + '/0/0'
-  }
-
-  render() {
-    const content = (
-      <div>
-        <Typography component='h1' variant='h5'>
-          Sorry! We could not find the specified portfolio
-        </Typography>
-        <label>Search for another user's portfolio below</label>
-        <form onSubmit={this.handleSubmit}>
-          <TextField
-            variant='filled'
-            margin='normal'
-            required
-            fullWidth
-            id='search'
-            label='Username'
-            name='search'
-            autoFocus
-            onChange={this.handleChange}
-          />
-          <Button type='submit' fullWidth variant='contained' color='primary'>
-            Search
-          </Button>
-        </form>
-      </div>
-    )
-
-    return <LandingContainer content={content} />
-  }
+  return (
+    <LandingContainer content={content} />
+  )
 }
-
-export default PublicPortfolio

@@ -10,7 +10,9 @@ const drawerWidth = 240
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex'
+    display: 'flex',
+    height: '100%',
+    width: '100vw'
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -27,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
+    height: '100%',
+    width: '100%',
     //backgroundColor: theme.palette.background.default,
     padding: theme.spacing(3)
   }

@@ -70,7 +70,7 @@ export const Paragraph = ({ name, editing, data, index }) => {
       />
     )
   ) : (
-    <Typography>{data}</Typography>
+    <Typography style={{ whiteSpace: "pre-line" }} variant="body1">{data}</Typography>
   )
 
   return rendered
