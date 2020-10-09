@@ -801,21 +801,13 @@ export default function EditPortfolioContent(props) {
             xs={2}
             style={{ minWidth: '100%' }}
             container
-            spacing={1}
+            spacing={2}
             direction='row'
             justify='flex-end'
             alignItems='center'
             className={classes.floatingBottomContainer}
           >
-            <Grid
-              item
-              xs={6}
-              sm={5}
-              md={3}
-              className={classes.fabProgressContainer}
-              container
-              justify='flex-end'
-            >
+            <Grid item>
               <Fab
                 disabled={loading}
                 style={!pageId ? { visibility: 'hidden' } : {}}
@@ -832,9 +824,8 @@ export default function EditPortfolioContent(props) {
 
             {/* ADD SECTION BUTTON */}
             {/* When a section is clicked, it adds the section to the overall sections component */}
-            <Grid item xs={6} sm={5} md={3} container justify='flex-end'>
-              <SectionsButton pageId={pageId} handleSectionAdd={handleSectionAdd} />
-            </Grid>
+            <Grid item></Grid>
+            <SectionsButton pageId={pageId} handleSectionAdd={handleSectionAdd} />
           </Grid>
         </Paper>
       </Grid>
