@@ -1,58 +1,61 @@
-import React, { Component } from 'react'
+import React, { useContext } from 'react'
 // import { BrowserRouter, Route, Switch, Redirect, Link } from 'react-router-dom'
-
+// import LandingContainer from './LandingContainer'
 import {
-  TextField,
-  Button,
-  //   Checkbox,
-  //   FormControlLabel,
-  //   Grid,
-  //   Avatar,
-  Typography
-  //   styled,
-  //   withStyles
+  Typography,
+  makeStyles,
+  Grid
+  // Grid
 } from '@material-ui/core'
+import clsx from 'clsx'
+import { ThemesContext } from '../Contexts/ThemesContext'
 
-class PublicPortfolio extends Component {
-  state = { search: '' }
-
-  handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value })
+const useStyles = makeStyles((theme) => ({
+  content: {
+    flexGrow: 1,
+    height: '100%',
+    width: '100%',
+    paddingTop: '10%',
+    //backgroundColor: theme.palette.background.default,
+    padding: theme.spacing(3)
+  },
+  image: {
+    maxWidth: '50%',
+    height: 'auto'
+  },
+  lightImage: {
+    filter:
+      'invert(99%) sepia(4%) saturate(239%) hue-rotate(249deg) brightness(117%) contrast(100%)'
   }
+}))
 
-  handleSubmit = (e) => {
-    e.preventDefault()
-    window.location.href = '/public/' + this.state.search + '/0/0'
-  }
+export default function PublicPortfolioFailed() {
+  const classes = useStyles()
+  const { currentTheme: theme } = useContext(ThemesContext)
 
-  render() {
-    const content = (
-      <div>
-        <Typography component='h1' variant='h5'>
-          Sorry! We could not find the specified portfolio
-        </Typography>
-        <label>Search for another user's portfolio below</label>
-        <form onSubmit={this.handleSubmit}>
-          <TextField
-            variant='filled'
-            margin='normal'
-            required
-            fullWidth
-            id='search'
-            label='Username'
-            name='search'
-            autoFocus
-            onChange={this.handleChange}
-          />
-          <Button type='submit' fullWidth variant='contained' color='primary'>
-            Search
-          </Button>
-        </form>
-      </div>
-    )
+  const content = (
+    <Grid
+      container
+      direction='column'
+      alignItems='center'
+      justify='center'
+      className={classes.content}
+    >
+      <Typography align='center' variant='h4' style={{ textTransform: 'lowercase' }}>
+        Sorry! We could not find the specified portfolio
+      </Typography>
+      <Typography align='center' variant='h6' style={{ paddingTop: 8, textTransform: 'lowercase' }}>
+        Please make sure you have the correct portfolio link before trying again
+      </Typography>
+      <center>
+        <img
+          className={theme === 'dark' ? clsx(classes.image, classes.lightImage) : classes.image}
+          src={require('../../Images/404.png')}
+          alt='not found'
+        />
+      </center>
+    </Grid>
+  )
 
-    return content
-  }
+  return content
 }
-
-export default PublicPortfolio

@@ -199,7 +199,7 @@ export default function LandingPage() {
       <Grid item className={classes.container} container justify='center' alignItems='center'>
         <img
           className={theme === 'dark' ? clsx(classes.image, classes.lightImage) : classes.image}
-          src='https://miro.medium.com/max/680/1*iqbSkjkrX-MG83gqKvfM7A.png'
+          src={require('../../Images/landingPage.png')}
           alt='bitshift'
         />
       </Grid>

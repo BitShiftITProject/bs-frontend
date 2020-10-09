@@ -807,7 +807,7 @@ export default function EditPortfolioContent(props) {
             alignItems='center'
             className={classes.floatingBottomContainer}
           >
-            <Grid item>
+            <Grid item className={classes.fabProgressContainer}>
               <Fab
                 disabled={loading}
                 style={!pageId ? { visibility: 'hidden' } : {}}
