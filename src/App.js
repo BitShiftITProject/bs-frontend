@@ -13,6 +13,8 @@ import PublicPortfolioFailed from './Components/LoggedOutComponents/PublicPortfo
 
 export default function App() {
   return (
+            <Redirect from='/public/:portfolio' to='/public/:portfolio/0' />
+            <Route exact path='/public/:portfolio/:page' component={PublicPortfolio} />
     <LocaleProvider>
       <PortfolioProvider>
         <Switch>

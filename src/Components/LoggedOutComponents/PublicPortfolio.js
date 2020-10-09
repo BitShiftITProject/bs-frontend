@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getUserPortfolios, getPortfolioPages } from '../../Backend/Fetch'
+import { getPortfolio, getPortfolioPages } from '../../Backend/Fetch'
 import Loading from '../CommonComponents/Loading'
 import PublicSidebar from './PublicSidebar'
 import SectionsList from '../Sections/SectionsList'
@@ -11,7 +11,6 @@ class PublicPortfolio extends Component {
   // Gets the url parameters
   getParams = () => {
     return {
-      username: this.props.match.params.username,
       portfolio: this.props.match.params.portfolio,
       page: this.props.match.params.page
     }
@@ -23,25 +22,21 @@ class PublicPortfolio extends Component {
     this.setState({ pageIndex: params.page })
 
     // Get the actual array of the user's portfolios
-    const portfolios = await getUserPortfolios(params.username)
+    const portfolio = await getPortfolio(params.portfolio)
 
-    if (portfolios) {
-      if (portfolios.length > params.portfolio) {
-        this.setState({ portfolioDetails: portfolios[params.portfolio] })
-
-        // Get the array of pages of the portfolio
-        const portfolioId = portfolios[params.portfolio].id
+    if (portfolio) {
+        this.setState({ portfolioDetails: portfolio })
 
         // GET methods already return the JSON-parsed response
         // so getPortfolioPages should either return null or an array of pages
-        const pages = await getPortfolioPages(portfolioId)
+        const pages = await getPortfolioPages(params.portfolio)
+        console.log(pages);
 
-        if (pages) {
+        if (pages && pages.length > this.state.pageIndex) {
           this.setState({ portfolioPages: pages })
+        }else{
+            window.location.href = '/publicfailed'
         }
-      } else {
-        window.location.href = '/publicfailed'
-      }
     } else {
       window.location.href = '/publicfailed'
     }
@@ -50,14 +45,24 @@ class PublicPortfolio extends Component {
   render() {
     // If the portfolioDetails does not equal null then we have found one
     if (this.state.portfolioPages) {
-      const sections = this.state.portfolioPages[this.getParams().page].content.sections
-      const pageContent = <SectionsList sections={sections} />
+      // Array for storing JSX of sections to be displayed
+      let sectionsJSX = null;
+      // If the sections array is present in the pages data then create the section JSX
+      if (this.state.portfolioPages[this.state.pageIndex].content.sections) {
+        sectionsJSX = <SectionsList sections={this.state.portfolioPages[this.state.pageIndex].content.sections} editing={false}/>
+      }
+      // Check to see if the page has sections or is the old formatting
+      const pageContent = this.state.portfolioPages[this.state.pageIndex].content.sections ? (
+        sectionsJSX
+      ) : (
+        <p>Nothing here sorry</p>
+      )
 
       return (
         // Display sidebar with pages data and section content
         <PublicSidebar
           pages={this.state.portfolioPages}
-          content={<div id='sections'>{pageContent}</div>}
+          content={pageContent}
         />
       )
     }
