@@ -11,47 +11,34 @@ import PublicThemesProvider from './Components/Contexts/PublicThemesContext'
 import PublicPortfolio from './Components/LoggedOutComponents/PublicPortfolio'
 import PublicPortfolioFailed from './Components/LoggedOutComponents/PublicPortfolioFailed'
 
+// import SectionEditor from './Components/SectionEditor'
+
 export default function App() {
   return (
-            <Redirect from='/public/:portfolio' to='/public/:portfolio/0' />
-            <Route exact path='/public/:portfolio/:page' component={PublicPortfolio} />
-    <LocaleProvider>
-      <PortfolioProvider>
-        <Switch>
-          <Route
-            exact
-            path='/publicfailed'
-            render={() => (
-              <ThemesProvider>
-                <CssBaseline>
-                  <PublicPortfolioFailed />
-                </CssBaseline>
-              </ThemesProvider>
-            )}
-          />
-          <Route
-            exact
-            path='/public/:username/:portfolio/:page'
-            render={(routeProps) => (
-              <PublicThemesProvider>
-                <CssBaseline>
-                  <PublicPortfolio {...routeProps} />
-                </CssBaseline>
-              </PublicThemesProvider>
-            )}
-          />
-          <Redirect from='/public/:username' to='/public/:username/0/0' />
-          <Route
-            render={() => (
-              <ThemesProvider>
-                <CssBaseline>
-                  <Authentication />
-                </CssBaseline>
-              </ThemesProvider>
-            )}
-          />
-        </Switch>
-      </PortfolioProvider>
-    </LocaleProvider>
+    <ThemesProvider>
+      <CssBaseline>
+        <LocaleProvider>
+          <PortfolioProvider>
+            <Switch>
+              {/* <Route exact path='/editor' render={() => <SectionEditor />} /> */}
+              <Route exact path='/publicfailed' render={() => <PublicPortfolioFailed />} />
+              <Route
+                exact
+                path='/public/:portfolio/:page'
+                render={(routeProps) => (
+                  <PublicThemesProvider>
+                    <CssBaseline>
+                      <PublicPortfolio {...routeProps} />
+                    </CssBaseline>
+                  </PublicThemesProvider>
+                )}
+              />
+              <Redirect from='/public/:portfolio' to='/public/:portfolio/0' />
+              <Route render={() => <Authentication />} />
+            </Switch>
+          </PortfolioProvider>
+        </LocaleProvider>
+      </CssBaseline>
+    </ThemesProvider>
   )
 }
