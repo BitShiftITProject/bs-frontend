@@ -1,20 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import {
-  Grid,
-  TextField,
-  Button,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle
+  Grid
 } from '@material-ui/core'
 
 import { loggedInStyles } from '../../../../Styles/loggedInStyles'
 import CustomDialog from '../../../CommonComponents/CustomDialog'
 import EditPortfolioPagesGrouped from "./EditPortfolioPagesGrouped"
 import EditPortfolioSectionsGrouped from "./EditPortfolioSectionsGrouped"
-
 import {
   // page related imports
   patchPage,
@@ -24,15 +17,10 @@ import {
   deletePage
 } from '../../../../Backend/Fetch'
 
-import { useIntl } from 'react-intl'
 import { PortfolioContext } from '../../../Contexts/PortfolioContext'
+import DialogThings from "./DialogThings"
 
 export default function EditPortfolioContent(props) {
-  /* -------------------------------------------------------------------------- */
-  /*                                   Locale                                   */
-  /* -------------------------------------------------------------------------- */
-
-  const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
@@ -106,10 +94,9 @@ export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */
   /*                                Section Handlers                            */
   /* -------------------------------------------------------------------------- */
-
   // Adds a new correctly-formatted section object into the current page's list
   // of sections (Note: Does not save to the backend)
-  function handleSectionAdd(newSection) {
+  const handleSectionAdd = (newSection) => {
     setSections((currentSections) => {
       // If this is the first section of the page, just set it as [newSection],
       // otherwise just add newSection to the end of the current list of sections
@@ -122,7 +109,7 @@ export default function EditPortfolioContent(props) {
   }
 
   // Deletes the section at a given index among the sections of the current page
-  function handleSectionDelete(sectionIndex) {
+  const handleSectionDelete = (sectionIndex) => {
     setSections((currentSections) => {
       // Ensure that the current page has a section at the specified index
       if (currentSections[pageId].length >= sectionIndex + 1) {
@@ -146,9 +133,7 @@ export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */
   /*                                   Styles                                   */
   /* -------------------------------------------------------------------------- */
-
   const classes = loggedInStyles()
-  const fixedHeightPaper = classes.fixedHeightPaper
 
   /* -------------------------------------------------------------------------- */
   /*                                Dialog State                                */
@@ -164,6 +149,19 @@ export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */
   /*                         Dialog Open Event Handlers                         */
   /* -------------------------------------------------------------------------- */
+  const dialogType = DialogThings({
+                                    handlePortfolioEdit, 
+                                    portfolioTitle,
+                                    setPortfolioTitle,
+                                    setPortfolio,
+                                    portfolio,
+                                    handleClose, 
+                                    handlePageAdd, 
+                                    pageTitle, 
+                                    setPageTitle,
+                                    handlePageTitleEdit, 
+                                    handlePageDelete
+                                  })
 
   // These two functions set the type of the event (which matches the key
   // strings of the dialogType object) as well as the target component of the current event.
@@ -334,183 +332,7 @@ export default function EditPortfolioContent(props) {
     setOpen(false)
   }
 
-  /* -------------------------------------------------------------------------- */
-  /*                               Dialog Content                               */
-  /* -------------------------------------------------------------------------- */
-
-  const dialogType = {
-    // Contains the contents to be rendered when a dialog is triggered, which is
-    // to be sent to the CustomDialog component
-    /* -------------------------------------------------------------------------- */
-    // Dialog to show when the Edit button next to the portfolio title is clicked
-    editPortfolio: (
-      <form onSubmit={handlePortfolioEdit}>
-        {/*
-         * TITLE
-         */}
-        <DialogTitle>{intl.formatMessage({ id: 'editPortfolio' })}</DialogTitle>
-        {/*
-         * TEXT FIELDS
-         */}
-        <DialogContent>
-          <TextField
-            inputProps={{ className: classes.input }}
-            className={classes.formLabel}
-            InputLabelProps={{
-              shrink: true
-            }}
-            autoFocus
-            margin='dense'
-            id='portfolioName'
-            label={intl.formatMessage({ id: 'title' })}
-            fullWidth
-            value={portfolioTitle}
-            onChange={(e) => setPortfolioTitle(e.target.value)}
-          />
-          <TextField
-            inputProps={{ className: classes.input }}
-            className={classes.formLabel}
-            InputLabelProps={{
-              shrink: true
-            }}
-            autoFocus
-            margin='dense'
-            id='portfolioDesc'
-            label={intl.formatMessage({ id: 'portfolioDescription' })}
-            fullWidth
-            value={portfolio.description}
-            onChange={(e) => setPortfolio({ ...portfolio, description: e.target.value })}
-          />
-        </DialogContent>
-        {/*
-         * BUTTONS
-         */}
-        <DialogActions>
-          <Button onClick={handleClose} variant='outlined'>
-            {intl.formatMessage({ id: 'cancel' })}
-          </Button>
-          <Button onClick={handlePortfolioEdit} variant='contained'>
-            {intl.formatMessage({ id: 'save' })}
-          </Button>
-        </DialogActions>
-      </form>
-    ),
-    /* -------------------------------------------------------------------------- */
-    // Dialog to show when the (+) button below pages is clicked to add a page
-    addPage: (
-      <form onSubmit={handlePageAdd}>
-        {/*
-         * TITLE
-         */}
-        <DialogTitle>{intl.formatMessage({ id: 'addPage' })}</DialogTitle>
-        {/*
-         * TEXT FIELDS
-         */}
-        <DialogContent>
-          <TextField
-            inputProps={{ className: classes.input }}
-            className={classes.formLabel}
-            InputLabelProps={{
-              shrink: true
-            }}
-            autoFocus
-            margin='dense'
-            id='pageName'
-            label={intl.formatMessage({ id: 'title' })}
-            fullWidth
-            value={pageTitle}
-            onChange={(e) => setPageTitle(e.target.value)}
-          />
-        </DialogContent>
-        {/*
-         * BUTTONS
-         */}
-        <DialogActions>
-          <Button onClick={handleClose} variant='outlined'>
-            {intl.formatMessage({ id: 'cancel' })}
-          </Button>
-          <Button onClick={handlePageAdd} variant='contained'>
-            {intl.formatMessage({ id: 'add' })}
-          </Button>
-        </DialogActions>
-      </form>
-    ),
-
-    /* -------------------------------------------------------------------------- */
-    // Dialog to show when the Edit button next to a page is clicked
-    editPage: (
-      <form onSubmit={handlePageTitleEdit}>
-        {/*
-         * TITLE
-         */}
-        <DialogTitle>{intl.formatMessage({ id: 'editPage' })}</DialogTitle>
-        {/*
-         * TEXT FIELDS
-         */}
-        <DialogContent>
-          <TextField
-            inputProps={{ className: classes.input }}
-            className={classes.formLabel}
-            InputLabelProps={{
-              shrink: true
-            }}
-            autoFocus
-            label={intl.formatMessage({ id: 'title' })}
-            margin='dense'
-            id='pageName'
-            fullWidth
-            value={pageTitle}
-            onChange={(e) => setPageTitle(e.target.value)}
-          />
-        </DialogContent>
-        {/*
-         * BUTTONS
-         */}
-        <DialogActions>
-          <Button onClick={handleClose} variant='outlined'>
-            {intl.formatMessage({ id: 'cancel' })}
-          </Button>
-          <Button onClick={handlePageTitleEdit} variant='contained'>
-            {intl.formatMessage({ id: 'save' })}
-          </Button>
-        </DialogActions>
-      </form>
-    ),
-    /* -------------------------------------------------------------------------- */
-    // Dialog to show when the Delete button next to a page is clicked
-    deletePage: (
-      <div>
-        {/*
-         * TITLE
-         */}
-        <DialogTitle id='alert-dialog-title'>
-          {intl.formatMessage({ id: 'deletePage' })}
-        </DialogTitle>
-        {/*
-         * CONTENT
-         */}
-        <DialogContent>
-          <DialogContentText id='alert-dialog-description'>
-            {intl.formatMessage(
-              { id: 'deletePagePrompt' },
-              { page: <span style={{ fontWeight: 'bold' }}>{pageTitle}</span> }
-            )}
-          </DialogContentText>
-        </DialogContent>
-        {/*
-         * BUTTONS
-         */}
-        <DialogActions>
-          <Button onClick={handleClose} variant='outlined'>
-            {intl.formatMessage({ id: 'cancel' })}
-          </Button>
-          <Button onClick={handlePageDelete} variant='contained'>
-            {intl.formatMessage({ id: 'delete' })}
-          </Button>
-        </DialogActions>
-      </div>
-    )
-  }
+  
 
   const dialog = (
     <CustomDialog open={open} setOpen={setOpen} content={dialogType[dialogContent.type]} />

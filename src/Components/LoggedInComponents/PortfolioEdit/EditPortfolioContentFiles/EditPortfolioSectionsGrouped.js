@@ -7,15 +7,14 @@ import {
     Fab
   } from '@material-ui/core'
 
-
 import { loggedInStyles, CursorTypography } from '../../../../Styles/loggedInStyles'
 import SectionsList from '../../../Sections/SectionsList'
 import SectionsButton from '../../../Sections/SectionAdd/SectionsButton'
+
 /* Pages and adding/removing pages part of the editing portfolio*/
 export default function EditPortfolioSectionsGrouped({pageId,handleSectionAdd, sections, handleSaveSections,handleSectionDelete }) {
     const classes = loggedInStyles()    
     const fixedHeightPaper = classes.fixedHeightPaper
-
     // Locale
     const intl = useIntl()
 
@@ -60,7 +59,6 @@ export default function EditPortfolioSectionsGrouped({pageId,handleSectionAdd, s
           )}
 
           {/* SAVE SECTIONS BUTTON */}
-
           <Grid
             item
             xs={2}
