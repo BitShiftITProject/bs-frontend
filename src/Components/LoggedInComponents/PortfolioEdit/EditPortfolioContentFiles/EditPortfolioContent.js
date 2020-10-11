@@ -2,12 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 
 import {
   Grid,
-  Paper,
-  Fab,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
   TextField,
   Button,
   DialogActions,
@@ -15,15 +9,11 @@ import {
   DialogContentText,
   DialogTitle
 } from '@material-ui/core'
-import CreateIcon from '@material-ui/icons/Create'
-import AddIcon from '@material-ui/icons/Add'
-import CloseIcon from '@material-ui/icons/Close'
 
-import SectionsList from '../../../Sections/SectionsList'
-import SectionsButton from '../../../Sections/SectionAdd/SectionsButton'
-
-import { loggedInStyles, CursorTypography } from '../../../../Styles/loggedInStyles'
+import { loggedInStyles } from '../../../../Styles/loggedInStyles'
 import CustomDialog from '../../../CommonComponents/CustomDialog'
+import EditPortfolioPagesGrouped from "./EditPortfolioPagesGrouped"
+import EditPortfolioSectionsGrouped from "./EditPortfolioSectionsGrouped"
 
 import {
   // page related imports
@@ -159,7 +149,6 @@ export default function EditPortfolioContent(props) {
 
   const classes = loggedInStyles()
   const fixedHeightPaper = classes.fixedHeightPaper
-  const leftPanel = classes.leftPanel
 
   /* -------------------------------------------------------------------------- */
   /*                                Dialog State                                */
@@ -533,205 +522,26 @@ export default function EditPortfolioContent(props) {
 
   return (
     <Grid container direction='row' spacing={0}>
+      {/* Pages and adding/removing pages part of the editing portfolio*/ }
+      <EditPortfolioPagesGrouped 
+        handlePortfolioEvent ={handlePortfolioEvent}
+        handlePageSelect = {handlePageSelect}
+        portfolio={portfolio}
+        pages={pages}
+        pageId={ pageId}
+        handlePageEvent ={handlePageEvent}
+        />
+    
       {/*
-       * LIST MENU
+       * PAGE CONTENT (as in, the sections)
        */}
-      <Grid item xs={12} md={4} lg={3}>
-        <Paper className={leftPanel}>
-          {/*
-           * LIST MENU CONTENT
-           */}
-          <Grid style={{ width: '100%', height: '100%' }}>
-            {/*
-             * PORTFOLIO TITLE
-             */}
-            <Grid
-              container
-              direction='row'
-              justify='space-between'
-              alignItems='center'
-              className={classes.padded}
-            >
-              <CursorTypography variant='button'>{portfolio.title}</CursorTypography>
-
-              {/* EDIT PORTFOLIO BUTTON */}
-
-              <Fab
-                color='secondary'
-                size='small'
-                onClick={() => handlePortfolioEvent('editPortfolio', portfolio.title)}
-              >
-                <CreateIcon />
-              </Fab>
-            </Grid>
-
-            <Divider />
-
-            {/* PORTFOLIO PAGES (List) */}
-
-            <Grid
-              style={{ width: '100%', paddingTop: 16 }}
-              container
-              direction='column'
-              justify='flex-start'
-            >
-              <CursorTypography variant='overline'>
-                {intl.formatMessage({ id: 'pages' })}
-              </CursorTypography>
-
-              {/* Each list item corresponds to a page. It shows the page's title, and when
-               * hovered has an edit button (Pen icon) and a delete button (Trash icon). */}
-
-              <List className={classes.pageList}>
-                {pages &&
-                  pages.map((page, idx) => (
-                    <ListItem
-                      onClick={() => handlePageSelect(page.id)}
-                      key={page.id}
-                      button
-                      selected={page.id === pageId}
-                      className={classes.hiddenButtonItem}
-                    >
-                      {/* PAGE TITLE */}
-
-                      <Grid
-                        item
-                        xs={2}
-                        container
-                        direction='row'
-                        justify='center'
-                        alignItems='center'
-                      >
-                        <div className={classes.selectedIndicator}></div>
-                      </Grid>
-
-                      <Grid item xs={5} container justify='flex-start' alignItems='center'>
-                        <ListItemText>{page.title}</ListItemText>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={5}
-                        container
-                        direction='row'
-                        justify='flex-end'
-                        alignItems='center'
-                        spacing={1}
-                      >
-                        {/* EDIT PAGE BUTTON */}
-
-                        <Fab
-                          size='small'
-                          className={classes.hiddenButton}
-                          onClick={() => handlePageEvent('editPage', idx)}
-                        >
-                          <CreateIcon />
-                        </Fab>
-                        {/* DELETE PAGE BUTTON */}
-                        <Fab
-                          size='small'
-                          className={classes.hiddenButton}
-                          onClick={() => handlePageEvent('deletePage', idx)}
-                        >
-                          <CloseIcon />
-                        </Fab>
-                      </Grid>
-                    </ListItem>
-                  ))}
-              </List>
-            </Grid>
-          </Grid>
-          {/* ADD PAGE BUTTON */}
-
-          <Fab
-            className={classes.floatingBottomContainer}
-            color='primary'
-            size='medium'
-            variant='extended'
-            onClick={() => handlePageEvent('addPage', '')}
-            style={{ width: '100%', marginLeft: 5, marginRight: 5 }}
-          >
-            {intl.formatMessage({ id: 'addPage' })}
-            <AddIcon style={{ paddingLeft: 5 }} />
-          </Fab>
-        </Paper>
-      </Grid>
-
-      {/*
-       * PAGE CONTENT
-       */}
-
-      <Grid item xs={12} md={8} lg={9} id='page-content'>
-        <Paper className={fixedHeightPaper}>
-          {/*
-           * PAGE SECTIONS
-           */}
-
-          {!pageId && (
-            <Grid
-              item
-              xs={10}
-              style={{ minWidth: '100%', height: '100%' }}
-              container
-              justify='center'
-              alignItems='center'
-            >
-              <CursorTypography variant='subtitle2'>
-                Select a page to start editing your portfolio
-              </CursorTypography>
-            </Grid>
-          )}
-
-          {pageId && sections[pageId] && (
-            <Grid
-              item
-              xs={10}
-              style={{ minWidth: '100%', overflow: 'scroll' }}
-              container
-              direction='column'
-              justify='space-between'
-            >
-              <SectionsList
-                sections={sections[pageId]}
-                editing
-                handleSectionDelete={handleSectionDelete}
-              />
-            </Grid>
-          )}
-
-          {/* SAVE SECTIONS BUTTON */}
-
-          <Grid
-            item
-            xs={2}
-            style={{ minWidth: '100%' }}
-            container
-            spacing={2}
-            direction='row'
-            justify='flex-end'
-            alignItems='center'
-            className={classes.floatingBottomContainer}
-          >
-            <Grid item>
-              <Fab
-                // disabled
-                style={!pageId ? { visibility: 'hidden' } : {}}
-                color='secondary'
-                variant='extended'
-                onClick={handleSaveSections}
-              >
-                <CursorTypography variant='button'>
-                  {intl.formatMessage({ id: 'saveSections' })}
-                </CursorTypography>
-              </Fab>
-            </Grid>
-
-            {/* ADD SECTION BUTTON */}
-            {/* When a section is clicked, it adds the section to the overall sections component */}
-            <Grid item></Grid>
-            <SectionsButton pageId={pageId} handleSectionAdd={handleSectionAdd} />
-          </Grid>
-        </Paper>
-      </Grid>
+      <EditPortfolioSectionsGrouped
+      pageId ={pageId}
+      handleSectionAdd={handleSectionAdd}
+      sections={sections}
+      handleSaveSections={handleSaveSections}
+      handleSectionDelete={handleSectionDelete}
+      />
       {dialog}
     </Grid>
   )
