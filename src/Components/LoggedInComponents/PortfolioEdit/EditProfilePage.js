@@ -6,7 +6,7 @@ import AboutMeDetails from "./AboutMeDetails"
 import EditProfileListMenu from "./EditProfileListMenu"
 import UserProfileDataForm from "./UserProfileDataForm"
 import { Grid } from '@material-ui/core'
-import { getUser, logout, patchUser } from '../../../Backend/Fetch'
+import { getUser, logout, patchUser } from '../UserProfileDataForm'
 import { useHistory } from 'react-router-dom'
 
 // Initial About Me and Contact data, will be fetched from database for the

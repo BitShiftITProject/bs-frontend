@@ -19,11 +19,11 @@ import CreateIcon from '@material-ui/icons/Create'
 import AddIcon from '@material-ui/icons/Add'
 import CloseIcon from '@material-ui/icons/Close'
 
-import SectionsList from '../../Sections/SectionsList'
-import SectionsButton from '../../Sections/SectionAdd/SectionsButton'
+import SectionsList from '../../../Sections/SectionsList'
+import SectionsButton from '../../../Sections/SectionAdd/SectionsButton'
 
-import { loggedInStyles, CursorTypography } from '../../../Styles/loggedInStyles'
-import CustomDialog from '../../CommonComponents/CustomDialog'
+import { loggedInStyles, CursorTypography } from '../../../../Styles/loggedInStyles'
+import CustomDialog from '../../../CommonComponents/CustomDialog'
 
 import {
   // page related imports
@@ -32,10 +32,10 @@ import {
   patchPortfolio,
   postPageToPortfolio,
   deletePage
-} from '../../../Backend/Fetch'
+} from '../../../../Backend/Fetch'
 
 import { useIntl } from 'react-intl'
-import { PortfolioContext } from '../../Contexts/PortfolioContext'
+import { PortfolioContext } from '../../../Contexts/PortfolioContext'
 
 export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */

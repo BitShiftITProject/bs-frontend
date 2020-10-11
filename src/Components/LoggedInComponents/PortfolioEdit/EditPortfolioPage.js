@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Grid } from '@material-ui/core'
 import Sidebar from '../Sidebar'
 import EditPortfolioDropdown from './EditPortfolioDropdown'
-import EditPortfolioContent from './EditPortfolioContent'
+import EditPortfolioContent from './EditPortfolioContentFiles/EditPortfolioContent'
 import EditPortfolioStyle from './EditPortfolioStyle'
 import { getPortfolio, getPortfolioPages } from '../../../Backend/Fetch'
 

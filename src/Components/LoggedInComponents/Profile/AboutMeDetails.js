@@ -8,7 +8,6 @@ import {
   TextField,
   Chip
 } from '@material-ui/core'
-
   
 export default function AboutMeDetails({handleOnAboutChange,handleAddTag,handleRemoveTag,about, tagText, setTagText}) {
     const intl = useIntl()

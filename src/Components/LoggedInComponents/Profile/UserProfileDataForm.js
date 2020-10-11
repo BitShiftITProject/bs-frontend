@@ -8,7 +8,7 @@ import {
   } from '@material-ui/core'
   import { useIntl } from 'react-intl'
   
-export default function EditProfileUserProfileDataForm({handleSubmit, form}) {
+export default function UserProfileDataForm({handleSubmit, form}) {
     const intl = useIntl()
     // Used for general styles
     const classes = loggedInStyles()
