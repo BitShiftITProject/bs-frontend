@@ -1,10 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-
-import {
-  Grid
-} from '@material-ui/core'
-
-import { loggedInStyles } from '../../../../Styles/loggedInStyles'
+import { Grid } from '@material-ui/core'
 import CustomDialog from '../../../CommonComponents/CustomDialog'
 import EditPortfolioPagesGrouped from "./EditPortfolioPagesGrouped"
 import EditPortfolioSectionsGrouped from "./EditPortfolioSectionsGrouped"
@@ -30,10 +25,10 @@ export default function EditPortfolioContent(props) {
   const [portfolioTitle, setPortfolioTitle] = useState('')
   const [pageTitle, setPageTitle] = useState('')
 
-  // The PortfolioContext stores all details about:
-  // - The ID of the currently-selected page (pageId) whose sections are shown,
-  // - The indexes of the currently-editable (non-disabled) sections (editableSections)
-  // - The current portfolio's section objects by page ID (sections),
+  // PortfolioContext stores all details about:
+  // - ID of currently-selected page (pageId) whose sections are shown,
+  // - Indexes of currently-editable (non-disabled) sections (editableSections)
+  // - Current portfolio's section objects by page ID (sections),
   //   stored like the following example:
   //
   //       {
@@ -42,8 +37,7 @@ export default function EditPortfolioContent(props) {
   //       }
   //
   // EditPortfolioContent uses pageId and sections to render a selected page's sections,
-  // as well as to add sections via SectionsButton, and edit or delete sections
-  // SectionsList.
+  // and adds sections via SectionsButton, and edit or delete sections SectionsList.
   const { pageId, setPageId, resetEditState, sections, setSections } = useContext(PortfolioContext)
 
   /* -------------------------------------------------------------------------- */
@@ -53,7 +47,6 @@ export default function EditPortfolioContent(props) {
   // This is run when the portfolio content editing page is first mounted
   useEffect(() => {
     // Reset the selected page ID, so at first, no page is selected
-
     setPageId(null)
   }, [setPageId])
 
@@ -62,7 +55,6 @@ export default function EditPortfolioContent(props) {
     // Reset the selected page ID and clear the sections whose changes we should keep
     // track of, since if we are unmounting then we don't need keep track of
     // anymore
-
     return () => {
       setPageId(null)
       setSections([])
@@ -73,8 +65,6 @@ export default function EditPortfolioContent(props) {
   // such as when a page is added or deleted or when the changes
   // to the sections within it are saved
   useEffect(() => {
-    // console.log('Pages:', pages)
-
     setSections((currentSections) => {
       //
       const newSections = pages
@@ -85,8 +75,6 @@ export default function EditPortfolioContent(props) {
           return { [page.id]: page.content.sections }
         })
         .reduce((prev, curr) => ({ ...prev, ...curr }), currentSections)
-      // console.log('Sections:', newSections)
-
       return newSections
     })
   }, [pages, setSections])
@@ -122,18 +110,11 @@ export default function EditPortfolioContent(props) {
           ...currentSections,
           [pageId]: pageIdSections
         }
-
         return newSections
       }
-
       return currentSections
     })
   }
-
-  /* -------------------------------------------------------------------------- */
-  /*                                   Styles                                   */
-  /* -------------------------------------------------------------------------- */
-  const classes = loggedInStyles()
 
   /* -------------------------------------------------------------------------- */
   /*                                Dialog State                                */
@@ -149,23 +130,25 @@ export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */
   /*                         Dialog Open Event Handlers                         */
   /* -------------------------------------------------------------------------- */
-  const dialogType = DialogType({
-                                    handlePortfolioEdit, 
-                                    portfolioTitle,
-                                    setPortfolioTitle,
-                                    setPortfolio,
-                                    portfolio,
-                                    handleClose, 
-                                    handlePageAdd, 
-                                    pageTitle, 
-                                    setPageTitle,
-                                    handlePageTitleEdit, 
-                                    handlePageDelete
-                                  })
+  const dialogType = DialogType(
+    {
+      handlePortfolioEdit, 
+      portfolioTitle,
+      setPortfolioTitle,
+      setPortfolio,
+      portfolio,
+      handleClose, 
+      handlePageAdd, 
+      pageTitle, 
+      setPageTitle,
+      handlePageTitleEdit, 
+      handlePageDelete
+    })
 
-  // These two functions set the type of the event (which matches the key
+  /* -------------------------------------------------------------------------- */
+
+  // The following two functions set the type of the event (which matches the key
   // strings of the dialogType object) as well as the target component of the current event.
-
   /* -------------------------------------------------------------------------- */
 
   // Portfolio event types include:
@@ -261,7 +244,6 @@ export default function EditPortfolioContent(props) {
     setPages((pages) => [...pages, newPage])
     setOpen(false)
   }
-
   /* -------------------------------------------------------------------------- */
 
   // Edit the PAGE TITLE of the Page in the DB
@@ -317,8 +299,8 @@ export default function EditPortfolioContent(props) {
     // not have the to-be-deleted page
     setPages(newPages)
 
-    // Remove the to-be-deleted page from the sections object, which was used
-    // to record the changes of the sections within the page, but now that it is
+    // Removes to-be-deleted page from sections object, which was used
+    // to record changes of sections in the page, but now that it is
     // being deleted, we shouldn't need to track it anymore
     setSections((s) => {
       const newSections = s
@@ -331,8 +313,6 @@ export default function EditPortfolioContent(props) {
 
     setOpen(false)
   }
-
-  
 
   const dialog = (
     <CustomDialog open={open} setOpen={setOpen} content={dialogType[dialogContent.type]} />
@@ -353,7 +333,7 @@ export default function EditPortfolioContent(props) {
         pageId={ pageId}
         handlePageEvent ={handlePageEvent}
         />
-    
+        
       {/*
        * PAGE CONTENT (as in, the sections)
        */}

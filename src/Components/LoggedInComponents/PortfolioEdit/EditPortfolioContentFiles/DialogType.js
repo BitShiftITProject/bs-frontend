@@ -1,6 +1,5 @@
 
 import React from 'react'
-
 import {
   TextField,
   Button,
@@ -11,9 +10,6 @@ import {
 } from '@material-ui/core'
 import { useIntl } from 'react-intl'
 import { loggedInStyles } from '../../../../Styles/loggedInStyles'
-
-
-
 
 export default function DialogType(
   {handlePortfolioEdit, 
