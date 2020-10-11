@@ -15,7 +15,7 @@ import { loggedInStyles } from '../../../../Styles/loggedInStyles'
 
 
 
-export default function DialogThings(
+export default function DialogType(
   {handlePortfolioEdit, 
     portfolioTitle,
     setPortfolioTitle,

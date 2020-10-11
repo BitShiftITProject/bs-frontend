@@ -18,7 +18,7 @@ import {
 } from '../../../../Backend/Fetch'
 
 import { PortfolioContext } from '../../../Contexts/PortfolioContext'
-import DialogThings from "./DialogThings"
+import DialogType from "./DialogType"
 
 export default function EditPortfolioContent(props) {
 
@@ -149,7 +149,7 @@ export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */
   /*                         Dialog Open Event Handlers                         */
   /* -------------------------------------------------------------------------- */
-  const dialogType = DialogThings({
+  const dialogType = DialogType({
                                     handlePortfolioEdit, 
                                     portfolioTitle,
                                     setPortfolioTitle,
