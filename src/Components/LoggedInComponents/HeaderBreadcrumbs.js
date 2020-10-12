@@ -7,11 +7,12 @@ import PersonIcon from '@material-ui/icons/Person'
 import DescriptionIcon from '@material-ui/icons/Description'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import SettingsIcon from '@material-ui/icons/Settings'
+import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
   /* -------------------------------------------------------------------------- */
-  /*                                 Breadcrumbs                                */
+  /*                                 Breadcrumbs                                 */
   /* -------------------------------------------------------------------------- */
 
   breadcrumbLink: {
@@ -34,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
     height: 27
   }
 }))
+
+/* -------------------------------------------------------------------------- */
+/*                         Function and Rendering                             */
+/* -------------------------------------------------------------------------- */
 
 export default function HeaderBreadcrumbs(props) {
   // Contains all styling
@@ -67,7 +72,6 @@ export default function HeaderBreadcrumbs(props) {
 
   // For mapping a path segment (the singular segment between /'s)
   // to a corresponding breadcrumb NAME (all segments must have a corresponding crumb)
-  // TODO: Handle mutable breadcrumbs such as portfolio titles
   const breadcrumbNameMap = {
     home: intl.formatMessage({ id: 'home' }),
     profile: intl.formatMessage({ id: 'profile' }),
@@ -90,7 +94,7 @@ export default function HeaderBreadcrumbs(props) {
 
   return (
     <div>
-      <Breadcrumbs aria-label='breadcrumb'>
+      <Breadcrumbs separator={<NavigateNextIcon fontSize='small' />} aria-label='breadcrumbs'>
         {/**
          * Maps each path segment to a Typography component if it is the last path segment,
          * and a router Link otherwise.

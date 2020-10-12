@@ -1,30 +1,64 @@
 import { createMuiTheme } from '@material-ui/core/styles'
-import { red } from '@material-ui/core/colors'
 
 const theme = createMuiTheme({
+  overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        //override the pseudo-classes
+        '.Mui-disabled': { color: 'rgb(222,211,221)' }
+      }
+    }
+  },
   palette: {
     type: 'dark',
+    background: {
+      default: '#32333D',
+      paper: '#373740',
+      paperLight: '#424250',
+      paperHover: 'rgba(124,124,142,0.5)'
+    },
     primary: {
-      main: '#26292C',
-      light: 'rgb(81, 91, 95)',
-      dark: 'rgb(26, 35, 39)',
-      contrastText: '#ffffff'
+      main: '#27272F',
+      light: '#373740',
+      lighter: '#5E5E6E',
+      lightest: '#868698',
+      dark: '#27272F',
+      contrastText: '#fff'
     },
     secondary: {
-      main: '#FFB74D',
-      light: 'rgb(255, 197, 112)',
-      dark: 'rgb(200, 147, 89)',
-      contrastText: 'rgba(0, 0, 0, 0.87)'
+      main: '#C9ADA7',
+      light: '#968894',
+      dark: '#C9ADA7',
+      contrastText: '#000'
     },
     titleBar: {
-      main: '#555555',
-      contrastText: '#ffffff'
+      main: '#27272F',
+      contrastText: '#fff'
+    },
+    success: {
+      light: '#55BA81',
+      main: '#387D52',
+      dark: '#295F35',
+      contrastText: '#fff'
     },
     error: {
-      main: red.A400
+      dark: '#89322b',
+      main: '#B2544D',
+      light: '#c17671',
+      contrastText: '#fff'
     },
     info: {
-      main: '#ffffff'
+      main: '#2BA9D4',
+      contrastText: '#fff'
+    },
+    portfolioBorder: {
+      hover: ' rgba(222,211,221,0.7)',
+      main: ' rgba(146,146,155,0.5)'
+    },
+    iconButton: {
+      main: '#5E5E6E',
+      hover: '#868698',
+      contrastText: '#fff'
     }
   }
 })

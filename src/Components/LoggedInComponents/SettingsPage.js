@@ -17,6 +17,10 @@ import languages from '../../lang/languages'
 import { LocaleContext } from '../Contexts/LocaleContext'
 import { useIntl } from 'react-intl'
 
+/* -------------------------------------------------------------------------- */
+/*                                   Styling                                  */
+/* -------------------------------------------------------------------------- */
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%'
@@ -81,6 +85,10 @@ export default function SettingsPage() {
 
   const content = (
     <div className={classes.root}>
+      {/* -------------------------------------------------------------------------- */}
+
+      {/* GENERAL SETTINGS */}
+
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <CursorTypography className={classes.heading}>
@@ -125,7 +133,7 @@ export default function SettingsPage() {
                 <Select native variant='outlined' value={locale} onChange={handleLocaleChange}>
                   {Object.keys(languages).map((lang) => (
                     <option key={lang} value={lang}>
-                      {languages[lang]}
+                      {languages[lang].name}
                     </option>
                   ))}
                 </Select>
@@ -134,10 +142,14 @@ export default function SettingsPage() {
           </Grid>
         </AccordionDetails>
       </Accordion>
+      {/* -------------------------------------------------------------------------- */}
+
+      {/* LOGIN DATA */}
+
       <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <CursorTypography className={classes.heading}>
-            {intl.formatMessage({ id: 'personalData' })}
+            {intl.formatMessage({ id: 'loginData' })}
           </CursorTypography>
           <CursorTypography className={classes.secondaryHeading}></CursorTypography>
         </AccordionSummary>
