@@ -10,7 +10,7 @@ import Login from './Components/LoggedOutComponents/Login'
 import Signup from './Components/LoggedOutComponents/Signup'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
 
-import EditProfilePage from './Components/LoggedInComponents/EditProfilePage'
+import EditProfilePage from './Components/LoggedInComponents/Profile/EditProfilePage'
 import PortfolioList from './Components/LoggedInComponents/PortfolioList/PortfolioList'
 import AddPortfolioPage from './Components/LoggedInComponents/PortfolioList/AddPortfolioPage'
 import EditPortfolioPage from './Components/LoggedInComponents/PortfolioEdit/EditPortfolioPage'
