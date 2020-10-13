@@ -62,6 +62,7 @@ class PublicPortfolio extends Component {
         <PublicSidebar
           pages={this.state.portfolioPages}
           content={pageContent}
+          parentPortfolio={this}
         />
       )
     }
