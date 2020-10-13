@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%'
   },
   popper: {
-    width: '100%'
+    // width: '100%'
   },
   menuItem: {
     display: 'flex',
