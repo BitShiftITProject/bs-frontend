@@ -14,7 +14,7 @@ const contentStyle = {
   borderRadius: 15,
   padding: 15,
   minWidth: 300,
-  overflow: 'scroll',
+  overflowY: 'scroll',
   border: 'none',
   backgroundColor: 'rgba(0, 0, 0, 0.05)',
   backdropFilter: 'blur(10px)'

@@ -40,7 +40,7 @@ export default function LandingContainer(props) {
       container
       direction='row'
       className={classes.background}
-      style={{ height: '100%', flex: 1, flexWrap: 1, overflow: 'scroll' }}
+      style={{ height: '100%', flex: 1, flexWrap: 1, overflowY: 'scroll' }}
     >
       {/* LEFT PADDING */}
       <Grid item xs={false} md={2}></Grid>

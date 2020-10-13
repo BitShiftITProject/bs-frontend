@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Grid } from '@material-ui/core'
+
 import CustomDialog from '../../../CommonComponents/CustomDialog'
-import EditPortfolioPagesGrouped from "./EditPortfolioPagesGrouped"
-import EditPortfolioSectionsGrouped from "./EditPortfolioSectionsGrouped"
+import EditPortfolioPagesGrouped from './EditPortfolioPagesGrouped'
+import EditPortfolioSectionsGrouped from './EditPortfolioSectionsGrouped'
 import {
   // page related imports
   patchPage,
@@ -13,10 +14,9 @@ import {
 } from '../../../../Backend/Fetch'
 
 import { PortfolioContext } from '../../../Contexts/PortfolioContext'
-import DialogType from "./DialogType"
+import DialogType from './DialogType'
 
 export default function EditPortfolioContent(props) {
-
   /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
@@ -130,20 +130,19 @@ export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */
   /*                         Dialog Open Event Handlers                         */
   /* -------------------------------------------------------------------------- */
-  const dialogType = DialogType(
-    {
-      handlePortfolioEdit, 
-      portfolioTitle,
-      setPortfolioTitle,
-      setPortfolio,
-      portfolio,
-      handleClose, 
-      handlePageAdd, 
-      pageTitle, 
-      setPageTitle,
-      handlePageTitleEdit, 
-      handlePageDelete
-    })
+  const dialogType = DialogType({
+    handlePortfolioEdit,
+    portfolioTitle,
+    setPortfolioTitle,
+    setPortfolio,
+    portfolio,
+    handleClose,
+    handlePageAdd,
+    pageTitle,
+    setPageTitle,
+    handlePageTitleEdit,
+    handlePageDelete
+  })
 
   /* -------------------------------------------------------------------------- */
 
@@ -324,25 +323,25 @@ export default function EditPortfolioContent(props) {
 
   return (
     <Grid container direction='row' spacing={0}>
-      {/* Pages and adding/removing pages part of the editing portfolio*/ }
-      <EditPortfolioPagesGrouped 
-        handlePortfolioEvent ={handlePortfolioEvent}
-        handlePageSelect = {handlePageSelect}
+      {/* Pages and adding/removing pages part of the editing portfolio*/}
+      <EditPortfolioPagesGrouped
+        handlePortfolioEvent={handlePortfolioEvent}
+        handlePageSelect={handlePageSelect}
         portfolio={portfolio}
         pages={pages}
-        pageId={ pageId}
-        handlePageEvent ={handlePageEvent}
-        />
-        
+        pageId={pageId}
+        handlePageEvent={handlePageEvent}
+      />
+
       {/*
        * PAGE CONTENT (as in, the sections)
        */}
       <EditPortfolioSectionsGrouped
-      pageId ={pageId}
-      handleSectionAdd={handleSectionAdd}
-      sections={sections}
-      handleSaveSections={handleSaveSections}
-      handleSectionDelete={handleSectionDelete}
+        pageId={pageId}
+        handleSectionAdd={handleSectionAdd}
+        sections={sections}
+        handleSaveSections={handleSaveSections}
+        handleSectionDelete={handleSectionDelete}
       />
       {dialog}
     </Grid>

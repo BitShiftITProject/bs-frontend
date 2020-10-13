@@ -62,11 +62,10 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   /* ----------------------------- View Portfolio ----------------------------- */
 
   // Redirects user to the public link of the portfolio whose index is at portfolioIndex
-  async function handleView(portfolioIndex) {
+  async function handleView(portfolioId) {
     // Get the current user, logs out if access token no longer valid
-
     // Go to the designated route for the public portfolio
-    history.push(`/public/${portfolios[portfolioIndex].id}/0`)
+    history.push(`/public/${portfolioId}/0`)
   }
 
   /* ----------------------------- Edit Portfolio ----------------------------- */
@@ -135,12 +134,14 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   // Clicking the Copy button copies the public link to the clicked portfolio
   function copyToClipboard(e) {
     navigator.clipboard.writeText(
-      user ? `http://bs-frontend.herokuapp.com/${user.username}/${clickedPortfolio.index}/0` : ''
+      user ? `http://bs-frontend.herokuapp.com/${clickedPortfolio.id}` : ''
     )
 
     enqueueSnackbar('Copied URL to clipboard!', {
       variant: 'info'
     })
+
+    // setOpen(false)
   }
 
   // Object with the dialog type as the key, and the corresponding JSX contents
@@ -165,12 +166,19 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
             <Grid item>
               <TextField
                 onFocus={(e) => e.target.select()}
+                onCopy={() => {
+                  navigator.clipboard.writeText(
+                    user ? `http://bs-frontend.herokuapp.com/${clickedPortfolio.id}` : ''
+                  )
+                  enqueueSnackbar('Copied URL to clipboard!', {
+                    variant: 'info'
+                  })
+                  setOpen(false)
+                }}
                 variant='outlined'
                 label={intl.formatMessage({ id: 'url' })}
                 defaultValue={
-                  user
-                    ? `http://bs-frontend.herokuapp.com/${user.username}/${clickedPortfolio.index}/0`
-                    : ''
+                  user ? `http://bs-frontend.herokuapp.com/${clickedPortfolio.id}` : ''
                 }
                 readOnly
                 className={classes.urlField}
