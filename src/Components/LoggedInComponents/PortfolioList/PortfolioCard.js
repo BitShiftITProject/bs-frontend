@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {
   CardContent,
   Card,
@@ -15,6 +15,7 @@ import ShareIcon from '@material-ui/icons/Share'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 import { useIntl } from 'react-intl'
 import { loggedInStyles } from '../../../Styles/loggedInStyles'
+import {getPortfolioPages} from '../../../Backend/Fetch'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -94,6 +95,15 @@ const PortfolioCard = (props) => {
     deletePortfolio
   } = props
 
+  const getPageCount = async () => {
+    return getPortfolioPages(portfolioId).then((pages) => {return ((pages.length > 0) ? true : false)});
+  }
+  const [hasPages, setHasPages] = useState(false)
+
+  useEffect(() => {
+      getPageCount().then((pages) => {setHasPages(pages)});    
+  }, [])
+
   const handleView = () => {
     viewPortfolio(portfolioId)
   }
@@ -149,9 +159,13 @@ const PortfolioCard = (props) => {
            * VIEW PORTFOLIO BUTTON
            */}
           <Grid item>
-            <Button size='small' onClick={handleView}>
-              {intl.formatMessage({ id: 'view' })}
-            </Button>
+            <Tooltip title={(hasPages) ? "" : "Please add content before viewing"} placement='top'>
+                <span>
+                    <Button size='small' onClick={handleView} disabled={!hasPages}>
+                    {intl.formatMessage({ id: 'view' })}
+                    </Button>
+                </span>
+            </Tooltip>
           </Grid>
           {/*
            * EDIT PORTFOLIO BUTTON
@@ -176,13 +190,15 @@ const PortfolioCard = (props) => {
            * SHARE PORTFOLIO BUTTON
            */}
           <Grid item>
-            <Tooltip title={intl.formatMessage({ id: 'share' })} placement='top'>
-              <IconButton
-                className={style.share}
-                onClick={(e) => sharePortfolio('share', portfolioId, title, index)}
-              >
-                <ShareIcon />
-              </IconButton>
+            <Tooltip title={(hasPages) ? intl.formatMessage({ id: 'share' }) : "Please add content before sharing"} placement='top'>
+                <span>
+                    <IconButton disabled={!hasPages}
+                        className={style.share}
+                        onClick={(e) => sharePortfolio('share', portfolioId, title, index)}
+                    >
+                        <ShareIcon />
+                    </IconButton>
+              </span>
             </Tooltip>
           </Grid>
           {/*
