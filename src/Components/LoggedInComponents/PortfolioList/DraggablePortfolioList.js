@@ -117,7 +117,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   // Clicking the Copy button copies the public link to the clicked portfolio
   function copyToClipboard(e) {
     navigator.clipboard.writeText(
-      user ? `http://bs-frontend.herokuapp.com/${user.username}/${clickedPortfolio.index}/0` : ''
+      user ? `http://bs-frontend.herokuapp.com/public/${clickedPortfolio.id}/0` : ''
     )
   }
 
@@ -147,7 +147,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
                 label={intl.formatMessage({ id: 'url' })}
                 defaultValue={
                   user
-                    ? `http://bs-frontend.herokuapp.com/${user.username}/${clickedPortfolio.index}/0`
+                    ? `http://bs-frontend.herokuapp.com/public/${clickedPortfolio.id}/0`
                     : ''
                 }
                 readOnly
