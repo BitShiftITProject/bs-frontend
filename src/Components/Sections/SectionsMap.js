@@ -19,7 +19,7 @@ export const sectionElementsBySectionId = {
   doubleText: [
     ['paragraph1', Paragraph, 6],
     ['paragraph2', Paragraph, 6]
-  ]
+  ],
 }
 
 // Given the section ID, returns a new section object with the correct
