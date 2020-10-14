@@ -86,7 +86,13 @@ const useStyles = makeStyles((theme) => ({
 
   image: {
     maxWidth: '100%',
-    height: 'auto'
+    height: 'auto',
+    userDrag: 'none',
+    userSelect: 'none',
+    MozUserSelect: 'none',
+    WebkitUserDrag: 'none',
+    WebkitUserSelect: 'none',
+    MsUserSelect: 'none'
   },
 
   lightImage: {

@@ -35,7 +35,11 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
       ) : (
         /* ------------------------ Public Portfolio Sections ----------------------- */
 
-        <div>{sections.map((section, idx) => GetSectionJSX(section, editing, idx))}</div>
+        <div>
+          {sections.map((section, idx) => (
+            <div key={idx}>{GetSectionJSX(section, editing, idx)}</div>
+          ))}
+        </div>
       )
     ) : (
       /* -------------------------------------------------------------------------- */

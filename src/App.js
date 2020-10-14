@@ -2,9 +2,12 @@ import React from 'react'
 import Authentication from './Authentication'
 import { CssBaseline } from '@material-ui/core'
 import { Route, Switch, Redirect } from 'react-router-dom'
+// import { Scrollbars } from 'react-custom-scrollbars'
 
 import ThemesProvider from './Components/Contexts/ThemesContext'
 import LocaleProvider from './Components/Contexts/LocaleContext'
+import PortfolioProvider from './Components/Contexts/PortfolioContext'
+import PublicThemesProvider from './Components/Contexts/PublicThemesContext'
 
 import PublicPortfolio from './Components/LoggedOutComponents/PublicPortfolio'
 import PublicPortfolioFailed from './Components/LoggedOutComponents/PublicPortfolioFailed'
@@ -12,16 +15,28 @@ import PublicPortfolioFailed from './Components/LoggedOutComponents/PublicPortfo
 export default function App() {
   return (
     <ThemesProvider>
-      <LocaleProvider>
-        <CssBaseline>
-          <Switch>
-            <Route exact path='/publicfailed' component={() => <PublicPortfolioFailed />} />
-            <Route exact path='/public/:portfolio/:page' component={PublicPortfolio} />
-            <Redirect from='/public/:portfolio' to='/public/:portfolio/0' />
-            <Route component={Authentication} />
-          </Switch>
-        </CssBaseline>
-      </LocaleProvider>
+      <CssBaseline>
+        <LocaleProvider>
+          <PortfolioProvider>
+            <Switch>
+              <Route exact path='/publicfailed' render={() => <PublicPortfolioFailed />} />
+              <Route
+                exact
+                path='/public/:portfolio/:page'
+                render={(routeProps) => (
+                  <PublicThemesProvider>
+                    <CssBaseline>
+                      <PublicPortfolio {...routeProps} />
+                    </CssBaseline>
+                  </PublicThemesProvider>
+                )}
+              />
+              <Redirect from='/public/:portfolio' to='/public/:portfolio/0' />
+              <Route render={() => <Authentication />} />
+            </Switch>
+          </PortfolioProvider>
+        </LocaleProvider>
+      </CssBaseline>
     </ThemesProvider>
   )
 }

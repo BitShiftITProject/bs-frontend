@@ -47,9 +47,9 @@ const drawerWidth = 240
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    '&::-webkit-scrollbar': {
-      display: 'none'
-    },
+    // '&::-webkit-scrollbar': {
+    //   display: 'none'
+    // },
     width: '100vw'
   },
   toolbar: {
@@ -126,7 +126,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     height: '100vh',
-    overflow: 'auto'
+    overflowY: 'auto'
   },
 
   sidebarItems: {
@@ -263,7 +263,7 @@ export default function Sidebar(props) {
                 onClick={() => {
                   sessionStorage.removeItem('accessToken')
                   localStorage.removeItem('accessToken')
-                  window.sessionStorage.removeItem('portfolioId')
+                  localStorage.removeItem('portfolioId')
                   window.location.href = '/'
                 }}
                 color='inherit'

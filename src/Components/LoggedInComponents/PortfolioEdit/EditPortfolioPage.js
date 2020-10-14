@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 
-import { Grid } from '@material-ui/core'
+import { CssBaseline, Grid } from '@material-ui/core'
 import Sidebar from '../Sidebar'
 import EditPortfolioDropdown from './EditPortfolioDropdown'
 import EditPortfolioContent from './EditPortfolioContentFiles/EditPortfolioContent'
 import EditPortfolioStyle from './EditPortfolioStyle'
 import { getPortfolio, getPortfolioPages } from '../../../Backend/Fetch'
+import PublicThemesProvider from '../../Contexts/PublicThemesContext'
+import ThemesProvider from '../../Contexts/ThemesContext'
 
 export default function EditPortfolioPage() {
   /* -------------------------------------------------------------------------- */
@@ -20,20 +22,25 @@ export default function EditPortfolioPage() {
   /*                         Fetching Current Portfolio                         */
   /* -------------------------------------------------------------------------- */
 
-  const portfolioId = window.sessionStorage.getItem('portfolioId')
+  const portfolioId = localStorage.getItem('portfolioId')
 
   // Runs when the component is mounted for the first time, fetches the
   // portfolio using the portfolioId item set in the sessionStorage.
   // The portfolioId is set in the sessionStorage when:
   // - A user clicks on the Add Portfolio button in AddPortfolioPage
   // - A user clicks on the Edit button in PortfolioCard
+
   useEffect(() => {
-    getPortfolio(portfolioId).then((portfolio) => {
-      setPortfolio({ ...portfolio })
-      getPortfolioPages(portfolioId).then((pages) => {
-        setPages(pages)
+    if (portfolioId) {
+      getPortfolio(portfolioId).then((portfolio) => {
+        setPortfolio({ ...portfolio })
+        getPortfolioPages(portfolioId).then((pages) => {
+          setPages(pages)
+        })
       })
-    })
+    } else {
+      window.location.href = '/portfolios'
+    }
   }, [portfolioId])
 
   /* -------------------------------------------------------------------------- */
@@ -42,7 +49,15 @@ export default function EditPortfolioPage() {
 
   /* ------------------------------- Edit Style ------------------------------- */
 
-  const editStylePage = <EditPortfolioStyle portfolio={portfolio} setPortfolio={setPortfolio} />
+  const editStylePage = (
+    <PublicThemesProvider>
+      <ThemesProvider>
+        <CssBaseline>
+          <EditPortfolioStyle portfolio={portfolio} setPortfolio={setPortfolio} />
+        </CssBaseline>
+      </ThemesProvider>
+    </PublicThemesProvider>
+  )
 
   /* ------------------------------ Edit Content ------------------------------ */
 
