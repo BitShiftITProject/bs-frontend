@@ -16,11 +16,12 @@ import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined'
 import { useHistory } from 'react-router-dom'
 // import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { useSnackbar } from 'notistack'
 
 import transitions from '../../../Styles/transitions'
 import PortfolioCard from './PortfolioCard'
 import CustomDialog from '../../CommonComponents/CustomDialog'
-import { getUser, deletePortfolio, logout } from '../../../Backend/Fetch'
+import { deletePortfolio } from '../../../Backend/Fetch'
 import { useIntl } from 'react-intl'
 
 /* -------------------------------------------------------------------------- */
@@ -36,7 +37,23 @@ const useStyles = makeStyles((theme) => ({
 const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   const classes = useStyles()
 
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const intl = useIntl()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   History                                  */
+  /* -------------------------------------------------------------------------- */
+
   const history = useHistory()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Snackbars                                 */
+  /* -------------------------------------------------------------------------- */
+
+  const { enqueueSnackbar } = useSnackbar()
 
   /* -------------------------------------------------------------------------- */
   /*                          Portfolio Event Handlers                          */
@@ -47,11 +64,8 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   // Redirects user to the public link of the portfolio whose index is at portfolioIndex
   async function handleView(portfolioId) {
     // Get the current user, logs out if access token no longer valid
-    const user = await getUser()
-    if (!user) logout()
-
     // Go to the designated route for the public portfolio
-    history.push(`/public/${portfolioId}`)
+    history.push(`/public/${portfolioId}/0`)
   }
 
   /* ----------------------------- Edit Portfolio ----------------------------- */
@@ -60,7 +74,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   function handleEdit(portfolioId) {
     // Set portfolioId in session storage so EditPortfolioPage will fetch
     // portfolio from DB based on this ID
-    window.sessionStorage.setItem('portfolioId', portfolioId)
+    localStorage.setItem('portfolioId', portfolioId)
     history.push('/portfolios/edit')
   }
 
@@ -87,6 +101,10 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
 
       // Delete the portfolio from the portfolios DB
       await deletePortfolio(portfolioId)
+
+      enqueueSnackbar(`${clickedPortfolio.title} deleted`, {
+        variant: 'error'
+      })
     }
 
     setOpen(false)
@@ -99,7 +117,6 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   const [open, setOpen] = useState(false)
   const [dialogType, setDialogType] = useState('delete')
   const [clickedPortfolio, setClickedPortfolio] = useState({ id: '', title: '', index: 0 })
-  const intl = useIntl()
 
   // Opens the dialog according to the dialog type, for the portfolio with the
   // id parameter as its portfolio ID, as well as its title and index
@@ -119,6 +136,12 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
     navigator.clipboard.writeText(
       user ? `http://bs-frontend.herokuapp.com/public/${clickedPortfolio.id}/0` : ''
     )
+
+    enqueueSnackbar('Copied URL to clipboard!', {
+      variant: 'info'
+    })
+
+    // setOpen(false)
   }
 
   // Object with the dialog type as the key, and the corresponding JSX contents
@@ -143,6 +166,15 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
             <Grid item>
               <TextField
                 onFocus={(e) => e.target.select()}
+                onCopy={() => {
+                  navigator.clipboard.writeText(
+                    user ? `http://bs-frontend.herokuapp.com/${clickedPortfolio.id}` : ''
+                  )
+                  enqueueSnackbar('Copied URL to clipboard!', {
+                    variant: 'info'
+                  })
+                  setOpen(false)
+                }}
                 variant='outlined'
                 label={intl.formatMessage({ id: 'url' })}
                 defaultValue={

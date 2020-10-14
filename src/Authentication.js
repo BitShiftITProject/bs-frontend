@@ -1,5 +1,7 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom'
+import { SnackbarProvider } from 'notistack'
+import { makeStyles } from '@material-ui/core/styles'
 
 import Loading from './Components/CommonComponents/Loading'
 
@@ -15,10 +17,10 @@ import EditPortfolioPage from './Components/LoggedInComponents/PortfolioEdit/Edi
 import SettingsPage from './Components/LoggedInComponents/SettingsPage'
 import HelpPage from './Components/LoggedInComponents/HelpPage'
 import Sidebar from './Components/LoggedInComponents/Sidebar'
-import { getUser, logout } from './Backend/Fetch'
-import PortfolioProvider from './Components/Contexts/PortfolioContext'
 
-async function loggedIn() {
+import { getUser, logout } from './Backend/Fetch'
+
+async function isLoggedIn() {
   // Get access token from session storage
   const accessToken = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
 
@@ -44,55 +46,114 @@ async function loggedIn() {
   }
 }
 
-class Authentication extends Component {
-  state = { loggedIn: null }
-
-  async componentDidMount() {
-    let logincheck = await loggedIn()
-    this.setState({ loggedIn: logincheck })
+const useStyles = makeStyles((theme) => ({
+  success: {
+    backgroundColor: `${theme.palette.success.main} !important`,
+    color: `${theme.palette.success.contrastText} !important`
+  },
+  error: {
+    backgroundColor: `${theme.palette.error.main} !important`,
+    color: `${theme.palette.error.contrastText} !important`
+  },
+  warning: {
+    backgroundColor: `${theme.palette.warning.main} !important`,
+    color: `${theme.palette.warning.contrastText} !important`
+  },
+  info: {
+    backgroundColor: `${theme.palette.info.main} !important`,
+    color: `${theme.palette.info.contrastText} !important`
   }
+}))
 
-  render() {
-    if (this.state.loggedIn == null) {
-      // Route for loading page while getting if the user is logged in
-      return (
-        <div style={{ height: '100vh' }}>
-          <Loading vertical />
-        </div>
-      )
-    } else if (this.state.loggedIn === true) {
-      // Route for pages accessible when logged in
-      return (
-        <PortfolioProvider>
-          <Switch>
-            <Route exact path='/settings' render={() => <SettingsPage />} />
-            <Route exact path='/help' render={() => <HelpPage />} />
-            <Route exact path='/portfolios/edit' render={() => <EditPortfolioPage />} />
-            <Route exact path='/portfolios/add' render={() => <AddPortfolioPage />} />
-            <Route
-              exact
-              path='/portfolios'
-              render={() => <Sidebar content={<PortfolioList xs={12} md={12} lg={12} />} />}
-            />
-            <Route exact path='/profile' render={() => <EditProfilePage />} />
-            {/* <Route exact path='/home' render={() => <HomePage />} /> */}
-            <Redirect to='/portfolios' />
-          </Switch>
-        </PortfolioProvider>
-      )
-    } else if (this.state.loggedIn === false) {
-      // Route for pages accessible when not logged in
+function Authentication() {
+  /* -------------------------------------------------------------------------- */
+  /*                             Current Login State                            */
+  /* -------------------------------------------------------------------------- */
 
-      return (
+  const [loggedIn, setLoggedIn] = useState(null)
+
+  useEffect(() => {
+    async function checkLoginState() {
+      const loginState = await isLoggedIn()
+      return loginState
+    }
+
+    checkLoginState().then((loginState) => {
+      // console.log(loginState)
+      setLoggedIn(loginState)
+    })
+  }, [])
+
+  /* -------------------------------------------------------------------------- */
+  /*                               Snackbar Styles                              */
+  /* -------------------------------------------------------------------------- */
+
+  const classes = useStyles()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Routes                                   */
+  /* -------------------------------------------------------------------------- */
+
+  if (loggedIn == null) {
+    // Route for loading page while getting if the user is logged in
+    return (
+      <div style={{ height: '100vh' }}>
+        <Loading vertical />
+      </div>
+    )
+  } else if (loggedIn === true) {
+    // Route for pages accessible when logged in
+    return (
+      <SnackbarProvider
+        classes={{
+          variantSuccess: classes.success,
+          variantError: classes.error,
+          variantWarning: classes.warning,
+          variantInfo: classes.info
+        }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        autoHideDuration={1750}
+      >
         <Switch>
-          <Route exact path='/login' component={Login} />
-          <Route exact path='/signup' component={Signup} />
-          <Route exact path='/forgotpassword' component={ForgotPassword} />
-          <Route exact path='/' component={LandingPage} />
+          <Route exact path='/settings' render={() => <SettingsPage />} />
+          <Route exact path='/help' render={() => <HelpPage />} />
+          <Route exact path='/portfolios/edit' render={() => <EditPortfolioPage />} />
+          <Route exact path='/portfolios/add' render={() => <AddPortfolioPage />} />
+          <Route
+            exact
+            path='/portfolios'
+            render={() => <Sidebar content={<PortfolioList xs={12} md={12} lg={12} />} />}
+          />
+          <Route exact path='/profile' render={() => <EditProfilePage />} />
+          {/* <Route exact path='/home' render={() => <HomePage />} /> */}
+          <Redirect to='/portfolios' />
+        </Switch>
+      </SnackbarProvider>
+    )
+  } else if (loggedIn === false) {
+    // Route for pages accessible when not logged in
+
+    return (
+      <SnackbarProvider
+        classes={{
+          variantSuccess: classes.success,
+          variantError: classes.error,
+          variantWarning: classes.warning,
+          variantInfo: classes.info
+        }}
+      >
+        <Switch>
+          <Route exact path='/login' render={() => <Login />} />
+          <Route exact path='/signup' render={() => <Signup />} />
+          <Route exact path='/forgotpassword' render={() => <ForgotPassword />} />
+          <Route exact path='/' render={() => <LandingPage />} />
           <Redirect to='/' />
         </Switch>
-      )
-    }
+      </SnackbarProvider>
+    )
   }
 }
 

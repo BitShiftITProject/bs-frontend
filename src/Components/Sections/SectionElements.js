@@ -11,7 +11,7 @@ const subtitle = 'Subtitle'
 // const quote = '"Lorem ipsum dolor sit amet, consectetur adipisicing elit." -Lorem Ipsum'
 
 const ExampleSection = styled(Grid)({
-  overflow: 'hidden',
+  overflowY: 'hidden',
   height: 40,
   border: '0.5px solid rgba(0,0,0,0.05)',
   backgroundColor: '#F1F1F1',
@@ -49,7 +49,7 @@ const ExampleSection = styled(Grid)({
 //     attribute is null
 
 export const Paragraph = ({ name, editing, data, index }) => {
-  const { editableSections, sections, pageId, modifySection } = useContext(PortfolioContext)
+  const { sections, pageId, modifySection } = useContext(PortfolioContext)
 
   const rendered = editing ? (
     data === null ? (
@@ -62,7 +62,6 @@ export const Paragraph = ({ name, editing, data, index }) => {
       <TextField
         value={sections[pageId][index]['data'][name]}
         onChange={(e) => modifySection(index, name, e.target.value)}
-        disabled={!editableSections.has(index)}
         fullWidth
         multiline
         id={name}
@@ -70,14 +69,16 @@ export const Paragraph = ({ name, editing, data, index }) => {
       />
     )
   ) : (
-    <Typography style={{ whiteSpace: "pre-line" }} variant="body1">{data}</Typography>
+    <Typography style={{ whiteSpace: 'pre-line' }} variant='body1'>
+      {data}
+    </Typography>
   )
 
   return rendered
 }
 
 export const Title = ({ name, editing, data, index }) => {
-  const { editableSections, sections, pageId, modifySection } = useContext(PortfolioContext)
+  const { sections, pageId, modifySection } = useContext(PortfolioContext)
 
   const rendered = editing ? (
     data === null ? (
@@ -88,7 +89,6 @@ export const Title = ({ name, editing, data, index }) => {
       <TextField
         value={sections[pageId][index]['data'][name]}
         onChange={(e) => modifySection(index, name, e.target.value)}
-        disabled={!editableSections.has(index)}
         fullWidth
         multiline
         id={name}
@@ -105,7 +105,7 @@ export const Title = ({ name, editing, data, index }) => {
 }
 
 export const Subtitle = ({ name, editing, data, index }) => {
-  const { editableSections, sections, pageId, modifySection } = useContext(PortfolioContext)
+  const { sections, pageId, modifySection } = useContext(PortfolioContext)
 
   const rendered = editing ? (
     data === null ? (
@@ -116,7 +116,6 @@ export const Subtitle = ({ name, editing, data, index }) => {
       <TextField
         value={sections[pageId][index]['data'][name]}
         onChange={(e) => modifySection(index, name, e.target.value)}
-        disabled={!editableSections.has(index)}
         fullWidth
         multiline
         id={name}

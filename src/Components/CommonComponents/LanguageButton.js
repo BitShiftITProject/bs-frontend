@@ -11,7 +11,7 @@ import { makeStyles } from '@material-ui/core'
 const useStyles = makeStyles((theme) => ({
   speedDial: {
     zIndex: theme.zIndex.speedDial,
-    overflow: 'visible',
+    overflowY: 'visible',
     height: 40
   },
   fab: {

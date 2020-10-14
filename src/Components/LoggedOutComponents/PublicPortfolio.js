@@ -19,23 +19,23 @@ class PublicPortfolio extends Component {
   async componentDidMount() {
     const params = this.getParams()
 
-    this.setState({ pageIndex: params.page })
+    if (params.page) this.setState({ pageIndex: params.page })
 
     // Get the actual array of the user's portfolios
     const portfolio = await getPortfolio(params.portfolio)
 
     if (portfolio) {
-        this.setState({ portfolioDetails: portfolio })
+      this.setState({ portfolioDetails: portfolio })
 
         // GET methods already return the JSON-parsed response
         // so getPortfolioPages should either return null or an array of pages
         const pages = await getPortfolioPages(params.portfolio)
 
-        if (pages && pages.length > this.state.pageIndex) {
-          this.setState({ portfolioPages: pages })
-        }else{
-            window.location.href = '/publicfailed'
-        }
+      if (pages && pages.length >= this.state.pageIndex) {
+        this.setState({ portfolioPages: pages })
+      } else {
+        window.location.href = '/publicfailed'
+      }
     } else {
       window.location.href = '/publicfailed'
     }
@@ -45,10 +45,15 @@ class PublicPortfolio extends Component {
     // If the portfolioDetails does not equal null then we have found one
     if (this.state.portfolioPages) {
       // Array for storing JSX of sections to be displayed
-      let sectionsJSX = null;
+      let sectionsJSX = null
       // If the sections array is present in the pages data then create the section JSX
       if (this.state.portfolioPages[this.state.pageIndex].content.sections) {
-        sectionsJSX = <SectionsList sections={this.state.portfolioPages[this.state.pageIndex].content.sections} editing={false}/>
+        sectionsJSX = (
+          <SectionsList
+            sections={this.state.portfolioPages[this.state.pageIndex].content.sections}
+            editing={false}
+          />
+        )
       }
       // Check to see if the page has sections or is the old formatting
       const pageContent = this.state.portfolioPages[this.state.pageIndex].content.sections ? (

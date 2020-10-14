@@ -15,18 +15,18 @@ const loggedInStyles = makeStyles((theme) => ({
     padding: theme.spacing(4),
     borderRadius: 0,
     display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-    '&::-webkit-scrollbar': {
-      display: 'none'
-    }
+    overflowY: 'auto',
+    flexDirection: 'column'
+    // '&::-webkit-scrollbar': {
+    //   display: 'none'
+    // }
   },
   fixedHeight: {
     height: '73vh',
-    overflow: 'scroll',
-    '&::-webkit-scrollbar': {
-      display: 'none'
-    }
+    overflowY: 'scroll'
+    // '&::-webkit-scrollbar': {
+    //   display: 'none'
+    // }
   },
 
   fixedHeightPaper: {
@@ -38,17 +38,20 @@ const loggedInStyles = makeStyles((theme) => ({
     },
     borderRadius: 0,
     display: 'flex',
-    overflow: 'scroll',
+    overflowY: 'scroll',
+    overflowX: 'hidden',
     flexDirection: 'column',
-    '&::-webkit-scrollbar': {
-      display: 'none'
-    },
+    // '&::-webkit-scrollbar': {
+    //   display: 'none'
+    // },
 
     height: '73vh'
   },
 
   leftPanel: {
-    padding: theme.spacing(4),
+    padding: theme.spacing(2),
+    paddingRight: theme.spacing(3),
+    paddingLeft: theme.spacing(3),
     borderRadius: 0,
 
     display: 'flex',
@@ -56,9 +59,9 @@ const loggedInStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
 
-    '&::-webkit-scrollbar': {
-      display: 'none'
-    },
+    // '&::-webkit-scrollbar': {
+    //   display: 'none'
+    // },
 
     height: '73vh',
     [theme.breakpoints.down('sm')]: {
@@ -78,10 +81,10 @@ const loggedInStyles = makeStyles((theme) => ({
       height: '100%'
     },
 
-    overflow: 'scroll',
-    '&::-webkit-scrollbar': {
-      display: 'none'
-    }
+    overflowY: 'scroll'
+    // '&::-webkit-scrollbar': {
+    //   display: 'none'
+    // }
   },
 
   floatingTopContainer: {
@@ -111,9 +114,22 @@ const loggedInStyles = makeStyles((theme) => ({
     }
   },
 
+  fabProgressContainer: {
+    position: 'relative'
+  },
+
+  fabProgress: {
+    // color: theme.palette.info.main,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12
+  },
+
   pageList: {
-    overflow: 'scroll',
-    height: 325,
+    overflowY: 'scroll',
+    height: 200,
     [theme.breakpoints.between('xs, sm')]: {
       height: 125
     }
@@ -122,7 +138,7 @@ const loggedInStyles = makeStyles((theme) => ({
   selectedIndicator: {
     height: theme.spacing(1),
     width: theme.spacing(1),
-    marginRight: theme.spacing(3),
+    // marginRight: theme.spacing(3),
     borderRadius: '50%',
     backgroundColor: 'rgba(0,0,0,0.3)'
   },
