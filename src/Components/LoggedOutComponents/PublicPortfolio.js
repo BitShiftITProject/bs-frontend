@@ -27,10 +27,9 @@ class PublicPortfolio extends Component {
     if (portfolio) {
       this.setState({ portfolioDetails: portfolio })
 
-      // GET methods already return the JSON-parsed response
-      // so getPortfolioPages should either return null or an array of pages
-      const pages = await getPortfolioPages(params.portfolio)
-      // console.log(pages.length, params.page)
+        // GET methods already return the JSON-parsed response
+        // so getPortfolioPages should either return null or an array of pages
+        const pages = await getPortfolioPages(params.portfolio)
 
       if (pages && pages.length >= this.state.pageIndex) {
         this.setState({ portfolioPages: pages })
@@ -65,7 +64,11 @@ class PublicPortfolio extends Component {
 
       return (
         // Display sidebar with pages data and section content
-        <PublicSidebar pages={this.state.portfolioPages} content={pageContent} />
+        <PublicSidebar
+          pages={this.state.portfolioPages}
+          content={pageContent}
+          parentPortfolio={this}
+        />
       )
     }
     // If portfolioDetails is null we are still fetching the portfolio

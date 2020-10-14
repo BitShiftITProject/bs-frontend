@@ -52,7 +52,7 @@ export default function PublicSidebar(props) {
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
-  const { content, pages } = props
+  const { content, pages, parentPortfolio } = props
 
   const pageTitles = pages.map((page) => page.title)
 
@@ -73,10 +73,10 @@ export default function PublicSidebar(props) {
               button
               key={text}
               onClick={() => {
-                history.push(
-                  history.location.pathname.split('/').slice(0, -1).join('/') + '/' + index
-                )
-                history.go()
+                parentPortfolio.setState({ pageIndex: index })
+                history.replace(
+                    history.location.pathname.split('/').slice(0, -1).join('/') + '/' + index
+                  )
               }}
             >
               <ListItemText primary={text} />
