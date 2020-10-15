@@ -72,16 +72,6 @@ const loggedInStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(3)
   },
 
-  dragHandleIconContainer: {
-    cursor: 'grab',
-    '&:active': { cursor: 'grabbing' }
-  },
-
-  dragHandleIcon: {
-    transform: 'rotate(90deg)',
-    color: ' rgba(0, 0, 0, 0.3)'
-  },
-
   listMenu: {
     padding: 0,
 
@@ -148,6 +138,20 @@ const loggedInStyles = makeStyles((theme) => ({
     }
   },
 
+  dragHandleIconContainer: {
+    // visibility: 'hidden',
+    '&:hover': {
+      visibility: 'visible',
+      cursor: 'grab'
+    },
+    '&:active': { cursor: 'grabbing' }
+  },
+
+  dragHandleIcon: {
+    transform: 'rotate(90deg)',
+    color: ' rgba(0, 0, 0, 0.3)'
+  },
+
   selectedIndicator: {
     height: theme.spacing(1),
     width: theme.spacing(1),
@@ -161,6 +165,7 @@ const loggedInStyles = makeStyles((theme) => ({
     background: 'none',
 
     '&:hover': {
+      cursor: 'pointer',
       '& button': {
         visibility: 'visible'
       },

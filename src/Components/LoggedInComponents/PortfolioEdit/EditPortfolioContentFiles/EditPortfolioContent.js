@@ -241,6 +241,13 @@ export default function EditPortfolioContent(props) {
     // Updates the pages to included the newly added page in the frontend,
     // without messing with the other pages' unsaved changes
     setPages((pages) => [...pages, newPage])
+
+    // console.log(portfolio, newPage)
+
+    await patchPortfolio(portfolio.id, { pageOrder: [...portfolio.pageOrder, newPage.id] })
+    // Sets the currently shown portfolio as the updated portfolio
+    const updatedPortfolio = await getPortfolio(portfolio.id)
+    setPortfolio(updatedPortfolio)
     setOpen(false)
   }
   /* -------------------------------------------------------------------------- */
@@ -309,6 +316,12 @@ export default function EditPortfolioContent(props) {
 
     // Delete the portfolio from the portfolios DB
     await deletePage(toBeDeletedPageId)
+    await patchPortfolio(portfolio.id, {
+      pageOrder: portfolio.pageOrder.filter((pageId) => pageId !== toBeDeletedPageId)
+    })
+    // Sets the currently shown portfolio as the updated portfolio
+    const updatedPortfolio = await getPortfolio(portfolio.id)
+    setPortfolio(updatedPortfolio)
 
     setOpen(false)
   }
@@ -328,6 +341,7 @@ export default function EditPortfolioContent(props) {
         handlePortfolioEvent={handlePortfolioEvent}
         handlePageSelect={handlePageSelect}
         portfolio={portfolio}
+        setPortfolio={setPortfolio}
         pages={pages}
         setPages={setPages}
         pageId={pageId}

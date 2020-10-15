@@ -254,10 +254,8 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
                  * PORTFOLIO CARD
                  */}
                 <PortfolioCard
-                  portfolioId={portfolio.id}
-                  title={portfolio.title}
                   index={idx}
-                  description={portfolio.description}
+                  portfolio={portfolio}
                   viewPortfolio={handleView}
                   editPortfolio={handleEdit}
                   sharePortfolio={handleClick}

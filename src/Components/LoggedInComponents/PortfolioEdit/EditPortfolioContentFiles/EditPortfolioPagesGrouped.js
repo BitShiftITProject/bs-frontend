@@ -14,13 +14,14 @@ import CloseIcon from '@material-ui/icons/Close'
 
 import { loggedInStyles, CursorTypography } from '../../../../Styles/loggedInStyles'
 
-// import { patchPortfolio } from '../../../../Backend/Fetch'
+import { patchPortfolio } from '../../../../Backend/Fetch'
 
 /* Pages and adding/removing pages part of the editing portfolio*/
 export default function EditPortfolioPagesGrouped({
   handlePortfolioEvent,
   handlePageSelect,
   portfolio,
+  setPortfolio,
   pages,
   setPages,
   pageId,
@@ -32,6 +33,7 @@ export default function EditPortfolioPagesGrouped({
   // Locale
   const intl = useIntl()
 
+  // Portfolio URL
   const portfolioLink = `/public/${portfolio.id}/0`
 
   /* -------------------------------------------------------------------------- */
@@ -41,14 +43,25 @@ export default function EditPortfolioPagesGrouped({
   // Needed for react-beautiful-dnd to work, passed to the DragDropContext
   const onDragEnd = ({ source, destination }) => {
     if (pages.length > 1) {
+      // console.log(
+      //   'prev pageOrder:',
+      //   pages.map((p) => p.id)
+      // )
+
       // Update the pages state with the new order
       const newPages = arrayMove(pages, source.index, destination.index)
       setPages(newPages)
 
-      // TODO: Patch the current portfolio's pageOrder array with the newly ordered pageOrder array
+      // console.log(
+      //   'curr pageOrder:',
+      //   newPages.map((p) => p.id)
+      // )
 
-      // const patchDetails = { pageOrder: newPages.map((p) => p.id) }
-      // patchPortfolio(portfolio.id, patchDetails)
+      const patchDetails = { pageOrder: newPages.map((p) => p.id) }
+      patchPortfolio(portfolio.id, patchDetails).then(() => {
+        // Sets the currently shown portfolio as the updated portfolio
+        setPortfolio((p) => ({ ...p, ...patchDetails }))
+      })
     }
   }
 
@@ -169,8 +182,7 @@ export default function EditPortfolioPagesGrouped({
                                 <Grid
                                   item
                                   xs={5}
-                                  md={7}
-                                  lg={6}
+                                  md={6}
                                   container
                                   justify='flex-start'
                                   alignItems='center'
@@ -180,8 +192,7 @@ export default function EditPortfolioPagesGrouped({
                                 <Grid
                                   item
                                   xs={5}
-                                  md={3}
-                                  lg={4}
+                                  md={4}
                                   container
                                   direction='row'
                                   justify='flex-end'

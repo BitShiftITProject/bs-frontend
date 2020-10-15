@@ -58,7 +58,8 @@ export default function AddPortfolioPage() {
     // passed into the portfolio creation endpoint
     const postDetails = {
       title: title,
-      description: description
+      description: description,
+      pageOrder: []
     }
 
     // Creates a portfolio belonging to the currently logged-in user,
