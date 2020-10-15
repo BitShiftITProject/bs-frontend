@@ -65,7 +65,6 @@ export default function EditPortfolioSectionsGrouped({
           </Grid>
         )}
 
-
         {/* SAVE SECTIONS BUTTON */}
         <Grid
           item

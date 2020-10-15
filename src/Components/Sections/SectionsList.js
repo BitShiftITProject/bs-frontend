@@ -16,16 +16,7 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
   const intl = useIntl()
   console.log("sections",sections)
 
-  // might need to make this change constantly
-    const [items, setItems] = useState(sections ? sections:[] ) 
-    console.log("items",items)
-
-    useEffect(()=>{
-      setItems(sections ? sections:[] ) 
-    }, [sections] 
-    )
-
-  const grid = items.length
+  const grid = sections.length
 
   // reorders the result
   const reorder = (list, startIndex, endIndex) => {
@@ -38,7 +29,7 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
 
   // styles for when theyre being dragged 
   const getItemStyle = (isDragging, draggableStyle) => ({
-    // some basic styles to make the items look a bit nicer
+    // some basic styles to make the sections look a bit nicer
     userSelect: "none",
     padding: grid * 2,
     margin: `0 0 ${grid}px 0`,
@@ -57,14 +48,13 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
       return;
     }
 
-    const newItems = reorder(
-      items,
+    const newSections = reorder(
+      sections,
       result.source.index,
       result.destination.index
     );
-    setItems(newItems);
     if (handleSetPageSection){
-    handleSetPageSection(newItems)
+    handleSetPageSection(newSections)
   }
   }
 
@@ -85,74 +75,42 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
 
       handleSectionDelete ? (
         <div>
-
-
-
-  <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppable">
-            {(provided, snapshot) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {items.map((item, idx) => (
-                  <Draggable key={idx} draggableId={`item-${idx}`} index={idx}>
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={getItemStyle(
-                          snapshot.isDragging,
-                          provided.draggableProps.style
-                        )}
-                      >
-                              <SectionContainer
-                                key={idx}
-                                sectionId={item.id}
-                                index={idx}
-                                handleSectionDelete={handleSectionDelete}
-                              >
-                                {GetSectionJSX(item, editing, idx)}
-                              </SectionContainer>
-
-
-                          {/* 
-                              {sections.map((section, idx) => {
-                                return (
-                                  <SectionContainer
-                                    key={idx}
-                                    sectionId={section.id}
-                                    index={idx}
-                                    handleSectionDelete={handleSectionDelete}
-                                  >
-                                    {GetSectionJSX(section, editing, idx)}
-                                  </SectionContainer>
-                                )
-                              })}
-                          */}
-
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-
-
-
-
-
-          
-
-
-
-
-
-
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="droppable">
+              {(provided, snapshot) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {sections.map((item, idx) => (
+                    <Draggable key={idx} draggableId={`item-${idx}`} index={idx}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={getItemStyle(
+                            snapshot.isDragging,
+                            provided.draggableProps.style
+                          )}
+                        >
+                                <SectionContainer
+                                  key={idx}
+                                  sectionId={item.id}
+                                  index={idx}
+                                  handleSectionDelete={handleSectionDelete}
+                                >
+                                  {GetSectionJSX(item, editing, idx)}
+                                </SectionContainer>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
 
         </div>
       ) : (
