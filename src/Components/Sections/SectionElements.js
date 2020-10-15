@@ -1,13 +1,15 @@
 import React, { useContext } from 'react'
 import { PortfolioContext } from '../Contexts/PortfolioContext'
 
-import { Grid, TextField, Typography, styled } from '@material-ui/core'
+import { Grid, TextField, Typography, styled, Tooltip } from '@material-ui/core'
+import YouTube from 'react-youtube'
 
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius amet error pariatur atque modi necessitatibus numquam. Adipisci quidem ad animi id libero amet itaque numquam, nostrum recusandae dolor quo pariatur possimus quos odit neque perferendis optio repudiandae repellat molestias dolorum sint eligendi atque placeat. Vero eius placeat incidunt sit adipisci?'
 
 const title = 'Title'
 const subtitle = 'Subtitle'
+const youtubeVideo = 'Youtube Video'
 // const quote = '"Lorem ipsum dolor sit amet, consectetur adipisicing elit." -Lorem Ipsum'
 
 const ExampleSection = styled(Grid)({
@@ -130,3 +132,31 @@ export const Subtitle = ({ name, editing, data, index }) => {
 
   return rendered
 }
+
+export const YoutubeVideo = ({ name, editing, data, index }) => {
+    const { sections, pageId, modifySection } = useContext(PortfolioContext)
+  
+    const rendered = editing ? (
+      data === null ? (
+        <ExampleSection container>
+          <Typography variant='h6'>{youtubeVideo}</Typography>
+        </ExampleSection>
+      ) : (
+        <Tooltip placement='top' title="Video ID (See FAQ)">
+            <TextField
+            value={sections[pageId][index]['data'][name]}
+            onChange={(e) => modifySection(index, name, e.target.value)}
+            fullWidth
+            multiline
+            id={name}
+            variant='outlined'
+            />
+        </Tooltip>
+      )
+    ) : (
+        <YouTube videoId={data}/>
+    )
+  
+    return rendered
+  }
+  
