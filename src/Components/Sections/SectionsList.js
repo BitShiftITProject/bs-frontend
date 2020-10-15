@@ -12,7 +12,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 
 
-export default function SectionsList({ sections, editing, handleSectionAdd, handleSectionDelete }) {
+export default function SectionsList({ sections, editing, handleSectionAdd, handleSectionDelete,handleSetPageSection }) {
   const intl = useIntl()
   console.log("sections",sections)
 
@@ -63,6 +63,9 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
       result.destination.index
     );
     setItems(newItems);
+    if (handleSetPageSection){
+    handleSetPageSection(newItems)
+  }
   }
 
 

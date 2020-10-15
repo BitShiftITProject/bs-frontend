@@ -96,6 +96,24 @@ export default function EditPortfolioContent(props) {
     })
   }
 
+
+// sets the SPECFIC PAGES sections
+  const handleSetPageSection = (newUnsavedSection) => {
+    setSections((currentSections) => {
+      // If this is the first section of the page, just set it as [newSection],
+      // otherwise just add newSection to the end of the current list of sections
+      const newSections = {
+        ...currentSections,
+      }
+      newSections[pageId] = newUnsavedSection
+      return newSections
+    })
+  }
+
+
+
+
+
   // Deletes the section at a given index among the sections of the current page
   const handleSectionDelete = (sectionIndex) => {
     setSections((currentSections) => {
@@ -342,6 +360,7 @@ export default function EditPortfolioContent(props) {
         sections={sections}
         handleSaveSections={handleSaveSections}
         handleSectionDelete={handleSectionDelete}
+        handleSetPageSection={handleSetPageSection}
       />
       {dialog}
     </Grid>
