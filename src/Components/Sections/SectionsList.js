@@ -14,24 +14,15 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 export default function SectionsList({ sections, editing, handleSectionAdd, handleSectionDelete }) {
   const intl = useIntl()
+  console.log("sections",sections)
 
   // might need to make this change constantly
-    const [items, setItems] = useState(sections ? sections.map((section,index) => {
-      return {
-        ...section, 
-        order:`item-${index}`,
-      }
-    }):[] ) 
+    const [items, setItems] = useState(sections ? sections:[] ) 
+    console.log("items",items)
 
     useEffect(()=>{
-      setItems(sections ? sections.map((section,index) => {
-        return {
-          ...section, 
-          order:`item-${index}`,
-        }
-      }):[])
+      setItems(sections ? sections:[] ) 
     }, [sections] 
-    
     )
 
   const grid = items.length
@@ -102,7 +93,7 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
                 ref={provided.innerRef}
               >
                 {items.map((item, idx) => (
-                  <Draggable key={item.order} draggableId={item.order} index={idx}>
+                  <Draggable key={idx} draggableId={`item-${idx}`} index={idx}>
                     {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
