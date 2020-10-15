@@ -49,15 +49,12 @@ const loggedInStyles = makeStyles((theme) => ({
   },
 
   leftPanel: {
-    padding: theme.spacing(2),
-    paddingRight: theme.spacing(3),
-    paddingLeft: theme.spacing(3),
     borderRadius: 0,
 
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
 
     // '&::-webkit-scrollbar': {
     //   display: 'none'
@@ -67,6 +64,22 @@ const loggedInStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       height: '100%'
     }
+  },
+
+  leftPanelContainerItem: {
+    padding: theme.spacing(0),
+    paddingRight: theme.spacing(3),
+    paddingLeft: theme.spacing(3)
+  },
+
+  dragHandleIconContainer: {
+    cursor: 'grab',
+    '&:active': { cursor: 'grabbing' }
+  },
+
+  dragHandleIcon: {
+    transform: 'rotate(90deg)',
+    color: ' rgba(0, 0, 0, 0.3)'
   },
 
   listMenu: {

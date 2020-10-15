@@ -14,7 +14,6 @@ import {
 } from '@material-ui/core'
 import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined'
 import { useHistory } from 'react-router-dom'
-// import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { useSnackbar } from 'notistack'
 
@@ -178,9 +177,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
                 variant='outlined'
                 label={intl.formatMessage({ id: 'url' })}
                 defaultValue={
-                  user
-                    ? `http://bs-frontend.herokuapp.com/public/${clickedPortfolio.id}/0`
-                    : ''
+                  user ? `http://bs-frontend.herokuapp.com/public/${clickedPortfolio.id}/0` : ''
                 }
                 readOnly
                 className={classes.urlField}

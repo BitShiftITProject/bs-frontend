@@ -329,6 +329,7 @@ export default function EditPortfolioContent(props) {
         handlePageSelect={handlePageSelect}
         portfolio={portfolio}
         pages={pages}
+        setPages={setPages}
         pageId={pageId}
         handlePageEvent={handlePageEvent}
       />
