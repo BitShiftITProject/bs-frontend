@@ -188,7 +188,7 @@ const PortfolioCard = (props) => {
               title={
                 hasPages ? intl.formatMessage({ id: 'share' }) : 'Please add content before sharing'
               }
-              placement='top'
+              placement='bottom'
             >
               <span>
                 <IconButton

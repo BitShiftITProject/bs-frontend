@@ -46,7 +46,23 @@ export default function EditPortfolioSectionsGrouped({
           </Grid>
         )}
 
-        {pageId && sections[pageId] && (
+        {pageId && sections[pageId].length === 0 && (
+          <Grid
+            item
+            xs={10}
+            style={{ minWidth: '100%', height: '100%' }}
+            container
+            direction='column'
+            justify='center'
+            alignItems='center'
+          >
+            <CursorTypography variant='subtitle2'>
+              To add a section, click on Add Sections and choose a template
+            </CursorTypography>
+          </Grid>
+        )}
+
+        {pageId && sections[pageId].length > 0 && (
           <Grid
             item
             xs={10}
