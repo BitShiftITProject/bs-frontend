@@ -108,8 +108,7 @@ export default function EditPortfolioContent(props) {
 
     // Shows a notification that the section has been added
     enqueueSnackbar(`Added ${sectionName} to ${pageTitle}`, {
-      variant: 'info',
-      hideIconVariant: true
+      variant: 'info'
     })
   }
 
