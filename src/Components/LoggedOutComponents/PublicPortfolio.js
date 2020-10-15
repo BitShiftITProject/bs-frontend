@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getPortfolio, getPortfolioPages } from '../../Backend/Fetch'
+import { getPage, getPortfolio } from '../../Backend/Fetch'
 import Loading from '../CommonComponents/Loading'
 import PublicSidebar from './PublicSidebar'
 import SectionsList from '../Sections/SectionsList'
@@ -27,9 +27,13 @@ class PublicPortfolio extends Component {
     if (portfolio) {
       this.setState({ portfolioDetails: portfolio })
 
-        // GET methods already return the JSON-parsed response
-        // so getPortfolioPages should either return null or an array of pages
-        const pages = await getPortfolioPages(params.portfolio)
+      const pageOrder = portfolio.pageOrder
+      // console.log(pageOrder)
+      let pages = []
+
+      for (var i = 0; i < pageOrder.length; i++) {
+        await getPage(pageOrder[i]).then((page) => pages.push(page))
+      }
 
       if (pages && pages.length >= this.state.pageIndex) {
         this.setState({ portfolioPages: pages })
