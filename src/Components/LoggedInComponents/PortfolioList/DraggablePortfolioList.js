@@ -140,7 +140,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
       variant: 'info'
     })
 
-    // setOpen(false)
+    setOpen(false)
   }
 
   // Object with the dialog type as the key, and the corresponding JSX contents

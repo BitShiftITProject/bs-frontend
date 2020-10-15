@@ -1,7 +1,7 @@
 import React from 'react'
 import { useIntl } from 'react-intl'
 
-import { Grid, Paper, Fab } from '@material-ui/core'
+import { Grid, Paper, Fab, CircularProgress } from '@material-ui/core'
 
 import { loggedInStyles, CursorTypography } from '../../../../Styles/loggedInStyles'
 import SectionsList from '../../../Sections/SectionsList'
@@ -12,6 +12,7 @@ export default function EditPortfolioSectionsGrouped({
   pageId,
   handleSectionAdd,
   sections,
+  loading,
   handleSaveSections,
   handleSectionDelete
 }) {
@@ -91,9 +92,9 @@ export default function EditPortfolioSectionsGrouped({
           alignItems='center'
           className={classes.floatingBottomContainer}
         >
-          <Grid item>
+          <Grid item className={classes.fabProgressContainer}>
             <Fab
-              // disabled
+              disabled={loading}
               style={!pageId ? { visibility: 'hidden' } : {}}
               color='secondary'
               variant='extended'
@@ -103,6 +104,7 @@ export default function EditPortfolioSectionsGrouped({
                 {intl.formatMessage({ id: 'saveSections' })}
               </CursorTypography>
             </Fab>
+            {loading && <CircularProgress size={24} className={classes.fabProgress} />}
           </Grid>
 
           {/* ADD SECTION BUTTON */}

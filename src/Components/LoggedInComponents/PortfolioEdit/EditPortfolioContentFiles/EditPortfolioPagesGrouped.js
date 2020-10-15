@@ -95,6 +95,17 @@ export default function EditPortfolioPagesGrouped({
             {/* PORTFOLIO BUTTONS */}
 
             <Grid item xs={5} container direction='row' justify='space-evenly' alignItems='center'>
+              {/* EDIT PORTFOLIO BUTTON */}
+              <Fab
+                color='secondary'
+                size='small'
+                onClick={() => handlePortfolioEvent('editPortfolio', portfolio.title)}
+                style={{
+                  transform: 'scale(0.8)'
+                }}
+              >
+                <CreateIcon />
+              </Fab>
               {/* VIEW PORTFOLIO BUTTON */}
               <Fab
                 color='secondary'
@@ -107,18 +118,6 @@ export default function EditPortfolioPagesGrouped({
                 }}
               >
                 <VisibilityIcon />
-              </Fab>
-
-              {/* EDIT PORTFOLIO BUTTON */}
-              <Fab
-                color='secondary'
-                size='small'
-                onClick={() => handlePortfolioEvent('editPortfolio', portfolio.title)}
-                style={{
-                  transform: 'scale(0.8)'
-                }}
-              >
-                <CreateIcon />
               </Fab>
             </Grid>
           </Grid>
