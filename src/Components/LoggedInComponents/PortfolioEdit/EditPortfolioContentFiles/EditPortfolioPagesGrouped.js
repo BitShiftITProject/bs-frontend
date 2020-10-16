@@ -42,7 +42,7 @@ export default function EditPortfolioPagesGrouped({
 
   // Needed for react-beautiful-dnd to work, passed to the DragDropContext
   const onDragEnd = ({ source, destination }) => {
-    if (pages.length > 1) {
+    if (pages.length > 1 && source && destination) {
       // console.log(
       //   'prev pageOrder:',
       //   pages.map((p) => p.id)

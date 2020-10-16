@@ -20,7 +20,7 @@ export default function App() {
         <LocaleProvider>
           <PortfolioProvider>
             <Switch>
-              <Route exact path='/dropzone' render={() => <DropzoneButton img />} />
+              <Route exact path='/dropzone' render={() => <DropzoneButton />} />
               <Route exact path='/publicfailed' render={() => <PublicPortfolioFailed />} />
               <Route
                 exact
