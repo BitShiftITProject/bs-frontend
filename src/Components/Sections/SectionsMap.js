@@ -1,12 +1,12 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import { Paragraph, Title, Subtitle, YoutubeVideo} from './SectionElements'
+import { Paragraph, Title, Subtitle, YoutubeVideo, Image} from './SectionElements'
 
 // Stores the section IDs by the category of sections
 export const sectionIdsByCategory = {
   headings: ['headingTitle', 'headingSubtitle'],
   text: ['singleText', 'doubleText'],
-  multimedia: ['youtubeVideo']
+  multimedia: ['youtubeVideo', 'singleImage']
 }
 
 // A section ID corresponds to a given arrangement of section elements.
@@ -21,7 +21,8 @@ export const sectionElementsBySectionId = {
     ['paragraph1', Paragraph, 6],
     ['paragraph2', Paragraph, 6]
   ],
-  youtubeVideo: [['video', YoutubeVideo]]
+  youtubeVideo: [['video', YoutubeVideo]],
+  singleImage: [['image', Image]]
 }
 
 // Given the section ID, returns a new section object with the correct

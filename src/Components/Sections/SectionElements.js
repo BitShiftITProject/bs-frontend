@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { PortfolioContext } from '../Contexts/PortfolioContext'
 
-import { Grid, TextField, Typography, styled, Tooltip } from '@material-ui/core'
+import { Grid, TextField, Typography, styled, Tooltip, Button} from '@material-ui/core'
 import YouTube from 'react-youtube'
 
 const lorem =
@@ -10,6 +10,7 @@ const lorem =
 const title = 'Title'
 const subtitle = 'Subtitle'
 const youtubeVideo = 'Youtube Video'
+const image = 'Image'
 // const quote = '"Lorem ipsum dolor sit amet, consectetur adipisicing elit." -Lorem Ipsum'
 
 const ExampleSection = styled(Grid)({
@@ -159,4 +160,33 @@ export const YoutubeVideo = ({ name, editing, data, index }) => {
   
     return rendered
   }
+
   
+export const Image = ({ name, editing, data, index }) => {
+    const { sections, pageId, modifySection } = useContext(PortfolioContext)
+    
+    const rendered = editing ? (
+      data === null ? (
+        <ExampleSection container>
+          <Typography variant='h6'>{image}</Typography>
+        </ExampleSection>
+      ) : (
+        // Open up file dialog with function related to changing this value
+        // Make typography on the right show file name
+        // Show button and typography in line
+        <Grid container direction='row' spacing={1} justify="flex-start" alignItems="center">
+            <Grid item>
+                <Button variant="contained">Upload Image</Button>
+            </Grid>
+            <Grid item>
+                <Typography variant="h9">{sections[pageId][index]['data'][name] === "" ? "No Image Uploaded" : sections[pageId][index]['data'][name]}</Typography>
+            </Grid>
+        </Grid>
+      )
+    ) : (
+        // Get image before showing
+        <img src={data} width='35%' height='35%'/>
+    )
+
+    return rendered
+  }
