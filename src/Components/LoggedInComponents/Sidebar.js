@@ -10,7 +10,6 @@ import {
   List,
   Divider,
   IconButton,
-  Container,
   makeStyles,
   Tooltip,
   Grid
@@ -391,11 +390,15 @@ export default function Sidebar(props) {
   const pageContent = (
     <main className={classes.content}>
       <div className={classes.appBarSpacer} />
-      <Container maxWidth='lg' className={classes.container}>
-        <HeaderBreadcrumbs />
-        <div className={classes.breadcrumbSpacer} />
-        {content}
-      </Container>
+      <Grid container className={classes.container}>
+        <Grid item xs={1} />
+        <Grid item xs={10}>
+          <HeaderBreadcrumbs />
+          <div className={classes.breadcrumbSpacer} />
+          {content}
+        </Grid>
+        <Grid item xs={1} />
+      </Grid>
     </main>
   )
 
