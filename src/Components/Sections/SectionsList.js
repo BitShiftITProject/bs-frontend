@@ -14,7 +14,6 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 export default function SectionsList({ sections, editing, handleSectionAdd, handleSectionDelete,handleSetPageSection }) {
   const intl = useIntl()
-  console.log("sections",sections)
 
   const grid = sections.length
 
@@ -41,7 +40,7 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
     ...draggableStyle
   });
 
-
+  // when done with dragging 
   const onDragEnd = (result) => {
     // dropped outside the list
     if (!result.destination) {
@@ -82,6 +81,7 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
+                  {/* map the sections as dragable items */}
                   {sections.map((item, idx) => (
                     <Draggable key={idx} draggableId={`item-${idx}`} index={idx}>
                       {(provided, snapshot) => (
