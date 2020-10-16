@@ -15,8 +15,9 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 export default function SectionsList({ sections, editing, handleSectionAdd, handleSectionDelete,handleSetPageSection }) {
   const intl = useIntl()
 
-  const grid = sections.length
-
+  // the grid for the drop and drag related sections
+  const grid = sections ? sections.length : 0
+ 
   // reorders the result
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
