@@ -1,4 +1,4 @@
-import { BACKEND, AUTHENTICATE, GET_USER, USERS, PORTFOLIOS, PAGES, SIGNUP } from './Endpoints'
+import { BACKEND, AUTHENTICATE, GET_USER, USERS, PORTFOLIOS, PAGES, SIGNUP, MEDIA_ITEM} from './Endpoints'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Constants                                 */
@@ -295,6 +295,43 @@ export const deleteAllPortfolioPages = async (portfolioId) => {
   const response = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId + PAGES, {
     method: 'DELETE',
     headers
+  })
+
+  return response
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                Media Methods                               */
+/* -------------------------------------------------------------------------- */
+
+/* ----------------------------------- GET ---------------------------------- */
+
+export const getMediaItem = async (userID) => {
+  const response = await fetch(BACKEND + USERS + '/' + userID + MEDIA_ITEM, {
+    method: 'GET',
+    headers
+  })
+    .then((response) => (response.ok ? response : null))
+    .catch(() => {
+      return null
+    })
+
+  if (!response) return null
+
+  const mediaItems = await response.json()
+
+  return mediaItems
+}
+
+
+/* ----------------------------------- POST ---------------------------------- */
+// Adds a page to a portfolio whose ID is portfolioId. The page's details
+// are outlined in the postDetails argument.
+export const postMediaContent = async (postDetails, userID) => {
+  const response = await fetch(BACKEND + USERS + '/' + userID + MEDIA_ITEM, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(postDetails)
   })
 
   return response
