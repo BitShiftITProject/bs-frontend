@@ -335,3 +335,38 @@ export const postMediaContent = async (postDetails, userID) => {
 
   return response
 }
+
+
+/* ---------------------------------- PATCH --------------------------------- */
+
+// Edits a page whose ID is pageId, with changes outlined in patchDetails
+export const patchPage = async (pageId, patchDetails) => {
+  const response = await fetch(BACKEND + PAGES + '/' + pageId, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify(patchDetails)
+  })
+
+  return response
+}
+
+/* --------------------------------- DELETE --------------------------------- */
+
+// export const deleteMediaItem = async (mediaId) => {
+//   const response = await fetch(BACKEND + PAGES + '/' + mediaId, {
+//     method: 'DELETE',
+//     headers
+//   })
+
+//   return response
+// }
+
+// // Deletes all pages belonging to a portfolio whose ID is portfolioId
+// export const deleteAllMediaItems = async (userID) => {
+//   const response = await fetch(BACKEND + USERS + '/' + userID + MEDIA_ITEM, {
+//     method: 'DELETE',
+//     headers
+//   })
+
+//   return response
+// }
