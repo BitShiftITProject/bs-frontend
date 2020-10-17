@@ -305,8 +305,8 @@ export const deleteAllPortfolioPages = async (portfolioId) => {
 /* -------------------------------------------------------------------------- */
 
 /* ----------------------------------- GET ---------------------------------- */
-
-export const getMediaItem = async (userID) => {
+// gets all the Media Items for a given user
+export const getMediaItems = async (userID) => {
   const response = await fetch(BACKEND + USERS + '/' + userID + MEDIA_ITEM, {
     method: 'GET',
     headers
@@ -325,8 +325,7 @@ export const getMediaItem = async (userID) => {
 
 
 /* ----------------------------------- POST ---------------------------------- */
-// Adds a page to a portfolio whose ID is portfolioId. The page's details
-// are outlined in the postDetails argument.
+// Adds a media item to a user
 export const postMediaContent = async (postDetails, userID) => {
   const response = await fetch(BACKEND + USERS + '/' + userID + MEDIA_ITEM, {
     method: 'POST',
