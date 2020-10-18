@@ -98,7 +98,7 @@ export default {
     gender: '性別',
     male: '男',
     female: '女',
-    other: '自定义',
+    other: 'Other',
     occupation: '职业',
     profileDescription: '个人简介',
     descriptionPlaceholder: '输入一些东西…',

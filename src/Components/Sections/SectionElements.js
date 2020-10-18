@@ -96,7 +96,7 @@ export const Title = ({ name, editing, data, index }) => {
       />
     )
   ) : (
-    <Typography component='h2' variant='h5'>
+    <Typography component='h2' variant='h3'>
       {data}
     </Typography>
   )
@@ -123,7 +123,7 @@ export const Subtitle = ({ name, editing, data, index }) => {
       />
     )
   ) : (
-    <Typography component='h4' variant='h6'>
+    <Typography component='h4' variant='h5'>
       {data}
     </Typography>
   )
