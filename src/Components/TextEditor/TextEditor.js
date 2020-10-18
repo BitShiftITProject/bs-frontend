@@ -20,7 +20,8 @@ export default function TextEditor({ index, name, data }) {
         // width: 600,
         plugins:
           'paste searchreplace autolink directionality link codesample table charmap hr insertdatetime advlist lists wordcount textpattern noneditable help quickbars emoticons',
-        menubar: 'edit insert format table help',
+        // menubar: 'edit insert format table help',
+        menubar: false,
         toolbar:
           'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | fontsizeselect formatselect | link codesample charmap emoticons ',
         toolbar_sticky: true,

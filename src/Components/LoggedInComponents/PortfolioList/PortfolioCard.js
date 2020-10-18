@@ -153,7 +153,10 @@ const PortfolioCard = (props) => {
            * VIEW PORTFOLIO BUTTON
            */}
           <Grid item>
-            <Tooltip title={hasPages ? '' : 'Please add content before viewing'} placement='bottom'>
+            <Tooltip
+              title={hasPages ? '' : intl.formatMessage({ id: 'viewPortfolioError' })}
+              placement='bottom'
+            >
               <span>
                 <Button size='small' onClick={handleView} disabled={!hasPages}>
                   {intl.formatMessage({ id: 'view' })}
@@ -186,7 +189,9 @@ const PortfolioCard = (props) => {
           <Grid item>
             <Tooltip
               title={
-                hasPages ? intl.formatMessage({ id: 'share' }) : 'Please add content before sharing'
+                hasPages
+                  ? intl.formatMessage({ id: 'share' })
+                  : intl.formatMessage({ id: 'sharePortfolioError' })
               }
               placement='bottom'
             >
@@ -205,7 +210,7 @@ const PortfolioCard = (props) => {
            * DELETE PORTFOLIO BUTTON
            */}
           <Grid item>
-            <Tooltip title={intl.formatMessage({ id: 'delete' })} placement='top'>
+            <Tooltip title={intl.formatMessage({ id: 'delete' })} placement='bottom'>
               <IconButton
                 className={style.delete}
                 onClick={(e) => deletePortfolio('delete', portfolio.id, portfolio.title, index)}

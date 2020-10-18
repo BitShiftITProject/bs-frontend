@@ -15,6 +15,7 @@ export default {
     forgotPasswordPrompt: '忘记密码？',
     signUpPrompt: '新建帐户',
     loginError: '邮箱或密码有误。',
+    loginLoading: 'Authenticating',
 
     // Sign Up
     signUp: '注册',
@@ -22,6 +23,7 @@ export default {
     passwordError: '密码必须匹配',
     passwordPattern: '8至12个字符',
     loginPromptSignUp: '登录现有帐号',
+    signupLoading: 'Please wait while we save your data',
 
     // Forgot Password
     forgotPasswordDescription: '请输入邮箱或用户名来获取密码重置链接',
@@ -48,6 +50,8 @@ export default {
     copy: '复制',
     url: '链接',
     errorText: '出现错误。再试一次。',
+    viewPortfolioError: 'Please add content before viewing',
+    sharePortfolioError: 'Please add content before sharing',
 
     // Home
     home: '首页',
@@ -76,9 +80,11 @@ export default {
     portfolioDescription: '概要',
 
     pages: '页面',
+    selectAPage: 'Select a page to start editing your portfolio',
 
     saveSections: '保存',
     addSection: '添加',
+    clickAddSections: 'To add a section, click on Add Sections and choose a template',
     chooseATemplate: '选择模板',
     headings: '标题',
     text: '文字',
@@ -138,8 +144,19 @@ export default {
     // 主题 (theme)
     language: '语言',
 
-    loginData: '登录资料'
+    loginData: '登录资料',
     // 个人信息
     // 数据 (data)
+
+    // Snackbars
+
+    changedPortfolioTheme: '将博客主题更改为{themeName}',
+    savedAllSections: '将所有部分保存在$ {pageTitle}中',
+    addedSectionToPage: '将{sectionName}添加到{pageTitle}',
+    deletedSectionFromPage: '已从{pageTitle}中删除{sectionName}',
+    deletedPage: '已删除{pageTitle}',
+    addedPortfolio: '添加了{portfolioTitle}',
+    deletedPortfolio: '已删除{portfolioTitle}',
+    copiedURLToClipboard: '已复制URL到剪贴板'
   }
 }

@@ -361,7 +361,7 @@ function Signup(props) {
           )}
 
           {/* Loading sign up */}
-          {state.loading && <Loading message=' Hold on while we save your data' />}
+          {state.loading && <Loading message={intl.formatMessage({ id: 'signupLoading' })} />}
 
           {/* SIGN UP BUTTON */}
 

@@ -15,6 +15,7 @@ export default {
     forgotPasswordPrompt: 'Forgot Password?',
     signUpPrompt: 'Create New Account',
     loginError: "The email or password you've entered is incorrect.",
+    loginLoading: 'Authenticating',
 
     // Sign Up
     signUp: 'Sign Up',
@@ -22,6 +23,7 @@ export default {
     passwordError: 'Passwords must match',
     passwordPattern: '8 to 12 characters',
     loginPromptSignUp: 'Already have an account? Log in.',
+    signupLoading: 'Please wait while we save your data',
 
     // Forgot Password
     forgotPasswordDescription:
@@ -49,7 +51,8 @@ export default {
     copy: 'Copy',
     url: 'URL',
     errorText: 'An error occurred. Try again.',
-
+    viewPortfolioError: 'Please add content before viewing',
+    sharePortfolioError: 'Please add content before sharing',
     // Home
     home: 'Home',
 
@@ -74,9 +77,11 @@ export default {
     portfolioDescription: 'Description',
 
     pages: 'Pages',
+    selectAPage: 'Select a page to start editing your portfolio',
 
     saveSections: 'Save Sections',
     addSection: 'Add Section',
+    clickAddSections: 'To add a section, click on Add Sections and choose a template',
     chooseATemplate: 'Choose a template',
     headings: 'Headings',
     text: 'Text',
@@ -134,6 +139,17 @@ export default {
     theme: 'Dark Mode',
     language: 'Language',
 
-    loginData: 'Login data'
+    loginData: 'Login data',
+
+    // Snackbars
+
+    changedPortfolioTheme: 'Changed portfolio theme to {themeName}',
+    savedAllSections: 'Saved all sections in {pageTitle}',
+    addedSectionToPage: 'Added {sectionName} to {pageTitle}',
+    deletedSectionFromPage: 'Deleted {sectionName} from {pageTitle}',
+    deletedPage: 'Deleted {pageTitle}',
+    addedPortfolio: '{portfolioTitle} added',
+    deletedPortfolio: '{portfolioTitle} deleted',
+    copiedURLToClipboard: 'Copied URL to clipboard!'
   }
 }

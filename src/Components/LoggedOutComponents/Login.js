@@ -219,7 +219,7 @@ function Login(props) {
         </Grid>
 
         {/* Loading message */}
-        {state.loading && <Loading message='Authenticating log in' />}
+        {state.loading && <Loading message={intl.formatMessage({ id: 'loginLoading' })} />}
 
         {/* LOGIN BUTTON */}
 

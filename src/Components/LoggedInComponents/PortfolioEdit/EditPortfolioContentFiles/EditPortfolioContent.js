@@ -16,6 +16,7 @@ import {
 import { PortfolioContext } from '../../../Contexts/PortfolioContext'
 import DialogType from './DialogType'
 import { useSnackbar } from 'notistack'
+import { useIntl } from 'react-intl'
 
 export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */
@@ -23,6 +24,12 @@ export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */
 
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
@@ -107,7 +114,7 @@ export default function EditPortfolioContent(props) {
     const pageTitle = pages.filter((page) => page.id === pageId)[0].title
 
     // Shows a notification that the section has been added
-    enqueueSnackbar(`Added ${sectionName} to ${pageTitle}`, {
+    enqueueSnackbar(intl.formatMessage({ id: 'addedSectionToPage', sectionName, pageTitle }), {
       variant: 'info'
     })
   }
@@ -128,7 +135,7 @@ export default function EditPortfolioContent(props) {
       const pageTitle = pages.filter((page) => page.id === pageId)[0].title
 
       // Show a notification that all sections have been saved
-      enqueueSnackbar(`Saved all sections in ${pageTitle}`, {
+      enqueueSnackbar(intl.formatMessage({ id: 'savedAllSections', pageTitle }), {
         variant: 'success'
       })
 
@@ -154,10 +161,13 @@ export default function EditPortfolioContent(props) {
         // const pageTitle = pages.filter((page) => page.id === pageId)[0].title
 
         // Show a notification that the section has been deleted from the page
-        const key = enqueueSnackbar(`Deleted ${sectionName} from ${pageTitle}`, {
-          variant: 'error',
-          persist: true
-        })
+        const key = enqueueSnackbar(
+          intl.formatMessage({ id: 'deletedSectionFromPage', sectionName, pageTitle }),
+          {
+            variant: 'error',
+            persist: true
+          }
+        )
 
         setTimeout(() => {
           closeSnackbar(key)
@@ -362,7 +372,7 @@ export default function EditPortfolioContent(props) {
     // Delete the portfolio from the portfolios DB
     deletePage(toBeDeletedPageId).then(() => {
       // Show the notification after deleting the page
-      enqueueSnackbar(`Deleted ${toBeDeletedPageTitle}`, {
+      enqueueSnackbar(intl.formatMessage({ id: 'deletedPage', pageTitle: toBeDeletedPageTitle }), {
         variant: 'error',
         autoHideDuration: 3000
       })

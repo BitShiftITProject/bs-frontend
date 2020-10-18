@@ -101,9 +101,12 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
       // Delete the portfolio from the portfolios DB
       await deletePortfolio(portfolioId)
 
-      enqueueSnackbar(`${clickedPortfolio.title} deleted`, {
-        variant: 'error'
-      })
+      enqueueSnackbar(
+        intl.formatMessage({ id: 'deletedPortfolio', portfolioTitle: clickedPortfolio.title }),
+        {
+          variant: 'error'
+        }
+      )
     }
 
     setOpen(false)
@@ -136,7 +139,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
       user ? `http://bs-frontend.herokuapp.com/public/${clickedPortfolio.id}/0` : ''
     )
 
-    enqueueSnackbar('Copied URL to clipboard!', {
+    enqueueSnackbar(intl.formatMessage({ id: 'copiedURLToClipboard' }), {
       variant: 'info'
     })
 
@@ -169,7 +172,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
                   navigator.clipboard.writeText(
                     user ? `http://bs-frontend.herokuapp.com/${clickedPortfolio.id}` : ''
                   )
-                  enqueueSnackbar('Copied URL to clipboard!', {
+                  enqueueSnackbar(intl.formatMessage({ id: 'copiedURLToClipboard' }), {
                     variant: 'info'
                   })
                   setOpen(false)
