@@ -1,8 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { PortfolioContext } from '../Contexts/PortfolioContext'
+import DropzoneButton from '../../Components/CommonComponents/DropzoneButton'
 
 import { Grid, TextField, Typography, styled, Tooltip, Button} from '@material-ui/core'
 import YouTube from 'react-youtube'
+import {getMediaItem, getFile, getDataUrl} from '../../Backend/Fetch'
+import { useAsync } from 'react-async';
 
 const lorem =
   'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius amet error pariatur atque modi necessitatibus numquam. Adipisci quidem ad animi id libero amet itaque numquam, nostrum recusandae dolor quo pariatur possimus quos odit neque perferendis optio repudiandae repellat molestias dolorum sint eligendi atque placeat. Vero eius placeat incidunt sit adipisci?'
@@ -160,11 +163,47 @@ export const YoutubeVideo = ({ name, editing, data, index }) => {
   
     return rendered
   }
-
   
 export const Image = ({ name, editing, data, index }) => {
     const { sections, pageId, modifySection } = useContext(PortfolioContext)
+    const [imageName, setImageName] = useState("")
+    const [file, setFile] = useState(null)
     
+    useEffect(() => {
+        async function getNameOfImage () {
+            console.log(sections[pageId][index]['data'][name])
+            if(sections[pageId][index]['data'][name] === ""){
+                return "No Image Uploaded";
+            }else{
+                let itemName = await getMediaItem(sections[pageId][index]['data'][name]);
+                return itemName.public_name;
+            }
+        }
+        async function getUploadedFile () {
+            if(editing){
+                if(sections[pageId][index]['data'][name] === ""){
+                    return null
+                }else{
+                    let file = await getFile(sections[pageId][index]['data'][name]);
+                    return file;
+                }
+            }else{
+                if(data === ""){
+                    return null
+                }else{
+                    let file = await getDataUrl(data);
+                    return file;
+                }
+            }
+        }
+        if(data != null){
+            getUploadedFile().then((file) => {file!=null?setFile(file):setFile("")})
+            if(editing){
+                getNameOfImage().then((name) => {setImageName(name)});
+            }
+        }
+    }, [])
+
     const rendered = editing ? (
       data === null ? (
         <ExampleSection container>
@@ -176,16 +215,18 @@ export const Image = ({ name, editing, data, index }) => {
         // Show button and typography in line
         <Grid container direction='row' spacing={1} justify="flex-start" alignItems="center">
             <Grid item>
-                <Button variant="contained">Upload Image</Button>
+                {
+                    file === null ? <p>loading...</p> : ( file === "" ? <DropzoneButton img sectionIndex={index} sectionName={name}/> : <DropzoneButton img sectionIndex={index} sectionName={name} initialFile={file}/>)
+                }
             </Grid>
             <Grid item>
-                <Typography variant="h9">{sections[pageId][index]['data'][name] === "" ? "No Image Uploaded" : sections[pageId][index]['data'][name]}</Typography>
+                <Typography variant="h6">{imageName}</Typography>
             </Grid>
         </Grid>
       )
     ) : (
         // Get image before showing
-        <img src={data} width='35%' height='35%'/>
+        <img src={file} />
     )
 
     return rendered
