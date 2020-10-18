@@ -117,7 +117,9 @@ function Signup(props) {
       last_name: state.lastName,
       email: state.email,
       username: state.username,
-      password: state.password
+      password: state.password,
+      birthdate: state.birthdate,
+      gender: state.gender
     }
 
     changeLoading()
