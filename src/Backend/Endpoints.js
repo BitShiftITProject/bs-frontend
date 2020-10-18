@@ -11,6 +11,8 @@ const USERS = '/users'
 const PORTFOLIOS = '/portfolios'
 
 const PAGES = '/pages'
+const MEDIA_ITEM = '/media-items'
+const BUCKETS = '/buckets'
 
 module.exports = {
   BACKEND,
@@ -20,5 +22,7 @@ module.exports = {
   PORTFOLIOS,
   GET_USER,
   USERS,
-  PAGES
+  PAGES,
+  MEDIA_ITEM,
+  BUCKETS
 }
