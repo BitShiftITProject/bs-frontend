@@ -1,24 +1,28 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
+import { PortfolioContext } from '../Contexts/PortfolioContext'
 
-export default function TextEditor() {
+export default function TextEditor({ index, name, data }) {
+  const { modifySection } = useContext(PortfolioContext)
+
   function handleEditorChange(content, editor) {
-    // console.log('Content was updated:', content)
+    modifySection(index, name, content)
   }
 
   return (
     <Editor
       // public and free API key
       apiKey='kz1kzb3i7lq7l47z5uyabflz18exurcg3yg25zitynhdw6g9'
-      initialValue='<p>This is the initial content of the editor</p>'
+      initialValue={data}
+      id={name}
       init={{
-        height: 600,
-        width: 600,
+        // height: 300,
+        // width: 600,
         plugins:
           'paste searchreplace autolink directionality link codesample table charmap hr insertdatetime advlist lists wordcount textpattern noneditable help quickbars emoticons',
         menubar: 'edit insert format table help',
         toolbar:
-          'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | fontsizeselect formatselect | link codesample charmap emoticons ',
+          'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | fontsizeselect formatselect | link codesample charmap emoticons ',
         toolbar_sticky: true,
         quickbars_insert_toolbar: false,
         quickbars_selection_toolbar:

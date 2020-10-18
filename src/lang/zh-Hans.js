@@ -28,7 +28,7 @@ export default {
     forgotPassword: '忘记密码',
     or: '或',
     resetPassword: '重置密码',
-    loginPromptForgotPassword: 'Back to Log In',
+    loginPromptForgotPassword: '返回登录',
 
     // Logged-in Appbar
     toggleTheme: '切换夜間模式',
@@ -77,11 +77,12 @@ export default {
 
     pages: '页面',
 
-    saveSections: 'Save Sections',
-    addSection: 'Add Section',
-    chooseATemplate: 'Choose a template',
-    headings: 'Headings',
-    textAndMultimedia: 'Text and Multimedia',
+    saveSections: '保存',
+    addSection: '添加',
+    chooseATemplate: '选择模板',
+    headings: '标题',
+    text: '文字',
+    multimedia: '多媒体',
 
     // Profile
 
@@ -98,7 +99,7 @@ export default {
     gender: '性別',
     male: '男',
     female: '女',
-    other: 'Other',
+    other: '其他',
     occupation: '职业',
     profileDescription: '个人简介',
     descriptionPlaceholder: '输入一些东西…',
