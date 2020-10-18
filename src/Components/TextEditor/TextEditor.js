@@ -23,7 +23,7 @@ export default function TextEditor({ index, name, data }) {
         // menubar: 'edit insert format table help',
         menubar: false,
         toolbar:
-          'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | fontsizeselect formatselect | link codesample charmap emoticons ',
+          'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | forecolor backcolor | outdent indent |  numlist bullist | fontsizeselect formatselect | link codesample charmap emoticons ',
         toolbar_sticky: true,
         quickbars_insert_toolbar: false,
         quickbars_selection_toolbar:

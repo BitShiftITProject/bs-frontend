@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 import { DropzoneArea } from 'material-ui-dropzone'
 import CustomDialog from './CustomDialog'
-import {postMediaContent, getUser, deleteMediaItem} from '../../Backend/Fetch'
+import { postMediaContent, getUser, deleteMediaItem } from '../../Backend/Fetch'
 import { PortfolioContext } from '../Contexts/PortfolioContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -58,39 +58,43 @@ export default function DropzoneButton({ img, initialFile, sectionIndex, section
   // Upload images only
   const onlyImage = img
 
-  function fileToBase64 (file) {
+  function fileToBase64(file) {
     return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          let encoded = reader.result.toString().replace(/^data:(.*,)?/, '');
-          if ((encoded.length % 4) > 0) {
-            encoded += '='.repeat(4 - (encoded.length % 4));
-          }
-          resolve(encoded);
-        };
-        reader.onerror = error => reject(error);
-      });
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        let encoded = reader.result.toString().replace(/^data:(.*,)?/, '')
+        if (encoded.length % 4 > 0) {
+          encoded += '='.repeat(4 - (encoded.length % 4))
+        }
+        resolve(encoded)
+      }
+      reader.onerror = (error) => reject(error)
+    })
   }
 
   async function handleSubmit() {
-    if(files.length){
-        var fileType = files[0].type
-        const user = await getUser()
-        if(user){
-            let fileResponse = fileToBase64(files[0]).then((result) => {
-                var stream = result.toString().replace(/^.*,/, '')
-                var postContent = {
-                    "public_name": fileName + '.' + fileExtension,
-                    "file_type": fileType,
-                    "stream": stream
-                }
-                return postMediaContent(postContent, user)
-            })
-            
-            let key = await fileResponse.then(async (response) => { return await response.json().then((body) => {return body.key})});
-            modifySection(sectionIndex, sectionName, key)
-        }
+    if (files.length) {
+      var fileType = files[0].type
+      const user = await getUser()
+      if (user) {
+        let fileResponse = fileToBase64(files[0]).then((result) => {
+          var stream = result.toString().replace(/^.*,/, '')
+          var postContent = {
+            public_name: fileName + '.' + fileExtension,
+            file_type: fileType,
+            stream: stream
+          }
+          return postMediaContent(postContent, user)
+        })
+
+        let key = await fileResponse.then(async (response) => {
+          return await response.json().then((body) => {
+            return body.key
+          })
+        })
+        modifySection(sectionIndex, sectionName, key)
+      }
     }
     setOpen(false)
   }
@@ -108,7 +112,7 @@ export default function DropzoneButton({ img, initialFile, sectionIndex, section
           maxFileSize={5000000}
           onDelete={(deletedFile) => {
             deleteMediaItem(sections[pageId][sectionIndex]['data'][sectionName])
-            modifySection(sectionIndex, sectionName, "")
+            modifySection(sectionIndex, sectionName, '')
             setFileName('')
             setFileExtension('')
             setFiles([])
@@ -116,7 +120,7 @@ export default function DropzoneButton({ img, initialFile, sectionIndex, section
           // On current file change (includes change that happens on component mount)
           onChange={(newFiles) => {
             console.log('Files:', newFiles)
-            
+
             if (newFiles.length) {
               setFiles(newFiles)
               const file = newFiles[0].name

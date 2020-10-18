@@ -198,7 +198,7 @@ const PortfolioCard = (props) => {
               <span>
                 <IconButton
                   disabled={!hasPages}
-                  className={style.share}
+                  className={style.sdropzonehare}
                   onClick={(e) => sharePortfolio('share', portfolio.id, portfolio.title, index)}
                 >
                   <ShareIcon />

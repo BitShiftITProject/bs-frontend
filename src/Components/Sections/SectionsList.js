@@ -19,8 +19,8 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
 
       handleSectionDelete ? (
         <div>
-          {sections.map((section, idx) => {
-            return (
+          {sections.map(
+            (section, idx) => (
               <SectionContainer
                 key={idx}
                 sectionId={section.id}
@@ -29,8 +29,7 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
               >
                 {GetSectionJSX(section, editing, idx)}
               </SectionContainer>
-            )
-          })}
+          ))}
         </div>
       ) : (
         /* ------------------------ Public Portfolio Sections ----------------------- */

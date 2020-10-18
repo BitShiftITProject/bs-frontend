@@ -11,8 +11,6 @@ import PublicThemesProvider from './Components/Contexts/PublicThemesContext'
 
 import PublicPortfolio from './Components/LoggedOutComponents/PublicPortfolio'
 import PublicPortfolioFailed from './Components/LoggedOutComponents/PublicPortfolioFailed'
-import DropzoneButton from './Components/CommonComponents/DropzoneButton'
-import TextEditor from './Components/TextEditor'
 
 export default function App() {
   return (
@@ -21,8 +19,6 @@ export default function App() {
         <LocaleProvider>
           <PortfolioProvider>
             <Switch>
-              <Route exact path='/editor' render={() => <TextEditor />} />
-              <Route exact path='/dropzone' render={() => <DropzoneButton />} />
               <Route exact path='/publicfailed' render={() => <PublicPortfolioFailed />} />
               <Route
                 exact
