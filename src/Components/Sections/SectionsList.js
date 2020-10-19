@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import { Typography, Grid } from '@material-ui/core'
 import { useIntl } from 'react-intl'
 
@@ -8,7 +8,7 @@ import SectionTemplate from './SectionAdd/SectionTemplate'
 
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
-
+import { useTheme } from '@material-ui/core/styles'
 
 
 
@@ -27,19 +27,39 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
     return result;
     };
 
-  // styles for when theyre being dragged 
-  const getItemStyle = (isDragging, draggableStyle) => ({
-    // some basic styles to make the sections look a bit nicer
-    userSelect: "none",
+
+    const theme = useTheme()
+
+    // styles for when theyre being dragged
+    const getItemStyle = (isDragging, draggableStyle) => ({
+      // some basic styles to make the sections look a bit nicer
+     userSelect: "none",
     padding: grid * 2,
     margin: `0 0 ${grid}px 0`,
+  
+      // change background colour if dragging
+      background: isDragging
+        ? // theme.palette.background.paperHover
+          'lightgreen'
+        : theme.palette.background.paperLight,
+  
+      // styles we need to apply on draggables
+      ...draggableStyle
+    })
 
-    // change background colour if dragging
-    background: isDragging ? "lightgreen" : "grey",
+  // // styles for when theyre being dragged 
+  // const getItemStyle = (isDragging, draggableStyle) => ({
+  //   // some basic styles to make the sections look a bit nicer
+  //   userSelect: "none",
+  //   padding: grid * 2,
+  //   margin: `0 0 ${grid}px 0`,
 
-    // styles we need to apply on draggables
-    ...draggableStyle
-  });
+  //   // change background colour if dragging
+  //   background: isDragging ? "lightgreen" : "grey",
+
+  //   // styles we need to apply on draggables
+  //   ...draggableStyle
+  // });
 
   // when done with dragging 
   const onDragEnd = (result) => {
