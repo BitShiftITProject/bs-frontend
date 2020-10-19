@@ -7,6 +7,8 @@ import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { Link } from 'react-router-dom'
+import { sendConfirmationCode, resetPassword } from "../../Backend/Fetch"
+import { useSnackbar } from 'notistack'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -43,19 +45,60 @@ function ForgotPassword(props) {
   const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
+  /*                                  Snackbars                                 */
+  /* -------------------------------------------------------------------------- */
+
+  const { enqueueSnackbar } = useSnackbar()
+
+  /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
   const [email, setEmail] = useState('')
-  const [username, setUsername] = useState('')
+  const [confirmationCode, setConfirmationCode] = useState('')
+  const [newPassword, setNewPassword] = useState('')
 
-  function handleSubmit(e) {
+  async function handleSubmitEmail(e) {
     e.preventDefault()
+    // Doesn't check if email exists yet
+    const response = await sendConfirmationCode(email);
+
+    if (response.ok) {
+      enqueueSnackbar(`Please check your email (${email}) for a confirmation code`, {
+        variant: 'success'
+      })
+    } else {
+      // Display error
+      enqueueSnackbar(`Email does not exist`, {
+        variant: 'error'
+      })
+    }
+  }
+
+  async function handleResetPassword(e) {
+    e.preventDefault()
+    const authDetails = {
+      "Email": email,
+      "Password": newPassword,
+      "Code": confirmationCode
+    }
+    const response = await resetPassword(authDetails);
+    if (response.ok) {
+      // Success
+      enqueueSnackbar(`Password changed successfully. Please log in again`, {
+        variant: 'success'
+      })
+    } else {
+      enqueueSnackbar(`An error occurred`, {
+        variant: 'error'
+      })
+    }
+
   }
 
   const content = (
     <div className={classes.div}>
-      <form onSubmit={(e) => handleSubmit(e)} className={classes.form}>
+      <form onSubmit={(e) => handleSubmitEmail(e)} className={classes.form}>
         {/*
          * HEADING
          */}
@@ -84,14 +127,20 @@ function ForgotPassword(props) {
           name='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required={!username}
+          required={true}
           variant='outlined'
           fullWidth
         />
 
-        <CursorTypography variant='button'>{intl.formatMessage({ id: 'or' })}</CursorTypography>
+        <span>
+          <Fab type='submit' variant='extended' className={style.submit} color='primary'>
+            {intl.formatMessage({ id: 'sendCode' })}
+          </Fab>
+        </span>
+      </form>
+      <form onSubmit={(e) => handleResetPassword(e)} className={classes.form}>
 
-        {/* USERNAME */}
+        {/* CONFIRMATION CODE */}
 
         <PaddedTextField
           inputProps={{ className: style.input }}
@@ -99,14 +148,32 @@ function ForgotPassword(props) {
             shrink: true
           }}
           className={style.formLabel}
-          id='forgot_password__username'
+          id='forgot_password__confirmationCode'
           type='text'
-          placeholder={intl.formatMessage({ id: 'username' })}
-          // label={intl.formatMessage({ id: 'username' })}
-          name='username'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required={!email}
+          placeholder={intl.formatMessage({ id: 'confirmationCode' })}
+          name='confirmationCode'
+          value={confirmationCode}
+          onChange={(e) => setConfirmationCode(e.target.value)}
+          required={true}
+          variant='outlined'
+          fullWidth
+        />
+
+        {/* NEW PASSWORD */}
+
+        <PaddedTextField
+          inputProps={{ className: style.input }}
+          InputLabelProps={{
+            shrink: true
+          }}
+          className={style.formLabel}
+          id='forgot_password__newPassword'
+          type='password'
+          placeholder={intl.formatMessage({ id: 'newPassword' })}
+          name='newPassword'
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          required={true}
           variant='outlined'
           fullWidth
         />

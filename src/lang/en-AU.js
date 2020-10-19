@@ -25,8 +25,11 @@ export default {
 
     // Forgot Password
     forgotPasswordDescription:
-      'Please enter your email or username to receive the password reset link',
+      'Please enter your email to receive a confirmation code',
     forgotPassword: 'Forgot Password',
+    sendCode: 'Send Code',
+    confirmationCode: 'Confirmation Code',
+    newPassword: 'New Password',
     or: 'Or',
     resetPassword: 'Reset Password',
     loginPromptForgotPassword: 'Back to Log In',

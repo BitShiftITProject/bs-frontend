@@ -24,8 +24,11 @@ export default {
     loginPromptSignUp: '登录现有帐号',
 
     // Forgot Password
-    forgotPasswordDescription: '请输入邮箱或用户名来获取密码重置链接',
+    forgotPasswordDescription: '请输入您的电子邮件以接收确认码',
     forgotPassword: '忘记密码',
+    sendCode: '发送确认码',
+    confirmationCode: '验证码',
+    newPassword: '新密码',
     or: '或',
     resetPassword: '重置密码',
     loginPromptForgotPassword: 'Back to Log In',
