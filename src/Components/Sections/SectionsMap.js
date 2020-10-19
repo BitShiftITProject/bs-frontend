@@ -24,7 +24,10 @@ export const sectionElementsBySectionId = {
   youtubeVideo: [['video', YoutubeVideo]],
   singleImage: [['image', Image]],
   singleRichText: [['text', Text]],
-  doubleRichText: [['text1', Text, 6], ['text2', Text, 6]]
+  doubleRichText: [
+    ['text', Text, 6],
+    ['text', Text, 6]
+  ]
 }
 
 // Given the section ID, returns a new section object with the correct
