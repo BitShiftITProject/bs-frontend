@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { BACKEND, AUTHENTICATE, GET_USER, USERS, PORTFOLIOS, PAGES, SIGNUP, MEDIA_ITEM, BUCKETS} from './Endpoints'
+=======
+import { BACKEND, FORGOTPASSWORD, CHANGEPASSWORD, AUTHENTICATE, GET_USER, USERS, PORTFOLIOS, PAGES, SIGNUP } from './Endpoints'
+>>>>>>> forgotpassword
 
 /* -------------------------------------------------------------------------- */
 /*                                  Constants                                 */
@@ -14,7 +18,7 @@ const headers = {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                               Login / Signup                               */
+/*                        Login / Signup / Forgot Password                    */
 /* -------------------------------------------------------------------------- */
 
 // Creates a user in Cognito and in the database using the user details
@@ -43,6 +47,39 @@ export const authenticate = async (loginDetails) => {
       accept: 'application/json'
     },
     body: JSON.stringify(loginDetails)
+  })
+  return response
+}
+
+// Sends a confirmation code to the given user's email
+export const sendConfirmationCode = async (email) => {
+  const body = {
+    'Email': email
+  }
+  const response = await fetch(BACKEND + FORGOTPASSWORD, {
+    method: 'POST',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+      'Content-Type': 'application/json',
+      accept: 'application/json'
+    },
+    body: JSON.stringify(body)
+  })
+  return response
+}
+
+// Resets password given a confirmation code
+export const resetPassword = async (authDetails) => {
+  const response = await fetch(BACKEND + CHANGEPASSWORD, {
+    method: 'POST',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+      'Content-Type': 'application/json',
+      accept: 'application/json'
+    },
+    body: JSON.stringify(authDetails)
   })
   return response
 }
