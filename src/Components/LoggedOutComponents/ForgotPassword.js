@@ -57,7 +57,15 @@ function ForgotPassword(props) {
   /* -------------------------------------------------------------------------- */
 
   const [email, confirmationCode, newPassword, modifyForm] = useFormStore(
-    useCallback(({ email, modifyForm }) => [email, modifyForm], []),
+    useCallback(
+      ({ email, confirmationCode, newPassword, modifyForm }) => [
+        email,
+        confirmationCode,
+        newPassword,
+        modifyForm
+      ],
+      []
+    ),
     shallow
   )
 
@@ -154,12 +162,11 @@ function ForgotPassword(props) {
           }}
           className={style.formLabel}
           id='forgot_password__confirmationCode'
-          type='text'
           placeholder={intl.formatMessage({ id: 'confirmationCode' })}
           name='confirmationCode'
           value={confirmationCode}
           onChange={handleChange}
-          required={true}
+          required
           variant='outlined'
           fullWidth
         />
@@ -178,7 +185,7 @@ function ForgotPassword(props) {
           name='newPassword'
           value={newPassword}
           onChange={handleChange}
-          required={true}
+          required
           variant='outlined'
           fullWidth
         />
