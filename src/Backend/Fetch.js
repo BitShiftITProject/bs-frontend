@@ -1,8 +1,16 @@
-<<<<<<< HEAD
-import { BACKEND, AUTHENTICATE, GET_USER, USERS, PORTFOLIOS, PAGES, SIGNUP, MEDIA_ITEM, BUCKETS} from './Endpoints'
-=======
-import { BACKEND, FORGOTPASSWORD, CHANGEPASSWORD, AUTHENTICATE, GET_USER, USERS, PORTFOLIOS, PAGES, SIGNUP } from './Endpoints'
->>>>>>> forgotpassword
+import {
+  BACKEND,
+  FORGOTPASSWORD,
+  CHANGEPASSWORD,
+  AUTHENTICATE,
+  GET_USER,
+  USERS,
+  PORTFOLIOS,
+  PAGES,
+  SIGNUP,
+  MEDIA_ITEM,
+  BUCKETS
+} from './Endpoints'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Constants                                 */
@@ -54,7 +62,7 @@ export const authenticate = async (loginDetails) => {
 // Sends a confirmation code to the given user's email
 export const sendConfirmationCode = async (email) => {
   const body = {
-    'Email': email
+    Email: email
   }
   const response = await fetch(BACKEND + FORGOTPASSWORD, {
     method: 'POST',
@@ -362,72 +370,72 @@ export const getMediaItems = async (userID) => {
 
 // gets all the Media Items for a given user
 export const getMediaItem = async (key) => {
-    const response = await fetch(BACKEND + MEDIA_ITEM + '/' + key, {
-      method: 'GET',
-      headers
+  const response = await fetch(BACKEND + MEDIA_ITEM + '/' + key, {
+    method: 'GET',
+    headers
+  })
+    .then((response) => (response.ok ? response : null))
+    .catch(() => {
+      return null
     })
-      .then((response) => (response.ok ? response : null))
-      .catch(() => {
-        return null
-      })
-  
-    if (!response) return null
-  
-    const mediaItem = await response.json()
-  
-    return mediaItem
-  }
+
+  if (!response) return null
+
+  const mediaItem = await response.json()
+
+  return mediaItem
+}
 
 // gets all the Media Items for a given user
 export const getDataUrl = async (key) => {
-    const response = await fetch(BACKEND + BUCKETS + '/media-storage-bucket12/' + key, {
-      method: 'GET',
-      headers
+  const response = await fetch(BACKEND + BUCKETS + '/media-storage-bucket12/' + key, {
+    method: 'GET',
+    headers
+  })
+    .then((response) => (response.ok ? response : null))
+    .catch(() => {
+      return null
     })
-      .then((response) => (response.ok ? response : null))
-      .catch(() => {
-        return null
-      })
-  
-    if (!response) return null
 
-    return await getMediaItem(key).then(async (item) => {
-        const file = await response.json().then((response) => {
-            let buf = Buffer.from(response.Body.data)
-            let base64 = buf.toString()
-    
-            return ('data:' + item.file_type + ';base64,' + base64)
-          })
-        return file
+  if (!response) return null
+
+  return await getMediaItem(key).then(async (item) => {
+    const file = await response.json().then((response) => {
+      let buf = Buffer.from(response.Body.data)
+      let base64 = buf.toString()
+
+      return 'data:' + item.file_type + ';base64,' + base64
     })
-  }
+    return file
+  })
+}
 
-  export const getFile = async (key) => {
-    const response = await fetch(BACKEND + BUCKETS + '/media-storage-bucket12/' + key, {
-      method: 'GET',
-      headers
+export const getFile = async (key) => {
+  const response = await fetch(BACKEND + BUCKETS + '/media-storage-bucket12/' + key, {
+    method: 'GET',
+    headers
+  })
+    .then((response) => (response.ok ? response : null))
+    .catch(() => {
+      return null
     })
-      .then((response) => (response.ok ? response : null))
-      .catch(() => {
-        return null
-      })
-  
-    if (!response) return null
 
-    return await getMediaItem(key).then(async (item) => {
-        const file = await response.json().then(async (response) => {
-            let buf = Buffer.from(response.Body.data)
-            let base64 = buf.toString()
+  if (!response) return null
 
-            return await fetch(('data:' + item.file_type + ';base64,' + base64))
-            .then(res => res.blob())
-            .then(blob => {
-                    return new File([blob], item.public_name, {type:item.file_type})
-                })
-          })
-        return file
+  return await getMediaItem(key).then(async (item) => {
+    const file = await response.json().then(async (response) => {
+      let buf = Buffer.from(response.Body.data)
+      let base64 = buf.toString()
+
+      return await fetch('data:' + item.file_type + ';base64,' + base64)
+        .then((res) => res.blob())
+        .then((blob) => {
+          return new File([blob], item.public_name, { type: item.file_type })
+        })
     })
-  }
+    return file
+  })
+}
 
 /* ----------------------------------- POST ---------------------------------- */
 // Adds a media item to a user
@@ -444,10 +452,10 @@ export const postMediaContent = async (postDetails, userID) => {
 /* ----------------------------------- DELETE ---------------------------------- */
 
 export const deleteMediaItem = async (key) => {
-    const response = await fetch(BACKEND + MEDIA_ITEM + '/' + key, {
-      method: 'DELETE',
-      headers
-    })
-  
-    return response
-  }
+  const response = await fetch(BACKEND + MEDIA_ITEM + '/' + key, {
+    method: 'DELETE',
+    headers
+  })
+
+  return response
+}

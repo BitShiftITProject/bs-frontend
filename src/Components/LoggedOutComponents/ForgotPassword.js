@@ -9,7 +9,7 @@ import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { Link } from 'react-router-dom'
 import { useFormStore } from '../../Store'
-import { sendConfirmationCode, resetPassword } from "../../Backend/Fetch"
+import { sendConfirmationCode, resetPassword } from '../../Backend/Fetch'
 import { useSnackbar } from 'notistack'
 
 /* -------------------------------------------------------------------------- */
@@ -56,7 +56,7 @@ function ForgotPassword(props) {
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
-  const [email, modifyForm] = useFormStore(
+  const [email, confirmationCode, newPassword, modifyForm] = useFormStore(
     useCallback(({ email, modifyForm }) => [email, modifyForm], []),
     shallow
   )
@@ -68,7 +68,7 @@ function ForgotPassword(props) {
   async function handleSubmitEmail(e) {
     e.preventDefault()
     // Doesn't check if email exists yet
-    const response = await sendConfirmationCode(email);
+    const response = await sendConfirmationCode(email)
 
     if (response.ok) {
       enqueueSnackbar(`Please check your email (${email}) for a confirmation code`, {
@@ -85,11 +85,11 @@ function ForgotPassword(props) {
   async function handleResetPassword(e) {
     e.preventDefault()
     const authDetails = {
-      "Email": email,
-      "Password": newPassword,
-      "Code": confirmationCode
+      Email: email,
+      Password: newPassword,
+      Code: confirmationCode
     }
-    const response = await resetPassword(authDetails);
+    const response = await resetPassword(authDetails)
     if (response.ok) {
       // Success
       enqueueSnackbar(`Password changed successfully. Please log in again`, {
@@ -100,7 +100,6 @@ function ForgotPassword(props) {
         variant: 'error'
       })
     }
-
   }
 
   const content = (
@@ -146,7 +145,6 @@ function ForgotPassword(props) {
         </span>
       </form>
       <form onSubmit={(e) => handleResetPassword(e)} className={classes.form}>
-
         {/* CONFIRMATION CODE */}
 
         <PaddedTextField
@@ -160,7 +158,7 @@ function ForgotPassword(props) {
           placeholder={intl.formatMessage({ id: 'confirmationCode' })}
           name='confirmationCode'
           value={confirmationCode}
-          onChange={(e) => setConfirmationCode(e.target.value)}
+          onChange={handleChange}
           required={true}
           variant='outlined'
           fullWidth
@@ -179,7 +177,7 @@ function ForgotPassword(props) {
           placeholder={intl.formatMessage({ id: 'newPassword' })}
           name='newPassword'
           value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
+          onChange={handleChange}
           required={true}
           variant='outlined'
           fullWidth

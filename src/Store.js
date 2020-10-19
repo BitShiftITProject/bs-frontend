@@ -13,6 +13,8 @@ const formStore = (set) => ({
   firstName: '',
   lastName: '',
   signUpFailed: false,
+  confirmationCode: '',
+  newPassword: '',
   errorMessage: '',
   loading: false,
   completed: false,
