@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import shallow from 'zustand/shallow'
 import { useIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 
@@ -8,14 +9,9 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import Loading from '../CommonComponents/Loading'
+import { useFormStore } from '../../Store'
 
-export default function SignupLoginData({
-  state,
-  handleChange,
-  handleSubmit,
-  showPassword,
-  handleClickShowPassword
-}) {
+function SignupLoginData({ handleChange, handleSubmit, handleClickShowPassword }) {
   /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */
   /* -------------------------------------------------------------------------- */
@@ -27,6 +23,26 @@ export default function SignupLoginData({
   /* -------------------------------------------------------------------------- */
 
   const intl = useIntl()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    State                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const [username, email, password, firstName, lastName, loading, showPassword] = useFormStore(
+    useCallback(
+      ({ username, email, password, firstName, lastName, loading, showPassword }) => [
+        username,
+        email,
+        password,
+        firstName,
+        lastName,
+        loading,
+        showPassword
+      ],
+      []
+    ),
+    shallow
+  )
 
   return (
     <Grid
@@ -55,7 +71,7 @@ export default function SignupLoginData({
             // placeholder={intl.formatMessage({ id: 'firstName' })}
             label={intl.formatMessage({ id: 'firstName' })}
             name='firstName'
-            value={state.firstName}
+            value={firstName}
             onChange={handleChange}
             required
             variant='filled'
@@ -77,7 +93,7 @@ export default function SignupLoginData({
             // placeholder={intl.formatMessage({ id: 'lastName' })}
             label={intl.formatMessage({ id: 'lastName' })}
             name='lastName'
-            value={state.lastName}
+            value={lastName}
             onChange={handleChange}
             required
             variant='filled'
@@ -103,7 +119,7 @@ export default function SignupLoginData({
         id='signup__username'
         // placeholder={intl.formatMessage({ id: 'username' })}
         name='username'
-        value={state.username}
+        value={username}
         onChange={handleChange}
       />
 
@@ -123,7 +139,7 @@ export default function SignupLoginData({
         id='signup__email'
         // placeholder={intl.formatMessage({ id: 'email' })}
         name='email'
-        value={state.email}
+        value={email}
         onChange={handleChange}
       />
 
@@ -147,7 +163,7 @@ export default function SignupLoginData({
             title='8 to 12 characters'
             name='password'
             required
-            value={state.password}
+            value={password}
             onChange={handleChange}
             InputProps={{
               // this is where the toggle button is added
@@ -167,7 +183,7 @@ export default function SignupLoginData({
         </Grid>
       </Grid>
       {/* Loading sign up */}
-      {state.loading && <Loading message={intl.formatMessage({ id: 'signupLoading' })} />}
+      {loading && <Loading message={intl.formatMessage({ id: 'signupLoading' })} />}
 
       {/* SIGN UP BUTTON */}
 
@@ -179,7 +195,7 @@ export default function SignupLoginData({
         justify='center'
         alignItems='center'
       >
-        {!state.loading && (
+        {!loading && (
           <Fab
             type='submit'
             variant='extended'
@@ -208,3 +224,5 @@ export default function SignupLoginData({
     </Grid>
   )
 }
+
+export default React.memo(SignupLoginData)

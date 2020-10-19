@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback } from 'react'
 
 import { Grid, Paper } from '@material-ui/core'
 
@@ -6,18 +6,14 @@ import LandingContainer from './LandingContainer'
 import SignupForm from './SignupForm'
 import SignupVerifyEmail from './SignupVerifyEmail'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
+import { useFormStore } from '../../Store'
 
 function Signup() {
-  const [completed, setCompleted] = useState(false)
-  const [email, setEmail] = useState('')
+  const completed = useFormStore(useCallback((state) => state.completed, []))
 
   const style = loggedOutStyles()
 
-  const content = !completed ? (
-    <SignupForm setCompleted={setCompleted} setEmail={setEmail} />
-  ) : (
-    <SignupVerifyEmail email={email} />
-  )
+  const content = !completed ? <SignupForm /> : <SignupVerifyEmail />
 
   return (
     <LandingContainer

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useCallback } from 'react'
+import shallow from 'zustand/shallow'
 
 import {
   TextField,
@@ -19,7 +20,9 @@ import LandingContainer from './LandingContainer'
 import Loading from '../CommonComponents/Loading'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
+
 import { authenticate } from '../../Backend/Fetch'
+import { useFormStore } from '../../Store'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -61,34 +64,42 @@ function Login(props) {
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
-  const [state, setState] = useState({
-    email: '',
-    password: '',
-    rememberMe: false,
-    loginFailed: false,
-    errorMessage: intl.formatMessage({ id: 'loginError' }),
-    loading: false
-  })
+  const [
+    email,
+    password,
+    rememberMe,
+    loginFailed,
+    errorMessage,
+    loading,
+    modifyForm
+  ] = useFormStore(
+    useCallback(
+      ({ email, password, rememberMe, loginFailed, errorMessage, loading, modifyForm }) => [
+        email,
+        password,
+        rememberMe,
+        loginFailed,
+        errorMessage,
+        loading,
+        modifyForm
+      ],
+      []
+    ),
+    shallow
+  )
 
-  // Toggle between currently loading (true) or not currently loading (false)
-  function changeLoading() {
-    setState((st) => ({
-      ...st,
-      loading: !st.loading
-    }))
-  }
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
   /* -------------------------------------------------------------------------- */
 
   // Change the current attribute in the state that is currently being changed
   function handleChange(e) {
-    setState({ ...state, [e.target.name]: e.target.value })
+    modifyForm(e.target.name, e.target.value)
   }
 
   // Toggle the checkbox from being checked (true) or not (false)
   function handleCheckbox(e) {
-    setState((st) => ({ ...st, rememberMe: !st.rememberMe }))
+    modifyForm('rememberMe', !rememberMe)
   }
 
   // Authenticates login details through authenticate(),
@@ -96,14 +107,14 @@ function Login(props) {
   async function handleSubmit(e) {
     e.preventDefault()
 
-    setState((st) => ({ ...st, loginFailed: false, errorMessage: '' }))
+    modifyForm('loginFailed', false)
+    modifyForm('errorMessage', '')
+    modifyForm('loading', true)
 
     const loginDetails = {
-      Email: state.email,
-      Password: state.password
+      Email: email,
+      Password: password
     }
-
-    changeLoading()
 
     // Authenticate login details
     const response = await authenticate(loginDetails)
@@ -112,7 +123,7 @@ function Login(props) {
     if (response && response.ok) {
       const auth = await response.json()
 
-      if (state.rememberMe) {
+      if (rememberMe) {
         localStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
       } else {
         sessionStorage.setItem('accessToken', auth.AuthenticationResult.AccessToken)
@@ -122,14 +133,10 @@ function Login(props) {
       // Toggle error alert
     } else {
       const error = await response.json()
-
-      setState((st) => ({
-        ...st,
-        loginFailed: true,
-        errorMessage: error.error.message
-      }))
+      modifyForm('loginFailed', true)
+      modifyForm('errorMessage', error.error.message)
+      modifyForm('loading', false)
     }
-    changeLoading()
   }
 
   /* -------------------------------------------------------------------------- */
@@ -187,10 +194,10 @@ function Login(props) {
         />
 
         {/* The error message appears iff the state is loginFailed */}
-        {state.loginFailed && (
+        {loginFailed && (
           <div style={{ paddingBottom: 5 }}>
             <Alert variant='filled' severity='error'>
-              {state.errorMessage}
+              {errorMessage}
             </Alert>
           </div>
         )}
@@ -203,7 +210,7 @@ function Login(props) {
               className={classes.div}
               control={
                 <Checkbox
-                  disabled={state.loading}
+                  disabled={loading}
                   value='remember'
                   color='primary'
                   onClick={handleCheckbox}
@@ -219,11 +226,11 @@ function Login(props) {
         </Grid>
 
         {/* Loading message */}
-        {state.loading && <Loading message={intl.formatMessage({ id: 'loginLoading' })} />}
+        {loading && <Loading message={intl.formatMessage({ id: 'loginLoading' })} />}
 
         {/* LOGIN BUTTON */}
 
-        {!state.loading && (
+        {!loading && (
           <Fab
             type='submit'
             variant='extended'
@@ -267,4 +274,4 @@ function Login(props) {
   )
 }
 
-export default withStyles(styles)(Login)
+export default withStyles(styles)(React.memo(Login))

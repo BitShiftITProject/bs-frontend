@@ -4,8 +4,11 @@ import { Fab, Grid } from '@material-ui/core'
 import DoneIcon from '@material-ui/icons/Done'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
+import { useFormStore } from '../../Store'
 
-export default function SignupVerifyEmail({ email }) {
+export default function SignupVerifyEmail() {
+  const email = useFormStore((state) => state.email)
+
   const style = loggedOutStyles()
   // const intl = useIntl()
   return (

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useCallback } from 'react'
+import shallow from 'zustand/shallow'
 import { useIntl } from 'react-intl'
 import { withStyles, styled } from '@material-ui/core/styles'
 import { TextField, Fab, Typography, Paper, Grid } from '@material-ui/core'
@@ -7,6 +8,7 @@ import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { Link } from 'react-router-dom'
+import { useFormStore } from '../../Store'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -46,8 +48,14 @@ function ForgotPassword(props) {
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
-  const [email, setEmail] = useState('')
-  const [username, setUsername] = useState('')
+  const [email, modifyForm] = useFormStore(
+    useCallback(({ email, modifyForm }) => [email, modifyForm], []),
+    shallow
+  )
+
+  function handleChange(e) {
+    modifyForm(e.target.name, e.target.value)
+  }
 
   function handleSubmit(e) {
     e.preventDefault()
@@ -83,30 +91,8 @@ function ForgotPassword(props) {
           // label={intl.formatMessage({ id: 'email' })}
           name='email'
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required={!username}
-          variant='outlined'
-          fullWidth
-        />
-
-        <CursorTypography variant='button'>{intl.formatMessage({ id: 'or' })}</CursorTypography>
-
-        {/* USERNAME */}
-
-        <PaddedTextField
-          inputProps={{ className: style.input }}
-          InputLabelProps={{
-            shrink: true
-          }}
-          className={style.formLabel}
-          id='forgot_password__username'
-          type='text'
-          placeholder={intl.formatMessage({ id: 'username' })}
-          // label={intl.formatMessage({ id: 'username' })}
-          name='username'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required={!email}
+          onChange={handleChange}
+          required
           variant='outlined'
           fullWidth
         />
