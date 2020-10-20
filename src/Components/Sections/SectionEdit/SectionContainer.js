@@ -6,24 +6,43 @@ import CloseTwoToneIcon from '@material-ui/icons/CloseTwoTone'
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone'
 
 import { useIntl } from 'react-intl'
-
+import DragHandleIcon from '@material-ui/icons/DragHandle';
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
 /* -------------------------------------------------------------------------- */
 
 const useStyles = makeStyles((theme) => ({
+  // container: {
+  //   padding: theme.spacing(2),
+  //   // flexDirection:"column",
+  //   // marginBottom: theme.spacing(2),
+  //   borderRadius: 15,
+  //   backgroundColor: theme.palette.background.paperLight,
+  //   '&:hover': {
+  //     backgroundColor: theme.palette.background.paperHover
+  //   },
+  //   '&:focus': {
+  //     backgroundColor: theme.palette.background.paperHover
+  //   }
+  // },
+
+
+
+
   container: {
     padding: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    // marginBottom: theme.spacing(2),
     borderRadius: 15,
-    backgroundColor: theme.palette.background.paperLight,
+    // backgroundColor: theme.palette.background.paperLight,
     '&:hover': {
-      backgroundColor: theme.palette.background.paperHover
+      // backgroundColor: theme.palette.background.paperHover
     },
     '&:focus': {
-      backgroundColor: theme.palette.background.paperHover
+      // backgroundColor: theme.palette.background.paperHover
     }
   },
+
+
   sectionName: {
     paddingBottom: theme.spacing(1)
   },
@@ -74,16 +93,19 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.error.dark
     }
+  },
+  middle:{  
+    display: "flex",
+    alignItems:"center",
+
+    justifyContent:"center"
+
   }
 }))
 
 export default function SectionContainer({ children, sectionId, index, handleSectionDelete }) {
   const classes = useStyles()
-
-  /* -------------------------------------------------------------------------- */
-  /*                                   Locale                                   */
-  /* -------------------------------------------------------------------------- */
-
+  // Locale
   const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
@@ -107,81 +129,85 @@ export default function SectionContainer({ children, sectionId, index, handleSec
 
   return (
     <Grid container direction='row' justify='space-between' className={classes.container}>
-      {/* -------------------------------------------------------------------------- */}
-
-      {/* SECTION LABEL AND SECTION ELEMENTS */}
-
-      <Grid item xs={10} md={11} container direction='column'>
-        <Grid item container>
-          <InputLabel className={classes.sectionName}>{sectionName}</InputLabel>
+        {/* -------------------------------------------------------------------------- */}
+        <Grid item xs={1} className={classes.middle}> 
+        <DragHandleIcon 
+        // style={{'&:hover': {cursor: 'drag'}, '&:active': {cursor: 'dragging'}}}
+/>
         </Grid>
-        <Grid item container>
-          {children}
+        {/* SECTION LABEL AND SECTION ELEMENTS */}
+
+        <Grid item xs={9} md={10} container direction='column'>
+          <Grid item container direction="column">
+              <InputLabel className={classes.sectionName}>{sectionName}</InputLabel>
+            </Grid>
+            <Grid item container>    
+
+              {children}
+          </Grid>
         </Grid>
-      </Grid>
+        {/* -------------------------------------------------------------------------- */}
 
-      {/* -------------------------------------------------------------------------- */}
-
-      {/* SECTION ACTION BUTTONS */}
-
-      <Grid
-        item
-        xs={2}
-        md={1}
-        container
-        direction='column'
-        justify='flex-start'
-        alignItems='flex-end'
-        spacing={3}
-        className={classes.sectionIcons}
-      >
-        {/* DELETE BUTTON */}
-        {!confirmDelete && (
-          <Tooltip
-            PopperProps={{ className: classes.tooltip }}
-            title={intl.formatMessage({ id: 'delete' })}
-            placement='bottom'
-          >
-            <Fab
-              size='small'
-              color='primary'
-              onClick={() => setConfirmDelete(true)}
-              className={classes.deleteIcon}
-            >
-              <DeleteTwoToneIcon />
-            </Fab>
-          </Tooltip>
-        )}
-
-        {/* CONFIRM DELETE AND CANCEL BUTTONS */}
-        {/* After clicking the delete button once, we can confirm delete or opt to
-         * cancel the delete action to the section. */}
-
-        {confirmDelete && (
-          <>
+        {/* SECTION ACTION BUTTONS */}
+      
+        <Grid
+          item
+          xs={2}
+          md={1}
+          container
+          direction='column'
+          justify='flex-start'
+          alignItems='flex-end'
+          spacing={3}
+          className={classes.sectionIcons}
+        >
+          {/* DELETE BUTTON */}
+          {!confirmDelete && (
             <Tooltip
               PopperProps={{ className: classes.tooltip }}
-              title={intl.formatMessage({ id: 'cancel' })}
-              placement='top'
-            >
-              {/* CANCEL DELETE BUTTON */}
-              <Fab size='small' onClick={() => setConfirmDelete(false)}>
-                <CloseTwoToneIcon />
-              </Fab>
-            </Tooltip>
-            <Tooltip
-              PopperProps={{ className: classes.tooltip }}
-              title={intl.formatMessage({ id: 'confirmDelete' })}
+              title={intl.formatMessage({ id: 'delete' })}
               placement='bottom'
             >
-              {/* CONFIRM DELETE BUTTON */}
-              <Fab size='small' onClick={deleteSection} className={classes.confirmDeleteIcon}>
-                <DeleteForeverTwoToneIcon />
+              <Fab
+                size='small'
+                color='primary'
+                onClick={() => setConfirmDelete(true)}
+                className={classes.deleteIcon}
+              >
+                <DeleteTwoToneIcon />
               </Fab>
             </Tooltip>
-          </>
-        )}
-      </Grid>
+          )}
+
+          {/* CONFIRM DELETE AND CANCEL BUTTONS */}
+          {/* After clicking the delete button once, we can confirm delete or opt to
+          * cancel the delete action to the section. */}
+
+          {confirmDelete && (
+            <>
+              <Tooltip
+                PopperProps={{ className: classes.tooltip }}
+                title={intl.formatMessage({ id: 'cancel' })}
+                placement='top'
+              >
+                {/* CANCEL DELETE BUTTON */}
+                <Fab size='small' onClick={() => setConfirmDelete(false)}>
+                  <CloseTwoToneIcon />
+                </Fab>
+              </Tooltip>
+              <Tooltip
+                PopperProps={{ className: classes.tooltip }}
+                title={intl.formatMessage({ id: 'confirmDelete' })}
+                placement='bottom'
+              >
+                {/* CONFIRM DELETE BUTTON */}
+                <Fab size='small' onClick={deleteSection} className={classes.confirmDeleteIcon}>
+                  <DeleteForeverTwoToneIcon />
+                </Fab>
+              </Tooltip>
+            </>
+          )}
+        </Grid>
     </Grid>
   )
 }

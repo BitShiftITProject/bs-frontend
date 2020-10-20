@@ -6,8 +6,84 @@ import { GetSectionJSX, sectionIdsByCategory } from './SectionsMap'
 import SectionContainer from './SectionEdit/SectionContainer'
 import SectionTemplate from './SectionAdd/SectionTemplate'
 
-export default function SectionsList({ sections, editing, handleSectionAdd, handleSectionDelete }) {
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
+import { useTheme } from '@material-ui/core/styles'
+
+
+
+export default function SectionsList({ sections, editing, handleSectionAdd, handleSectionDelete,handleSetPageSection }) {
   const intl = useIntl()
+
+  // the grid for the drop and drag related sections
+  const grid = sections ? sections.length : 0
+ 
+  // reorders the result
+  const reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
+    };
+
+
+    const theme = useTheme()
+
+    // styles for when theyre being dragged
+    const getItemStyle = (isDragging, draggableStyle) => ({
+      // some basic styles to make the sections look a bit nicer
+     userSelect: "none",
+    padding: grid * 2,
+    margin: `0 0 ${grid}px 0`,
+  
+      // change background colour if dragging
+      background: isDragging
+        ? // theme.palette.background.paperHover
+          'lightgreen'
+        : theme.palette.background.paperLight,
+  
+      // styles we need to apply on draggables
+      ...draggableStyle
+    })
+
+  // // styles for when theyre being dragged 
+  // const getItemStyle = (isDragging, draggableStyle) => ({
+  //   // some basic styles to make the sections look a bit nicer
+  //   userSelect: "none",
+  //   padding: grid * 2,
+  //   margin: `0 0 ${grid}px 0`,
+
+  //   // change background colour if dragging
+  //   background: isDragging ? "lightgreen" : "grey",
+
+  //   // styles we need to apply on draggables
+  //   ...draggableStyle
+  // });
+
+  // when done with dragging 
+  const onDragEnd = (result) => {
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const newSections = reorder(
+      sections,
+      result.source.index,
+      result.destination.index
+    );
+    if (handleSetPageSection){
+    handleSetPageSection(newSections)
+  }
+  }
+
+
+
+
+
+
+
 
   const sectionList =
     /* -------------------------------------------------------------------------- */
@@ -19,18 +95,44 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
 
       handleSectionDelete ? (
         <div>
-          {sections.map((section, idx) => {
-            return (
-              <SectionContainer
-                key={idx}
-                sectionId={section.id}
-                index={idx}
-                handleSectionDelete={handleSectionDelete}
-              >
-                {GetSectionJSX(section, editing, idx)}
-              </SectionContainer>
-            )
-          })}
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="droppable">
+              {(provided, snapshot) => (
+                <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef}
+                >
+                  {/* map the sections as dragable items */}
+                  {sections.map((item, idx) => (
+                    <Draggable key={idx} draggableId={`item-${idx}`} index={idx}>
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={getItemStyle(
+                            snapshot.isDragging,
+                            provided.draggableProps.style
+                          )}
+                        >
+                                <SectionContainer
+                                  key={idx}
+                                  sectionId={item.id}
+                                  index={idx}
+                                  handleSectionDelete={handleSectionDelete}
+                                >
+                                  {GetSectionJSX(item, editing, idx)}
+                                </SectionContainer>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+
         </div>
       ) : (
         /* ------------------------ Public Portfolio Sections ----------------------- */

@@ -53,6 +53,7 @@ class PublicPortfolio extends Component {
             sections={this.state.portfolioPages[this.state.pageIndex].content.sections}
             editing={false}
           />
+          
         )
       }
       // Check to see if the page has sections or is the old formatting

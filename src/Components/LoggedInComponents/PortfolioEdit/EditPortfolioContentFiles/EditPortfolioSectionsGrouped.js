@@ -12,6 +12,7 @@ export default function EditPortfolioSectionsGrouped({
   pageId,
   handleSectionAdd,
   sections,
+  handleSetPageSection,
   handleSaveSections,
   handleSectionDelete
 }) {
@@ -59,6 +60,7 @@ export default function EditPortfolioSectionsGrouped({
               sections={sections[pageId]}
               editing
               handleSectionDelete={handleSectionDelete}
+              handleSetPageSection={handleSetPageSection}
             />
           </Grid>
         )}
