@@ -79,12 +79,12 @@ function ForgotPassword(props) {
     const response = await sendConfirmationCode(email)
 
     if (response.ok) {
-      enqueueSnackbar(`Please check your email (${email}) for a confirmation code`, {
+      enqueueSnackbar(intl.formatMessage({id: 'confirmationEmail'}, { email: (<span style={{fontWeight: 'bold'}}>{email}</span>)}), {
         variant: 'success'
       })
     } else {
       // Display error
-      enqueueSnackbar(`Email does not exist`, {
+      enqueueSnackbar(intl.formatMessage({id: 'emailDoesNotExist'}), {
         variant: 'error'
       })
     }
@@ -100,11 +100,11 @@ function ForgotPassword(props) {
     const response = await resetPassword(authDetails)
     if (response.ok) {
       // Success
-      enqueueSnackbar(`Password changed successfully. Please log in again`, {
+      enqueueSnackbar(intl.formatMessage({id: 'successfulPasswordChange'}), {
         variant: 'success'
       })
     } else {
-      enqueueSnackbar(`An error occurred`, {
+      enqueueSnackbar(intl.formatMessage({id: 'errorText'}), {
         variant: 'error'
       })
     }

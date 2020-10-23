@@ -102,7 +102,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
       await deletePortfolio(portfolioId)
 
       enqueueSnackbar(
-        intl.formatMessage({ id: 'deletedPortfolio', portfolioTitle: clickedPortfolio.title }),
+        intl.formatMessage({ id: 'deletedPortfolio'}, {portfolioTitle: clickedPortfolio.title }),
         {
           variant: 'error'
         }

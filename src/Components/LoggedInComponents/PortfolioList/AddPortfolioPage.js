@@ -71,7 +71,7 @@ export default function AddPortfolioPage() {
     await postPortfolioToUser(user.username, postDetails).then((response) => {
       if (response.ok) {
         const key = enqueueSnackbar(
-          intl.formatMessage({ id: 'addedPortfolio', portfolioTitle: title }),
+          intl.formatMessage({ id: 'addedPortfolio'}, {portfolioTitle: title }),
           {
             variant: 'success'
           }

@@ -57,7 +57,7 @@ export default function EditPortfolioStyle({ portfolio }) {
     const titleCase = e.target.value.replace(/([A-Z])/g, ' $1')
     const themeName = titleCase.charAt(0).toUpperCase() + titleCase.slice(1)
 
-    enqueueSnackbar(intl.formatMessage({ id: 'changedPortfolioTheme', themeName }), {})
+    enqueueSnackbar(intl.formatMessage({ id: 'changedPortfolioTheme'}, {themeName }), {})
   }
 
   /* -------------------------------------------------------------------------- */

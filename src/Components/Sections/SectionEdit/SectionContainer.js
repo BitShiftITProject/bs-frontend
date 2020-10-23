@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import { Grid, makeStyles, Fab, Tooltip, InputLabel } from '@material-ui/core'
+import CreateTwoToneIcon from '@material-ui/icons/CreateTwoTone'
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone'
 import CloseTwoToneIcon from '@material-ui/icons/CloseTwoTone'
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone'
@@ -77,7 +78,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function SectionContainer({ children, sectionId, index, handleSectionDelete }) {
+export default function SectionContainer({
+  children,
+  sectionIndex,
+  startSectionEdit,
+  handleSectionDelete
+}) {
   const classes = useStyles()
 
   /* -------------------------------------------------------------------------- */
@@ -90,11 +96,6 @@ export default function SectionContainer({ children, sectionId, index, handleSec
   /*                                   Section                                  */
   /* -------------------------------------------------------------------------- */
 
-  /* ------------------------------ Section Label ----------------------------- */
-
-  const titleCase = sectionId.replace(/([A-Z])/g, ' $1')
-  const sectionName = titleCase.charAt(0).toUpperCase() + titleCase.slice(1)
-
   /* -------------------------- Edit and Delete Modes ------------------------- */
 
   const [confirmDelete, setConfirmDelete] = useState(false)
@@ -102,7 +103,7 @@ export default function SectionContainer({ children, sectionId, index, handleSec
   // Actually delete the section
   function deleteSection() {
     setConfirmDelete(false)
-    handleSectionDelete(index, sectionName)
+    handleSectionDelete(sectionIndex)
   }
 
   return (
@@ -112,12 +113,7 @@ export default function SectionContainer({ children, sectionId, index, handleSec
       {/* SECTION LABEL AND SECTION ELEMENTS */}
 
       <Grid item xs={10} md={11} container direction='column'>
-        <Grid item container>
-          <InputLabel className={classes.sectionName}>{sectionName}</InputLabel>
-        </Grid>
-        <Grid item container>
-          {children}
-        </Grid>
+        {children}
       </Grid>
 
       {/* -------------------------------------------------------------------------- */}
@@ -137,20 +133,36 @@ export default function SectionContainer({ children, sectionId, index, handleSec
       >
         {/* DELETE BUTTON */}
         {!confirmDelete && (
-          <Tooltip
-            PopperProps={{ className: classes.tooltip }}
-            title={intl.formatMessage({ id: 'delete' })}
-            placement='bottom'
-          >
-            <Fab
-              size='small'
-              color='primary'
-              onClick={() => setConfirmDelete(true)}
-              className={classes.deleteIcon}
+          <>
+            <Tooltip
+              PopperProps={{ className: classes.tooltip }}
+              title={intl.formatMessage({ id: 'edit' })}
+              placement='right'
             >
-              <DeleteTwoToneIcon />
-            </Fab>
-          </Tooltip>
+              <Fab
+                size='small'
+                color='primary'
+                onClick={() => startSectionEdit(sectionIndex)}
+                className={classes.editIcon}
+              >
+                <CreateTwoToneIcon />
+              </Fab>
+            </Tooltip>
+            <Tooltip
+              PopperProps={{ className: classes.tooltip }}
+              title={intl.formatMessage({ id: 'delete' })}
+              placement='right'
+            >
+              <Fab
+                size='small'
+                color='primary'
+                onClick={() => setConfirmDelete(true)}
+                className={classes.deleteIcon}
+              >
+                <DeleteTwoToneIcon />
+              </Fab>
+            </Tooltip>
+          </>
         )}
 
         {/* CONFIRM DELETE AND CANCEL BUTTONS */}
@@ -162,7 +174,7 @@ export default function SectionContainer({ children, sectionId, index, handleSec
             <Tooltip
               PopperProps={{ className: classes.tooltip }}
               title={intl.formatMessage({ id: 'cancel' })}
-              placement='top'
+              placement='right'
             >
               {/* CANCEL DELETE BUTTON */}
               <Fab size='small' onClick={() => setConfirmDelete(false)}>
@@ -172,7 +184,7 @@ export default function SectionContainer({ children, sectionId, index, handleSec
             <Tooltip
               PopperProps={{ className: classes.tooltip }}
               title={intl.formatMessage({ id: 'confirmDelete' })}
-              placement='bottom'
+              placement='right'
             >
               {/* CONFIRM DELETE BUTTON */}
               <Fab size='small' onClick={deleteSection} className={classes.confirmDeleteIcon}>

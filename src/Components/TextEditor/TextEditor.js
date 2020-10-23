@@ -2,11 +2,11 @@ import React, { useContext } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { PortfolioContext } from '../Contexts/PortfolioContext'
 
-export default function TextEditor({ index, name, data }) {
+export default function TextEditor({ sectionIndex, elementIndex, name, data }) {
   const { modifySection } = useContext(PortfolioContext)
 
   function handleEditorChange(content, editor) {
-    modifySection(index, name, content)
+    modifySection(sectionIndex, elementIndex, name, content)
   }
 
   return (
@@ -14,9 +14,8 @@ export default function TextEditor({ index, name, data }) {
       // public and free API key
       apiKey='kz1kzb3i7lq7l47z5uyabflz18exurcg3yg25zitynhdw6g9'
       initialValue={data}
-      id={name}
       init={{
-        // height: 300,
+        height: 300,
         // width: 600,
         plugins:
           'paste searchreplace autolink directionality link codesample table charmap hr insertdatetime advlist lists wordcount textpattern noneditable help quickbars emoticons',

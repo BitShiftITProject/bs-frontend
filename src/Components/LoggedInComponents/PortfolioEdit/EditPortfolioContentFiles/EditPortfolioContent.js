@@ -90,6 +90,7 @@ export default function EditPortfolioContent(props) {
           return { [page.id]: page.content.sections }
         })
         .reduce((prev, curr) => ({ ...prev, ...curr }), currentSections)
+      console.log(newSections)
       return newSections
     })
   }, [pages, setSections])
@@ -100,7 +101,7 @@ export default function EditPortfolioContent(props) {
 
   // Adds a new correctly-formatted section object into the current page's list
   // of sections (Note: Does not save to the backend)
-  function handleSectionAdd(newSection, sectionName) {
+  function handleSectionAdd(newSection) {
     setSections((currentSections) => {
       // If this is the first section of the page, just set it as [newSection],
       // otherwise just add newSection to the end of the current list of sections
@@ -114,7 +115,7 @@ export default function EditPortfolioContent(props) {
     const pageTitle = pages.filter((page) => page.id === pageId)[0].title
 
     // Shows a notification that the section has been added
-    enqueueSnackbar(intl.formatMessage({ id: 'addedSectionToPage', sectionName, pageTitle }), {
+    enqueueSnackbar(intl.formatMessage({ id: 'addedSectionToPage' }, { pageTitle }), {
       variant: 'info'
     })
   }
@@ -135,7 +136,7 @@ export default function EditPortfolioContent(props) {
       const pageTitle = pages.filter((page) => page.id === pageId)[0].title
 
       // Show a notification that all sections have been saved
-      enqueueSnackbar(intl.formatMessage({ id: 'savedAllSections', pageTitle }), {
+      enqueueSnackbar(intl.formatMessage({ id: 'savedAllSections' }, { pageTitle }), {
         variant: 'success'
       })
 
@@ -144,7 +145,7 @@ export default function EditPortfolioContent(props) {
   }
 
   // Deletes the section at a given index among the sections of the current page
-  function handleSectionDelete(sectionIndex, sectionName) {
+  function handleSectionDelete(sectionIndex) {
     setSections((currentSections) => {
       // Ensure that the current page has a section at the specified index
       if (currentSections[pageId].length >= sectionIndex + 1) {
@@ -162,7 +163,7 @@ export default function EditPortfolioContent(props) {
 
         // Show a notification that the section has been deleted from the page
         const key = enqueueSnackbar(
-          intl.formatMessage({ id: 'deletedSectionFromPage', sectionName, pageTitle }),
+          intl.formatMessage({ id: 'deletedSectionFromPage' }, { pageTitle }),
           {
             variant: 'error',
             persist: true
@@ -372,10 +373,13 @@ export default function EditPortfolioContent(props) {
     // Delete the portfolio from the portfolios DB
     deletePage(toBeDeletedPageId).then(() => {
       // Show the notification after deleting the page
-      enqueueSnackbar(intl.formatMessage({ id: 'deletedPage', pageTitle: toBeDeletedPageTitle }), {
-        variant: 'error',
-        autoHideDuration: 3000
-      })
+      enqueueSnackbar(
+        intl.formatMessage({ id: 'deletedPage' }, { pageTitle: toBeDeletedPageTitle }),
+        {
+          variant: 'error',
+          autoHideDuration: 3000
+        }
+      )
     })
 
     await patchPortfolio(portfolio.id, {

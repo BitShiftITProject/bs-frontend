@@ -26,8 +26,7 @@ export default {
     signupLoading: 'Please wait while we save your data',
 
     // Forgot Password
-    forgotPasswordDescription:
-      'Please enter your email to receive a confirmation code',
+    forgotPasswordDescription: 'Please enter your email to receive a confirmation code',
     forgotPassword: 'Forgot Password',
     sendCode: 'Send Code',
     confirmationCode: 'Confirmation Code',
@@ -35,6 +34,9 @@ export default {
     or: 'Or',
     resetPassword: 'Reset Password',
     loginPromptForgotPassword: 'Back to Log In',
+    confirmationEmail: 'Please check your email ({email}) for a confirmation code',
+    emailDoesNotExist: 'Email does not exist',
+    successfulPasswordChange: 'Password changed successfully. Please log in again',
 
     // Logged-in Appbar
     toggleTheme: 'Toggle theme',
@@ -148,8 +150,8 @@ export default {
 
     changedPortfolioTheme: 'Changed portfolio theme to {themeName}',
     savedAllSections: 'Saved all sections in {pageTitle}',
-    addedSectionToPage: 'Added {sectionName} to {pageTitle}',
-    deletedSectionFromPage: 'Deleted {sectionName} from {pageTitle}',
+    addedSectionToPage: 'Added a section to {pageTitle}',
+    deletedSectionFromPage: 'Deleted a section from {pageTitle}',
     deletedPage: 'Deleted {pageTitle}',
     addedPortfolio: '{portfolioTitle} added',
     deletedPortfolio: '{portfolioTitle} deleted',

@@ -42,7 +42,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function DropzoneButton({ img, initialFile, sectionIndex, sectionName }) {
+export default function DropzoneButton({
+  img,
+  initialFile,
+  sectionIndex,
+  elementIndex,
+  elementName
+}) {
   const classes = useStyles()
   const { sections, pageId, modifySection } = useContext(PortfolioContext)
 
@@ -93,7 +99,7 @@ export default function DropzoneButton({ img, initialFile, sectionIndex, section
             return body.key
           })
         })
-        modifySection(sectionIndex, sectionName, key)
+        modifySection(sectionIndex, elementIndex, elementName, key)
       }
     }
     setOpen(false)
@@ -111,8 +117,8 @@ export default function DropzoneButton({ img, initialFile, sectionIndex, section
           filesLimit={filesLimit}
           maxFileSize={5000000}
           onDelete={(deletedFile) => {
-            deleteMediaItem(sections[pageId][sectionIndex]['data'][sectionName])
-            modifySection(sectionIndex, sectionName, '')
+            deleteMediaItem(sections[pageId][sectionIndex][elementIndex].data)
+            modifySection(sectionIndex, elementIndex, elementName, '')
             setFileName('')
             setFileExtension('')
             setFiles([])

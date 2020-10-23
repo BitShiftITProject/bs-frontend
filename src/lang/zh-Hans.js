@@ -34,6 +34,9 @@ export default {
     or: '或',
     resetPassword: '重置密码',
     loginPromptForgotPassword: '返回登录',
+    confirmationEmail: 'Please check your email ({email}) for a confirmation code',
+    emailDoesNotExist: 'Email does not exist',
+    successfulPasswordChange: 'Password changed successfully. Please log in again',
 
     // Logged-in Appbar
     toggleTheme: '切换夜間模式',
@@ -155,8 +158,8 @@ export default {
 
     changedPortfolioTheme: '将博客主题更改为{themeName}',
     savedAllSections: '将所有部分保存在$ {pageTitle}中',
-    addedSectionToPage: '将{sectionName}添加到{pageTitle}',
-    deletedSectionFromPage: '已从{pageTitle}中删除{sectionName}',
+    addedSectionToPage: '将添加到{pageTitle}',
+    deletedSectionFromPage: '已从{pageTitle}中删除',
     deletedPage: '已删除{pageTitle}',
     addedPortfolio: '添加了{portfolioTitle}',
     deletedPortfolio: '已删除{portfolioTitle}',

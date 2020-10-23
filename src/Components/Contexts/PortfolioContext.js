@@ -31,15 +31,17 @@ const PortfolioProvider = ({ children }) => {
   // n-th (where n === index) section of the current page.
   // e.g. modifySection(0, 'paragraph1', 'Hello') replaces the value of the
   // 0-th section's 'paragraph1' field in its data object with 'Hello'
-  function modifySection(index, name, value) {
+  function modifySection(sectionIndex, elementIndex, name, value) {
     setSections((sections) => {
-      // Create the copy of the n-th section with the new data
-      const newSectionData = { ...sections[pageId][index]['data'], [name]: value }
-      const newSection = { id: sections[pageId][index]['id'], data: newSectionData }
+      // Create the copy of the n-th element with the new data
+      const newElement = { id: name, data: value }
 
-      // Replaces the section at the given index with the new section
+      // Replaces the element at the given index with the new element
+      const newSection = Array.from(sections[pageId][sectionIndex])
+      newSection.splice(elementIndex, 1, newElement)
+
       const newPage = Array.from(sections[pageId])
-      newPage.splice(index, 1, newSection)
+      newPage.splice(sectionIndex, 1, newSection)
 
       return {
         ...sections,

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid, Button } from '@material-ui/core'
-import { GetSectionJSX } from '../SectionsMap'
+import { GetElementJSX } from '../SectionsMap'
 import CloseIcon from '@material-ui/icons/Close'
 export default function ExpandedSectionsButton({ handleToggle, handleSectionOnClick }) {
   const section = {
@@ -39,7 +39,7 @@ export default function ExpandedSectionsButton({ handleToggle, handleSectionOnCl
                     onClick={() => { handleSectionOnClick(section)}
                     }
                 >
-                    {GetSectionJSX(section, false)} <button> (+) </Button>
+                    {GetElementJSX(section, false)} <button> (+) </Button>
                 </Button>
             </Grid>
             */}
@@ -51,7 +51,7 @@ export default function ExpandedSectionsButton({ handleToggle, handleSectionOnCl
           }}
         >
           {/*  */}
-          {GetSectionJSX(section, false)}
+          {GetElementJSX(section, false)}
         </Button>
       </Grid>
 
@@ -61,7 +61,7 @@ export default function ExpandedSectionsButton({ handleToggle, handleSectionOnCl
             handleSectionOnClick(section1)
           }}
         >
-          {GetSectionJSX(section1, false)}
+          {GetElementJSX(section1, false)}
         </Button>
       </Grid>
     </Grid>

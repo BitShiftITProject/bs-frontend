@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Grid, Paper, Fab, CircularProgress } from '@material-ui/core'
@@ -6,6 +6,7 @@ import { Grid, Paper, Fab, CircularProgress } from '@material-ui/core'
 import { loggedInStyles, CursorTypography } from '../../../../Styles/loggedInStyles'
 import SectionsList from '../../../Sections/SectionsList'
 import SectionsButton from '../../../Sections/SectionAdd/SectionsButton'
+import SectionEditDialog from '../../../Sections/SectionEdit/SectionEditDialog'
 
 /* Pages and adding/removing pages part of the editing portfolio*/
 export default function EditPortfolioSectionsGrouped({
@@ -16,8 +17,48 @@ export default function EditPortfolioSectionsGrouped({
   handleSaveSections,
   handleSectionDelete
 }) {
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
+
   const classes = loggedInStyles()
   const fixedHeightPaper = classes.fixedHeightPaper
+
+  /* -------------------------------------------------------------------------- */
+  /*                           Edit Mode for a Section                          */
+  /* -------------------------------------------------------------------------- */
+
+  const [editMode, setEditMode] = useState(false)
+  const [sectionIndex, setSectionIndex] = useState(null)
+  const [elementIndex, setElementIndex] = useState(0)
+
+  const startSectionEdit = (index) => {
+    console.log('Edit section', index)
+    setSectionIndex(index)
+    setElementIndex(0)
+    setEditMode(true)
+  }
+
+  const finishSectionEdit = () => {
+    setSectionIndex(null)
+    setEditMode(false)
+  }
+
+  const handleChange = (event, newValue) => {
+    setElementIndex(newValue)
+  }
+
+  const dialog = (
+    <SectionEditDialog
+      sectionIndex={sectionIndex}
+      editMode={editMode}
+      finishSectionEdit={finishSectionEdit}
+      elementIndex={elementIndex}
+      sections={sections}
+      pageId={pageId}
+      handleChange={handleChange}
+    />
+  )
 
   /* -------------------------------------------------------------------------- */
   /*                                   Locale                                   */
@@ -74,7 +115,7 @@ export default function EditPortfolioSectionsGrouped({
           >
             <SectionsList
               sections={sections[pageId]}
-              editing
+              startSectionEdit={startSectionEdit}
               handleSectionDelete={handleSectionDelete}
             />
           </Grid>
@@ -112,6 +153,7 @@ export default function EditPortfolioSectionsGrouped({
           <Grid item></Grid>
           <SectionsButton pageId={pageId} handleSectionAdd={handleSectionAdd} />
         </Grid>
+        {sectionIndex !== null && dialog}
       </Paper>
     </Grid>
   )
