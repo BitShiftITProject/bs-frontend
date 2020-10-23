@@ -1,6 +1,8 @@
-const BACKEND = 'http://localhost:3000'
+const BACKEND = 'http://localhost:8000'
 // const BACKEND = 'https://bitshift-backend.herokuapp.com'
 
+const FORGOTPASSWORD = '/cognito/forgotpassword'
+const CHANGEPASSWORD = '/cognito/changepassword'
 const AUTHENTICATE = '/cognito/authenticate'
 const LOGGEDIN = '/cognito/loggedin'
 
@@ -14,6 +16,8 @@ const PAGES = '/pages'
 
 module.exports = {
   BACKEND,
+  FORGOTPASSWORD,
+  CHANGEPASSWORD,
   AUTHENTICATE,
   LOGGEDIN,
   SIGNUP,
