@@ -79,7 +79,7 @@ export default function LandingContainer(props) {
             }}
           >
             <Typography variant='h4' component='h1'>
-              bitshift
+              bitspace
             </Typography>
             <Typography variant='h4' component='h2'>
               <EmojiHover />
