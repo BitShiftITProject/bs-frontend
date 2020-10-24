@@ -13,6 +13,10 @@ import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 
 export default function AddPortfolioPage() {
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
   const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
@@ -58,16 +62,20 @@ export default function AddPortfolioPage() {
     // passed into the portfolio creation endpoint
     const postDetails = {
       title: title,
-      description: description
+      description: description,
+      pageOrder: []
     }
 
     // Creates a portfolio belonging to the currently logged-in user,
     // if error, show an error helper text.
     await postPortfolioToUser(user.username, postDetails).then((response) => {
       if (response.ok) {
-        const key = enqueueSnackbar(`${title} added`, {
-          variant: 'success'
-        })
+        const key = enqueueSnackbar(
+          intl.formatMessage({ id: 'addedPortfolio'}, {portfolioTitle: title }),
+          {
+            variant: 'success'
+          }
+        )
 
         setTimeout(() => {
           closeSnackbar(key)

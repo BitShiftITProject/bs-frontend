@@ -150,6 +150,24 @@ const loggedOutStyles = makeStyles((theme) => ({
     textTransform: 'lowercase',
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1)
+  },
+  signupDiv: {
+    width: '100%'
+  },
+  signupForm: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+
+  signupSpan: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%'
+  },
+
+  signupFab: {
+    transform: 'scale(0.65)'
   }
 }))
 

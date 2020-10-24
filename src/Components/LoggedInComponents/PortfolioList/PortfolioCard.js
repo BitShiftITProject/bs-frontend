@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   CardContent,
   Card,
@@ -15,7 +15,7 @@ import ShareIcon from '@material-ui/icons/Share'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline'
 import { useIntl } from 'react-intl'
 import { loggedInStyles } from '../../../Styles/loggedInStyles'
-import {getPortfolioPages} from '../../../Backend/Fetch'
+import { getPortfolioPages } from '../../../Backend/Fetch'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -84,32 +84,26 @@ const PortfolioCard = (props) => {
   /* -------------------------------------------------------------------------- */
   // Passed down from PortfolioList
 
-  const {
-    portfolioId,
-    title,
-    description,
-    index,
-    viewPortfolio,
-    editPortfolio,
-    sharePortfolio,
-    deletePortfolio
-  } = props
+  const { index, portfolio, viewPortfolio, editPortfolio, sharePortfolio, deletePortfolio } = props
 
   const getPageCount = async () => {
-    return getPortfolioPages(portfolioId).then((pages) => {return ((pages.length > 0) ? true : false)});
+    return getPortfolioPages(portfolio.id).then((pages) => pages.length)
   }
+
   const [hasPages, setHasPages] = useState(false)
 
   useEffect(() => {
-      getPageCount().then((pages) => {setHasPages(pages)});    
+    getPageCount().then((pageCount) => {
+      setHasPages(pageCount > 0)
+    })
   }, [])
 
   const handleView = () => {
-    viewPortfolio(portfolioId)
+    viewPortfolio(portfolio.id)
   }
 
   const handleEdit = () => {
-    editPortfolio(portfolioId)
+    editPortfolio(portfolio.id)
   }
 
   return (
@@ -128,7 +122,7 @@ const PortfolioCard = (props) => {
             variant='h5'
             component='h2'
           >
-            {title}
+            {portfolio.title}
           </Typography>
           {/*
            * PORTFOLIO DESCRIPTION
@@ -139,7 +133,7 @@ const PortfolioCard = (props) => {
             color='textSecondary'
             component='p'
           >
-            {description}
+            {portfolio.description}
           </Typography>
         </CardContent>
       </Grid>
@@ -159,12 +153,15 @@ const PortfolioCard = (props) => {
            * VIEW PORTFOLIO BUTTON
            */}
           <Grid item>
-            <Tooltip title={(hasPages) ? "" : "Please add content before viewing"} placement='top'>
-                <span>
-                    <Button size='small' onClick={handleView} disabled={!hasPages}>
-                    {intl.formatMessage({ id: 'view' })}
-                    </Button>
-                </span>
+            <Tooltip
+              title={hasPages ? '' : intl.formatMessage({ id: 'viewPortfolioError' })}
+              placement='bottom'
+            >
+              <span>
+                <Button size='small' onClick={handleView} disabled={!hasPages}>
+                  {intl.formatMessage({ id: 'view' })}
+                </Button>
+              </span>
             </Tooltip>
           </Grid>
           {/*
@@ -190,14 +187,22 @@ const PortfolioCard = (props) => {
            * SHARE PORTFOLIO BUTTON
            */}
           <Grid item>
-            <Tooltip title={(hasPages) ? intl.formatMessage({ id: 'share' }) : "Please add content before sharing"} placement='top'>
-                <span>
-                    <IconButton disabled={!hasPages}
-                        className={style.share}
-                        onClick={(e) => sharePortfolio('share', portfolioId, title, index)}
-                    >
-                        <ShareIcon />
-                    </IconButton>
+            <Tooltip
+              title={
+                hasPages
+                  ? intl.formatMessage({ id: 'share' })
+                  : intl.formatMessage({ id: 'sharePortfolioError' })
+              }
+              placement='bottom'
+            >
+              <span>
+                <IconButton
+                  disabled={!hasPages}
+                  className={style.sdropzonehare}
+                  onClick={(e) => sharePortfolio('share', portfolio.id, portfolio.title, index)}
+                >
+                  <ShareIcon />
+                </IconButton>
               </span>
             </Tooltip>
           </Grid>
@@ -205,10 +210,10 @@ const PortfolioCard = (props) => {
            * DELETE PORTFOLIO BUTTON
            */}
           <Grid item>
-            <Tooltip title={intl.formatMessage({ id: 'delete' })} placement='top'>
+            <Tooltip title={intl.formatMessage({ id: 'delete' })} placement='bottom'>
               <IconButton
                 className={style.delete}
-                onClick={(e) => deletePortfolio('delete', portfolioId, title, index)}
+                onClick={(e) => deletePortfolio('delete', portfolio.id, portfolio.title, index)}
               >
                 <DeleteOutlineIcon />
               </IconButton>

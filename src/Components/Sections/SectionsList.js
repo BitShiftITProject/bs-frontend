@@ -1,10 +1,8 @@
 import React from 'react'
-import { Typography, Grid } from '@material-ui/core'
-import { useIntl } from 'react-intl'
+import { Grid } from '@material-ui/core'
 
-import { GetSectionJSX, sectionIdsByCategory } from './SectionsMap'
+import { GetElementJSX } from './SectionsMap'
 import SectionContainer from './SectionEdit/SectionContainer'
-import SectionTemplate from './SectionAdd/SectionTemplate'
 
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -12,12 +10,10 @@ import { useTheme } from '@material-ui/core/styles'
 
 
 
-export default function SectionsList({ sections, editing, handleSectionAdd, handleSectionDelete,handleSetPageSection }) {
-  const intl = useIntl()
-
+export default function SectionsList({ sections, editing, startSectionEdit, handleSectionDelete, handleSetPageSection }) {
   // the grid for the drop and drag related sections
   const grid = sections ? sections.length : 0
- 
+
   // reorders the result
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -25,27 +21,27 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
     result.splice(endIndex, 0, removed);
 
     return result;
-    };
+  };
 
 
-    const theme = useTheme()
+  const theme = useTheme()
 
-    // styles for when theyre being dragged
-    const getItemStyle = (isDragging, draggableStyle) => ({
-      // some basic styles to make the sections look a bit nicer
-     userSelect: "none",
+  // styles for when theyre being dragged
+  const getItemStyle = (isDragging, draggableStyle) => ({
+    // some basic styles to make the sections look a bit nicer
+    userSelect: "none",
     padding: grid * 2,
     margin: `0 0 ${grid}px 0`,
-  
-      // change background colour if dragging
-      background: isDragging
-        ? // theme.palette.background.paperHover
-          'lightgreen'
-        : theme.palette.background.paperLight,
-  
-      // styles we need to apply on draggables
-      ...draggableStyle
-    })
+
+    // change background colour if dragging
+    background: isDragging
+      ? // theme.palette.background.paperHover
+      'lightgreen'
+      : theme.palette.background.paperLight,
+
+    // styles we need to apply on draggables
+    ...draggableStyle
+  })
 
   // // styles for when theyre being dragged 
   // const getItemStyle = (isDragging, draggableStyle) => ({
@@ -73,9 +69,9 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
       result.source.index,
       result.destination.index
     );
-    if (handleSetPageSection){
-    handleSetPageSection(newSections)
-  }
+    if (handleSetPageSection) {
+      handleSetPageSection(newSections)
+    }
   }
 
 
@@ -90,83 +86,75 @@ export default function SectionsList({ sections, editing, handleSectionAdd, hand
     /*               ACTUAL SECTIONS (Has content from Page object)               */
     /* -------------------------------------------------------------------------- */
 
-    sections ? (
-      /* ---------------------------- Editable Sections --------------------------- */
+    /* ---------------------------- Editable Sections --------------------------- */
 
-      handleSectionDelete ? (
-        <div>
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable">
-              {(provided, snapshot) => (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  {/* map the sections as dragable items */}
-                  {sections.map((item, idx) => (
-                    <Draggable key={idx} draggableId={`item-${idx}`} index={idx}>
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={getItemStyle(
-                            snapshot.isDragging,
-                            provided.draggableProps.style
-                          )}
+    handleSectionDelete ? (
+      <div>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="droppable">
+            {(provided, snapshot) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {/* map the sections as dragable items */}
+                {sections.map((section, sectionIndex) => (
+                  <Draggable key={sectionIndex} draggableId={`item-${sectionIndex}`} index={sectionIndex}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={getItemStyle(
+                          snapshot.isDragging,
+                          provided.draggableProps.style
+                        )}
+                      >
+                        <SectionContainer
+                          key={sectionIndex}
+                          sectionIndex={sectionIndex}
+                          startSectionEdit={startSectionEdit}
+                          handleSectionDelete={handleSectionDelete}
                         >
-                                <SectionContainer
-                                  key={idx}
-                                  sectionId={item.id}
-                                  index={idx}
-                                  handleSectionDelete={handleSectionDelete}
-                                >
-                                  {GetSectionJSX(item, editing, idx)}
-                                </SectionContainer>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+                          <Grid container direction='row' spacing={2}>
+                            {section.map((element, elementIndex) => (
+                              <Grid item key={elementIndex} xs={12 / section.length}>
+                                {GetElementJSX(element, editing, sectionIndex, elementIndex)}
+                              </Grid>
+                            ))}
+                          </Grid>
+                        </SectionContainer>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
 
-        </div>
-      ) : (
+      </div>
+
+    ) : (
         /* ------------------------ Public Portfolio Sections ----------------------- */
 
         <div>
-          {sections.map((section, idx) => (
-            <div key={idx}>{GetSectionJSX(section, editing, idx)}</div>
-          ))}
+          {sections.map((section, sectionIndex) => {
+            return (
+              <div key={sectionIndex}>
+                <Grid container direction='row' spacing={2}>
+                  {section.map((element, elementIndex) => (
+                    <Grid item key={elementIndex} xs={12 / section.length}>
+                      {GetElementJSX(element, editing, sectionIndex, elementIndex)}
+                    </Grid>
+                  ))}
+                </Grid>
+              </div>
+            )
+          })}
         </div>
       )
-    ) : (
-      /* -------------------------------------------------------------------------- */
-      /*                   SECTION TEMPLATES IN ADD SECTIONS MENU                   */
-      /* -------------------------------------------------------------------------- */
-
-      <div>
-        {Object.keys(sectionIdsByCategory).map((category) => (
-          <div key={category}>
-            <Grid container style={{ padding: 8 }}>
-              <Typography variant='overline'>{intl.formatMessage({ id: category })}</Typography>
-            </Grid>
-            {sectionIdsByCategory[category].map((id, idx) => {
-              const exampleSection = { id }
-              const editing = true
-              return (
-                <SectionTemplate key={id} sectionId={id} handleSectionAdd={handleSectionAdd}>
-                  {GetSectionJSX(exampleSection, editing, idx)}
-                </SectionTemplate>
-              )
-            })}
-          </div>
-        ))}
-      </div>
-    )
 
   return sectionList
 }

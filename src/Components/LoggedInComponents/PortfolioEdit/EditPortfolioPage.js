@@ -5,7 +5,7 @@ import Sidebar from '../Sidebar'
 import EditPortfolioDropdown from './EditPortfolioDropdown'
 import EditPortfolioContent from './EditPortfolioContentFiles/EditPortfolioContent'
 import EditPortfolioStyle from './EditPortfolioStyle'
-import { getPortfolio, getPortfolioPages } from '../../../Backend/Fetch'
+import { getPortfolio, getPortfolioPages, patchPortfolio } from '../../../Backend/Fetch'
 import PublicThemesProvider from '../../Contexts/PublicThemesContext'
 import ThemesProvider from '../../Contexts/ThemesContext'
 
@@ -34,9 +34,22 @@ export default function EditPortfolioPage() {
     if (portfolioId) {
       getPortfolio(portfolioId).then((portfolio) => {
         setPortfolio({ ...portfolio })
-        getPortfolioPages(portfolioId).then((pages) => {
-          setPages(pages)
-        })
+
+        const pageOrder = portfolio.pageOrder
+        if (!pageOrder) {
+          getPortfolioPages(portfolio.id).then((pages) => {
+            setPages(pages)
+            const patchDetails = { pageOrder: pages }
+            patchPortfolio(portfolio.id, patchDetails)
+          })
+        } else {
+          getPortfolioPages(portfolio.id).then((pages) => {
+            pages.sort((a, b) => {
+              return pageOrder.indexOf(a.id) - pageOrder.indexOf(b.id)
+            })
+            setPages(pages)
+          })
+        }
       })
     } else {
       window.location.href = '/portfolios'

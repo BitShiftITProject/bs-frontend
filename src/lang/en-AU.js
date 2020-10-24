@@ -15,6 +15,7 @@ export default {
     forgotPasswordPrompt: 'Forgot Password?',
     signUpPrompt: 'Create New Account',
     loginError: "The email or password you've entered is incorrect.",
+    loginLoading: 'Authenticating',
 
     // Sign Up
     signUp: 'Sign Up',
@@ -22,10 +23,10 @@ export default {
     passwordError: 'Passwords must match',
     passwordPattern: '8 to 12 characters',
     loginPromptSignUp: 'Already have an account? Log in.',
+    signupLoading: 'Please wait while we save your data',
 
     // Forgot Password
-    forgotPasswordDescription:
-      'Please enter your email to receive a confirmation code',
+    forgotPasswordDescription: 'Please enter your email to receive a confirmation code',
     forgotPassword: 'Forgot Password',
     sendCode: 'Send Code',
     confirmationCode: 'Confirmation Code',
@@ -33,6 +34,9 @@ export default {
     or: 'Or',
     resetPassword: 'Reset Password',
     loginPromptForgotPassword: 'Back to Log In',
+    confirmationEmail: 'Please check your email ({email}) for a confirmation code',
+    emailDoesNotExist: 'Email does not exist',
+    successfulPasswordChange: 'Password changed successfully. Please log in again',
 
     // Logged-in Appbar
     toggleTheme: 'Toggle theme',
@@ -52,7 +56,8 @@ export default {
     copy: 'Copy',
     url: 'URL',
     errorText: 'An error occurred. Try again.',
-
+    viewPortfolioError: 'Please add content before viewing',
+    sharePortfolioError: 'Please add content before sharing',
     // Home
     home: 'Home',
 
@@ -77,12 +82,15 @@ export default {
     portfolioDescription: 'Description',
 
     pages: 'Pages',
+    selectAPage: 'Select a page to start editing your portfolio',
 
     saveSections: 'Save Sections',
     addSection: 'Add Section',
+    clickAddSections: 'To add a section, click on Add Sections and choose a template',
     chooseATemplate: 'Choose a template',
     headings: 'Headings',
-    textAndMultimedia: 'Text and Multimedia',
+    text: 'Text',
+    multimedia: 'Multimedia',
 
     // Profile
     profile: 'Profile',
@@ -119,8 +127,11 @@ export default {
     help: 'Help',
     faq: 'Frequently Asked Questions (FAQ)',
 
-    question1: 'Question 1',
-    answer1: 'Answer 1',
+    question1: 'How can I get a youtube video ID so i can place it into my portfolio?',
+    answer1: `To get the youtube video ID for a youtube video, navigate to the youtube video of choice on youtube and click the share button under the video.
+     You should be presented with a link, the last part of which is the video ID. 
+     For example, the video 'https://youtu.be/2g811Eo7K8U' has the ID '2g811Eo7K8U'. 
+     You can then place this ID into the youtube video element to show it in your portfolio.`,
 
     question2: 'Question 2',
     answer2: 'Answer 2',
@@ -133,6 +144,17 @@ export default {
     theme: 'Dark Mode',
     language: 'Language',
 
-    loginData: 'Login data'
+    loginData: 'Login data',
+
+    // Snackbars
+
+    changedPortfolioTheme: 'Changed portfolio theme to {themeName}',
+    savedAllSections: 'Saved all sections in {pageTitle}',
+    addedSectionToPage: 'Added a section to {pageTitle}',
+    deletedSectionFromPage: 'Deleted a section from {pageTitle}',
+    deletedPage: 'Deleted {pageTitle}',
+    addedPortfolio: '{portfolioTitle} added',
+    deletedPortfolio: '{portfolioTitle} deleted',
+    copiedURLToClipboard: 'Copied URL to clipboard!'
   }
 }

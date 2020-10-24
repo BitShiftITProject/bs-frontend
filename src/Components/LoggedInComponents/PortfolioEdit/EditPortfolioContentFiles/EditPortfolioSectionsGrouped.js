@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useIntl } from 'react-intl'
 
-import { Grid, Paper, Fab } from '@material-ui/core'
+import { Grid, Paper, Fab, CircularProgress } from '@material-ui/core'
 
 import { loggedInStyles, CursorTypography } from '../../../../Styles/loggedInStyles'
 import SectionsList from '../../../Sections/SectionsList'
 import SectionsButton from '../../../Sections/SectionAdd/SectionsButton'
+import SectionEditDialog from '../../../Sections/SectionEdit/SectionEditDialog'
 
 /* Pages and adding/removing pages part of the editing portfolio*/
 export default function EditPortfolioSectionsGrouped({
@@ -13,11 +14,52 @@ export default function EditPortfolioSectionsGrouped({
   handleSectionAdd,
   sections,
   handleSetPageSection,
+  loading,
   handleSaveSections,
   handleSectionDelete
 }) {
+  /* -------------------------------------------------------------------------- */
+  /*                                   Styling                                  */
+  /* -------------------------------------------------------------------------- */
+
   const classes = loggedInStyles()
   const fixedHeightPaper = classes.fixedHeightPaper
+
+  /* -------------------------------------------------------------------------- */
+  /*                           Edit Mode for a Section                          */
+  /* -------------------------------------------------------------------------- */
+
+  const [editMode, setEditMode] = useState(false)
+  const [sectionIndex, setSectionIndex] = useState(null)
+  const [elementIndex, setElementIndex] = useState(0)
+
+  const startSectionEdit = (index) => {
+    console.log('Edit section', index)
+    setSectionIndex(index)
+    setElementIndex(0)
+    setEditMode(true)
+  }
+
+  const finishSectionEdit = () => {
+    setSectionIndex(null)
+    setEditMode(false)
+  }
+
+  const handleChange = (event, newValue) => {
+    setElementIndex(newValue)
+  }
+
+  const dialog = (
+    <SectionEditDialog
+      sectionIndex={sectionIndex}
+      editMode={editMode}
+      finishSectionEdit={finishSectionEdit}
+      elementIndex={elementIndex}
+      sections={sections}
+      pageId={pageId}
+      handleChange={handleChange}
+    />
+  )
 
   /* -------------------------------------------------------------------------- */
   /*                                   Locale                                   */
@@ -47,7 +89,23 @@ export default function EditPortfolioSectionsGrouped({
           </Grid>
         )}
 
-        {pageId && sections[pageId] && (
+        {pageId && sections[pageId].length === 0 && (
+          <Grid
+            item
+            xs={10}
+            style={{ minWidth: '100%', height: '100%' }}
+            container
+            direction='column'
+            justify='center'
+            alignItems='center'
+          >
+            <CursorTypography variant='subtitle2'>
+              To add a section, click on Add Sections and choose a template
+            </CursorTypography>
+          </Grid>
+        )}
+
+        {pageId && sections[pageId].length > 0 && (
           <Grid
             item
             xs={10}
@@ -58,7 +116,7 @@ export default function EditPortfolioSectionsGrouped({
           >
             <SectionsList
               sections={sections[pageId]}
-              editing
+              startSectionEdit={startSectionEdit}
               handleSectionDelete={handleSectionDelete}
               handleSetPageSection={handleSetPageSection}
             />
@@ -77,9 +135,9 @@ export default function EditPortfolioSectionsGrouped({
           alignItems='center'
           className={classes.floatingBottomContainer}
         >
-          <Grid item>
+          <Grid item className={classes.fabProgressContainer}>
             <Fab
-              // disabled
+              disabled={loading}
               style={!pageId ? { visibility: 'hidden' } : {}}
               color='secondary'
               variant='extended'
@@ -89,6 +147,7 @@ export default function EditPortfolioSectionsGrouped({
                 {intl.formatMessage({ id: 'saveSections' })}
               </CursorTypography>
             </Fab>
+            {loading && <CircularProgress size={24} className={classes.fabProgress} />}
           </Grid>
 
           {/* ADD SECTION BUTTON */}
@@ -96,6 +155,7 @@ export default function EditPortfolioSectionsGrouped({
           <Grid item></Grid>
           <SectionsButton pageId={pageId} handleSectionAdd={handleSectionAdd} />
         </Grid>
+        {sectionIndex !== null && dialog}
       </Paper>
     </Grid>
   )

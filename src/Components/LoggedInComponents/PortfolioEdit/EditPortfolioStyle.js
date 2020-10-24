@@ -20,6 +20,7 @@ import { loggedInStyles } from '../../../Styles/loggedInStyles'
 import { PublicThemesContext } from '../../Contexts/PublicThemesContext'
 import { themes } from '../../../Themes/themes'
 import { useSnackbar } from 'notistack'
+import { useIntl } from 'react-intl'
 
 export default function EditPortfolioStyle({ portfolio }) {
   /* -------------------------------------------------------------------------- */
@@ -36,6 +37,12 @@ export default function EditPortfolioStyle({ portfolio }) {
   const { enqueueSnackbar } = useSnackbar()
 
   /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const intl = useIntl()
+
+  /* -------------------------------------------------------------------------- */
   /*                                Public Theme                                */
   /* -------------------------------------------------------------------------- */
 
@@ -50,7 +57,7 @@ export default function EditPortfolioStyle({ portfolio }) {
     const titleCase = e.target.value.replace(/([A-Z])/g, ' $1')
     const themeName = titleCase.charAt(0).toUpperCase() + titleCase.slice(1)
 
-    enqueueSnackbar(`Changed portfolio theme to ${themeName}`, {})
+    enqueueSnackbar(intl.formatMessage({ id: 'changedPortfolioTheme'}, {themeName }), {})
   }
 
   /* -------------------------------------------------------------------------- */

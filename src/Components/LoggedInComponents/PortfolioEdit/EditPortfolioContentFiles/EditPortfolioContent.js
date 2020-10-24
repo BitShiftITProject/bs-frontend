@@ -15,8 +15,22 @@ import {
 
 import { PortfolioContext } from '../../../Contexts/PortfolioContext'
 import DialogType from './DialogType'
+import { useSnackbar } from 'notistack'
+import { useIntl } from 'react-intl'
 
 export default function EditPortfolioContent(props) {
+  /* -------------------------------------------------------------------------- */
+  /*                                  Snackbars                                 */
+  /* -------------------------------------------------------------------------- */
+
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const intl = useIntl()
+
   /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
@@ -24,6 +38,7 @@ export default function EditPortfolioContent(props) {
   const { portfolio, setPortfolio, pages, setPages } = props
   const [portfolioTitle, setPortfolioTitle] = useState('')
   const [pageTitle, setPageTitle] = useState('')
+  const [loading, setLoading] = useState(false)
 
   // PortfolioContext stores all details about:
   // - ID of currently-selected page (pageId) whose sections are shown,
@@ -75,6 +90,7 @@ export default function EditPortfolioContent(props) {
           return { [page.id]: page.content.sections }
         })
         .reduce((prev, curr) => ({ ...prev, ...curr }), currentSections)
+      console.log(newSections)
       return newSections
     })
   }, [pages, setSections])
@@ -82,9 +98,10 @@ export default function EditPortfolioContent(props) {
   /* -------------------------------------------------------------------------- */
   /*                                Section Handlers                            */
   /* -------------------------------------------------------------------------- */
+
   // Adds a new correctly-formatted section object into the current page's list
   // of sections (Note: Does not save to the backend)
-  const handleSectionAdd = (newSection) => {
+  function handleSectionAdd(newSection) {
     setSections((currentSections) => {
       // If this is the first section of the page, just set it as [newSection],
       // otherwise just add newSection to the end of the current list of sections
@@ -94,6 +111,37 @@ export default function EditPortfolioContent(props) {
       }
       return newSections
     })
+
+    const pageTitle = pages.filter((page) => page.id === pageId)[0].title
+
+    // Shows a notification that the section has been added
+    enqueueSnackbar(intl.formatMessage({ id: 'addedSectionToPage' }, { pageTitle }), {
+      variant: 'info'
+    })
+  }
+
+  // Saves all the sections of the currently-selected page
+  async function handleSaveSections(e) {
+    e.preventDefault()
+    const savedPage = { content: { sections: sections[pageId] } }
+    // console.log(savedPage)
+
+    // Start showing loading animation
+    setLoading(true)
+
+    // Patch the page with the current sections on the screen
+    await patchPage(pageId, savedPage)
+
+    setTimeout(() => {
+      const pageTitle = pages.filter((page) => page.id === pageId)[0].title
+
+      // Show a notification that all sections have been saved
+      enqueueSnackbar(intl.formatMessage({ id: 'savedAllSections' }, { pageTitle }), {
+        variant: 'success'
+      })
+
+      setLoading(false)
+    }, 1000)
   }
 
 
@@ -115,7 +163,7 @@ export default function EditPortfolioContent(props) {
 
 
   // Deletes the section at a given index among the sections of the current page
-  const handleSectionDelete = (sectionIndex) => {
+  function handleSectionDelete(sectionIndex) {
     setSections((currentSections) => {
       // Ensure that the current page has a section at the specified index
       if (currentSections[pageId].length >= sectionIndex + 1) {
@@ -128,8 +176,25 @@ export default function EditPortfolioContent(props) {
           ...currentSections,
           [pageId]: pageIdSections
         }
+
+        // const pageTitle = pages.filter((page) => page.id === pageId)[0].title
+
+        // Show a notification that the section has been deleted from the page
+        const key = enqueueSnackbar(
+          intl.formatMessage({ id: 'deletedSectionFromPage' }, { pageTitle }),
+          {
+            variant: 'error',
+            persist: true
+          }
+        )
+
+        setTimeout(() => {
+          closeSnackbar(key)
+        }, 2500)
+
         return newSections
       }
+
       return currentSections
     })
   }
@@ -259,6 +324,13 @@ export default function EditPortfolioContent(props) {
     // Updates the pages to included the newly added page in the frontend,
     // without messing with the other pages' unsaved changes
     setPages((pages) => [...pages, newPage])
+
+    // console.log(portfolio, newPage)
+
+    await patchPortfolio(portfolio.id, { pageOrder: [...portfolio.pageOrder, newPage.id] })
+    // Sets the currently shown portfolio as the updated portfolio
+    const updatedPortfolio = await getPortfolio(portfolio.id)
+    setPortfolio(updatedPortfolio)
     setOpen(false)
   }
   /* -------------------------------------------------------------------------- */
@@ -285,20 +357,11 @@ export default function EditPortfolioContent(props) {
 
   /* -------------------------------------------------------------------------- */
 
-  // Edit the PAGE CONTENT of the Page in the DB
-  async function handleSaveSections(e) {
-    e.preventDefault()
-    const savedPage = { content: { sections: sections[pageId] } }
-    // console.log(savedPage)
-    await patchPage(pageId, savedPage)
-  }
-
-  /* -------------------------------------------------------------------------- */
-
   // Removes a Page (and any reference to it) from the DB
   async function handlePageDelete(e) {
     e.preventDefault()
     const toBeDeletedPageId = pages[dialogContent.component].id
+    const toBeDeletedPageTitle = pages[dialogContent.component].title
 
     // Get the new list of page IDs
     const newPageIds = pages.map((pageObj) => pageObj.id).filter((id) => id !== toBeDeletedPageId)
@@ -326,7 +389,23 @@ export default function EditPortfolioContent(props) {
     })
 
     // Delete the portfolio from the portfolios DB
-    await deletePage(toBeDeletedPageId)
+    deletePage(toBeDeletedPageId).then(() => {
+      // Show the notification after deleting the page
+      enqueueSnackbar(
+        intl.formatMessage({ id: 'deletedPage' }, { pageTitle: toBeDeletedPageTitle }),
+        {
+          variant: 'error',
+          autoHideDuration: 3000
+        }
+      )
+    })
+
+    await patchPortfolio(portfolio.id, {
+      pageOrder: portfolio.pageOrder.filter((pageId) => pageId !== toBeDeletedPageId)
+    })
+    // Sets the currently shown portfolio as the updated portfolio
+    const updatedPortfolio = await getPortfolio(portfolio.id)
+    setPortfolio(updatedPortfolio)
 
     setOpen(false)
   }
@@ -346,7 +425,9 @@ export default function EditPortfolioContent(props) {
         handlePortfolioEvent={handlePortfolioEvent}
         handlePageSelect={handlePageSelect}
         portfolio={portfolio}
+        setPortfolio={setPortfolio}
         pages={pages}
+        setPages={setPages}
         pageId={pageId}
         handlePageEvent={handlePageEvent}
       />
@@ -357,6 +438,7 @@ export default function EditPortfolioContent(props) {
       <EditPortfolioSectionsGrouped
         pageId={pageId}
         handleSectionAdd={handleSectionAdd}
+        loading={loading}
         sections={sections}
         handleSaveSections={handleSaveSections}
         handleSectionDelete={handleSectionDelete}
