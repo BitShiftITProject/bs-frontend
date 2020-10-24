@@ -1,20 +1,29 @@
 import React, { useState } from 'react'
-import { Grid, Fab, Typography, Divider, makeStyles } from '@material-ui/core'
+import {
+  Grid,
+  Fab,
+  Typography,
+  makeStyles,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  ButtonBase,
+  Link
+} from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import CloseIcon from '@material-ui/icons/Close'
 
 import { useIntl } from 'react-intl'
 
-import Popup from 'reactjs-popup'
-import 'reactjs-popup/dist/index.css'
-
-import SectionsList from '../SectionsList'
+import CustomDialog from '../../CommonComponents/CustomDialog'
+import { GetElementJSX, sectionElements, ConvertToSection } from '../SectionsMap'
 
 const contentStyle = {
   borderRadius: 15,
   padding: 15,
   minWidth: 300,
-  overflow: 'scroll',
+  overflowY: 'scroll',
   border: 'none',
   backgroundColor: 'rgba(0, 0, 0, 0.05)',
   backdropFilter: 'blur(10px)'
@@ -45,74 +54,119 @@ export default function SectionsButton({ pageId, handleSectionAdd }) {
 
   const intl = useIntl()
 
-  const [open, setOpen] = useState(false)
+  const editing = true
 
-  function handleToggle() {
-    setOpen((o) => !o)
+  const [open, setOpen] = useState(false)
+  const [elements, setElements] = useState([])
+
+  function addSectionElement(elementName) {
+    setElements((elements) => [...elements, { id: elementName, data: null }])
   }
-  function handleClose() {
+
+  function removeSectionElement(index) {
+    const newElements = elements
+    newElements.splice(index, 1)
+    setElements([...newElements])
+  }
+
+  function handleClick() {
+    const newSection = ConvertToSection(elements)
+    handleSectionAdd(newSection)
     setOpen(false)
   }
 
-  // function handleToggle() {
-  //   setOpen((o) => !o)
-  // }
+  function handleOpen() {
+    setElements([])
+    setOpen(true)
+  }
+
+  function handleClose() {
+    setOpen(false)
+  }
 
   /* -------------------------------------------------------------------------- */
   /*                        Section Templates Popup Menu                        */
   /* -------------------------------------------------------------------------- */
 
-  // Clicking on the Add Section button toggles a menu, whereby the user can
-  // choose to add a template by clicking on the SectionTemplate component within the
-  // SectionsList component
-
-  const popup = (
-    <Popup
-      trigger={<span></span>}
-      open={open}
-      position='top right'
-      contentStyle={contentStyle}
-      offsetY={20}
-      arrow={false}
-    >
-      {/* SECTIONS */}
-
-      <Grid
-        container
-        direction='row'
-        justify='space-between'
-        alignItems='center'
-        className={classes.container}
-      >
-        <div>
-          <Typography variant='h6' component='h4'>
-            {intl.formatMessage({ id: 'chooseATemplate' })}
-          </Typography>
-        </div>
-        <div>
-          <Fab size='small' className={classes.closeIcon} onClick={handleClose}>
-            <CloseIcon />
-          </Fab>
-        </div>
-      </Grid>
-
-      <Divider />
-
-      <SectionsList editing handleSectionAdd={handleSectionAdd} />
-    </Popup>
+  const dialogContent = (
+    <div>
+      <DialogTitle>{intl.formatMessage({ id: 'addSection' })}</DialogTitle>
+      <DialogContent>
+        <Grid container direction='column' spacing={4}>
+          <Grid item container>
+            <Typography variant='button'>Preview</Typography>
+            <Grid
+              style={{
+                height: 200,
+                padding: 24,
+                marginTop: 16,
+                backgroundColor: 'rgba(0,0,0,0.1)'
+              }}
+              container
+              direction='row'
+              spacing={2}
+            >
+              {elements.map((section, idx) => (
+                <Grid
+                  key={idx}
+                  container
+                  item
+                  xs={12 / elements.length}
+                  style={{ height: '100%', position: 'relative' }}
+                >
+                  {GetElementJSX(section, editing, idx)}
+                  <Fab
+                    size='small'
+                    style={{ transform: 'scale(0.9)', position: 'absolute', top: -10, right: -5 }}
+                    onClick={() => removeSectionElement(idx)}
+                  >
+                    <CloseIcon />
+                  </Fab>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
+          <Grid item container direction='column' spacing={2}>
+            <Grid item>
+              <Typography variant='body1'>Choose elements to add to your new section:</Typography>
+            </Grid>
+            <Grid item container direction='row' spacing={2}>
+              {Object.keys(sectionElements).map((elementName, idx) => (
+                <Grid key={idx} item>
+                  <ButtonBase onClick={(e) => addSectionElement(elementName)}>
+                    <Link color='textPrimary' style={{ textTransform: 'capitalize' }}>
+                      {elementName}
+                    </Link>
+                  </ButtonBase>
+                </Grid>
+              ))}
+            </Grid>
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>{intl.formatMessage({ id: 'cancel' })}</Button>
+        <Button disabled={!elements.length} onClick={handleClick}>
+          {intl.formatMessage({ id: 'addSection' })}
+        </Button>
+      </DialogActions>
+    </div>
   )
+
+  const dialog = <CustomDialog open={open} setOpen={setOpen} content={dialogContent} />
+
   return (
     <Grid>
       <div>
         <Fab
           style={!pageId ? { visibility: 'hidden' } : {}}
           variant='extended'
-          onClick={handleToggle}
+          onClick={handleOpen}
         >
           <AddIcon style={{ paddingRight: 5 }} />
           {intl.formatMessage({ id: 'addSection' })}
         </Fab>
-        {popup}
+        {dialog}
       </div>
     </Grid>
   )

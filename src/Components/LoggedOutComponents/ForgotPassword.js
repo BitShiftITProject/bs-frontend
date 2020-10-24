@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useCallback } from 'react'
+import shallow from 'zustand/shallow'
 import { useIntl } from 'react-intl'
 import { withStyles, styled } from '@material-ui/core/styles'
 import { TextField, Fab, Typography, Paper, Grid } from '@material-ui/core'
@@ -7,6 +8,9 @@ import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { Link } from 'react-router-dom'
+import { useFormStore } from '../../Store'
+import { sendConfirmationCode, resetPassword } from '../../Backend/Fetch'
+import { useSnackbar } from 'notistack'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -43,19 +47,72 @@ function ForgotPassword(props) {
   const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
+  /*                                  Snackbars                                 */
+  /* -------------------------------------------------------------------------- */
+
+  const { enqueueSnackbar } = useSnackbar()
+
+  /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
-  const [email, setEmail] = useState('')
-  const [username, setUsername] = useState('')
+  const [email, confirmationCode, newPassword, modifyForm] = useFormStore(
+    useCallback(
+      ({ email, confirmationCode, newPassword, modifyForm }) => [
+        email,
+        confirmationCode,
+        newPassword,
+        modifyForm
+      ],
+      []
+    ),
+    shallow
+  )
 
-  function handleSubmit(e) {
+  function handleChange(e) {
+    modifyForm(e.target.name, e.target.value)
+  }
+
+  async function handleSubmitEmail(e) {
     e.preventDefault()
+    // Doesn't check if email exists yet
+    const response = await sendConfirmationCode(email)
+
+    if (response.ok) {
+      enqueueSnackbar(intl.formatMessage({id: 'confirmationEmail'}, { email: (<span style={{fontWeight: 'bold'}}>{email}</span>)}), {
+        variant: 'success'
+      })
+    } else {
+      // Display error
+      enqueueSnackbar(intl.formatMessage({id: 'emailDoesNotExist'}), {
+        variant: 'error'
+      })
+    }
+  }
+
+  async function handleResetPassword(e) {
+    e.preventDefault()
+    const authDetails = {
+      Email: email,
+      Password: newPassword,
+      Code: confirmationCode
+    }
+    const response = await resetPassword(authDetails)
+    if (response.ok) {
+      // Success
+      enqueueSnackbar(intl.formatMessage({id: 'successfulPasswordChange'}), {
+        variant: 'success'
+      })
+    } else {
+      enqueueSnackbar(intl.formatMessage({id: 'errorText'}), {
+        variant: 'error'
+      })
+    }
   }
 
   const content = (
     <div className={classes.div}>
-      <form onSubmit={(e) => handleSubmit(e)} className={classes.form}>
+      <form onSubmit={(e) => handleSubmitEmail(e)} className={classes.form}>
         {/*
          * HEADING
          */}
@@ -83,15 +140,20 @@ function ForgotPassword(props) {
           // label={intl.formatMessage({ id: 'email' })}
           name='email'
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required={!username}
+          onChange={handleChange}
+          required
           variant='outlined'
           fullWidth
         />
 
-        <CursorTypography variant='button'>{intl.formatMessage({ id: 'or' })}</CursorTypography>
-
-        {/* USERNAME */}
+        <span>
+          <Fab type='submit' variant='extended' className={style.submit} color='primary'>
+            {intl.formatMessage({ id: 'sendCode' })}
+          </Fab>
+        </span>
+      </form>
+      <form onSubmit={(e) => handleResetPassword(e)} className={classes.form}>
+        {/* CONFIRMATION CODE */}
 
         <PaddedTextField
           inputProps={{ className: style.input }}
@@ -99,14 +161,31 @@ function ForgotPassword(props) {
             shrink: true
           }}
           className={style.formLabel}
-          id='forgot_password__username'
-          type='text'
-          placeholder={intl.formatMessage({ id: 'username' })}
-          // label={intl.formatMessage({ id: 'username' })}
-          name='username'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required={!email}
+          id='forgot_password__confirmationCode'
+          placeholder={intl.formatMessage({ id: 'confirmationCode' })}
+          name='confirmationCode'
+          value={confirmationCode}
+          onChange={handleChange}
+          required
+          variant='outlined'
+          fullWidth
+        />
+
+        {/* NEW PASSWORD */}
+
+        <PaddedTextField
+          inputProps={{ className: style.input }}
+          InputLabelProps={{
+            shrink: true
+          }}
+          className={style.formLabel}
+          id='forgot_password__newPassword'
+          type='password'
+          placeholder={intl.formatMessage({ id: 'newPassword' })}
+          name='newPassword'
+          value={newPassword}
+          onChange={handleChange}
+          required
           variant='outlined'
           fullWidth
         />

@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
+import { useSnackbar } from 'notistack'
 
-import { Grid, Paper, TextField, Button, FormControl, FormHelperText } from '@material-ui/core'
+import { Grid, Paper, TextField, Button, FormControl, FormHelperText, Fab } from '@material-ui/core'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+
 import { loggedInStyles, PaddedFormGrid } from '../../../Styles/loggedInStyles'
 import Sidebar from '../Sidebar'
 
@@ -10,6 +13,10 @@ import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 
 export default function AddPortfolioPage() {
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
   const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
@@ -20,6 +27,7 @@ export default function AddPortfolioPage() {
   const [description, setDescription] = useState('')
   const [error, setError] = useState(false)
   const [helperText, setHelperText] = useState(' ')
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
   /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */
@@ -54,13 +62,25 @@ export default function AddPortfolioPage() {
     // passed into the portfolio creation endpoint
     const postDetails = {
       title: title,
-      description: description
+      description: description,
+      pageOrder: []
     }
 
     // Creates a portfolio belonging to the currently logged-in user,
     // if error, show an error helper text.
     await postPortfolioToUser(user.username, postDetails).then((response) => {
       if (response.ok) {
+        const key = enqueueSnackbar(
+          intl.formatMessage({ id: 'addedPortfolio'}, {portfolioTitle: title }),
+          {
+            variant: 'success'
+          }
+        )
+
+        setTimeout(() => {
+          closeSnackbar(key)
+        }, 2000)
+
         history.push('/portfolios')
       } else {
         setHelperText('An error occurred. Try again.')
@@ -135,12 +155,24 @@ export default function AddPortfolioPage() {
 
                   <FormHelperText>{helperText}</FormHelperText>
 
-                  {/* ADD PORTFOLIO BUTTON */}
-
-                  <PaddedFormGrid>
-                    <Button type='submit' variant='contained'>
-                      {intl.formatMessage({ id: 'addPortfolio' })}
-                    </Button>
+                  <PaddedFormGrid container spacing={2} direction='row' alignItems='center'>
+                    {/* BACK BUTTON (TO /PORTFOLIOS) */}
+                    <Grid item>
+                      <Fab
+                        size='small'
+                        onClick={() => {
+                          history.push('/portfolios')
+                        }}
+                      >
+                        <ArrowBackIcon />
+                      </Fab>
+                    </Grid>
+                    {/* ADD PORTFOLIO BUTTON */}
+                    <Grid item>
+                      <Button type='submit' variant='contained' color='secondary'>
+                        {intl.formatMessage({ id: 'addPortfolio' })}
+                      </Button>
+                    </Grid>
                   </PaddedFormGrid>
                 </FormControl>
               </form>

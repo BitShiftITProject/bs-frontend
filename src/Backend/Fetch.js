@@ -1,4 +1,16 @@
-import { BACKEND, AUTHENTICATE, GET_USER, USERS, PORTFOLIOS, PAGES, SIGNUP } from './Endpoints'
+import {
+  BACKEND,
+  FORGOTPASSWORD,
+  CHANGEPASSWORD,
+  AUTHENTICATE,
+  GET_USER,
+  USERS,
+  PORTFOLIOS,
+  PAGES,
+  SIGNUP,
+  MEDIA_ITEM,
+  BUCKETS
+} from './Endpoints'
 
 /* -------------------------------------------------------------------------- */
 /*                                  Constants                                 */
@@ -14,7 +26,7 @@ const headers = {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                               Login / Signup                               */
+/*                        Login / Signup / Forgot Password                    */
 /* -------------------------------------------------------------------------- */
 
 // Creates a user in Cognito and in the database using the user details
@@ -43,6 +55,39 @@ export const authenticate = async (loginDetails) => {
       accept: 'application/json'
     },
     body: JSON.stringify(loginDetails)
+  })
+  return response
+}
+
+// Sends a confirmation code to the given user's email
+export const sendConfirmationCode = async (email) => {
+  const body = {
+    Email: email
+  }
+  const response = await fetch(BACKEND + FORGOTPASSWORD, {
+    method: 'POST',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+      'Content-Type': 'application/json',
+      accept: 'application/json'
+    },
+    body: JSON.stringify(body)
+  })
+  return response
+}
+
+// Resets password given a confirmation code
+export const resetPassword = async (authDetails) => {
+  const response = await fetch(BACKEND + CHANGEPASSWORD, {
+    method: 'POST',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+      'Content-Type': 'application/json',
+      accept: 'application/json'
+    },
+    body: JSON.stringify(authDetails)
   })
   return response
 }
@@ -293,6 +338,121 @@ export const deletePage = async (pageId) => {
 // Deletes all pages belonging to a portfolio whose ID is portfolioId
 export const deleteAllPortfolioPages = async (portfolioId) => {
   const response = await fetch(BACKEND + PORTFOLIOS + '/' + portfolioId + PAGES, {
+    method: 'DELETE',
+    headers
+  })
+
+  return response
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                Media Methods                               */
+/* -------------------------------------------------------------------------- */
+
+/* ----------------------------------- GET ---------------------------------- */
+// gets all the Media Items for a given user
+export const getMediaItems = async (userID) => {
+  const response = await fetch(BACKEND + USERS + '/' + userID + MEDIA_ITEM, {
+    method: 'GET',
+    headers
+  })
+    .then((response) => (response.ok ? response : null))
+    .catch(() => {
+      return null
+    })
+
+  if (!response) return null
+
+  const mediaItems = await response.json()
+
+  return mediaItems
+}
+
+// gets all the Media Items for a given user
+export const getMediaItem = async (key) => {
+  const response = await fetch(BACKEND + MEDIA_ITEM + '/' + key, {
+    method: 'GET',
+    headers
+  })
+    .then((response) => (response.ok ? response : null))
+    .catch(() => {
+      return null
+    })
+
+  if (!response) return null
+
+  const mediaItem = await response.json()
+
+  return mediaItem
+}
+
+// gets all the Media Items for a given user
+export const getDataUrl = async (key) => {
+  const response = await fetch(BACKEND + BUCKETS + '/media-storage-bucket12/' + key, {
+    method: 'GET',
+    headers
+  })
+    .then((response) => (response.ok ? response : null))
+    .catch(() => {
+      return null
+    })
+
+  if (!response) return null
+
+  return await getMediaItem(key).then(async (item) => {
+    const file = await response.json().then((response) => {
+      let buf = Buffer.from(response.Body.data)
+      let base64 = buf.toString()
+
+      return 'data:' + item.file_type + ';base64,' + base64
+    })
+    return file
+  })
+}
+
+export const getFile = async (key) => {
+  const response = await fetch(BACKEND + BUCKETS + '/media-storage-bucket12/' + key, {
+    method: 'GET',
+    headers
+  })
+    .then((response) => (response.ok ? response : null))
+    .catch(() => {
+      return null
+    })
+
+  if (!response) return null
+
+  return await getMediaItem(key).then(async (item) => {
+    const file = await response.json().then(async (response) => {
+      let buf = Buffer.from(response.Body.data)
+      let base64 = buf.toString()
+
+      return await fetch('data:' + item.file_type + ';base64,' + base64)
+        .then((res) => res.blob())
+        .then((blob) => {
+          return new File([blob], item.public_name, { type: item.file_type })
+        })
+    })
+    return file
+  })
+}
+
+/* ----------------------------------- POST ---------------------------------- */
+// Adds a media item to a user
+export const postMediaContent = async (postDetails, userID) => {
+  const response = await fetch(BACKEND + USERS + '/' + userID + MEDIA_ITEM, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(postDetails)
+  })
+
+  return response
+}
+
+/* ----------------------------------- DELETE ---------------------------------- */
+
+export const deleteMediaItem = async (key) => {
+  const response = await fetch(BACKEND + MEDIA_ITEM + '/' + key, {
     method: 'DELETE',
     headers
   })

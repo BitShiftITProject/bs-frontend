@@ -1,43 +1,12 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import { Paragraph, Title, Subtitle } from './SectionElements'
+import { YoutubeVideo, Image, Text, File } from './SectionElements'
 
-// Stores the section IDs by the category of sections
-export const sectionIdsByCategory = {
-  headings: ['headingTitle', 'headingSubtitle'],
-  textAndMultimedia: ['singleText', 'doubleText']
-}
-
-// A section ID corresponds to a given arrangement of section elements.
-// This stores the section elements formatted as:
-//   [{section element name}, {section element component}, {optional grid size}]
-// in an array consisting of all the section elements of a section ID.
-export const sectionElementsBySectionId = {
-  headingTitle: [['title', Title]],
-  headingSubtitle: [['subtitle', Subtitle]],
-  singleText: [['paragraph', Paragraph]],
-  doubleText: [
-    ['paragraph1', Paragraph, 6],
-    ['paragraph2', Paragraph, 6]
-  ]
-}
-
-// Given the section ID, returns a new section object with the correct
-// section elements each initialised with empty strings
-export function GetNewSectionObject(sectionId) {
-  // The index of the section element name, stored in sectionElementsBySectionId
-  const name = 0
-
-  // Initialise the section elements within the section data property with
-  // empty strings
-  const sectionData = sectionElementsBySectionId[sectionId]
-    .map((element) => {
-      return { [element[name]]: '' }
-    })
-    .reduce((prev, curr) => ({ ...prev, ...curr }), {})
-
-  // Return a new section object with the correct format
-  return { id: sectionId, data: sectionData }
+export const sectionElements = {
+  text: Text,
+  image: Image,
+  video: YoutubeVideo,
+  file: File
 }
 
 // Receives section whose data field might be:
@@ -46,39 +15,23 @@ export function GetNewSectionObject(sectionId) {
 //   and index is not ignored, or
 // - NULL to return a section template from the section's ID
 //   field (editing is true and index is ignored)
-export function GetSectionJSX(section, editing, index) {
-  // Might do extra stuff here later on, otherwise can just export MapSection
-  return MapSectionToJSX(section, editing, index)
-}
-
-// Structures a section via Material-UI's Grid, and:
-// - Renders the correct components of the data fields within the section
-//   by using sectionElementsBySectionId (if it is an actual section), or
-// - Renders a section template if it isn't an actual section
-export function MapSectionToJSX(section, editing, index) {
-  const sectionElements = sectionElementsBySectionId[section.id]
-  const isActualSection = section && section.data
+export function GetElementJSX(element, editing, sectionIndex, elementIndex) {
+  const sectionElementName = element.id
+  const SectionElementComponent = sectionElements[sectionElementName]
 
   return (
-    <Grid container direction='row' spacing={2} justify='center' alignItems='flex-start'>
-      {sectionElements.map((element) => {
-        const sectionElementName = element[0]
-        const SectionElementComponent = element[1]
-        const sectionElementGridSize = element.length > 2 ? element[2] : 12
-
-        return (
-          <Grid key={sectionElementName} item xs={sectionElementGridSize}>
-            <SectionElementComponent
-              name={sectionElementName}
-              editing={editing}
-              data={isActualSection ? section.data[sectionElementName] : null}
-              index={index}
-            />
-          </Grid>
-        )
-      })}
-    </Grid>
+    <SectionElementComponent
+      name={sectionElementName}
+      editing={editing}
+      data={element.data}
+      sectionIndex={sectionIndex}
+      elementIndex={elementIndex}
+    />
   )
+}
+
+export function ConvertToSection(section) {
+  return section.map((element) => ({ ...element, data: '' }))
 }
 
 /* -------------------------------------------------------------------------- */
@@ -162,4 +115,53 @@ export function MapSectionToJSX(section, editing, index) {
 //     default:
 //       return <Grid container>Not yet mapped: {section.data}</Grid>
 //   }
+// }
+
+/* -------------------------------------------------------------------------- */
+
+// Stores the section IDs by the category of sections
+// export const sectionIdsByCategory = {
+//   headings: ['headingTitle', 'headingSubtitle'],
+//   text: ['singleText', 'doubleText', 'singleRichText'],
+//   multimedia: ['youtubeVideo', 'singleImage']
+// }
+
+// A section ID corresponds to a given arrangement of section elements.
+// This stores the section elements formatted as:
+//   [{section element name}, {section element component}, {optional grid size}]
+// in an array consisting of all the section elements of a section ID.
+// export const sectionElementsBySectionId = {
+//   headingTitle: [['title', Title]],
+//   headingSubtitle: [['subtitle', Subtitle]],
+//   singleText: [['paragraph', Paragraph]],
+//   doubleText: [
+//     ['paragraph1', Paragraph, 6],
+//     ['paragraph2', Paragraph, 6]
+//   ],
+//   youtubeVideo: [['video', YoutubeVideo]],
+//   singleImage: [['image', Image]],
+//   singleRichText: [['text', Text]],
+//   doubleRichText: [
+//     ['text', Text, 6],
+//     ['text', Text, 6]
+//   ],
+//   singleFile: [['file', File]]
+// }
+
+// Given the section ID, returns a new section object with the correct
+// section elements each initialised with empty strings
+// export function GetNewSectionObject(sectionId) {
+//   // The index of the section element name, stored in sectionElementsBySectionId
+//   const name = 0
+
+//   // Initialise the section elements within the section data property with
+//   // empty strings
+//   const sectionData = sectionElementsBySectionId[sectionId]
+//     .map((element) => {
+//       return { [element[name]]: '' }
+//     })
+//     .reduce((prev, curr) => ({ ...prev, ...curr }), {})
+
+//   // Return a new section object with the correct format
+//   return { id: sectionId, data: sectionData }
 // }

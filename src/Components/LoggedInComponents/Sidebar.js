@@ -10,7 +10,6 @@ import {
   List,
   Divider,
   IconButton,
-  Container,
   makeStyles,
   Tooltip,
   Grid
@@ -47,9 +46,9 @@ const drawerWidth = 240
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    '&::-webkit-scrollbar': {
-      display: 'none'
-    },
+    // '&::-webkit-scrollbar': {
+    //   display: 'none'
+    // },
     width: '100vw'
   },
   toolbar: {
@@ -126,7 +125,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     height: '100vh',
-    overflow: 'auto'
+    overflowY: 'auto'
   },
 
   sidebarItems: {
@@ -263,7 +262,7 @@ export default function Sidebar(props) {
                 onClick={() => {
                   sessionStorage.removeItem('accessToken')
                   localStorage.removeItem('accessToken')
-                  window.sessionStorage.removeItem('portfolioId')
+                  localStorage.removeItem('portfolioId')
                   window.location.href = '/'
                 }}
                 color='inherit'
@@ -391,11 +390,15 @@ export default function Sidebar(props) {
   const pageContent = (
     <main className={classes.content}>
       <div className={classes.appBarSpacer} />
-      <Container maxWidth='lg' className={classes.container}>
-        <HeaderBreadcrumbs />
-        <div className={classes.breadcrumbSpacer} />
-        {content}
-      </Container>
+      <Grid container className={classes.container}>
+        <Grid item xs={1} />
+        <Grid item xs={10}>
+          <HeaderBreadcrumbs />
+          <div className={classes.breadcrumbSpacer} />
+          {content}
+        </Grid>
+        <Grid item xs={1} />
+      </Grid>
     </main>
   )
 

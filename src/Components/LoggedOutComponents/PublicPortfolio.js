@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getPortfolio, getPortfolioPages } from '../../Backend/Fetch'
+import { getPortfolio, getPortfolioPages, patchPortfolio } from '../../Backend/Fetch'
 import Loading from '../CommonComponents/Loading'
 import PublicSidebar from './PublicSidebar'
 import SectionsList from '../Sections/SectionsList'
@@ -19,24 +19,35 @@ class PublicPortfolio extends Component {
   async componentDidMount() {
     const params = this.getParams()
 
-    this.setState({ pageIndex: params.page })
+    if (params.page) this.setState({ pageIndex: params.page })
 
     // Get the actual array of the user's portfolios
     const portfolio = await getPortfolio(params.portfolio)
 
     if (portfolio) {
-        this.setState({ portfolioDetails: portfolio })
+      this.setState({ portfolioDetails: portfolio })
 
-        // GET methods already return the JSON-parsed response
-        // so getPortfolioPages should either return null or an array of pages
-        const pages = await getPortfolioPages(params.portfolio)
-        console.log(pages);
+      // Retrieve pages by the sorted order if there is an order, but if there
+      // isn't a page ordering then create one based on the response of
+      // getPortfolioPages for the portfolio
 
+      const pageOrder = portfolio.pageOrder
+
+      getPortfolioPages(portfolio.id).then((pages) => {
+        if (!pageOrder) {
+          const patchDetails = { pageOrder: pages }
+          patchPortfolio(portfolio.id, patchDetails)
+        } else {
+          pages.sort((a, b) => {
+            return pageOrder.indexOf(a.id) - pageOrder.indexOf(b.id)
+          })
+        }
         if (pages && pages.length > this.state.pageIndex) {
           this.setState({ portfolioPages: pages })
-        }else{
-            window.location.href = '/publicfailed'
+        } else {
+          window.location.href = '/publicfailed'
         }
+      })
     } else {
       window.location.href = '/publicfailed'
     }
@@ -46,10 +57,16 @@ class PublicPortfolio extends Component {
     // If the portfolioDetails does not equal null then we have found one
     if (this.state.portfolioPages) {
       // Array for storing JSX of sections to be displayed
-      let sectionsJSX = null;
+      let sectionsJSX = null
       // If the sections array is present in the pages data then create the section JSX
       if (this.state.portfolioPages[this.state.pageIndex].content.sections) {
-        sectionsJSX = <SectionsList sections={this.state.portfolioPages[this.state.pageIndex].content.sections} editing={false}/>
+        sectionsJSX = (
+          <SectionsList
+            sections={this.state.portfolioPages[this.state.pageIndex].content.sections}
+            editing={false}
+          />
+          
+        )
       }
       // Check to see if the page has sections or is the old formatting
       const pageContent = this.state.portfolioPages[this.state.pageIndex].content.sections ? (
@@ -63,6 +80,7 @@ class PublicPortfolio extends Component {
         <PublicSidebar
           pages={this.state.portfolioPages}
           content={pageContent}
+          parentPortfolio={this}
         />
       )
     }
