@@ -107,7 +107,7 @@ export default function EditPortfolioPagesGrouped({
                 <CreateIcon />
               </Fab>
               {/* VIEW PORTFOLIO BUTTON */}
-              <Fab
+              <Fab disabled={!pages.length}
                 color='secondary'
                 size='small'
                 onClick={() => {
