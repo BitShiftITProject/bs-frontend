@@ -18,15 +18,12 @@ export default function TextEditor({ sectionIndex, elementIndex, name, data }) {
         height: 300,
         // width: 600,
         plugins:
-          'paste searchreplace autolink directionality link codesample table charmap hr insertdatetime advlist lists wordcount textpattern noneditable help quickbars emoticons',
+          'paste searchreplace autolink directionality link codesample table charmap hr insertdatetime advlist lists wordcount textpattern noneditable help emoticons',
         // menubar: 'edit insert format table help',
         menubar: false,
         toolbar:
           'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | forecolor backcolor | outdent indent |  numlist bullist | fontsizeselect formatselect | link codesample charmap emoticons ',
         toolbar_sticky: true,
-        quickbars_insert_toolbar: false,
-        quickbars_selection_toolbar:
-          'alignleft aligncenter alignright alignjustify | fontsizeselect formatselect | quicklink quicktable',
         noneditable_noneditable_class: 'mceNonEditable',
         toolbar_mode: 'sliding',
         contextmenu: 'link table'

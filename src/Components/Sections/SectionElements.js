@@ -174,7 +174,7 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
     )
   ) : (
     // Get image before showing
-    <img src={file} alt={file} />
+    <img style={{width:"100%"}} src={file} alt={file} />
   )
 
   return rendered

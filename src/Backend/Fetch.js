@@ -388,7 +388,7 @@ export const getMediaItem = async (key) => {
 
 // gets all the Media Items for a given user
 export const getDataUrl = async (key) => {
-  const response = await fetch(BACKEND + BUCKETS + '/media-storage-bucket12/' + key, {
+  const response = await fetch(BACKEND + BUCKETS + '/' + key, {
     method: 'GET',
     headers
   })
@@ -411,7 +411,7 @@ export const getDataUrl = async (key) => {
 }
 
 export const getFile = async (key) => {
-  const response = await fetch(BACKEND + BUCKETS + '/media-storage-bucket12/' + key, {
+  const response = await fetch(BACKEND + BUCKETS + '/' + key, {
     method: 'GET',
     headers
   })
