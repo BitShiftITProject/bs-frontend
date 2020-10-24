@@ -200,7 +200,7 @@ export default function LandingPage() {
         <img
           className={theme === 'dark' ? clsx(classes.image, classes.lightImage) : classes.image}
           src={require('../../Images/landingPage.png')}
-          alt='bitshift'
+          alt='bitspace'
         />
       </Grid>
     </Grid>
