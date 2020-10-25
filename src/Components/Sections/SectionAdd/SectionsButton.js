@@ -3,7 +3,6 @@ import {
   Grid,
   Fab,
   Typography,
-  makeStyles,
   DialogTitle,
   DialogContent,
   DialogActions,
@@ -19,39 +18,7 @@ import { useIntl } from 'react-intl'
 import CustomDialog from '../../CommonComponents/CustomDialog'
 import { GetElementJSX, sectionElements, ConvertToSection } from '../SectionsMap'
 
-const contentStyle = {
-  borderRadius: 15,
-  padding: 15,
-  minWidth: 300,
-  overflowY: 'scroll',
-  border: 'none',
-  backgroundColor: 'rgba(0, 0, 0, 0.05)',
-  backdropFilter: 'blur(10px)'
-}
-
-const useStyles = makeStyles((theme) => ({
-  container: {
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2)
-  },
-  closeIcon: {
-    boxShadow: 'none',
-    minHeight: theme.spacing(4),
-    backgroundColor: theme.palette.primary.lighter,
-    color: theme.palette.primary.contrastText,
-    '&:hover': {
-      backgroundColor: theme.palette.primary.lightest,
-      transition: 'background-color 0.2s ease-in-out'
-    },
-    '&:active': {
-      boxShadow: 'none'
-    }
-  }
-}))
-
 export default function SectionsButton({ pageId, handleSectionAdd }) {
-  const classes = useStyles()
-
   const intl = useIntl()
 
   const editing = true

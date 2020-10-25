@@ -21,6 +21,7 @@ import { PublicThemesContext } from '../../Contexts/PublicThemesContext'
 import { themes } from '../../../Themes/themes'
 import { useSnackbar } from 'notistack'
 import { useIntl } from 'react-intl'
+import { patchPortfolio } from '../../../Backend/Fetch'
 
 export default function EditPortfolioStyle({ portfolio }) {
   /* -------------------------------------------------------------------------- */
@@ -50,14 +51,18 @@ export default function EditPortfolioStyle({ portfolio }) {
 
   function handleThemeChange(e) {
     e.preventDefault()
-    // await patchPortfolio({ theme: e.target.value })
-    localStorage.setItem('publicTheme', e.target.value)
+    window.sessionStorage.setItem('publicTheme', e.target.value)
     setPublicTheme(e.target.value)
+
+    const portfolioId = window.sessionStorage.getItem('portfolioId')
+    const patchDetails = { theme: e.target.value }
 
     const titleCase = e.target.value.replace(/([A-Z])/g, ' $1')
     const themeName = titleCase.charAt(0).toUpperCase() + titleCase.slice(1)
 
-    enqueueSnackbar(intl.formatMessage({ id: 'changedPortfolioTheme'}, {themeName }), {})
+    patchPortfolio(portfolioId, patchDetails).then(() => {
+      enqueueSnackbar(intl.formatMessage({ id: 'changedPortfolioTheme' }, { themeName }), {})
+    })
   }
 
   /* -------------------------------------------------------------------------- */

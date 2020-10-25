@@ -122,6 +122,7 @@ function Authentication() {
           <Route exact path='/help' render={() => <HelpPage />} />
           <Route exact path='/portfolios/edit' render={() => <EditPortfolioPage />} />
           <Route exact path='/portfolios/add' render={() => <AddPortfolioPage />} />
+
           <Route
             exact
             path='/portfolios'
@@ -150,6 +151,7 @@ function Authentication() {
           <Route exact path='/signup' render={() => <Signup />} />
           <Route exact path='/forgotpassword' render={() => <ForgotPassword />} />
           <Route exact path='/' render={() => <LandingPage />} />
+          <Route path='/blob' render={() => <div></div>} />
           <Redirect to='/' />
         </Switch>
       </SnackbarProvider>

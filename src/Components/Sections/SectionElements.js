@@ -1,23 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
+import ReactHtmlParser from 'react-html-parser'
+import YouTube from 'react-youtube'
+import { Grid, TextField, Typography, styled, Tooltip, Link } from '@material-ui/core'
+
 import { PortfolioContext } from '../Contexts/PortfolioContext'
 
-import { Grid, TextField, Typography, styled, Tooltip, Link } from '@material-ui/core'
-import YouTube from 'react-youtube'
-import { getMediaItem, getFile, getDataUrl } from '../../Backend/Fetch'
+import { getMediaItem, getFile, getDataUrl, getPage } from '../../Backend/Fetch'
 import DropzoneButton from '../../Components/CommonComponents/DropzoneButton'
 
-import ReactHtmlParser from 'react-html-parser'
 import TextEditor from '../TextEditor'
 
-const lorem =
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius amet error pariatur atque modi necessitatibus numquam. Adipisci quidem ad animi id libero amet itaque numquam, nostrum recusandae dolor quo pariatur possimus quos odit neque perferendis optio repudiandae repellat molestias dolorum sint eligendi atque placeat. Vero eius placeat incidunt sit adipisci?'
-// const title = 'Title'
-// const subtitle = 'Subtitle'
 const text = 'Text'
 const youtubeVideo = 'Video'
 const image = 'Image'
 const fileUpload = 'File'
-// const quote = '"Lorem ipsum dolor sit amet, consectetur adipisicing elit." -Lorem Ipsum'
 
 const ExampleSection = styled(Grid)({
   overflowY: 'hidden',
@@ -107,13 +103,11 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
 
   useEffect(() => {
     async function getNameOfImage() {
-      // console.log(sections[pageId][sectionIndex][elementIndex].data)
-      if (sections[pageId][sectionIndex][elementIndex].data === '') {
-        return 'No Image Uploaded'
-      } else {
-        let itemName = await getMediaItem(sections[pageId][sectionIndex][elementIndex].data)
-        return itemName.public_name
-      }
+      const name =
+        sections[pageId][sectionIndex][elementIndex].data === ''
+          ? 'No Image Uploaded'
+          : await getMediaItem(sections[pageId][sectionIndex][elementIndex].data).public_name
+      return name
     }
     async function getUploadedFile() {
       if (editing) {
@@ -132,6 +126,7 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
         }
       }
     }
+
     if (data != null) {
       getUploadedFile().then((file) => {
         file != null ? setFile(file) : setFile('')
@@ -174,27 +169,62 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
     )
   ) : (
     // Get image before showing
-    <img style={{width:"100%"}} src={file} alt={file} />
+    <img style={{ width: '100%' }} src={file} alt={file} />
   )
 
   return rendered
 }
 
 export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
-  const { sections, pageId } = useContext(PortfolioContext)
+  const { pageId, sections } = useContext(PortfolioContext)
   const [fileName, setFileName] = useState('')
   const [file, setFile] = useState(null)
+  const [page, setPage] = useState(null)
 
   useEffect(() => {
-    async function getNameOfFile() {
-      // console.log(sections[pageId][sectionIndex][elementIndex].data)
+    async function getCurrentPage(pageId) {
+      const currentPage = await getPage(pageId)
+      return currentPage
+    }
+
+    if (pageId) {
+      getCurrentPage(pageId).then((currentPage) => {
+        setPage(currentPage)
+      })
+    }
+  }, [pageId])
+
+  const getFileName = useCallback(async () => {
+    // In EditPortfolioSectionsGrouped
+    if (sections[pageId]) {
       if (sections[pageId][sectionIndex][elementIndex].data === '') {
         return 'No File Uploaded'
       } else {
-        let itemName = await getMediaItem(sections[pageId][sectionIndex][elementIndex].data)
-        return itemName.public_name
+        const mediaItem = await getMediaItem(sections[pageId][sectionIndex][elementIndex].data)
+        return mediaItem.public_name
       }
+    } else if (
+      page &&
+      page.content.sections[sectionIndex] &&
+      page.content.sections[sectionIndex][elementIndex] &&
+      page.content.sections[sectionIndex][elementIndex].id === 'file'
+    ) {
+      if (page.content.sections[sectionIndex][elementIndex].data === '') {
+        return 'No File Uploaded'
+      } else {
+        const mediaItem = await getMediaItem(page.content.sections[sectionIndex][elementIndex].data)
+        return mediaItem.public_name
+      }
+    } else {
+      return 'Loading...'
     }
+  }, [page, elementIndex, pageId, sectionIndex, sections])
+
+  useEffect(() => {
+    async function getNameOfFile() {
+      return await getFileName()
+    }
+
     async function getUploadedFile() {
       if (editing) {
         if (sections[pageId][sectionIndex][elementIndex].data === '') {
@@ -212,17 +242,27 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
         }
       }
     }
-    if (data != null) {
+
+    if (page != null && data != null) {
       getUploadedFile().then((file) => {
         file != null ? setFile(file) : setFile('')
       })
-      if (editing) {
-        getNameOfFile().then((name) => {
-          setFileName(name)
-        })
-      }
+      getNameOfFile().then((name) => {
+        setFileName(name)
+      })
     }
-  }, [data, editing, sectionIndex, elementIndex, name, pageId, sections])
+  }, [pageId, sections, data, editing, sectionIndex, elementIndex, name, page])
+
+  const handleClick = async () => {
+    if (file) {
+      const fileBlob = await (await fetch(file)).blob()
+      const blobURL = URL.createObjectURL(fileBlob)
+      const a = document.createElement('a')
+      a.href = blobURL
+      a.download = fileName
+      a.click()
+    }
+  }
 
   const rendered = editing ? (
     data === null ? (
@@ -253,91 +293,10 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
     )
   ) : (
     // Get file before showing
-    <Link>Download File</Link>
+    <Link onClick={handleClick} style={{ cursor: 'pointer' }}>
+      {page !== null && fileName !== null && fileName}
+    </Link>
   )
 
   return rendered
 }
-
-// export const Paragraph = ({ name, editing, data, index }) => {
-//   const { sections, pageId, modifySection } = useContext(PortfolioContext)
-
-//   const rendered = editing ? (
-//     data === null ? (
-//       <ExampleSection container>
-//         <Typography variant='caption' component='p'>
-//           {lorem}
-//         </Typography>
-//       </ExampleSection>
-//     ) : (
-//       <TextField
-//         value={sections[pageId][index]['data'][name]}
-//         onChange={(e) => modifySection(index, name, e.target.value)}
-//         fullWidth
-//         multiline
-//         id={name}
-//         variant='outlined'
-//       />
-//     )
-//   ) : (
-//     <Typography style={{ whiteSpace: 'pre-line' }} variant='body1'>
-//       {data}
-//     </Typography>
-//   )
-
-//   return rendered
-// }
-
-// export const Title = ({ name, editing, data, index }) => {
-//   const { sections, pageId, modifySection } = useContext(PortfolioContext)
-
-//   const rendered = editing ? (
-//     data === null ? (
-//       <ExampleSection container>
-//         <Typography variant='h5'>{title}</Typography>
-//       </ExampleSection>
-//     ) : (
-//       <TextField
-//         value={sections[pageId][index]['data'][name]}
-//         onChange={(e) => modifySection(index, name, e.target.value)}
-//         fullWidth
-//         multiline
-//         id={name}
-//         variant='outlined'
-//       />
-//     )
-//   ) : (
-//     <Typography component='h2' variant='h3'>
-//       {data}
-//     </Typography>
-//   )
-
-//   return rendered
-// }
-
-// export const Subtitle = ({ name, editing, data, index }) => {
-//   const { sections, pageId, modifySection } = useContext(PortfolioContext)
-
-//   const rendered = editing ? (
-//     data === null ? (
-//       <ExampleSection container>
-//         <Typography variant='h6'>{subtitle}</Typography>
-//       </ExampleSection>
-//     ) : (
-//       <TextField
-//         value={sections[pageId][index]['data'][name]}
-//         onChange={(e) => modifySection(index, name, e.target.value)}
-//         fullWidth
-//         multiline
-//         id={name}
-//         variant='outlined'
-//       />
-//     )
-//   ) : (
-//     <Typography component='h4' variant='h5'>
-//       {data}
-//     </Typography>
-//   )
-
-//   return rendered
-// }

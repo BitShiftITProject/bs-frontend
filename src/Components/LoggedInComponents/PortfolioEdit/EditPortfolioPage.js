@@ -22,7 +22,7 @@ export default function EditPortfolioPage() {
   /*                         Fetching Current Portfolio                         */
   /* -------------------------------------------------------------------------- */
 
-  const portfolioId = localStorage.getItem('portfolioId')
+  const portfolioId = window.sessionStorage.getItem('portfolioId')
 
   // Runs when the component is mounted for the first time, fetches the
   // portfolio using the portfolioId item set in the sessionStorage.
