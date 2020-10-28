@@ -137,7 +137,7 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
         })
       }
     }
-  }, [data, editing, sectionIndex, elementIndex, name, pageId, sections])
+  }, [data, editing, sectionIndex, elementIndex, name, pageId])
 
   const rendered = editing ? (
     data === null ? (
@@ -251,7 +251,7 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
         setFileName(name)
       })
     }
-  }, [pageId, sections, data, editing, sectionIndex, elementIndex, name, page])
+  }, [data, editing, sectionIndex, elementIndex, name, pageId])
 
   const handleClick = async () => {
     if (file) {

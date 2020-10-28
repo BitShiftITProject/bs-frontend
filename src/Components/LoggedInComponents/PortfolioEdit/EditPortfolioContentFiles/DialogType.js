@@ -22,7 +22,8 @@ export default function DialogType(
     pageTitle, 
     setPageTitle,
     handlePageTitleEdit, 
-    handlePageDelete
+    handlePageDelete,
+    loading
   }) {
   const intl = useIntl()
   const classes = loggedInStyles()
@@ -33,7 +34,7 @@ export default function DialogType(
     /* -------------------------------------------------------------------------- */
     // Dialog to show when the Edit button next to the portfolio title is clicked
     editPortfolio: (
-      <form onSubmit={handlePortfolioEdit}>
+      <form onSubmit={loading ? (e) => {e.preventDefault()} : handlePortfolioEdit}>
         {/*
          * TITLE
          */}
@@ -78,7 +79,7 @@ export default function DialogType(
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
           </Button>
-          <Button onClick={handlePortfolioEdit} variant='contained'>
+          <Button disabled={loading} onClick={handlePortfolioEdit} variant='contained'>
             {intl.formatMessage({ id: 'save' })}
           </Button>
         </DialogActions>
@@ -87,7 +88,7 @@ export default function DialogType(
     /* -------------------------------------------------------------------------- */
     // Dialog to show when the (+) button below pages is clicked to add a page
     addPage: (
-      <form onSubmit={handlePageAdd}>
+      <form onSubmit={loading ? (e) => {e.preventDefault()} : handlePageAdd}>
         {/*
          * TITLE
          */}
@@ -118,7 +119,7 @@ export default function DialogType(
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
           </Button>
-          <Button onClick={handlePageAdd} variant='contained'>
+          <Button disabled={loading} onClick={handlePageAdd} variant='contained'>
             {intl.formatMessage({ id: 'add' })}
           </Button>
         </DialogActions>
@@ -128,7 +129,7 @@ export default function DialogType(
     /* -------------------------------------------------------------------------- */
     // Dialog to show when the Edit button next to a page is clicked
     editPage: (
-      <form onSubmit={handlePageTitleEdit}>
+      <form onSubmit={loading ? (e) => {e.preventDefault()} : handlePageTitleEdit}>
         {/*
          * TITLE
          */}
@@ -159,7 +160,7 @@ export default function DialogType(
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
           </Button>
-          <Button onClick={handlePageTitleEdit} variant='contained'>
+          <Button disabled={loading} onClick={handlePageTitleEdit} variant='contained'>
             {intl.formatMessage({ id: 'save' })}
           </Button>
         </DialogActions>
@@ -193,7 +194,7 @@ export default function DialogType(
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
           </Button>
-          <Button onClick={handlePageDelete} variant='contained'>
+          <Button disabled={loading} onClick={handlePageDelete} variant='contained'>
             {intl.formatMessage({ id: 'delete' })}
           </Button>
         </DialogActions>
