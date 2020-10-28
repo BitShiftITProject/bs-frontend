@@ -112,7 +112,11 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
         return 'No Image Uploaded'
       } else {
         let itemName = await getMediaItem(sections[pageId][sectionIndex][elementIndex].data)
-        return itemName.public_name
+        if(itemName != null){
+            return itemName.public_name
+        }else{
+            return null;
+        }
       }
     }
     async function getUploadedFile() {
@@ -142,7 +146,7 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
         })
       }
     }
-  }, [data, editing, sectionIndex, elementIndex, name, pageId, sections])
+  }, [data, editing, sectionIndex, elementIndex, name, pageId])
 
   const rendered = editing ? (
     data === null ? (
@@ -222,7 +226,7 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
         })
       }
     }
-  }, [data, editing, sectionIndex, elementIndex, name, pageId, sections])
+  }, [data, editing, sectionIndex, elementIndex, name, pageId])
 
   const rendered = editing ? (
     data === null ? (
