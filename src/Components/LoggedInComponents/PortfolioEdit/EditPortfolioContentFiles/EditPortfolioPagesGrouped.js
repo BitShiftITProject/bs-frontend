@@ -65,6 +65,10 @@ export default function EditPortfolioPagesGrouped({
     }
   }
 
+  const handlePortfolioView = () => {
+    window.location.href = portfolioLink
+  }
+
   return (
     <Grid item xs={12} md={4} lg={3}>
       <Paper className={leftPanel}>
@@ -107,12 +111,11 @@ export default function EditPortfolioPagesGrouped({
                 <CreateIcon />
               </Fab>
               {/* VIEW PORTFOLIO BUTTON */}
-              <Fab disabled={!pages.length}
+              <Fab
+                disabled={!pages.length}
                 color='secondary'
                 size='small'
-                onClick={() => {
-                  window.location.href = portfolioLink
-                }}
+                onClick={handlePortfolioView}
                 style={{
                   transform: 'scale(0.8)'
                 }}

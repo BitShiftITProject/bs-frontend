@@ -368,7 +368,7 @@ export const getMediaItems = async (userID) => {
   return mediaItems
 }
 
-// gets all the Media Items for a given user
+// gets specific Media Items for a given user
 export const getMediaItem = async (key) => {
   const response = await fetch(BACKEND + MEDIA_ITEM + '/' + key, {
     method: 'GET',

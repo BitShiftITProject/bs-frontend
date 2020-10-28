@@ -65,7 +65,6 @@ class PublicPortfolio extends Component {
             sections={this.state.portfolioPages[this.state.pageIndex].content.sections}
             editing={false}
           />
-          
         )
       }
       // Check to see if the page has sections or is the old formatting
@@ -78,6 +77,7 @@ class PublicPortfolio extends Component {
       return (
         // Display sidebar with pages data and section content
         <PublicSidebar
+          pageIndex={this.state.pageIndex}
           pages={this.state.portfolioPages}
           content={pageContent}
           parentPortfolio={this}
