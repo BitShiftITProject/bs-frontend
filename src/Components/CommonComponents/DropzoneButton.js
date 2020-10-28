@@ -57,6 +57,7 @@ export default function DropzoneButton({
   const [files, setFiles] = useState(initialFile ? [initialFile] : [])
   const [fileName, setFileName] = useState('')
   const [fileExtension, setFileExtension] = useState('')
+  const [loading, setLoading] = useState(false)
 
   // Max files that can be uploaded
   const filesLimit = 1
@@ -80,6 +81,7 @@ export default function DropzoneButton({
   }
 
   async function handleSubmit() {
+    setLoading(true)
     if (files.length) {
       var fileType = files[0].type
       const user = await getUser()
@@ -102,6 +104,7 @@ export default function DropzoneButton({
         modifySection(sectionIndex, elementIndex, elementName, key)
       }
     }
+    setLoading(false)
     setOpen(false)
   }
 
@@ -188,7 +191,7 @@ export default function DropzoneButton({
         <Button variant='text' onClick={() => setOpen(false)}>
           Cancel
         </Button>
-        <Button variant='text' onClick={handleSubmit}>
+        <Button variant='text' disabled={loading} onClick={handleSubmit}>
           Submit
         </Button>
       </DialogActions>
