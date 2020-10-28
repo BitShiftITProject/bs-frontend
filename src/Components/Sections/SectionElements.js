@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ReactHtmlParser from 'react-html-parser'
 import YouTube from 'react-youtube'
 import { Grid, TextField, Typography, styled, Tooltip, Link, makeStyles } from '@material-ui/core'
@@ -36,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
   },
   fileUpload: {
     cursor: 'pointer',
-    color: theme.palette.text.primary
+    fontWeight: 'bold',
+    color: theme.palette.info.main
   }
 }))
 
@@ -114,11 +115,13 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
 
   useEffect(() => {
     async function getNameOfImage() {
-      const name =
-        sections[pageId][sectionIndex][elementIndex].data === ''
-          ? 'No Image Uploaded'
-          : await getMediaItem(sections[pageId][sectionIndex][elementIndex].data).public_name
-      return name
+      if (sections[pageId][sectionIndex][elementIndex].data === '') {
+        return 'No Image Uploaded'
+      } else {
+        const file = await getMediaItem(sections[pageId][sectionIndex][elementIndex].data)
+        if (!file) return 'No Image Uploaded'
+        return file.public_name
+      }
     }
     async function getUploadedFile() {
       if (editing) {
@@ -144,6 +147,7 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
       })
       if (editing) {
         getNameOfImage().then((name) => {
+          console.log('Image Name:', name)
           setImageName(name)
         })
       }
@@ -218,8 +222,9 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
       if (sections[pageId][sectionIndex][elementIndex].data === '') {
         return 'No File Uploaded'
       } else {
-        const mediaItem = await getMediaItem(sections[pageId][sectionIndex][elementIndex].data)
-        return mediaItem.public_name
+        const file = await getMediaItem(sections[pageId][sectionIndex][elementIndex].data)
+        if (!file) return 'No File Uploaded'
+        return file.public_name
       }
     } else if (
       page &&
@@ -230,8 +235,9 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
       if (page.content.sections[sectionIndex][elementIndex].data === '') {
         return 'No File Uploaded'
       } else {
-        const mediaItem = await getMediaItem(page.content.sections[sectionIndex][elementIndex].data)
-        return mediaItem.public_name
+        const file = await getMediaItem(page.content.sections[sectionIndex][elementIndex].data)
+        if (!file) return 'No File Uploaded'
+        return file.public_name
       }
     } else {
       return 'Loading...'
@@ -313,13 +319,23 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
     )
   ) : (
     // Get file before showing
-    <span
-      onClick={handleClick}
-      style={{ width: '100%', display: 'flex', justify: 'center', alignItems: 'center' }}
+    <div
+      style={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justify: 'center',
+        alignItems: 'center'
+      }}
     >
-      <GetAppIcon className={classes.fileUploadIcon} />
-      <Link className={classes.fileUpload}>{page !== null && fileName !== null && fileName}</Link>
-    </span>
+      <span
+        onClick={handleClick}
+        style={{ display: 'flex', justify: 'center', alignItems: 'center' }}
+      >
+        <GetAppIcon className={classes.fileUploadIcon} />
+        <Link className={classes.fileUpload}>{page !== null && fileName !== null && fileName}</Link>
+      </span>
+    </div>
   )
 
   return rendered

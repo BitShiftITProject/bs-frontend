@@ -151,7 +151,6 @@ function Authentication() {
           <Route exact path='/signup' render={() => <Signup />} />
           <Route exact path='/forgotpassword' render={() => <ForgotPassword />} />
           <Route exact path='/' render={() => <LandingPage />} />
-          <Route path='/blob' render={() => <div></div>} />
           <Redirect to='/' />
         </Switch>
       </SnackbarProvider>
