@@ -90,7 +90,7 @@ export default function EditPortfolioContent(props) {
           return { [page.id]: page.content.sections }
         })
         .reduce((prev, curr) => ({ ...prev, ...curr }), currentSections)
-      console.log(newSections)
+      // console.log(newSections)
       return newSections
     })
   }, [pages, setSections])
@@ -144,23 +144,18 @@ export default function EditPortfolioContent(props) {
     }, 1000)
   }
 
-
-// sets the SPECFIC PAGES sections
+  // sets the SPECFIC PAGES sections
   const handleSetPageSection = (newUnsavedSection) => {
     setSections((currentSections) => {
       // If this is the first section of the page, just set it as [newSection],
       // otherwise just add newSection to the end of the current list of sections
       const newSections = {
-        ...currentSections,
+        ...currentSections
       }
       newSections[pageId] = newUnsavedSection
       return newSections
     })
   }
-
-
-
-
 
   // Deletes the section at a given index among the sections of the current page
   function handleSectionDelete(sectionIndex) {
@@ -224,7 +219,8 @@ export default function EditPortfolioContent(props) {
     pageTitle,
     setPageTitle,
     handlePageTitleEdit,
-    handlePageDelete
+    handlePageDelete,
+    loading
   })
 
   /* -------------------------------------------------------------------------- */
@@ -279,6 +275,9 @@ export default function EditPortfolioContent(props) {
   // Edits the current portfolio's title and description
   async function handlePortfolioEdit(e) {
     e.preventDefault()
+
+    setLoading(true)
+
     await patchPortfolio(portfolio.id, {
       title: portfolioTitle,
       description: portfolio.description
@@ -286,6 +285,7 @@ export default function EditPortfolioContent(props) {
     // Sets the currently shown portfolio as the updated portfolio
     const updatedPortfolio = await getPortfolio(portfolio.id)
     setPortfolio(updatedPortfolio)
+    setLoading(false)
     setOpen(false)
   }
 
@@ -305,6 +305,7 @@ export default function EditPortfolioContent(props) {
 
   async function handlePageAdd(e) {
     e.preventDefault()
+    setLoading(true)
 
     // Creates a new page with the user-updated pageTitle (basically the content
     // of the text field) as its title and no content
@@ -331,6 +332,7 @@ export default function EditPortfolioContent(props) {
     // Sets the currently shown portfolio as the updated portfolio
     const updatedPortfolio = await getPortfolio(portfolio.id)
     setPortfolio(updatedPortfolio)
+    setLoading(false)
     setOpen(false)
   }
   /* -------------------------------------------------------------------------- */
@@ -338,6 +340,7 @@ export default function EditPortfolioContent(props) {
   // Edit the PAGE TITLE of the Page in the DB
   async function handlePageTitleEdit(e) {
     e.preventDefault()
+    setLoading(true)
 
     await patchPage(pages[dialogContent.component].id, { title: pageTitle })
 
@@ -352,6 +355,7 @@ export default function EditPortfolioContent(props) {
         }
       })
     )
+    setLoading(false)
     setOpen(false)
   }
 
@@ -360,6 +364,7 @@ export default function EditPortfolioContent(props) {
   // Removes a Page (and any reference to it) from the DB
   async function handlePageDelete(e) {
     e.preventDefault()
+    setLoading(true)
     const toBeDeletedPageId = pages[dialogContent.component].id
     const toBeDeletedPageTitle = pages[dialogContent.component].title
 
@@ -406,7 +411,7 @@ export default function EditPortfolioContent(props) {
     // Sets the currently shown portfolio as the updated portfolio
     const updatedPortfolio = await getPortfolio(portfolio.id)
     setPortfolio(updatedPortfolio)
-
+    setLoading(false)
     setOpen(false)
   }
 

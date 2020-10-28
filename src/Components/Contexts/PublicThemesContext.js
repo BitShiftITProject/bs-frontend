@@ -1,11 +1,7 @@
 import React, { useState, useEffect, createContext } from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
 import { getTheme } from '../../Themes/themes'
-import {
-  getPortfolio
-  // getUserPortfolios
-  // patchPortfolio
-} from '../../Backend/Fetch'
+import { getPortfolio } from '../../Backend/Fetch'
 import { useLocation } from 'react-router-dom'
 
 // eslint-disable-next-line no-unused-vars
@@ -26,31 +22,27 @@ const PublicThemesProvider = ({ children }) => {
       // Gets the current theme from the portfolio object of the current
       // portfolio in the URL
 
-      // const path = pathname.split('/')
-      // if (path[1] === 'public') {
-      //   const username = path[2]
-      //   const portfolioIndex = path[3]
-      //   const portfolios = await getUserPortfolios(username)
-      //   const currentPortfolio = await getPortfolio(portfolios[portfolioIndex].id)
-      //   const theme = currentPortfolio.theme
-      //     ? currentPortfolio.theme
-      //     : null || localStorage.getItem('publicTheme') || 'light'
-      //   return theme
-      // } else {
-
-      // Gets the current theme from local storage
-
-      const portfolioId = localStorage.getItem('portfolioId')
-      const currentPortfolio = await getPortfolio(portfolioId)
-      const theme = currentPortfolio.theme
-        ? currentPortfolio.theme
-        : null || localStorage.getItem('publicTheme') || 'light'
-      return theme
-      // }
+      const path = pathname.split('/')
+      if (path[1] === 'public') {
+        const portfolioId = path[2]
+        const currentPortfolio = await getPortfolio(portfolioId)
+        const theme = currentPortfolio.theme
+          ? currentPortfolio.theme
+          : null || window.sessionStorage.getItem('publicTheme') || 'light'
+        return theme
+      } else {
+        // Gets the current theme from local storage
+        const portfolioId = window.sessionStorage.getItem('portfolioId')
+        const currentPortfolio = await getPortfolio(portfolioId)
+        const theme = currentPortfolio.theme
+          ? currentPortfolio.theme
+          : null || window.sessionStorage.getItem('publicTheme') || 'light'
+        return theme
+      }
     }
 
     getCurrentPortfolioTheme().then((theme) => {
-      localStorage.setItem('publicTheme', theme)
+      window.sessionStorage.setItem('publicTheme', theme)
       setThemeName(theme)
     })
   }, [pathname])
@@ -61,7 +53,7 @@ const PublicThemesProvider = ({ children }) => {
   // Sets the actual theme
   const setPublicTheme = (name) => {
     // await patchPortfolio({ theme: name })
-    localStorage.setItem('publicTheme', name)
+    window.sessionStorage.setItem('publicTheme', name)
     setThemeName(name)
   }
 

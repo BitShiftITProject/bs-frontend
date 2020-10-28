@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Drawer, List, ListItem, ListItemText, makeStyles } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
+import { PortfolioContext } from '../Contexts/PortfolioContext'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function PublicSidebar(props) {
+function PublicSidebar(props) {
   const classes = useStyles()
 
   /* -------------------------------------------------------------------------- */
@@ -47,14 +48,20 @@ export default function PublicSidebar(props) {
   /* -------------------------------------------------------------------------- */
 
   const history = useHistory()
+  const { setPageId } = useContext(PortfolioContext)
 
   /* -------------------------------------------------------------------------- */
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
-  const { content, pages, parentPortfolio } = props
+  const { pageIndex, content, pages, parentPortfolio } = props
 
   const pageTitles = pages.map((page) => page.title)
+
+  useEffect(() => {
+    // console.log(pages[pageIndex].id)
+    setPageId(pages[pageIndex].id)
+  }, [pages, setPageId, pageIndex])
 
   return (
     <div className={classes.root}>
@@ -75,8 +82,8 @@ export default function PublicSidebar(props) {
               onClick={() => {
                 parentPortfolio.setState({ pageIndex: index })
                 history.replace(
-                    history.location.pathname.split('/').slice(0, -1).join('/') + '/' + index
-                  )
+                  history.location.pathname.split('/').slice(0, -1).join('/') + '/' + index
+                )
               }}
             >
               <ListItemText primary={text} />
@@ -88,3 +95,5 @@ export default function PublicSidebar(props) {
     </div>
   )
 }
+
+export default React.memo(PublicSidebar)

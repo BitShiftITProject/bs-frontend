@@ -73,7 +73,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   function handleEdit(portfolioId) {
     // Set portfolioId in session storage so EditPortfolioPage will fetch
     // portfolio from DB based on this ID
-    localStorage.setItem('portfolioId', portfolioId)
+    window.sessionStorage.setItem('portfolioId', portfolioId)
     history.push('/portfolios/edit')
   }
 
@@ -102,7 +102,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
       await deletePortfolio(portfolioId)
 
       enqueueSnackbar(
-        intl.formatMessage({ id: 'deletedPortfolio'}, {portfolioTitle: clickedPortfolio.title }),
+        intl.formatMessage({ id: 'deletedPortfolio' }, { portfolioTitle: clickedPortfolio.title }),
         {
           variant: 'error'
         }

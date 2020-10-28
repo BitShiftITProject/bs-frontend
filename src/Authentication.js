@@ -122,6 +122,7 @@ function Authentication() {
           <Route exact path='/help' render={() => <HelpPage />} />
           <Route exact path='/portfolios/edit' render={() => <EditPortfolioPage />} />
           <Route exact path='/portfolios/add' render={() => <AddPortfolioPage />} />
+
           <Route
             exact
             path='/portfolios'

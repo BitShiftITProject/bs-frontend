@@ -1,5 +1,4 @@
 import React from 'react'
-import { Grid } from '@material-ui/core'
 import { YoutubeVideo, Image, Text, File } from './SectionElements'
 
 export const sectionElements = {

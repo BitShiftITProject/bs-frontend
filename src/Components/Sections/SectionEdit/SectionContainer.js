@@ -1,35 +1,18 @@
 import React, { useState } from 'react'
 
-import { Grid, makeStyles, Fab, Tooltip, InputLabel } from '@material-ui/core'
+import { Grid, makeStyles, Fab, Tooltip } from '@material-ui/core'
 import CreateTwoToneIcon from '@material-ui/icons/CreateTwoTone'
 import DeleteForeverTwoToneIcon from '@material-ui/icons/DeleteForeverTwoTone'
 import CloseTwoToneIcon from '@material-ui/icons/CloseTwoTone'
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone'
 
 import { useIntl } from 'react-intl'
-import DragHandleIcon from '@material-ui/icons/DragHandle';
+import DragHandleIcon from '@material-ui/icons/DragHandle'
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
 /* -------------------------------------------------------------------------- */
 
 const useStyles = makeStyles((theme) => ({
-  // container: {
-  //   padding: theme.spacing(2),
-  //   // flexDirection:"column",
-  //   // marginBottom: theme.spacing(2),
-  //   borderRadius: 15,
-  //   backgroundColor: theme.palette.background.paperLight,
-  //   '&:hover': {
-  //     backgroundColor: theme.palette.background.paperHover
-  //   },
-  //   '&:focus': {
-  //     backgroundColor: theme.palette.background.paperHover
-  //   }
-  // },
-
-
-
-
   container: {
     padding: theme.spacing(2),
     // marginBottom: theme.spacing(2),
@@ -42,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
       // backgroundColor: theme.palette.background.paperHover
     }
   },
-
 
   sectionName: {
     paddingBottom: theme.spacing(1)
@@ -96,11 +78,10 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   middle: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
 
-    justifyContent: "center"
-
+    justifyContent: 'center'
   }
 }))
 
@@ -194,7 +175,7 @@ export default function SectionContainer({
         {/* -------------------------------------------------------------------------- */}
         {/* CONFIRM DELETE AND CANCEL BUTTONS */}
         {/* After clicking the delete button once, we can confirm delete or opt to
-          * cancel the delete action to the section. */}
+         * cancel the delete action to the section. */}
 
         {confirmDelete && (
           <>
@@ -221,6 +202,6 @@ export default function SectionContainer({
           </>
         )}
       </Grid>
-    </Grid >
+    </Grid>
   )
 }

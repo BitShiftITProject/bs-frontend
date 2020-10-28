@@ -368,7 +368,7 @@ export const getMediaItems = async (userID) => {
   return mediaItems
 }
 
-// gets all the Media Items for a given user
+// gets specific Media Items for a given user
 export const getMediaItem = async (key) => {
   const response = await fetch(BACKEND + MEDIA_ITEM + '/' + key, {
     method: 'GET',
@@ -401,10 +401,14 @@ export const getDataUrl = async (key) => {
 
   return await getMediaItem(key).then(async (item) => {
     const file = await response.json().then((response) => {
-      let buf = Buffer.from(response.Body.data)
-      let base64 = buf.toString()
+        if(item != null){
+            let buf = Buffer.from(response.Body.data)
+            let base64 = buf.toString()
 
-      return 'data:' + item.file_type + ';base64,' + base64
+            return 'data:' + item.file_type + ';base64,' + base64
+        }else{
+            return null
+        }
     })
     return file
   })
@@ -423,17 +427,21 @@ export const getFile = async (key) => {
   if (!response) return null
 
   return await getMediaItem(key).then(async (item) => {
-    const file = await response.json().then(async (response) => {
-      let buf = Buffer.from(response.Body.data)
-      let base64 = buf.toString()
+    if(item != null){
+        const file = await response.json().then(async (response) => {
+        let buf = Buffer.from(response.Body.data)
+        let base64 = buf.toString()
 
-      return await fetch('data:' + item.file_type + ';base64,' + base64)
-        .then((res) => res.blob())
-        .then((blob) => {
-          return new File([blob], item.public_name, { type: item.file_type })
+        return await fetch('data:' + item.file_type + ';base64,' + base64)
+            .then((res) => res.blob())
+            .then((blob) => {
+            return new File([blob], item.public_name, { type: item.file_type })
+            })
         })
-    })
-    return file
+        return file
+    }else{
+        return null;
+    }
   })
 }
 
