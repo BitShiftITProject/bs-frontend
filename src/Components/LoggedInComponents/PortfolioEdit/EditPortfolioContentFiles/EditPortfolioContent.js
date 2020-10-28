@@ -90,7 +90,7 @@ export default function EditPortfolioContent(props) {
           return { [page.id]: page.content.sections }
         })
         .reduce((prev, curr) => ({ ...prev, ...curr }), currentSections)
-      console.log(newSections)
+      // console.log(newSections)
       return newSections
     })
   }, [pages, setSections])
@@ -144,23 +144,18 @@ export default function EditPortfolioContent(props) {
     }, 1000)
   }
 
-
-// sets the SPECFIC PAGES sections
+  // sets the SPECFIC PAGES sections
   const handleSetPageSection = (newUnsavedSection) => {
     setSections((currentSections) => {
       // If this is the first section of the page, just set it as [newSection],
       // otherwise just add newSection to the end of the current list of sections
       const newSections = {
-        ...currentSections,
+        ...currentSections
       }
       newSections[pageId] = newUnsavedSection
       return newSections
     })
   }
-
-
-
-
 
   // Deletes the section at a given index among the sections of the current page
   function handleSectionDelete(sectionIndex) {
@@ -331,7 +326,7 @@ export default function EditPortfolioContent(props) {
     // without messing with the other pages' unsaved changes
     setPages((pages) => [...pages, newPage])
 
-    console.log(portfolio, newPage)
+    // console.log(portfolio, newPage)
 
     await patchPortfolio(portfolio.id, { pageOrder: [...portfolio.pageOrder, newPage.id] })
     // Sets the currently shown portfolio as the updated portfolio

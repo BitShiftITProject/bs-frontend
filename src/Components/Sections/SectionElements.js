@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import ReactHtmlParser from 'react-html-parser'
 import YouTube from 'react-youtube'
-import { Grid, TextField, Typography, styled, Tooltip, Link } from '@material-ui/core'
-
+import { Grid, TextField, Typography, styled, Tooltip, Link, makeStyles } from '@material-ui/core'
+import GetAppIcon from '@material-ui/icons/GetApp'
 import { PortfolioContext } from '../Contexts/PortfolioContext'
 
 import { getMediaItem, getFile, getDataUrl, getPage } from '../../Backend/Fetch'
@@ -28,6 +28,17 @@ const ExampleSection = styled(Grid)({
   justifyContent: 'center',
   alignItems: 'center'
 })
+
+const useStyles = makeStyles((theme) => ({
+  fileUploadIcon: {
+    transform: 'scale(0.8)',
+    color: theme.palette.info.main
+  },
+  fileUpload: {
+    cursor: 'pointer',
+    color: theme.palette.text.primary
+  }
+}))
 
 /* -------------------------------------------------------------------------- */
 /*                              Section Elements                              */
@@ -185,6 +196,8 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
   const [file, setFile] = useState(null)
   const [page, setPage] = useState(null)
 
+  const classes = useStyles()
+
   useEffect(() => {
     async function getCurrentPage(pageId) {
       const currentPage = await getPage(pageId)
@@ -200,6 +213,7 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
 
   const getFileName = async () => {
     // In EditPortfolioSectionsGrouped
+
     if (sections[pageId]) {
       if (sections[pageId][sectionIndex][elementIndex].data === '') {
         return 'No File Uploaded'
@@ -247,7 +261,7 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
       }
     }
 
-    if (page != null && data != null) {
+    if (data != null) {
       getUploadedFile().then((file) => {
         file != null ? setFile(file) : setFile('')
       })
@@ -255,7 +269,7 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
         setFileName(name)
       })
     }
-  }, [data, editing, sectionIndex, elementIndex, name, pageId])
+  }, [data, editing, sectionIndex, elementIndex, name, page])
 
   const handleClick = async () => {
     if (file) {
@@ -299,9 +313,13 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
     )
   ) : (
     // Get file before showing
-    <Link onClick={handleClick} style={{ cursor: 'pointer' }}>
-      {page !== null && fileName !== null && fileName}
-    </Link>
+    <span
+      onClick={handleClick}
+      style={{ width: '100%', display: 'flex', justify: 'center', alignItems: 'center' }}
+    >
+      <GetAppIcon className={classes.fileUploadIcon} />
+      <Link className={classes.fileUpload}>{page !== null && fileName !== null && fileName}</Link>
+    </span>
   )
 
   return rendered

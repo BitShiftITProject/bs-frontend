@@ -34,7 +34,7 @@ export default function EditPortfolioSectionsGrouped({
   const [elementIndex, setElementIndex] = useState(0)
 
   const startSectionEdit = (index) => {
-    console.log('Edit section', index)
+    // console.log('Edit section', index)
     setSectionIndex(index)
     setElementIndex(0)
     setEditMode(true)
