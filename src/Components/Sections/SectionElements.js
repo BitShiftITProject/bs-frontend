@@ -148,7 +148,7 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
       // Open up file dialog with function related to changing this value
       // Make typography on the right show file name
       // Show button and typography in line
-      <Grid container direction='row' spacing={1} justify='flex-start' alignItems='center'>
+      <Grid container direction='row' spacing={2} justify='center' alignItems='center'>
         <Grid item>
           {file === null ? (
             <p>Loading...</p>
@@ -169,7 +169,11 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
     )
   ) : (
     // Get image before showing
-    <img style={{ width: '100%' }} src={file} alt={file} />
+    <img
+      style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', maxWidth: '100%' }}
+      src={file}
+      alt={imageName}
+    />
   )
 
   return rendered
@@ -194,7 +198,7 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
     }
   }, [pageId])
 
-  const getFileName = useCallback(async () => {
+  const getFileName = async () => {
     // In EditPortfolioSectionsGrouped
     if (sections[pageId]) {
       if (sections[pageId][sectionIndex][elementIndex].data === '') {
@@ -218,7 +222,7 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
     } else {
       return 'Loading...'
     }
-  }, [page, elementIndex, pageId, sectionIndex, sections])
+  }
 
   useEffect(() => {
     async function getNameOfFile() {
@@ -257,7 +261,9 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
     if (file) {
       const fileBlob = await (await fetch(file)).blob()
       const blobURL = URL.createObjectURL(fileBlob)
+
       const a = document.createElement('a')
+
       a.href = blobURL
       a.download = fileName
       a.click()
@@ -273,7 +279,7 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
       // Open up file dialog with function related to changing this value
       // Make typography on the right show file name
       // Show button and typography in line
-      <Grid container direction='row' spacing={1} justify='flex-start' alignItems='center'>
+      <Grid container direction='row' spacing={2} justify='center' alignItems='center'>
         <Grid item>
           {file === null ? (
             <p>Loading...</p>

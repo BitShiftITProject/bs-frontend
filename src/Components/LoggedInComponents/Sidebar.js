@@ -261,7 +261,7 @@ export default function Sidebar(props) {
               <IconButton
                 onClick={() => {
                   sessionStorage.removeItem('accessToken')
-                  window.sessionStorage.removeItem('accessToken')
+                  localStorage.removeItem('accessToken')
                   window.sessionStorage.removeItem('portfolioId')
                   window.location.href = '/'
                 }}

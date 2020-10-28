@@ -100,7 +100,10 @@ export default function SectionsButton({ pageId, handleSectionAdd }) {
             <Grid item container direction='row' spacing={2}>
               {Object.keys(sectionElements).map((elementName, idx) => (
                 <Grid key={idx} item>
-                  <ButtonBase onClick={(e) => addSectionElement(elementName)}>
+                  <ButtonBase
+                    disabled={elements.length === 4}
+                    onClick={(e) => addSectionElement(elementName)}
+                  >
                     <Link color='textPrimary' style={{ textTransform: 'capitalize' }}>
                       {elementName}
                     </Link>
