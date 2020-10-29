@@ -1,10 +1,10 @@
 import React, { useState, useReducer, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
 import Sidebar from '../Sidebar'
-import ContactInfoDetails from "./ContactInfoDetails"
-import AboutMeDetails from "./AboutMeDetails"
-import EditProfileListMenu from "./EditProfileListMenu"
-import UserProfileDataForm from "./UserProfileDataForm"
+import ContactInfoDetails from './ContactInfoDetails'
+import AboutMeDetails from './AboutMeDetails'
+import EditProfileListMenu from './EditProfileListMenu'
+import UserProfileDataForm from './UserProfileDataForm'
 import { Grid } from '@material-ui/core'
 import { getUser, logout, patchUser } from '../../../Backend/Fetch'
 import { useHistory } from 'react-router-dom'
@@ -148,21 +148,20 @@ export default function EditProfilePage() {
   switch (page) {
     // Contact Form
     case 'contact':
-      form = <ContactInfoDetails 
-              handleOnContactChange={handleOnContactChange} 
-              contact={contact}
-            />
+      form = <ContactInfoDetails handleOnContactChange={handleOnContactChange} contact={contact} />
       break
     // About Me form
     default:
-      form = <AboutMeDetails 
-              handleOnAboutChange={handleOnAboutChange} 
-              handleAddTag={handleAddTag} 
-              handleRemoveTag={handleRemoveTag} 
-              about={about} 
-              tagText={tagText} 
-              setTagText={setTagText}
-            />
+      form = (
+        <AboutMeDetails
+          handleOnAboutChange={handleOnAboutChange}
+          handleAddTag={handleAddTag}
+          handleRemoveTag={handleRemoveTag}
+          about={about}
+          tagText={tagText}
+          setTagText={setTagText}
+        />
+      )
   }
   /* -------------------------------------------------------------------------- */
   /*                                Page Content                                */
@@ -172,10 +171,10 @@ export default function EditProfilePage() {
     <Grid container direction='row' spacing={0}>
       {/* TO DO: double check if this works. without PAGE={PAGE} it still renders and compiles?
       what is the purpose of page===contact*/}
-      <EditProfileListMenu setPage={setPage} page={page}/>
-  
+      <EditProfileListMenu setPage={setPage} page={page} />
+
       {/* FORM with user profile data*/}
-       <UserProfileDataForm handleSubmit={handleSubmit} form={form}/>
+      <UserProfileDataForm handleSubmit={handleSubmit} form={form} />
     </Grid>
   )
   return <Sidebar content={content} />

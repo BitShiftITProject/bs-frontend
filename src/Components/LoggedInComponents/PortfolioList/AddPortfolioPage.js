@@ -7,10 +7,12 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { loggedInStyles, PaddedFormGrid } from '../../../Styles/loggedInStyles'
 import Sidebar from '../Sidebar'
 
-import { getUser, logout, postPortfolioToUser } from '../../../Backend/Fetch'
+import { logout } from '../../../Backend/Fetch'
 
 import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
+import useAddPortfolio from '../../../Hooks/useAddPortfolio'
+import { useQueryCache } from 'react-query'
 
 export default function AddPortfolioPage() {
   /* -------------------------------------------------------------------------- */
@@ -41,6 +43,8 @@ export default function AddPortfolioPage() {
   /* -------------------------------------------------------------------------- */
 
   const history = useHistory()
+  const user = useQueryCache().getQueryData('user')
+  const [addPortfolio] = useAddPortfolio()
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -48,9 +52,6 @@ export default function AddPortfolioPage() {
     // Reset error state to false to not show the helper text right after
     // clicking Add Portfolio button
     setError(false)
-
-    // Gets the currently logged-in User object from access token
-    const user = await getUser()
 
     // Logs out if access token is no longer valid
     if (!user) {
@@ -68,26 +69,20 @@ export default function AddPortfolioPage() {
 
     // Creates a portfolio belonging to the currently logged-in user,
     // if error, show an error helper text.
-    await postPortfolioToUser(user.username, postDetails).then((response) => {
-      if (response.ok) {
-        const key = enqueueSnackbar(
-          intl.formatMessage({ id: 'addedPortfolio'}, {portfolioTitle: title }),
-          {
-            variant: 'success'
-          }
-        )
 
-        setTimeout(() => {
-          closeSnackbar(key)
-        }, 2000)
+    try {
+      addPortfolio({ username: user.username, postDetails }).then(() => {
+        enqueueSnackbar(intl.formatMessage({ id: 'addedPortfolio' }, { portfolioTitle: title }), {
+          variant: 'success'
+        })
 
-        history.push('/portfolios')
-      } else {
-        setHelperText('An error occurred. Try again.')
-        setError(true)
-        return null
-      }
-    })
+        window.location.href = '/portfolios'
+      })
+    } catch (error) {
+      setHelperText('An error occurred. Try again.')
+      setError(true)
+      return null
+    }
   }
 
   /* -------------------------------------------------------------------------- */

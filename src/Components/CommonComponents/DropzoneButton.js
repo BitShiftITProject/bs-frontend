@@ -1,6 +1,7 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useCallback } from 'react'
 import {
   Button,
+  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -11,7 +12,9 @@ import {
 import { DropzoneArea } from 'material-ui-dropzone'
 import CustomDialog from './CustomDialog'
 import { postMediaContent, getUser, deleteMediaItem } from '../../Backend/Fetch'
-import { PortfolioContext } from '../Contexts/PortfolioContext'
+import { useStore } from '../../Hooks/Store'
+import useEditPage from '../../Hooks/useEditPage'
+import { useQueryCache } from 'react-query'
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -42,15 +45,27 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function DropzoneButton({
-  img,
-  initialFile,
-  sectionIndex,
-  elementIndex,
-  elementName
-}) {
+const elementEditFunctions = ({
+  startEditingElement,
+  editCurrentElement,
+  finishEditingElement
+}) => [startEditingElement, editCurrentElement, finishEditingElement]
+
+const pageIdSelector = (state) => state.pageId
+const currentElementSelector = (state) => state.currentElement
+
+export default function DropzoneButton({ img, initialFile }) {
   const classes = useStyles()
-  const { sections, pageId, modifySection } = useContext(PortfolioContext)
+
+  const user = useQueryCache().getQueryData('user')
+
+  const pageId = useStore(pageIdSelector)
+  const currentElement = useStore(currentElementSelector)
+  const [startEditingElement, editCurrentElement, finishEditingElement] = useStore(
+    useCallback(elementEditFunctions, [])
+  )
+
+  const [editPage] = useEditPage()
 
   // Dialog state
   const [open, setOpen] = useState(false)
@@ -70,7 +85,7 @@ export default function DropzoneButton({
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = () => {
-        let encoded = reader.result.toString().replace(/^data:(.*,)?/, '')
+        const encoded = reader.result.toString().replace(/^data:(.*,)?/, '')
         if (encoded.length % 4 > 0) {
           encoded += '='.repeat(4 - (encoded.length % 4))
         }
@@ -80,28 +95,33 @@ export default function DropzoneButton({
     })
   }
 
+  function handleClose() {
+    if (!loading) {
+      setOpen(false)
+    }
+  }
+
   async function handleSubmit() {
     setLoading(true)
     if (files.length) {
-      var fileType = files[0].type
-      const user = await getUser()
+      const fileType = files[0].type
       if (user) {
-        let fileResponse = fileToBase64(files[0]).then((result) => {
-          var stream = result.toString().replace(/^.*,/, '')
-          var postContent = {
+        const fileResponse = fileToBase64(files[0]).then((result) => {
+          const stream = result.toString().replace(/^.*,/, '')
+          const postContent = {
             public_name: fileName + '.' + fileExtension,
             file_type: fileType,
             stream: stream
           }
-          return postMediaContent(postContent, user)
+          return postMediaContent(user.username, postContent)
         })
 
-        let key = await fileResponse.then(async (response) => {
+        const key = await fileResponse.then(async (response) => {
           return await response.json().then((body) => {
             return body.key
           })
         })
-        modifySection(sectionIndex, elementIndex, elementName, key)
+        editCurrentElement(key)
       }
     }
     setLoading(false)
@@ -119,9 +139,9 @@ export default function DropzoneButton({
           acceptedFiles={onlyImage ? ['image/*'] : ['application/*', 'text/*']}
           filesLimit={filesLimit}
           maxFileSize={5000000}
-          onDelete={(deletedFile) => {
-            deleteMediaItem(sections[pageId][sectionIndex][elementIndex].data)
-            modifySection(sectionIndex, elementIndex, elementName, '')
+          onDelete={() => {
+            deleteMediaItem(currentElement.data)
+            editCurrentElement('')
             setFileName('')
             setFileExtension('')
             setFiles([])
@@ -141,6 +161,15 @@ export default function DropzoneButton({
               setFileName('')
               setFileExtension('')
             }
+          }}
+          onAdd={(newFiles) => {
+            setFiles(newFiles)
+            const file = newFiles[0].name
+            const filename = file.substring(0, file.lastIndexOf('.'))
+            const ext = file.split('.').pop()
+            setFileName(filename)
+            setFileExtension(ext)
+            handleSubmit()
           }}
           // Dropzone settings
           disableRejectionFeedback={true}
@@ -186,15 +215,6 @@ export default function DropzoneButton({
           </Grid>
         </Grid>
       </DialogContent>
-      {/* Cancel or Submit file upload */}
-      <DialogActions>
-        <Button variant='text' onClick={() => setOpen(false)}>
-          Cancel
-        </Button>
-        <Button variant='text' disabled={loading} onClick={handleSubmit}>
-          Submit
-        </Button>
-      </DialogActions>
     </div>
   )
 
@@ -203,7 +223,9 @@ export default function DropzoneButton({
       <Button variant='contained' color='primary' onClick={() => setOpen(true)}>
         {onlyImage ? 'Add Image' : 'Add File'}
       </Button>
-      <CustomDialog open={open} setOpen={setOpen} content={content} />
+      <Dialog open={open} onClose={handleClose} onBackdropClick={handleClose}>
+        {content}
+      </Dialog>
     </div>
   )
 }

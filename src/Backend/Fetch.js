@@ -351,8 +351,8 @@ export const deleteAllPortfolioPages = async (portfolioId) => {
 
 /* ----------------------------------- GET ---------------------------------- */
 // gets all the Media Items for a given user
-export const getMediaItems = async (userID) => {
-  const response = await fetch(BACKEND + USERS + '/' + userID + MEDIA_ITEM, {
+export const getMediaItems = async (username) => {
+  const response = await fetch(BACKEND + USERS + '/' + username + MEDIA_ITEM, {
     method: 'GET',
     headers
   })
@@ -401,14 +401,14 @@ export const getDataUrl = async (key) => {
 
   return await getMediaItem(key).then(async (item) => {
     const file = await response.json().then((response) => {
-        if(item != null){
-            let buf = Buffer.from(response.Body.data)
-            let base64 = buf.toString()
+      if (item != null) {
+        let buf = Buffer.from(response.Body.data)
+        let base64 = buf.toString()
 
-            return 'data:' + item.file_type + ';base64,' + base64
-        }else{
-            return null
-        }
+        return 'data:' + item.file_type + ';base64,' + base64
+      } else {
+        return null
+      }
     })
     return file
   })
@@ -427,28 +427,28 @@ export const getFile = async (key) => {
   if (!response) return null
 
   return await getMediaItem(key).then(async (item) => {
-    if(item != null){
-        const file = await response.json().then(async (response) => {
+    if (item != null) {
+      const file = await response.json().then(async (response) => {
         let buf = Buffer.from(response.Body.data)
         let base64 = buf.toString()
 
         return await fetch('data:' + item.file_type + ';base64,' + base64)
-            .then((res) => res.blob())
-            .then((blob) => {
+          .then((res) => res.blob())
+          .then((blob) => {
             return new File([blob], item.public_name, { type: item.file_type })
-            })
-        })
-        return file
-    }else{
-        return null;
+          })
+      })
+      return file
+    } else {
+      return null
     }
   })
 }
 
 /* ----------------------------------- POST ---------------------------------- */
 // Adds a media item to a user
-export const postMediaContent = async (postDetails, userID) => {
-  const response = await fetch(BACKEND + USERS + '/' + userID + MEDIA_ITEM, {
+export const postMediaContent = async (username, postDetails) => {
+  const response = await fetch(BACKEND + USERS + '/' + username + MEDIA_ITEM, {
     method: 'POST',
     headers,
     body: JSON.stringify(postDetails)

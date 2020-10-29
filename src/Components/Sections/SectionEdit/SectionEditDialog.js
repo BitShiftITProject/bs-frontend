@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { Grid, DialogTitle, DialogContent, AppBar, Tabs, Tab, Dialog } from '@material-ui/core'
 import { GetElementJSX } from '../SectionsMap'
+import { useStore } from '../../../Hooks/Store'
+import useEditPage from '../../../Hooks/useEditPage'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -37,15 +39,23 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired
 }
 
-export default function SectionEditDialog({
-  sectionIndex,
-  editMode,
-  finishSectionEdit,
-  elementIndex,
-  sections,
-  pageId,
-  handleChange
-}) {
+const elementEditFunctions = ({
+  startEditingElement,
+  editCurrentElement,
+  finishEditingElement
+}) => [startEditingElement, editCurrentElement, finishEditingElement]
+
+const pageIdSelector = (state) => state.pageId
+const currentElementSelector = (state) => state.currentElement
+
+export default function SectionEditDialog() {
+  const currentElement = useStore(currentElementSelector)
+  const [startEditingElement, editCurrentElement, finishEditingElement] = useStore(
+    useCallback(elementEditFunctions, [])
+  )
+
+  const [editPage] = useEditPage()
+
   return sectionIndex !== null ? (
     <Dialog open={editMode} onClose={finishSectionEdit} fullWidth maxWidth='sm'>
       <DialogTitle>Edit Section</DialogTitle>

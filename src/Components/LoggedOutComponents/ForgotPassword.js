@@ -2,13 +2,13 @@ import React, { useCallback } from 'react'
 import shallow from 'zustand/shallow'
 import { useIntl } from 'react-intl'
 import { withStyles, styled } from '@material-ui/core/styles'
-import { TextField, Fab, Typography, Paper, Grid } from '@material-ui/core'
+import { TextField, Fab, Typography } from '@material-ui/core'
 
 import LandingContainer from './LandingContainer'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { Link } from 'react-router-dom'
-import { useFormStore } from '../../Store'
+import { useFormStore } from '../../Hooks/Store'
 import { sendConfirmationCode, resetPassword } from '../../Backend/Fetch'
 import { useSnackbar } from 'notistack'
 
@@ -79,12 +79,18 @@ function ForgotPassword(props) {
     const response = await sendConfirmationCode(email)
 
     if (response.ok) {
-      enqueueSnackbar(intl.formatMessage({id: 'confirmationEmail'}, { email: (<span style={{fontWeight: 'bold'}}>{email}</span>)}), {
-        variant: 'success'
-      })
+      enqueueSnackbar(
+        intl.formatMessage(
+          { id: 'confirmationEmail' },
+          { email: <span style={{ fontWeight: 'bold' }}>{email}</span> }
+        ),
+        {
+          variant: 'success'
+        }
+      )
     } else {
       // Display error
-      enqueueSnackbar(intl.formatMessage({id: 'emailDoesNotExist'}), {
+      enqueueSnackbar(intl.formatMessage({ id: 'emailDoesNotExist' }), {
         variant: 'error'
       })
     }
@@ -100,11 +106,11 @@ function ForgotPassword(props) {
     const response = await resetPassword(authDetails)
     if (response.ok) {
       // Success
-      enqueueSnackbar(intl.formatMessage({id: 'successfulPasswordChange'}), {
+      enqueueSnackbar(intl.formatMessage({ id: 'successfulPasswordChange' }), {
         variant: 'success'
       })
     } else {
-      enqueueSnackbar(intl.formatMessage({id: 'errorText'}), {
+      enqueueSnackbar(intl.formatMessage({ id: 'errorText' }), {
         variant: 'error'
       })
     }
@@ -220,13 +226,9 @@ function ForgotPassword(props) {
   return (
     <LandingContainer
       content={
-        <Grid container direction='row' justify='center' alignItems='center'>
-          <Grid item xs={1} sm={2} lg={3}></Grid>
-          <Grid item xs={10} sm={8} lg={6}>
-            <Paper className={style.paper}>{content}</Paper>
-          </Grid>
-          <Grid item xs={1} sm={2} lg={3}></Grid>
-        </Grid>
+        <div className={style.centerContainer}>
+          <div className={style.paper}>{content}</div>
+        </div>
       }
     />
   )

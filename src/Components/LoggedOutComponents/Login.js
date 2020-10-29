@@ -9,9 +9,12 @@ import {
   Grid,
   styled,
   withStyles,
-  Paper
+  InputAdornment,
+  IconButton
 } from '@material-ui/core'
 
+import VisibilityIcon from '@material-ui/icons/Visibility'
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import { Link } from 'react-router-dom'
 import Alert from '@material-ui/lab/Alert'
 import { useIntl } from 'react-intl'
@@ -22,7 +25,7 @@ import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 
 import { authenticate } from '../../Backend/Fetch'
-import { useFormStore } from '../../Store'
+import { useFormStore } from '../../Hooks/Store'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -71,16 +74,27 @@ function Login(props) {
     loginFailed,
     errorMessage,
     loading,
+    showPassword,
     modifyForm
   ] = useFormStore(
     useCallback(
-      ({ email, password, rememberMe, loginFailed, errorMessage, loading, modifyForm }) => [
+      ({
         email,
         password,
         rememberMe,
         loginFailed,
         errorMessage,
         loading,
+        showPassword,
+        modifyForm
+      }) => [
+        email,
+        password,
+        rememberMe,
+        loginFailed,
+        errorMessage,
+        loading,
+        showPassword,
         modifyForm
       ],
       []
@@ -96,6 +110,8 @@ function Login(props) {
   function handleChange(e) {
     modifyForm(e.target.name, e.target.value)
   }
+
+  const handleClickShowPassword = () => modifyForm('showPassword', !showPassword)
 
   // Toggle the checkbox from being checked (true) or not (false)
   function handleCheckbox(e) {
@@ -187,10 +203,24 @@ function Login(props) {
           fullWidth
           name='password'
           label={intl.formatMessage({ id: 'password' })}
-          type='password'
+          type={showPassword ? 'text' : 'password'}
           id='password'
           autoComplete='current-password'
           onChange={handleChange}
+          InputProps={{
+            // this is where the toggle button is added
+            endAdornment: (
+              <InputAdornment position='end'>
+                <IconButton
+                  style={{ transform: 'scale(0.8)' }}
+                  aria-label='toggle password visibility'
+                  onClick={handleClickShowPassword}
+                >
+                  {!showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
         />
 
         {/* The error message appears iff the state is loginFailed */}
@@ -262,13 +292,9 @@ function Login(props) {
   return (
     <LandingContainer
       content={
-        <Grid container direction='row' justify='center' alignItems='center'>
-          <Grid item xs={1} sm={2} lg={3}></Grid>
-          <Grid item xs={10} sm={8} lg={6}>
-            <Paper className={style.paper}>{content}</Paper>
-          </Grid>
-          <Grid item xs={1} sm={2} lg={3}></Grid>
-        </Grid>
+        <div className={style.centerContainer}>
+          <div className={style.paper}>{content}</div>
+        </div>
       }
     />
   )

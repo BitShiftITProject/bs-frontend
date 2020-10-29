@@ -1,19 +1,11 @@
-import React, {
-  useContext
-  // useEffect,
-  // useState
-} from 'react'
+import React, { useContext } from 'react'
 import {
-  // Button,
   FormControl,
   FormControlLabel,
-  // FormHelperText,
-  // FormLabel,
   Grid,
   Paper,
   Radio,
   RadioGroup,
-  // Select,
   Typography
 } from '@material-ui/core'
 import { loggedInStyles } from '../../../Styles/loggedInStyles'
@@ -21,9 +13,13 @@ import { PublicThemesContext } from '../../Contexts/PublicThemesContext'
 import { themes } from '../../../Themes/themes'
 import { useSnackbar } from 'notistack'
 import { useIntl } from 'react-intl'
-import { patchPortfolio } from '../../../Backend/Fetch'
+import useEditPortfolio from '../../../Hooks/useEditPortfolio'
+import { useQueryCache } from 'react-query'
+import { useStore } from '../../../Hooks/Store'
 
-export default function EditPortfolioStyle({ portfolio }) {
+const portfolioIdSelector = (state) => state.portfolioId
+
+export default function EditPortfolioStyle() {
   /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */
   /* -------------------------------------------------------------------------- */
@@ -49,20 +45,23 @@ export default function EditPortfolioStyle({ portfolio }) {
 
   const { publicTheme, setPublicTheme } = useContext(PublicThemesContext)
 
+  const portfolioId = useStore(portfolioIdSelector)
+  const portfolio = useQueryCache().getQueryData(['portfolios', portfolioId])
+  const [editPortfolio] = useEditPortfolio()
+
   function handleThemeChange(e) {
     e.preventDefault()
     window.sessionStorage.setItem('publicTheme', e.target.value)
     setPublicTheme(e.target.value)
 
-    const portfolioId = window.sessionStorage.getItem('portfolioId')
     const patchDetails = { theme: e.target.value }
 
     const titleCase = e.target.value.replace(/([A-Z])/g, ' $1')
     const themeName = titleCase.charAt(0).toUpperCase() + titleCase.slice(1)
 
-    patchPortfolio(portfolioId, patchDetails).then(() => {
-      enqueueSnackbar(intl.formatMessage({ id: 'changedPortfolioTheme' }, { themeName }), {})
-    })
+    editPortfolio({ portfolioId: portfolio.id, patchDetails })
+
+    enqueueSnackbar(intl.formatMessage({ id: 'changedPortfolioTheme' }, { themeName }), {})
   }
 
   /* -------------------------------------------------------------------------- */

@@ -9,9 +9,9 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import Loading from '../CommonComponents/Loading'
-import { useFormStore } from '../../Store'
+import { useFormStore } from '../../Hooks/Store'
 
-function SignupLoginData({ handleChange, handleSubmit, handleClickShowPassword }) {
+function SignupLoginData({ handleChange, handleClickShowPassword }) {
   /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */
   /* -------------------------------------------------------------------------- */
@@ -174,7 +174,7 @@ function SignupLoginData({ handleChange, handleSubmit, handleClickShowPassword }
                     aria-label='toggle password visibility'
                     onClick={handleClickShowPassword}
                   >
-                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    {!showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                   </IconButton>
                 </InputAdornment>
               )

@@ -1,5 +1,5 @@
-// const BACKEND = 'http://localhost:3000'
-const BACKEND = 'https://bitshift-backend.herokuapp.com'
+const BACKEND = 'http://localhost:3000'
+// const BACKEND = 'https://bitshift-backend.herokuapp.com'
 
 const FORGOTPASSWORD = '/cognito/forgotpassword'
 const CHANGEPASSWORD = '/cognito/changepassword'

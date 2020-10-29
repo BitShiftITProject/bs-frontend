@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { CssBaseline, Grid } from '@material-ui/core'
 import Sidebar from '../Sidebar'
 import EditPortfolioDropdown from './EditPortfolioDropdown'
 import EditPortfolioContent from './EditPortfolioContentFiles/EditPortfolioContent'
 import EditPortfolioStyle from './EditPortfolioStyle'
-import { getPortfolio, getPortfolioPages, patchPortfolio } from '../../../Backend/Fetch'
 import PublicThemesProvider from '../../Contexts/PublicThemesContext'
 import ThemesProvider from '../../Contexts/ThemesContext'
 
@@ -14,47 +13,9 @@ export default function EditPortfolioPage() {
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
-  const [portfolio, setPortfolio] = useState({})
-  const [pages, setPages] = useState([])
+  // const [portfolio, setPortfolio] = useState({})
+  // const [pages, setPages] = useState([])
   const [editMode, setEditMode] = useState('content')
-
-  /* -------------------------------------------------------------------------- */
-  /*                         Fetching Current Portfolio                         */
-  /* -------------------------------------------------------------------------- */
-
-  const portfolioId = window.sessionStorage.getItem('portfolioId')
-
-  // Runs when the component is mounted for the first time, fetches the
-  // portfolio using the portfolioId item set in the sessionStorage.
-  // The portfolioId is set in the sessionStorage when:
-  // - A user clicks on the Add Portfolio button in AddPortfolioPage
-  // - A user clicks on the Edit button in PortfolioCard
-
-  useEffect(() => {
-    if (portfolioId) {
-      getPortfolio(portfolioId).then((portfolio) => {
-        setPortfolio({ ...portfolio })
-
-        const pageOrder = portfolio.pageOrder
-        if (!pageOrder) {
-          getPortfolioPages(portfolio.id).then((pages) => {
-            setPages(pages)
-            const patchDetails = { pageOrder: pages }
-            patchPortfolio(portfolio.id, patchDetails)
-          })
-        } else {
-          getPortfolioPages(portfolio.id).then((pages) => {
-            pages.sort((a, b) => {
-              return pageOrder.indexOf(a.id) - pageOrder.indexOf(b.id)
-            })
-            setPages(pages)
-          })
-        }
-      })
-    } else {
-      window.location.href = '/portfolios'
-    }
-  }, [portfolioId])
 
   /* -------------------------------------------------------------------------- */
   /*                                Page Content                                */
@@ -66,7 +27,7 @@ export default function EditPortfolioPage() {
     <PublicThemesProvider>
       <ThemesProvider>
         <CssBaseline>
-          <EditPortfolioStyle portfolio={portfolio} setPortfolio={setPortfolio} />
+          <EditPortfolioStyle />
         </CssBaseline>
       </ThemesProvider>
     </PublicThemesProvider>
@@ -74,14 +35,7 @@ export default function EditPortfolioPage() {
 
   /* ------------------------------ Edit Content ------------------------------ */
 
-  const editContentPage = (
-    <EditPortfolioContent
-      portfolio={portfolio}
-      setPortfolio={setPortfolio}
-      pages={pages}
-      setPages={setPages}
-    />
-  )
+  const editContentPage = <EditPortfolioContent />
 
   /* ------------------------------ Rendered Page ----------------------------- */
 

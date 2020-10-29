@@ -1,14 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import ReactHtmlParser from 'react-html-parser'
 import YouTube from 'react-youtube'
 import { Grid, TextField, Typography, styled, Tooltip, Link, makeStyles } from '@material-ui/core'
 import GetAppIcon from '@material-ui/icons/GetApp'
-import { PortfolioContext } from '../Contexts/PortfolioContext'
 
 import { getMediaItem, getFile, getDataUrl, getPage } from '../../Backend/Fetch'
 import DropzoneButton from '../../Components/CommonComponents/DropzoneButton'
 
 import TextEditor from '../TextEditor'
+import { useQueryCache } from 'react-query'
+import { useStore } from '../../Hooks/Store'
+import shallow from 'zustand/shallow'
 
 const text = 'Text'
 const youtubeVideo = 'Video'
@@ -41,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
+const editElementFunction = (state) => state.editCurrentElement
+const pageIdSelector = (state) => state.pageId
+const currentSectionDetails = ({ pageId, currentElement }) => [pageId, currentElement]
+
 /* -------------------------------------------------------------------------- */
 /*                              Section Elements                              */
 /* -------------------------------------------------------------------------- */
@@ -72,7 +78,7 @@ export const Text = ({ name, editing, data, sectionIndex, elementIndex }) => {
         <Typography variant='h6'>{text}</Typography>
       </ExampleSection>
     ) : (
-      <TextEditor sectionIndex={sectionIndex} elementIndex={elementIndex} name={name} data={data} />
+      <TextEditor data={data} />
     )
   ) : (
     <div>{ReactHtmlParser(data)}</div>
@@ -82,7 +88,16 @@ export const Text = ({ name, editing, data, sectionIndex, elementIndex }) => {
 }
 
 export const YoutubeVideo = ({ name, editing, data, sectionIndex, elementIndex }) => {
-  const { sections, pageId, modifySection } = useContext(PortfolioContext)
+  const editCurrentElement = useStore(useCallback(editElementFunction, []))
+
+  const [pageId, currentElement] = useStore(useCallback(currentSectionDetails, []), shallow)
+
+  const currentPage = useQueryCache().getQueryData(['pages', pageId])
+
+  const handleChange = (e) => {
+    console.log('Youtube video changed to:', e.target.value)
+    editCurrentElement(e.target.value)
+  }
 
   const rendered = editing ? (
     data === null ? (
@@ -92,8 +107,8 @@ export const YoutubeVideo = ({ name, editing, data, sectionIndex, elementIndex }
     ) : (
       <Tooltip placement='top' title='Video ID (See FAQ)'>
         <TextField
-          value={sections[pageId][sectionIndex][elementIndex].data}
-          onChange={(e) => modifySection(sectionIndex, elementIndex, name, e.target.value)}
+          value={currentPage.content.sections[sectionIndex][elementIndex].data}
+          onChange={handleChange}
           fullWidth
           multiline
           id={name}
@@ -109,26 +124,31 @@ export const YoutubeVideo = ({ name, editing, data, sectionIndex, elementIndex }
 }
 
 export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
-  const { sections, pageId } = useContext(PortfolioContext)
+  const [pageId, currentElement] = useStore(useCallback(currentSectionDetails, []), shallow)
+
+  const currentPage = useQueryCache().getQueryData(['pages', pageId])
+
   const [imageName, setImageName] = useState('')
   const [file, setFile] = useState(null)
 
   useEffect(() => {
     async function getNameOfImage() {
-      if (sections[pageId][sectionIndex][elementIndex].data === '') {
+      if (currentPage.content.sections[sectionIndex][elementIndex].data === '') {
         return 'No Image Uploaded'
       } else {
-        const file = await getMediaItem(sections[pageId][sectionIndex][elementIndex].data)
+        const file = await getMediaItem(
+          currentPage.content.sections[pageId][sectionIndex][elementIndex].data
+        )
         if (!file) return 'No Image Uploaded'
         return file.public_name
       }
     }
     async function getUploadedFile() {
       if (editing) {
-        if (sections[pageId][sectionIndex][elementIndex].data === '') {
+        if (currentPage.content.sections[sectionIndex][elementIndex].data === '') {
           return null
         } else {
-          let file = await getFile(sections[pageId][sectionIndex][elementIndex].data)
+          let file = await getFile(currentPage.content.sections[sectionIndex][elementIndex].data)
           return file
         }
       } else {
@@ -168,13 +188,7 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
           {file === null ? (
             <p>Loading...</p>
           ) : (
-            <DropzoneButton
-              img
-              sectionIndex={sectionIndex}
-              elementIndex={elementIndex}
-              elementName={name}
-              initialFile={file === '' ? null : file}
-            />
+            <DropzoneButton img initialFile={file === '' ? null : file} />
           )}
         </Grid>
         <Grid item>
@@ -195,7 +209,10 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
 }
 
 export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
-  const { pageId, sections } = useContext(PortfolioContext)
+  const [pageId, currentElement] = useStore(useCallback(currentSectionDetails, []), shallow)
+
+  const currentPage = useQueryCache().getQueryData(['pages', pageId])
+
   const [fileName, setFileName] = useState('')
   const [file, setFile] = useState(null)
   const [page, setPage] = useState(null)
@@ -218,11 +235,13 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
   const getFileName = async () => {
     // In EditPortfolioSectionsGrouped
 
-    if (sections[pageId]) {
-      if (sections[pageId][sectionIndex][elementIndex].data === '') {
+    if (currentPage.content.sections) {
+      if (currentPage.content.sections[sectionIndex][elementIndex].data === '') {
         return 'No File Uploaded'
       } else {
-        const file = await getMediaItem(sections[pageId][sectionIndex][elementIndex].data)
+        const file = await getMediaItem(
+          currentPage.content.sections[sectionIndex][elementIndex].data
+        )
         if (!file) return 'No File Uploaded'
         return file.public_name
       }
@@ -251,10 +270,10 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
 
     async function getUploadedFile() {
       if (editing) {
-        if (sections[pageId][sectionIndex][elementIndex].data === '') {
+        if (currentPage.content.sections[sectionIndex][elementIndex].data === '') {
           return null
         } else {
-          let file = await getFile(sections[pageId][sectionIndex][elementIndex].data)
+          let file = await getFile(currentPage.content.sections[sectionIndex][elementIndex].data)
           return file
         }
       } else {

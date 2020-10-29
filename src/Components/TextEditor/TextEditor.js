@@ -1,12 +1,14 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Editor } from '@tinymce/tinymce-react'
-import { PortfolioContext } from '../Contexts/PortfolioContext'
+import { useStore } from '../../Hooks/Store'
 
-export default function TextEditor({ sectionIndex, elementIndex, name, data }) {
-  const { modifySection } = useContext(PortfolioContext)
+const editElementFunction = (state) => state.editCurrentElement
+
+export default function TextEditor({ data }) {
+  const editCurrentElement = useStore(editElementFunction)
 
   function handleEditorChange(content, editor) {
-    modifySection(sectionIndex, elementIndex, name, content)
+    editCurrentElement(content)
   }
 
   return (

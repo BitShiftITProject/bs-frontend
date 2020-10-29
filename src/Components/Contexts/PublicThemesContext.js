@@ -3,6 +3,9 @@ import { ThemeProvider } from '@material-ui/core/styles'
 import { getTheme } from '../../Themes/themes'
 import { getPortfolio } from '../../Backend/Fetch'
 import { useLocation } from 'react-router-dom'
+import { useStore } from '../../Hooks/Store'
+
+const portfolioIdSelector = (state) => state.portfolioId
 
 // eslint-disable-next-line no-unused-vars
 export const PublicThemesContext = createContext({
@@ -16,6 +19,7 @@ const PublicThemesProvider = ({ children }) => {
 
   // Theme name to get Theme object
   const [themeName, setThemeName] = useState('light')
+  const portfolioId = useStore(portfolioIdSelector)
 
   useEffect(() => {
     async function getCurrentPortfolioTheme() {
@@ -32,7 +36,6 @@ const PublicThemesProvider = ({ children }) => {
         return theme
       } else {
         // Gets the current theme from local storage
-        const portfolioId = window.sessionStorage.getItem('portfolioId')
         const currentPortfolio = await getPortfolio(portfolioId)
         const theme = currentPortfolio.theme
           ? currentPortfolio.theme

@@ -8,6 +8,11 @@ import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone'
 
 import { useIntl } from 'react-intl'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
+import usePages from '../../../Hooks/usePages'
+import { useQueryCache } from 'react-query'
+import { useStore } from '../../../Hooks/Store'
+import useEditPage from '../../../Hooks/useEditPage'
+import { useSnackbar } from 'notistack'
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
 /* -------------------------------------------------------------------------- */
@@ -85,12 +90,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default function SectionContainer({
-  children,
-  sectionIndex,
-  startSectionEdit,
-  handleSectionDelete
-}) {
+const pageIdSelector = (state) => state.pageId
+const startEditingElementSelector = (state) => state.startEditingElement
+
+export default function SectionContainer({ children, sectionIndex }) {
   const classes = useStyles()
   // Locale
   const intl = useIntl()
@@ -101,12 +104,45 @@ export default function SectionContainer({
 
   /* -------------------------- Edit and Delete Modes ------------------------- */
 
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const [confirmDelete, setConfirmDelete] = useState(false)
+
+  const pageId = useStore(pageIdSelector)
+  const startEditingElement = useStore(startEditingElementSelector)
+  const currentPage = useQueryCache().getQueryData(['pages', pageId])
+  const [editPage] = useEditPage()
+
+  function startEditingSection(sectionIndex) {
+    const elementIndex = 0
+    const element = currentPage.content.sections[sectionIndex][elementIndex]
+    startEditingElement(sectionIndex, elementIndex, element)
+  }
 
   // Actually delete the section
   function deleteSection() {
+    if (currentPage.content.sections.length >= sectionIndex + 1) {
+      // Remove the section at the given index
+      const newSections = currentPage.content.sections
+      newSections.splice(sectionIndex, 1)
+
+      const patchDetails = { content: { sections: newSections } }
+      editPage({ pageId, patchDetails })
+
+      // Show a notification that the section has been deleted from the page
+      const key = enqueueSnackbar(
+        intl.formatMessage({ id: 'deletedSectionFromPage' }, { pageTitle: currentPage.title }),
+        {
+          variant: 'error',
+          persist: true
+        }
+      )
+
+      setTimeout(() => {
+        closeSnackbar(key)
+      }, 2500)
+    }
+
     setConfirmDelete(false)
-    handleSectionDelete(sectionIndex)
   }
 
   return (
@@ -138,7 +174,8 @@ export default function SectionContainer({
         spacing={3}
         className={classes.sectionIcons}
       >
-        {/* DELETE BUTTON */}
+        {/* -------------------------------------------------------------------------- */}
+        {/* EDIT AND DELETE BUTTON */}
         {!confirmDelete && (
           <>
             <Tooltip
@@ -149,7 +186,7 @@ export default function SectionContainer({
               <Fab
                 size='small'
                 color='primary'
-                onClick={() => startSectionEdit(sectionIndex)}
+                onClick={() => startEditingSection(sectionIndex)}
                 className={classes.editIcon}
               >
                 <CreateTwoToneIcon />

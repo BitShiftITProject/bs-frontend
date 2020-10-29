@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import {
   Grid,
   Fab,
@@ -17,14 +17,22 @@ import { useIntl } from 'react-intl'
 
 import CustomDialog from '../../CommonComponents/CustomDialog'
 import { GetElementJSX, sectionElements, ConvertToSection } from '../SectionsMap'
+import { useStore } from '../../../Hooks/Store'
+import useEditPage from '../../../Hooks/useEditPage'
+import { useQueryCache } from 'react-query'
 
-export default function SectionsButton({ pageId, handleSectionAdd }) {
+const pageIdSelector = (state) => state.pageId
+
+export default function SectionsButton() {
   const intl = useIntl()
 
   const editing = true
 
   const [open, setOpen] = useState(false)
   const [elements, setElements] = useState([])
+  const pageId = useStore(useCallback(pageIdSelector, []))
+  const currentPage = useQueryCache().getQueryData(['pages', pageId])
+  const [editPage] = useEditPage()
 
   function addSectionElement(elementName) {
     setElements((elements) => [...elements, { id: elementName, data: null }])
@@ -38,7 +46,10 @@ export default function SectionsButton({ pageId, handleSectionAdd }) {
 
   function handleClick() {
     const newSection = ConvertToSection(elements)
-    handleSectionAdd(newSection)
+    const patchDetails = {
+      content: { sections: [...currentPage.content.sections, newSection] }
+    }
+    editPage({ pageId, patchDetails })
     setOpen(false)
   }
 
