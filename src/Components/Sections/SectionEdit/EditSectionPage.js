@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import { Grid, AppBar, Tabs, Tab, Typography } from '@material-ui/core'
 import { GetElementJSX } from '../SectionsMap'
 import { useStore } from '../../../Hooks/Store'
-import useEditPage from '../../../Hooks/useEditPage'
 import shallow from 'zustand/shallow'
-import { useQueryCache } from 'react-query'
+import usePage from '../../../Hooks/usePage'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -41,22 +40,22 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired
 }
 
-const currentSectionDetails = ({ pageId, sectionIndex, elementIndex, currentElement }) => [
+const currentSectionDetails = ({ pageId, sectionIndex, elementIndex }) => [
   pageId,
   sectionIndex,
-  elementIndex,
-  currentElement
+  elementIndex
 ]
 
 // If currently editing an element, then we are currently editing a section.
 // Therefore we need to show the edit panel for the current section's elements.
-export default function EditSectionPage({ handleFinishEditingElement }) {
-  const [pageId, sectionIndex, elementIndex, currentElement] = useStore(
+function EditSectionPage({ handleFinishEditingElement }) {
+  const [pageId, sectionIndex, elementIndex] = useStore(
     useCallback(currentSectionDetails, []),
     shallow
   )
 
-  const currentPage = useQueryCache().getQueryData(['pages', pageId])
+  const { data: currentPage } = usePage(pageId)
+  // console.log('Current page in edit section page:', currentPage)
 
   function handleChange() {
     handleFinishEditingElement()
@@ -97,3 +96,5 @@ export default function EditSectionPage({ handleFinishEditingElement }) {
     <div></div>
   )
 }
+
+export default EditSectionPage

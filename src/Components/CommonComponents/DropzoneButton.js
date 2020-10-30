@@ -1,8 +1,7 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import {
   Button,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
   Grid,
@@ -10,10 +9,8 @@ import {
   TextField
 } from '@material-ui/core'
 import { DropzoneArea } from 'material-ui-dropzone'
-import CustomDialog from './CustomDialog'
-import { postMediaContent, getUser, deleteMediaItem } from '../../Backend/Fetch'
+import { postMediaContent, deleteMediaItem } from '../../Backend/Fetch'
 import { useStore } from '../../Hooks/Store'
-import useEditPage from '../../Hooks/useEditPage'
 import { useQueryCache } from 'react-query'
 
 const useStyles = makeStyles((theme) => ({
@@ -45,27 +42,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const elementEditFunctions = ({
-  startEditingElement,
-  editCurrentElement,
-  finishEditingElement
-}) => [startEditingElement, editCurrentElement, finishEditingElement]
-
-const pageIdSelector = (state) => state.pageId
+const editElementFunction = (state) => state.editCurrentElement
 const currentElementSelector = (state) => state.currentElement
 
-export default function DropzoneButton({ img, initialFile }) {
+function DropzoneButton({ img, initialFile }) {
   const classes = useStyles()
 
   const user = useQueryCache().getQueryData('user')
 
-  const pageId = useStore(pageIdSelector)
   const currentElement = useStore(currentElementSelector)
-  const [startEditingElement, editCurrentElement, finishEditingElement] = useStore(
-    useCallback(elementEditFunctions, [])
-  )
-
-  const [editPage] = useEditPage()
+  const editCurrentElement = useStore(editElementFunction)
 
   // Dialog state
   const [open, setOpen] = useState(false)
@@ -85,7 +71,7 @@ export default function DropzoneButton({ img, initialFile }) {
       const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = () => {
-        const encoded = reader.result.toString().replace(/^data:(.*,)?/, '')
+        let encoded = reader.result.toString().replace(/^data:(.*,)?/, '')
         if (encoded.length % 4 > 0) {
           encoded += '='.repeat(4 - (encoded.length % 4))
         }
@@ -229,3 +215,5 @@ export default function DropzoneButton({ img, initialFile }) {
     </div>
   )
 }
+
+export default DropzoneButton

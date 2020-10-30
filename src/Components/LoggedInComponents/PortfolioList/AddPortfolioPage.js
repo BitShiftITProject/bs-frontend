@@ -29,7 +29,7 @@ export default function AddPortfolioPage() {
   const [description, setDescription] = useState('')
   const [error, setError] = useState(false)
   const [helperText, setHelperText] = useState(' ')
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar()
 
   /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */

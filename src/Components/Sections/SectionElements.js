@@ -8,9 +8,8 @@ import { getMediaItem, getFile, getDataUrl, getPage } from '../../Backend/Fetch'
 import DropzoneButton from '../../Components/CommonComponents/DropzoneButton'
 
 import TextEditor from '../TextEditor'
-import { useQueryCache } from 'react-query'
 import { useStore } from '../../Hooks/Store'
-import shallow from 'zustand/shallow'
+import usePage from '../../Hooks/usePage'
 
 const text = 'Text'
 const youtubeVideo = 'Video'
@@ -45,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
 
 const editElementFunction = (state) => state.editCurrentElement
 const pageIdSelector = (state) => state.pageId
-const currentSectionDetails = ({ pageId, currentElement }) => [pageId, currentElement]
 
 /* -------------------------------------------------------------------------- */
 /*                              Section Elements                              */
@@ -71,7 +69,7 @@ const currentSectionDetails = ({ pageId, currentElement }) => [pageId, currentEl
 //   - A section template, wrapped in the ExampleSection, where the 'data'
 //     attribute is null
 
-export const Text = ({ name, editing, data, sectionIndex, elementIndex }) => {
+export const Text = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
@@ -85,14 +83,15 @@ export const Text = ({ name, editing, data, sectionIndex, elementIndex }) => {
   )
 
   return rendered
-}
+})
 
-export const YoutubeVideo = ({ name, editing, data, sectionIndex, elementIndex }) => {
+export const YoutubeVideo = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
   const editCurrentElement = useStore(useCallback(editElementFunction, []))
 
-  const [pageId, currentElement] = useStore(useCallback(currentSectionDetails, []), shallow)
+  const pageId = useStore(pageIdSelector)
 
-  const currentPage = useQueryCache().getQueryData(['pages', pageId])
+  const { data: currentPage } = usePage(pageId)
+  // console.log(`Current page in [${sectionIndex}, ${elementIndex}] :`, currentPage)
 
   const handleChange = (e) => {
     console.log('Youtube video changed to:', e.target.value)
@@ -121,15 +120,23 @@ export const YoutubeVideo = ({ name, editing, data, sectionIndex, elementIndex }
   )
 
   return rendered
-}
+})
 
-export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
-  const [pageId, currentElement] = useStore(useCallback(currentSectionDetails, []), shallow)
+export const Image = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
+  const pageId = useStore(pageIdSelector)
 
-  const currentPage = useQueryCache().getQueryData(['pages', pageId])
+  const { data: currentPage } = usePage(pageId)
+  // console.log(`Current page in [${sectionIndex}, ${elementIndex}] :`, currentPage)
 
   const [imageName, setImageName] = useState('')
   const [file, setFile] = useState(null)
+
+  useEffect(() => {
+    return () => {
+      setImageName('')
+      setFile(null)
+    }
+  }, [])
 
   useEffect(() => {
     async function getNameOfImage() {
@@ -206,35 +213,27 @@ export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
   )
 
   return rendered
-}
+})
 
-export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
-  const [pageId, currentElement] = useStore(useCallback(currentSectionDetails, []), shallow)
+export const File = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
+  const pageId = useStore(pageIdSelector)
 
-  const currentPage = useQueryCache().getQueryData(['pages', pageId])
+  const { data: currentPage } = usePage(pageId)
+  // console.log(`Current page in [${sectionIndex}, ${elementIndex}] :`, currentPage)
 
   const [fileName, setFileName] = useState('')
   const [file, setFile] = useState(null)
-  const [page, setPage] = useState(null)
 
   const classes = useStyles()
 
   useEffect(() => {
-    async function getCurrentPage(pageId) {
-      const currentPage = await getPage(pageId)
-      return currentPage
+    return () => {
+      setFileName('')
+      setFile(null)
     }
-
-    if (pageId) {
-      getCurrentPage(pageId).then((currentPage) => {
-        setPage(currentPage)
-      })
-    }
-  }, [pageId])
+  }, [])
 
   const getFileName = async () => {
-    // In EditPortfolioSectionsGrouped
-
     if (currentPage.content.sections) {
       if (currentPage.content.sections[sectionIndex][elementIndex].data === '') {
         return 'No File Uploaded'
@@ -242,19 +241,6 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
         const file = await getMediaItem(
           currentPage.content.sections[sectionIndex][elementIndex].data
         )
-        if (!file) return 'No File Uploaded'
-        return file.public_name
-      }
-    } else if (
-      page &&
-      page.content.sections[sectionIndex] &&
-      page.content.sections[sectionIndex][elementIndex] &&
-      page.content.sections[sectionIndex][elementIndex].id === 'file'
-    ) {
-      if (page.content.sections[sectionIndex][elementIndex].data === '') {
-        return 'No File Uploaded'
-      } else {
-        const file = await getMediaItem(page.content.sections[sectionIndex][elementIndex].data)
         if (!file) return 'No File Uploaded'
         return file.public_name
       }
@@ -294,7 +280,7 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
         setFileName(name)
       })
     }
-  }, [data, editing, sectionIndex, elementIndex, name, page])
+  }, [data, editing, sectionIndex, elementIndex, name])
 
   const handleClick = async () => {
     if (file) {
@@ -347,15 +333,17 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
         alignItems: 'center'
       }}
     >
-      <span
-        onClick={handleClick}
-        style={{ display: 'flex', justify: 'center', alignItems: 'center' }}
-      >
-        <GetAppIcon className={classes.fileUploadIcon} />
-        <Link className={classes.fileUpload}>{page !== null && fileName !== null && fileName}</Link>
-      </span>
+      {fileName !== null && (
+        <span
+          onClick={handleClick}
+          style={{ display: 'flex', justify: 'center', alignItems: 'center' }}
+        >
+          <GetAppIcon className={classes.fileUploadIcon} />
+          <Link className={classes.fileUpload}>{fileName}</Link>
+        </span>
+      )}
     </div>
   )
 
   return rendered
-}
+})

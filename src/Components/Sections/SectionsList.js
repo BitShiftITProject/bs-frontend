@@ -7,13 +7,10 @@ import SectionContainer from './SectionEdit/SectionContainer'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 import { useTheme } from '@material-ui/core/styles'
+import { useLocation } from 'react-router-dom'
 
-export default function SectionsList({
-  sections,
-  editing,
-  handleSectionDelete,
-  handleSetPageSection
-}) {
+function SectionsList({ sections, editing }) {
+  const { pathname } = useLocation()
   // the grid for the drop and drag related sections
   const grid = sections ? sections.length : 0
 
@@ -53,9 +50,9 @@ export default function SectionsList({
     }
 
     const newSections = reorder(sections, result.source.index, result.destination.index)
-    if (handleSetPageSection) {
-      handleSetPageSection(newSections)
-    }
+    // if (handleSetPageSection) {
+    //   handleSetPageSection(newSections)
+    // }
   }
 
   const sectionList =
@@ -65,7 +62,7 @@ export default function SectionsList({
 
     /* ---------------------------- Editable Sections --------------------------- */
 
-    handleSectionDelete ? (
+    !pathname.includes('public') ? (
       <div>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId='droppable'>
@@ -85,11 +82,7 @@ export default function SectionsList({
                         {...provided.dragHandleProps}
                         style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                       >
-                        <SectionContainer
-                          key={sectionIndex}
-                          sectionIndex={sectionIndex}
-                          handleSectionDelete={handleSectionDelete}
-                        >
+                        <SectionContainer key={sectionIndex} sectionIndex={sectionIndex}>
                           <Grid container direction='row' spacing={2}>
                             {section.map((element, elementIndex) => (
                               <Grid item key={elementIndex} xs={12 / section.length}>
@@ -130,3 +123,5 @@ export default function SectionsList({
 
   return sectionList
 }
+
+export default SectionsList

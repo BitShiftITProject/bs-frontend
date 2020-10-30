@@ -279,6 +279,8 @@ export const getPage = async (pageId) => {
 
   const page = await response.json()
 
+  // console.log('Fetched page:', page)
+
   return page
 }
 

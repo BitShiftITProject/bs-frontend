@@ -3,6 +3,7 @@ import Authentication from './Authentication'
 import { CssBaseline } from '@material-ui/core'
 import { Route, Switch, Redirect } from 'react-router-dom'
 // import { Scrollbars } from 'react-custom-scrollbars'
+import { ReactQueryDevtools } from 'react-query-devtools'
 
 import ThemesProvider from './Components/Contexts/ThemesContext'
 import LocaleProvider from './Components/Contexts/LocaleContext'
@@ -37,6 +38,8 @@ export default function App() {
           </PortfolioProvider>
         </LocaleProvider>
       </CssBaseline>
+
+      <ReactQueryDevtools initialIsOpen={false} />
     </ThemesProvider>
   )
 }

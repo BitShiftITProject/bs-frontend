@@ -8,11 +8,10 @@ import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone'
 
 import { useIntl } from 'react-intl'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
-import usePages from '../../../Hooks/usePages'
-import { useQueryCache } from 'react-query'
 import { useStore } from '../../../Hooks/Store'
 import useEditPage from '../../../Hooks/useEditPage'
 import { useSnackbar } from 'notistack'
+import usePage from '../../../Hooks/usePage'
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
 /* -------------------------------------------------------------------------- */
@@ -93,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
 const pageIdSelector = (state) => state.pageId
 const startEditingElementSelector = (state) => state.startEditingElement
 
-export default function SectionContainer({ children, sectionIndex }) {
+function SectionContainer({ children, sectionIndex }) {
   const classes = useStyles()
   // Locale
   const intl = useIntl()
@@ -109,7 +108,9 @@ export default function SectionContainer({ children, sectionIndex }) {
 
   const pageId = useStore(pageIdSelector)
   const startEditingElement = useStore(startEditingElementSelector)
-  const currentPage = useQueryCache().getQueryData(['pages', pageId])
+  const { data: currentPage } = usePage(pageId)
+  // console.log(`Current page in section container ${sectionIndex}:`, currentPage)
+
   const [editPage] = useEditPage()
 
   function startEditingSection(sectionIndex) {
@@ -126,6 +127,7 @@ export default function SectionContainer({ children, sectionIndex }) {
       newSections.splice(sectionIndex, 1)
 
       const patchDetails = { content: { sections: newSections } }
+
       editPage({ pageId, patchDetails })
 
       // Show a notification that the section has been deleted from the page
@@ -242,3 +244,5 @@ export default function SectionContainer({ children, sectionIndex }) {
     </Grid>
   )
 }
+
+export default SectionContainer

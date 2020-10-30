@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Grid, Paper, Fab, CircularProgress, Dialog } from '@material-ui/core'
@@ -9,19 +9,17 @@ import SectionsButton from '../../../Sections/SectionAdd/SectionsButton'
 import { useStore } from '../../../../Hooks/Store'
 import EditSectionPage from '../../../Sections/SectionEdit/EditSectionPage'
 import useEditPage from '../../../../Hooks/useEditPage'
+import usePage from '../../../../Hooks/usePage'
+import shallow from 'zustand/shallow'
+import { useSnackbar } from 'notistack'
 
 const pageIdSelector = (state) => state.pageId
 const currentElementSelector = (state) => state.currentElement
 const finishEditingSelector = (state) => state.finishEditingSelector
+const loadingSelector = ({ loading, setLoading }) => [loading, setLoading]
 
 /* Pages and adding/removing pages part of the editing portfolio*/
-export default function EditPortfolioSectionsGrouped({
-  loading,
-  pages,
-  handleSectionAdd,
-  handleSaveSections,
-  handleSectionDelete
-}) {
+function EditPortfolioSectionsGrouped() {
   /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */
   /* -------------------------------------------------------------------------- */
@@ -34,8 +32,30 @@ export default function EditPortfolioSectionsGrouped({
   /* -------------------------------------------------------------------------- */
 
   const pageId = useStore(pageIdSelector)
-  const currentPage = pages.find((page) => page.id === pageId)
+  const { data: currentPage } = usePage(pageId)
+  // console.log('Current page in sections grouped:', currentPage)
+  const [loading, setLoading] = useStore(useCallback(loadingSelector, []), shallow)
+  const { enqueueSnackbar } = useSnackbar()
+
   const currentElement = useStore(currentElementSelector)
+
+  const handleSaveSections = () => {
+    setLoading(true)
+
+    // // Patch the page with the current sections on the screen
+    // editPage({ pageId, patchDetails: savedPage })
+
+    setTimeout(() => {
+      const pageTitle = currentPage.title
+
+      // Show a notification that all sections have been saved
+      enqueueSnackbar(intl.formatMessage({ id: 'savedAllSections' }, { pageTitle }), {
+        variant: 'success'
+      })
+
+      setLoading(false)
+    }, 1000)
+  }
 
   /* -------------------------------------------------------------------------- */
   /*                                   Locale                                   */
@@ -75,7 +95,7 @@ export default function EditPortfolioSectionsGrouped({
       </Grid>
 
       <Grid item></Grid>
-      <SectionsButton pageId={pageId} handleSectionAdd={handleSectionAdd} />
+      <SectionsButton />
     </Grid>
   )
 
@@ -84,14 +104,14 @@ export default function EditPortfolioSectionsGrouped({
   /* -------------------------------------------------------------------------- */
 
   const [editPage] = useEditPage()
-  const finishEditingElement = useStore(finishEditingSelector)
+  const finishEditingElement = useStore(useCallback(finishEditingSelector, []))
 
-  const handleFinishEditingElement = () => {
+  const handleFinishEditingElement = useCallback(() => {
     finishEditingElement(currentPage, editPage)
-  }
+  }, [currentPage, editPage, finishEditingElement])
 
   return (
-    <Grid item xs={12} md={8} lg={9} id='page-content'>
+    <Grid item xs={12} md={8} lg={9}>
       <Paper className={fixedHeightPaper}>
         {/*
          * PAGE SECTIONS
@@ -116,7 +136,7 @@ export default function EditPortfolioSectionsGrouped({
 
             {/* If there are sections in the current page, show the sections list */}
             {/* If there are NO sections in the current page, show the instruction on how to add a section */}
-            {currentPage.content.sections ? (
+            {currentPage && currentPage.content && currentPage.content.sections ? (
               <Grid
                 item
                 xs={10}
@@ -125,10 +145,7 @@ export default function EditPortfolioSectionsGrouped({
                 direction='column'
                 justify='space-between'
               >
-                <SectionsList
-                  sections={currentPage.content.sections}
-                  handleSectionDelete={handleSectionDelete}
-                />
+                <SectionsList sections={currentPage.content.sections} />
               </Grid>
             ) : (
               <Grid
@@ -146,12 +163,14 @@ export default function EditPortfolioSectionsGrouped({
               </Grid>
             )}
             {sectionButtons}
-            <Dialog open={!!currentElement} onClose={handleFinishEditingElement}>
-              <EditSectionPage handleFinishEditingElement={handleFinishEditingElement} />
-            </Dialog>
           </div>
         )}
+        <Dialog open={!!currentElement} onClose={handleFinishEditingElement}>
+          <EditSectionPage handleFinishEditingElement={handleFinishEditingElement} />
+        </Dialog>
       </Paper>
     </Grid>
   )
 }
+
+export default EditPortfolioSectionsGrouped

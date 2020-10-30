@@ -6,7 +6,9 @@ export default function usePage(pageId) {
     queryKey: ['pages', pageId],
     queryFn: () => getPage(pageId),
     config: {
-      // initialData: () => queryCache.getQueryData('pages')?.find((page) => page.id === pageId),
+      enabled: pageId,
+      staleTime: 3 * 60 * 1000,
+      initialData: () => queryCache.getQueryData('pages')?.find((page) => page.id === pageId)
       // initialStale: true
     }
   })

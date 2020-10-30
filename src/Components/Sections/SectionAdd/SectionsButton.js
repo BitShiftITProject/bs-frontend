@@ -19,11 +19,12 @@ import CustomDialog from '../../CommonComponents/CustomDialog'
 import { GetElementJSX, sectionElements, ConvertToSection } from '../SectionsMap'
 import { useStore } from '../../../Hooks/Store'
 import useEditPage from '../../../Hooks/useEditPage'
-import { useQueryCache } from 'react-query'
+import usePage from '../../../Hooks/usePage'
+import { useSnackbar } from 'notistack'
 
 const pageIdSelector = (state) => state.pageId
 
-export default function SectionsButton() {
+function SectionsButton() {
   const intl = useIntl()
 
   const editing = true
@@ -31,8 +32,12 @@ export default function SectionsButton() {
   const [open, setOpen] = useState(false)
   const [elements, setElements] = useState([])
   const pageId = useStore(useCallback(pageIdSelector, []))
-  const currentPage = useQueryCache().getQueryData(['pages', pageId])
+  const { data: currentPage } = usePage(pageId)
+  // console.log('Current page in sections button:', currentPage)
+
   const [editPage] = useEditPage()
+
+  const { enqueueSnackbar } = useSnackbar()
 
   function addSectionElement(elementName) {
     setElements((elements) => [...elements, { id: elementName, data: null }])
@@ -46,10 +51,16 @@ export default function SectionsButton() {
 
   function handleClick() {
     const newSection = ConvertToSection(elements)
+    const pageTitle = currentPage.title
+
     const patchDetails = {
       content: { sections: [...currentPage.content.sections, newSection] }
     }
     editPage({ pageId, patchDetails })
+    // Shows a notification that the section has been added
+    enqueueSnackbar(intl.formatMessage({ id: 'addedSectionToPage' }, { pageTitle }), {
+      variant: 'info'
+    })
     setOpen(false)
   }
 
@@ -152,3 +163,5 @@ export default function SectionsButton() {
     </Grid>
   )
 }
+
+export default SectionsButton

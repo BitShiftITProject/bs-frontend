@@ -27,28 +27,36 @@ const PublicThemesProvider = ({ children }) => {
       // portfolio in the URL
 
       const path = pathname.split('/')
+
       if (path[1] === 'public') {
-        const portfolioId = path[2]
-        const currentPortfolio = await getPortfolio(portfolioId)
-        const theme = currentPortfolio.theme
-          ? currentPortfolio.theme
-          : null || window.sessionStorage.getItem('publicTheme') || 'light'
-        return theme
-      } else {
-        // Gets the current theme from local storage
-        const currentPortfolio = await getPortfolio(portfolioId)
-        const theme = currentPortfolio.theme
-          ? currentPortfolio.theme
-          : null || window.sessionStorage.getItem('publicTheme') || 'light'
+        const publicPortfolioId = path[2]
+        const currentPortfolio = await getPortfolio(publicPortfolioId)
+        const theme =
+          currentPortfolio.theme || currentPortfolio.theme !== 'undefined'
+            ? currentPortfolio.theme
+            : null || window.sessionStorage.getItem('publicTheme') || 'light'
         return theme
       }
+
+      // Gets the current theme from local storage
+      const currentPortfolio = await getPortfolio(portfolioId)
+
+      const theme =
+        currentPortfolio.theme || currentPortfolio.theme !== 'undefined'
+          ? currentPortfolio.theme
+          : null || window.sessionStorage.getItem('publicTheme') || 'light'
+
+      console.log('Theme')
+      return theme
     }
 
-    getCurrentPortfolioTheme().then((theme) => {
-      window.sessionStorage.setItem('publicTheme', theme)
-      setThemeName(theme)
-    })
-  }, [pathname])
+    if (portfolioId) {
+      getCurrentPortfolioTheme().then((theme) => {
+        window.sessionStorage.setItem('publicTheme', theme)
+        setThemeName(theme)
+      })
+    }
+  }, [pathname, portfolioId])
 
   // Gets the Theme object, which will be passed into Material-UI ThemeProvider
   const theme = getTheme(themeName)

@@ -54,6 +54,9 @@ const store = (set) => ({
   //     }
   //   }),
 
+  loading: false,
+  setLoading: (value) => set((state) => (state.loading = value)),
+
   sectionIndex: null,
   setSectionIndex: (index) => set((state) => (state.sectionIndex = index)),
 

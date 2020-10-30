@@ -4,7 +4,7 @@ import { deletePage } from '../Backend/Fetch'
 export default function useDeletePage() {
   return useMutation(({ pageId }) => deletePage(pageId), {
     onSuccess: (data, variables) => {
-      queryCache.removeQuery(['pages', variables.pageId])
+      queryCache.invalidateQueries('pages')
     }
   })
 }

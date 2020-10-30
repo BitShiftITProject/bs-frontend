@@ -7,6 +7,7 @@ export default function usePortfolios(user) {
     queryFn: () => getUserPortfolios(user.username),
     config: {
       enabled: user,
+      staleTime: 3 * 60 * 1000,
       onSuccess: (data) =>
         data.forEach((portfolio) => {
           queryCache.setQueryData(['portfolios', portfolio.id], portfolio)
