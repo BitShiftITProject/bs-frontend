@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 const setPortfolioIdSelector = (state) => state.setPortfolioId
 
-function PortfolioList(props) {
+function PortfolioListPage(props) {
   const classes = useStyles()
   const fixedHeightPaper = loggedInStyles().fixedHeightPaper
   const floatingTopContainer = loggedInStyles().floatingTopContainer
@@ -112,7 +112,7 @@ function PortfolioList(props) {
   async function handleView(portfolioId) {
     // Get the current user, logs out if access token no longer valid
     // Go to the designated route for the public portfolio
-    history.push(`/public/${portfolioId}/0`)
+    window.open(`/public/${portfolioId}/0`)
   }
 
   /* ----------------------------- Edit Portfolio ----------------------------- */
@@ -334,4 +334,4 @@ function PortfolioList(props) {
   )
 }
 
-export default withStyles(transitions)(PortfolioList)
+export default withStyles(transitions)(PortfolioListPage)

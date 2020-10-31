@@ -1,8 +1,10 @@
-import { queryCache, useMutation } from 'react-query'
+import { useQueryCache, useMutation } from 'react-query'
 import { patchUser } from '../Backend/Fetch'
 
-export default function useEditPortfolio() {
+export default function useEditUser() {
+  const cache = useQueryCache()
+
   return useMutation(({ patchDetails }) => patchUser(patchDetails), {
-    onSuccess: () => queryCache.invalidateQueries('user')
+    onSuccess: (data) => cache.invalidateQueries('user')
   })
 }

@@ -168,9 +168,7 @@ function Login(props) {
         <CursorTypography component='h1' variant='h5'>
           {intl.formatMessage({ id: 'login' })}
         </CursorTypography>
-
         {/* TEXT FIELDS */}
-
         {/* Email */}
         <PaddedTextField
           inputProps={{ className: style.input }}
@@ -189,7 +187,6 @@ function Login(props) {
           autoFocus
           onChange={handleChange}
         />
-
         {/* Password */}
         <PaddedTextField
           inputProps={{ className: style.input }}
@@ -222,7 +219,6 @@ function Login(props) {
             )
           }}
         />
-
         {/* The error message appears iff the state is loginFailed */}
         {loginFailed && (
           <div style={{ paddingBottom: 5 }}>
@@ -231,9 +227,7 @@ function Login(props) {
             </Alert>
           </div>
         )}
-
         {/* REMEMBER ME CHECKBOX */}
-
         <Grid container justify='space-between'>
           <Grid item xs={7} md={5}>
             <FormControlLabel
@@ -254,26 +248,21 @@ function Login(props) {
             {' '}
           </Grid>
         </Grid>
-
-        {/* Loading message */}
-        {loading && <Loading message={intl.formatMessage({ id: 'loginLoading' })} />}
-
         {/* LOGIN BUTTON */}
-
-        {!loading && (
-          <Fab
-            type='submit'
-            variant='extended'
-            className={style.submit}
-            color='primary'
-            style={{ width: '100%' }}
-          >
-            {intl.formatMessage({ id: 'login' })}
-          </Fab>
-        )}
-
+        <Fab
+          type='submit'
+          variant='extended'
+          className={style.submit}
+          color='primary'
+          style={{ width: '100%' }}
+        >
+          {!loading ? (
+            intl.formatMessage({ id: 'login' })
+          ) : (
+            <Loading message={intl.formatMessage({ id: 'loginLoading' })} />
+          )}
+        </Fab>
         {/* FORGOT PASSWORD AND SIGN UP LINKS */}
-
         <Grid container className={style.links}>
           <Grid item xs>
             <Link to='/forgotpassword' variant='body2'>

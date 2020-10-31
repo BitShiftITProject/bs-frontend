@@ -8,9 +8,16 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 import { useTheme } from '@material-ui/core/styles'
 import { useLocation } from 'react-router-dom'
+import useEditPage from '../../Hooks/useEditPage'
+import { useStore } from '../../Hooks/Store'
+
+const pageIdSelector = (state) => state.pageId
 
 function SectionsList({ sections, editing }) {
   const { pathname } = useLocation()
+  const pageId = useStore(pageIdSelector)
+  const [editPage] = useEditPage()
+
   // the grid for the drop and drag related sections
   const grid = sections ? sections.length : 0
 
@@ -45,14 +52,11 @@ function SectionsList({ sections, editing }) {
   // when done with dragging
   const onDragEnd = (result) => {
     // dropped outside the list
-    if (!result.destination) {
-      return
+    if (result.source && result.destination) {
+      const newSections = reorder(sections, result.source.index, result.destination.index)
+      const patchDetails = { content: { sections: newSections } }
+      editPage({ pageId, patchDetails })
     }
-
-    const newSections = reorder(sections, result.source.index, result.destination.index)
-    // if (handleSetPageSection) {
-    //   handleSetPageSection(newSections)
-    // }
   }
 
   const sectionList =

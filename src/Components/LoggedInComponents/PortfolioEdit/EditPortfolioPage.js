@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { CssBaseline, Grid } from '@material-ui/core'
 import Sidebar from '../Sidebar'
@@ -7,15 +7,21 @@ import EditPortfolioContent from './EditPortfolioContentFiles/EditPortfolioConte
 import EditPortfolioStyle from './EditPortfolioStyle'
 import PublicThemesProvider from '../../Contexts/PublicThemesContext'
 import ThemesProvider from '../../Contexts/ThemesContext'
+import { useStore } from '../../../Hooks/Store'
+
+const setPortfolioIdSelector = (state) => state.setPortfolioId
 
 export default function EditPortfolioPage() {
   /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
-  // const [portfolio, setPortfolio] = useState({})
-  // const [pages, setPages] = useState([])
   const [editMode, setEditMode] = useState('content')
+  const setPortfolioId = useStore(setPortfolioIdSelector)
+
+  useEffect(() => {
+    return () => setPortfolioId(null)
+  }, [setPortfolioId])
 
   /* -------------------------------------------------------------------------- */
   /*                                Page Content                                */

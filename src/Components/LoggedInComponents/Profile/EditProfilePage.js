@@ -6,8 +6,10 @@ import AboutMeDetails from './AboutMeDetails'
 import EditProfileListMenu from './EditProfileListMenu'
 import UserProfileDataForm from './UserProfileDataForm'
 import { Grid } from '@material-ui/core'
-import { getUser, logout, patchUser } from '../../../Backend/Fetch'
+import { logout } from '../../../Backend/Fetch'
 import { useHistory } from 'react-router-dom'
+import useUser from '../../../Hooks/useUser'
+import useEditUser from '../../../Hooks/useEditUser'
 
 // Initial About Me and Contact data, will be fetched from database for the
 // currently authenticated user as the initial data in the states of the forms
@@ -32,7 +34,6 @@ const initialContact = {
 // Reducer to update the state object
 const reducer = (state, newState) => ({ ...state, ...newState })
 
-// TODO: Refactor the ever-living soul out of this component
 export default function EditProfilePage() {
   /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
@@ -49,40 +50,33 @@ export default function EditProfilePage() {
 
   const history = useHistory()
 
-  useEffect(() => {
-    async function grabUser() {
-      const user = await getUser()
-      if (!user) {
-        return null
-      }
-      return user
-    }
+  const { data: user } = useUser()
+  const [editUser] = useEditUser()
 
-    grabUser().then((user) => {
-      if (!user) {
-        logout()
-      } else {
-        setAbout({
-          first_name: user.first_name || '',
-          last_name: user.last_name || '',
-          occupation: user.occupation || '',
-          description: user.description || '',
-          tags: user.tags || []
-        })
-        setContact({
-          profile_email: user.profile_email || user.email,
-          company: user.company || '',
-          address_line_1: user.address_line_1 || '',
-          address_line_2: user.address_line_2 || '',
-          phone: user.phone || '',
-          town_suburb: user.town_suburb || '',
-          postcode: user.postcode || '',
-          state: user.state || '',
-          country: user.country || ''
-        })
-      }
-    })
-  }, [history])
+  useEffect(() => {
+    if (!user) {
+      logout()
+    } else {
+      setAbout({
+        first_name: user.first_name || '',
+        last_name: user.last_name || '',
+        occupation: user.occupation || '',
+        description: user.description || '',
+        tags: user.tags || []
+      })
+      setContact({
+        profile_email: user.profile_email || user.email,
+        company: user.company || '',
+        address_line_1: user.address_line_1 || '',
+        address_line_2: user.address_line_2 || '',
+        phone: user.phone || '',
+        town_suburb: user.town_suburb || '',
+        postcode: user.postcode || '',
+        state: user.state || '',
+        country: user.country || ''
+      })
+    }
+  }, [history, user])
 
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
@@ -127,13 +121,7 @@ export default function EditProfilePage() {
   function handleSubmit(e) {
     e.preventDefault()
     const patchDetails = { ...about, ...contact }
-    patchUser(patchDetails)
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    editUser({ patchDetails })
   }
   /* -------------------------------------------------------------------------- */
   /*                             Form to be Rendered                            */

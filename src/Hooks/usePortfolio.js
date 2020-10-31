@@ -1,13 +1,18 @@
-import { useQuery, queryCache } from 'react-query'
+import { useQuery, useQueryCache } from 'react-query'
 import { getPortfolio } from '../Backend/Fetch'
 
 export default function usePortfolio(portfolioId) {
+  const cache = useQueryCache()
+
   return useQuery({
-    queryKey: ['portfolios', portfolioId],
-    queryFn: () => getPortfolio(portfolioId),
+    queryKey: ['portfolios', { id: portfolioId }],
+    queryFn: () => {
+      return getPortfolio(portfolioId)
+    },
     config: {
-      initialData: () =>
-        queryCache.getQueryData('portfolios')?.find((portfolio) => portfolio.id === portfolioId)
+      enabled: portfolioId,
+      staleTime: 3 * 60 * 1000,
+      initialData: () => cache.getQueryData(['portfolios', { id: portfolioId }])
       // initialStale: true
     }
   })

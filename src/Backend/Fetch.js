@@ -94,10 +94,10 @@ export const resetPassword = async (authDetails) => {
 
 // "Logs out" a user by clearing the access token and redirecting the user to
 // the landing page
-export const logout = () => {
+export const logout = ({ noReload }) => {
   sessionStorage.removeItem('accessToken')
   localStorage.removeItem('accessToken')
-  window.location.href = '/'
+  if (!noReload) window.location.reload()
 }
 
 /* -------------------------------------------------------------------------- */
@@ -279,8 +279,6 @@ export const getPage = async (pageId) => {
 
   const page = await response.json()
 
-  // console.log('Fetched page:', page)
-
   return page
 }
 
@@ -315,13 +313,15 @@ export const postPageToPortfolio = async (portfolioId, postDetails) => {
 
 // Edits a page whose ID is pageId, with changes outlined in patchDetails
 export const patchPage = async (pageId, patchDetails) => {
-  const response = await fetch(BACKEND + PAGES + '/' + pageId, {
-    method: 'PATCH',
-    headers,
-    body: JSON.stringify(patchDetails)
-  })
+  if (pageId) {
+    const response = await fetch(BACKEND + PAGES + '/' + pageId, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify(patchDetails)
+    })
 
-  return response
+    return response
+  }
 }
 
 /* --------------------------------- DELETE --------------------------------- */

@@ -13,10 +13,10 @@ import useAddPage from '../../../../Hooks/useAddPage'
 import useEditPage from '../../../../Hooks/useEditPage'
 import useDeletePage from '../../../../Hooks/useDeletePage'
 import Loading from '../../../CommonComponents/Loading'
-import { useQueryCache } from 'react-query'
 import usePages from '../../../../Hooks/usePages'
 import { useStore } from '../../../../Hooks/Store'
 import shallow from 'zustand/shallow'
+import usePortfolio from '../../../../Hooks/usePortfolio'
 
 const portfolioIdSelector = (state) => state.portfolioId
 const pageSelector = ({ pageId, setPageId }) => [pageId, setPageId]
@@ -46,7 +46,7 @@ function EditPortfolioContent() {
 
   const portfolioId = useStore(portfolioIdSelector)
   const [pageId, setPageId] = useStore(useCallback(pageSelector, []), shallow)
-  const portfolio = useQueryCache().getQueryData(['portfolios', portfolioId])
+  const { data: portfolio } = usePortfolio(portfolioId)
   const { data: pages, status: pagesStatus } = usePages(portfolioId)
   const [loading, setLoading] = useStore(useCallback(loadingSelector, []), shallow)
 
@@ -182,7 +182,7 @@ function EditPortfolioContent() {
       portfolioId: portfolio.id,
       patchDetails: {
         title: portfolioTitle,
-        description: portfolio.description
+        description: portfolioDescription
       }
     })
 
@@ -194,11 +194,7 @@ function EditPortfolioContent() {
 
   // Updates the page index and page content to be those of the selected page
   function handlePageSelect(id) {
-    if (pageId === id) {
-      setPageId(null)
-    } else {
-      setPageId(id)
-    }
+    setPageId(id)
   }
 
   /* -------------------------------------------------------------------------- */
@@ -236,7 +232,7 @@ function EditPortfolioContent() {
     e.preventDefault()
     setLoading(true)
 
-    editPage({ pageId: pages[dialogContent.component].id, title: pageTitle })
+    editPage({ pageId: pages[dialogContent.component].id, patchDetails: { title: pageTitle } })
 
     setLoading(false)
     setOpen(false)
@@ -299,9 +295,6 @@ function EditPortfolioContent() {
           <EditPortfolioPagesGrouped
             handlePortfolioEvent={handlePortfolioEvent}
             handlePageSelect={handlePageSelect}
-            portfolio={portfolio}
-            pages={pages}
-            pageId={pageId}
             handlePageEvent={handlePageEvent}
           />
 

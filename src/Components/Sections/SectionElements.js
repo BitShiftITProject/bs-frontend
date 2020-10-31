@@ -4,7 +4,7 @@ import YouTube from 'react-youtube'
 import { Grid, TextField, Typography, styled, Tooltip, Link, makeStyles } from '@material-ui/core'
 import GetAppIcon from '@material-ui/icons/GetApp'
 
-import { getMediaItem, getFile, getDataUrl, getPage } from '../../Backend/Fetch'
+import { getMediaItem, getFile, getDataUrl } from '../../Backend/Fetch'
 import DropzoneButton from '../../Components/CommonComponents/DropzoneButton'
 
 import TextEditor from '../TextEditor'
@@ -179,7 +179,7 @@ export const Image = React.memo(({ name, editing, data, sectionIndex, elementInd
         })
       }
     }
-  }, [data, editing, sectionIndex, elementIndex, name, pageId])
+  }, [data, editing, sectionIndex, elementIndex, name, pageId, currentPage.content.sections])
 
   const rendered = editing ? (
     data === null ? (
@@ -233,7 +233,7 @@ export const File = React.memo(({ name, editing, data, sectionIndex, elementInde
     }
   }, [])
 
-  const getFileName = async () => {
+  const getFileName = useCallback(async () => {
     if (currentPage.content.sections) {
       if (currentPage.content.sections[sectionIndex][elementIndex].data === '') {
         return 'No File Uploaded'
@@ -247,7 +247,7 @@ export const File = React.memo(({ name, editing, data, sectionIndex, elementInde
     } else {
       return 'Loading...'
     }
-  }
+  }, [currentPage.content.sections, elementIndex, sectionIndex])
 
   useEffect(() => {
     async function getNameOfFile() {
@@ -272,7 +272,7 @@ export const File = React.memo(({ name, editing, data, sectionIndex, elementInde
       }
     }
 
-    if (data != null) {
+    if (currentPage && data) {
       getUploadedFile().then((file) => {
         file != null ? setFile(file) : setFile('')
       })
@@ -280,7 +280,7 @@ export const File = React.memo(({ name, editing, data, sectionIndex, elementInde
         setFileName(name)
       })
     }
-  }, [data, editing, sectionIndex, elementIndex, name])
+  }, [data, editing, sectionIndex, elementIndex, name, currentPage, getFileName])
 
   const handleClick = async () => {
     if (file) {

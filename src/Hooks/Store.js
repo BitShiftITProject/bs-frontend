@@ -28,12 +28,13 @@ const store = (set) => ({
   portfolioId: null,
   setPortfolioId: (id) =>
     set((state) => {
+      // console.log('Changed Portfolio ID to:', id)
       state.portfolioId = id
     }),
   pageId: null,
   setPageId: (id) =>
     set((state) => {
-      console.log('Changed Page ID to:', id)
+      // console.log('Changed Page ID to:', id)
       state.pageId = id
     }),
   // sections: {},
@@ -55,13 +56,22 @@ const store = (set) => ({
   //   }),
 
   loading: false,
-  setLoading: (value) => set((state) => (state.loading = value)),
+  setLoading: (value) =>
+    set((state) => {
+      state.loading = value
+    }),
 
   sectionIndex: null,
-  setSectionIndex: (index) => set((state) => (state.sectionIndex = index)),
+  setSectionIndex: (index) =>
+    set((state) => {
+      state.sectionIndex = index
+    }),
 
   elementIndex: 0,
-  setElementIndex: (index) => set((state) => (state.elementIndex = index)),
+  setElementIndex: (index) =>
+    set((state) => {
+      state.elementIndex = index
+    }),
 
   currentElement: null,
 

@@ -59,7 +59,7 @@ function PublicSidebar() {
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
-  const { portfolio: portfolioId, page: pageIndex } = useParams()
+  const { portfolio: portfolioId } = useParams()
   const { data: pages } = usePages(portfolioId)
 
   const [pageId, setPageId] = useStore(useCallback(pageSelector, []), shallow)

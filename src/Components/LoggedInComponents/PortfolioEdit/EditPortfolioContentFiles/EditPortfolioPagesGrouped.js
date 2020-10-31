@@ -15,14 +15,17 @@ import CloseIcon from '@material-ui/icons/Close'
 import { loggedInStyles, CursorTypography } from '../../../../Styles/loggedInStyles'
 
 import useEditPortfolio from '../../../../Hooks/useEditPortfolio'
+import { useStore } from '../../../../Hooks/Store'
+import usePortfolio from '../../../../Hooks/usePortfolio'
+import usePages from '../../../../Hooks/usePages'
+
+const portfolioIdSelector = (state) => state.portfolioId
+const pageIdSelector = (state) => state.pageId
 
 /* Pages and adding/removing pages part of the editing portfolio*/
 export default function EditPortfolioPagesGrouped({
   handlePortfolioEvent,
   handlePageSelect,
-  portfolio,
-  pages,
-  pageId,
   handlePageEvent
 }) {
   const classes = loggedInStyles()
@@ -31,8 +34,11 @@ export default function EditPortfolioPagesGrouped({
   // Locale
   const intl = useIntl()
 
-  // Portfolio URL
-  const [editPortfolio] = useEditPortfolio(portfolio.id)
+  const portfolioId = useStore(portfolioIdSelector)
+  const pageId = useStore(pageIdSelector)
+  const { data: portfolio } = usePortfolio(portfolioId)
+  const { data: pages } = usePages(portfolioId)
+  const [editPortfolio] = useEditPortfolio(portfolioId)
 
   /* -------------------------------------------------------------------------- */
   /*                                Drag and Drop                               */

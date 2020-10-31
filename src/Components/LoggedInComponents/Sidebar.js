@@ -389,7 +389,7 @@ export default function Sidebar(props) {
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
-  // Content is the page component that will be rendered (e.g. PortfolioList, SettingsPage, etc.)
+  // Content is the page component that will be rendered (e.g. PortfolioListPage, SettingsPage, etc.)
   const { content } = props
 
   const pageContent = (
