@@ -127,7 +127,7 @@ function SectionsButton() {
                     onClick={(e) => addSectionElement(elementName)}
                   >
                     <Link color='textPrimary' style={{ textTransform: 'capitalize' }}>
-                      {elementName}
+                      {sectionElements[elementName][0]}
                     </Link>
                   </ButtonBase>
                 </Grid>

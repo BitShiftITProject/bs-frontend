@@ -116,6 +116,7 @@ function SectionContainer({ children, sectionIndex }) {
   function startEditingSection(sectionIndex) {
     const elementIndex = 0
     const element = currentPage.content.sections[sectionIndex][elementIndex]
+    // console.log('Start editing element:', element)
     startEditingElement(sectionIndex, elementIndex, element)
   }
 

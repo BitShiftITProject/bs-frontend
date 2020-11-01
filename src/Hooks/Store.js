@@ -80,9 +80,13 @@ const store = (set) => ({
       state.sectionIndex = sectionIndex
       state.elementIndex = elementIndex
       state.currentElement = { id: element.id, data: element.data }
+      // console.log(
+      //   `Start editing element ${elementIndex} at section ${sectionIndex}: ${element.id} = ${element.data}`
+      // )
     }),
   editCurrentElement: (data) =>
     set((state) => {
+      // console.log(`Changed ${state.elementIndex} at section ${state.sectionIndex}: ${data}`)
       state.currentElement.data = data
     }),
   finishEditingElement: (currentPage, editPageFn) =>

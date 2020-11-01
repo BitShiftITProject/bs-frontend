@@ -94,10 +94,15 @@ export const resetPassword = async (authDetails) => {
 
 // "Logs out" a user by clearing the access token and redirecting the user to
 // the landing page
-export const logout = ({ noReload }) => {
+export const logout = () => {
   sessionStorage.removeItem('accessToken')
   localStorage.removeItem('accessToken')
-  if (!noReload) window.location.reload()
+  window.location.reload()
+}
+
+export const logoutNoReload = () => {
+  sessionStorage.removeItem('accessToken')
+  localStorage.removeItem('accessToken')
 }
 
 /* -------------------------------------------------------------------------- */
@@ -370,7 +375,7 @@ export const getMediaItems = async (username) => {
   return mediaItems
 }
 
-// gets specific Media Items for a given user
+// gets specific Media Items
 export const getMediaItem = async (key) => {
   const response = await fetch(BACKEND + MEDIA_ITEM + '/' + key, {
     method: 'GET',
@@ -389,7 +394,10 @@ export const getMediaItem = async (key) => {
 }
 
 // gets all the Media Items for a given user
-export const getDataUrl = async (key) => {
+export const getDataUrl = async (key, item) => {
+  // console.log('Data URL Key:', key)
+  // console.log('Data URL Item:', item)
+
   const response = await fetch(BACKEND + BUCKETS + '/' + key, {
     method: 'GET',
     headers
@@ -401,50 +409,49 @@ export const getDataUrl = async (key) => {
 
   if (!response) return null
 
-  return await getMediaItem(key).then(async (item) => {
-    const file = await response.json().then((response) => {
-      if (item != null) {
-        let buf = Buffer.from(response.Body.data)
-        let base64 = buf.toString()
-
-        return 'data:' + item.file_type + ';base64,' + base64
-      } else {
-        return null
-      }
-    })
-    return file
-  })
-}
-
-export const getFile = async (key) => {
-  const response = await fetch(BACKEND + BUCKETS + '/' + key, {
-    method: 'GET',
-    headers
-  })
-    .then((response) => (response.ok ? response : null))
-    .catch(() => {
-      return null
-    })
-
-  if (!response) return null
-
-  return await getMediaItem(key).then(async (item) => {
+  const file = await response.json().then((response) => {
     if (item != null) {
-      const file = await response.json().then(async (response) => {
-        let buf = Buffer.from(response.Body.data)
-        let base64 = buf.toString()
+      let buf = Buffer.from(response.Body.data)
+      let base64 = buf.toString()
 
-        return await fetch('data:' + item.file_type + ';base64,' + base64)
-          .then((res) => res.blob())
-          .then((blob) => {
-            return new File([blob], item.public_name, { type: item.file_type })
-          })
-      })
-      return file
+      return 'data:' + item.file_type + ';base64,' + base64
     } else {
       return null
     }
   })
+  return file
+}
+
+export const getFile = async (key, item) => {
+  // console.log('File Key:', key)
+  // console.log('File Item:', item)
+
+  const response = await fetch(BACKEND + BUCKETS + '/' + key, {
+    method: 'GET',
+    headers
+  })
+    .then((response) => (response.ok ? response : null))
+    .catch(() => {
+      return null
+    })
+
+  if (!response) return null
+
+  if (item != null) {
+    const file = await response.json().then(async (response) => {
+      let buf = Buffer.from(response.Body.data)
+      let base64 = buf.toString()
+
+      return await fetch('data:' + item.file_type + ';base64,' + base64)
+        .then((res) => res.blob())
+        .then((blob) => {
+          return new File([blob], item.public_name, { type: item.file_type })
+        })
+    })
+    return file
+  } else {
+    return null
+  }
 }
 
 /* ----------------------------------- POST ---------------------------------- */
@@ -462,7 +469,7 @@ export const postMediaContent = async (username, postDetails) => {
 /* ----------------------------------- DELETE ---------------------------------- */
 
 export const deleteMediaItem = async (key) => {
-  const response = await fetch(BACKEND + MEDIA_ITEM + '/' + key, {
+  const response = await fetch(BACKEND + USERS + '/' + key + MEDIA_ITEM, {
     method: 'DELETE',
     headers
   })

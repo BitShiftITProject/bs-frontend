@@ -288,7 +288,6 @@ function EditPortfolioContent() {
 
   return (
     <div>
-      {/* {console.log(portfolio, pages)} */}
       {portfolio && pages && (
         <Grid container direction='row' spacing={0}>
           {/* Pages and adding/removing pages part of the editing portfolio*/}

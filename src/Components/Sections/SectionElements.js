@@ -1,18 +1,23 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import ReactHtmlParser from 'react-html-parser'
 import YouTube from 'react-youtube'
 import { Grid, TextField, Typography, styled, Tooltip, Link, makeStyles } from '@material-ui/core'
 import GetAppIcon from '@material-ui/icons/GetApp'
 
-import { getMediaItem, getFile, getDataUrl } from '../../Backend/Fetch'
-import DropzoneButton from '../../Components/CommonComponents/DropzoneButton'
+// import { getMediaItem, getFile, getDataUrl } from '../../Backend/Fetch'
+import Dropzone from '../CommonComponents/Dropzone'
 
 import TextEditor from '../TextEditor'
 import { useStore } from '../../Hooks/Store'
-import usePage from '../../Hooks/usePage'
+// import usePage from '../../Hooks/usePage'
+import useFile from '../../Hooks/useFile'
+import useMediaItem from '../../Hooks/useMediaItem'
+import ReactPlayer from 'react-player'
+import shallow from 'zustand/shallow'
 
 const text = 'Text'
 const youtubeVideo = 'Video'
+const mediaPlayer = 'Media Player'
 const image = 'Image'
 const fileUpload = 'File'
 
@@ -42,8 +47,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const editElementFunction = (state) => state.editCurrentElement
-const pageIdSelector = (state) => state.pageId
+const currentElementSelector = ({ currentElement, editCurrentElement }) => [
+  currentElement,
+  editCurrentElement
+]
+// const pageIdSelector = (state) => state.pageId
 
 /* -------------------------------------------------------------------------- */
 /*                              Section Elements                              */
@@ -53,13 +61,10 @@ const pageIdSelector = (state) => state.pageId
 // section may be comprised of a Paragraph section element and a Title section
 // element.
 
-// Section elements are rendered in the MapSection function in SectionsMap.js,
+// Section elements are rendered in the MapSectionToJSX function in SectionsMap.js,
 // which maps section IDs to the corresponding components that makes up that
 // section.
 
-// For example, a section with the section ID 'headingTitle'  is mapped to
-// a single Title section element:
-//
 // - If it was rendered in the non-editing mode (i.e. in a public portfolio),
 //   it is shown as a Typography component with the section's data.
 //
@@ -85,16 +90,49 @@ export const Text = React.memo(({ name, editing, data, sectionIndex, elementInde
   return rendered
 })
 
-export const YoutubeVideo = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
-  const editCurrentElement = useStore(useCallback(editElementFunction, []))
-
-  const pageId = useStore(pageIdSelector)
-
-  const { data: currentPage } = usePage(pageId)
-  // console.log(`Current page in [${sectionIndex}, ${elementIndex}] :`, currentPage)
+export const MediaPlayer = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
+  const [currentElement, editCurrentElement] = useStore(
+    useCallback(currentElementSelector, []),
+    shallow
+  )
 
   const handleChange = (e) => {
-    console.log('Youtube video changed to:', e.target.value)
+    editCurrentElement(e.target.value)
+  }
+
+  const rendered = editing ? (
+    data === null ? (
+      <ExampleSection container>
+        <Typography variant='h6'>{mediaPlayer}</Typography>
+      </ExampleSection>
+    ) : (
+      <TextField
+        value={currentElement.data}
+        onChange={handleChange}
+        fullWidth
+        multiline
+        id={name}
+        variant='outlined'
+        label='Media URL'
+        helperText={
+          'Supports YouTube, Facebook, Soundcloud, Vimeo, Dailymotion, and any URL linking to a video or audio file'
+        }
+      />
+    )
+  ) : (
+    <ReactPlayer url={data} controls width='100%' />
+  )
+
+  return rendered
+})
+
+export const YoutubeVideo = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
+  const [currentElement, editCurrentElement] = useStore(
+    useCallback(currentElementSelector, []),
+    shallow
+  )
+
+  const handleChange = (e) => {
     editCurrentElement(e.target.value)
   }
 
@@ -106,7 +144,7 @@ export const YoutubeVideo = React.memo(({ name, editing, data, sectionIndex, ele
     ) : (
       <Tooltip placement='top' title='Video ID (See FAQ)'>
         <TextField
-          value={currentPage.content.sections[sectionIndex][elementIndex].data}
+          value={currentElement.data}
           onChange={handleChange}
           fullWidth
           multiline
@@ -123,63 +161,10 @@ export const YoutubeVideo = React.memo(({ name, editing, data, sectionIndex, ele
 })
 
 export const Image = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
-  const pageId = useStore(pageIdSelector)
-
-  const { data: currentPage } = usePage(pageId)
-  // console.log(`Current page in [${sectionIndex}, ${elementIndex}] :`, currentPage)
-
-  const [imageName, setImageName] = useState('')
-  const [file, setFile] = useState(null)
-
-  useEffect(() => {
-    return () => {
-      setImageName('')
-      setFile(null)
-    }
-  }, [])
-
-  useEffect(() => {
-    async function getNameOfImage() {
-      if (currentPage.content.sections[sectionIndex][elementIndex].data === '') {
-        return 'No Image Uploaded'
-      } else {
-        const file = await getMediaItem(
-          currentPage.content.sections[pageId][sectionIndex][elementIndex].data
-        )
-        if (!file) return 'No Image Uploaded'
-        return file.public_name
-      }
-    }
-    async function getUploadedFile() {
-      if (editing) {
-        if (currentPage.content.sections[sectionIndex][elementIndex].data === '') {
-          return null
-        } else {
-          let file = await getFile(currentPage.content.sections[sectionIndex][elementIndex].data)
-          return file
-        }
-      } else {
-        if (data === '') {
-          return null
-        } else {
-          let file = await getDataUrl(data)
-          return file
-        }
-      }
-    }
-
-    if (data != null) {
-      getUploadedFile().then((file) => {
-        file != null ? setFile(file) : setFile('')
-      })
-      if (editing) {
-        getNameOfImage().then((name) => {
-          console.log('Image Name:', name)
-          setImageName(name)
-        })
-      }
-    }
-  }, [data, editing, sectionIndex, elementIndex, name, pageId, currentPage.content.sections])
+  // The data being passed to the useMediaItem functions is the S3 key of the
+  // image
+  const { data: mediaItem } = useMediaItem(data)
+  const { data: file } = useFile(data, editing)
 
   const rendered = editing ? (
     data === null ? (
@@ -191,96 +176,58 @@ export const Image = React.memo(({ name, editing, data, sectionIndex, elementInd
       // Make typography on the right show file name
       // Show button and typography in line
       <Grid container direction='row' spacing={2} justify='center' alignItems='center'>
-        <Grid item>
-          {file === null ? (
+        {/* <Grid item>
+          {!file ? (
             <p>Loading...</p>
           ) : (
-            <DropzoneButton img initialFile={file === '' ? null : file} />
+            <Dropzone img initialFile={file === '' ? null : file} />
           )}
         </Grid>
         <Grid item>
-          <Typography variant='h6'>{imageName}</Typography>
-        </Grid>
+          <Typography variant='h6'>
+            {mediaItem && mediaItem.public_name ? mediaItem.public_name : 'No File Uploaded'}
+          </Typography>
+        </Grid> */}
+        <Dropzone
+          img
+          initialFile={
+            !file || file === ''
+              ? null
+              : {
+                  data: file,
+                  file: {
+                    name: mediaItem.public_name,
+                    path: mediaItem.public_name,
+                    type: mediaItem.file_type
+                  }
+                }
+          }
+        />
       </Grid>
     )
   ) : (
     // Get image before showing
-    <img
-      style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', maxWidth: '100%' }}
-      src={file}
-      alt={imageName}
-    />
+    <div>
+      {file && (
+        <img
+          style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', maxWidth: '100%' }}
+          src={file}
+          alt={mediaItem ? mediaItem.public_name : 'No File Uploaded'}
+        />
+      )}
+    </div>
   )
 
   return rendered
 })
 
 export const File = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
-  const pageId = useStore(pageIdSelector)
-
-  const { data: currentPage } = usePage(pageId)
-  // console.log(`Current page in [${sectionIndex}, ${elementIndex}] :`, currentPage)
-
-  const [fileName, setFileName] = useState('')
-  const [file, setFile] = useState(null)
+  // The data being passed to the useMediaItem functions is the S3 key of the
+  // file
+  const { data: mediaItem } = useMediaItem(data)
+  const { data: file } = useFile(data, editing)
 
   const classes = useStyles()
-
-  useEffect(() => {
-    return () => {
-      setFileName('')
-      setFile(null)
-    }
-  }, [])
-
-  const getFileName = useCallback(async () => {
-    if (currentPage.content.sections) {
-      if (currentPage.content.sections[sectionIndex][elementIndex].data === '') {
-        return 'No File Uploaded'
-      } else {
-        const file = await getMediaItem(
-          currentPage.content.sections[sectionIndex][elementIndex].data
-        )
-        if (!file) return 'No File Uploaded'
-        return file.public_name
-      }
-    } else {
-      return 'Loading...'
-    }
-  }, [currentPage.content.sections, elementIndex, sectionIndex])
-
-  useEffect(() => {
-    async function getNameOfFile() {
-      return await getFileName()
-    }
-
-    async function getUploadedFile() {
-      if (editing) {
-        if (currentPage.content.sections[sectionIndex][elementIndex].data === '') {
-          return null
-        } else {
-          let file = await getFile(currentPage.content.sections[sectionIndex][elementIndex].data)
-          return file
-        }
-      } else {
-        if (data === '') {
-          return null
-        } else {
-          let file = await getDataUrl(data)
-          return file
-        }
-      }
-    }
-
-    if (currentPage && data) {
-      getUploadedFile().then((file) => {
-        file != null ? setFile(file) : setFile('')
-      })
-      getNameOfFile().then((name) => {
-        setFileName(name)
-      })
-    }
-  }, [data, editing, sectionIndex, elementIndex, name, currentPage, getFileName])
 
   const handleClick = async () => {
     if (file) {
@@ -290,7 +237,7 @@ export const File = React.memo(({ name, editing, data, sectionIndex, elementInde
       const a = document.createElement('a')
 
       a.href = blobURL
-      a.download = fileName
+      a.download = mediaItem.public_name
       a.click()
     }
   }
@@ -305,11 +252,11 @@ export const File = React.memo(({ name, editing, data, sectionIndex, elementInde
       // Make typography on the right show file name
       // Show button and typography in line
       <Grid container direction='row' spacing={2} justify='center' alignItems='center'>
-        <Grid item>
+        {/* <Grid item>
           {file === null ? (
             <p>Loading...</p>
           ) : (
-            <DropzoneButton
+            <Dropzone
               sectionIndex={sectionIndex}
               elementIndex={elementIndex}
               elementName={name}
@@ -318,8 +265,24 @@ export const File = React.memo(({ name, editing, data, sectionIndex, elementInde
           )}
         </Grid>
         <Grid item>
-          <Typography variant='h6'>{fileName}</Typography>
-        </Grid>
+          <Typography variant='h6'>
+            {mediaItem && mediaItem.public_name ? mediaItem.public_name : 'No File Uploaded'}
+          </Typography>
+        </Grid> */}
+        <Dropzone
+          initialFile={
+            !file || file === ''
+              ? null
+              : {
+                  data: file,
+                  file: {
+                    name: mediaItem.public_name,
+                    path: mediaItem.public_name,
+                    type: mediaItem.file_type
+                  }
+                }
+          }
+        />
       </Grid>
     )
   ) : (
@@ -333,15 +296,15 @@ export const File = React.memo(({ name, editing, data, sectionIndex, elementInde
         alignItems: 'center'
       }}
     >
-      {fileName !== null && (
-        <span
-          onClick={handleClick}
-          style={{ display: 'flex', justify: 'center', alignItems: 'center' }}
-        >
-          <GetAppIcon className={classes.fileUploadIcon} />
-          <Link className={classes.fileUpload}>{fileName}</Link>
-        </span>
-      )}
+      <span
+        onClick={handleClick}
+        style={{ display: 'flex', justify: 'center', alignItems: 'center' }}
+      >
+        <GetAppIcon className={classes.fileUploadIcon} />
+        <Link className={classes.fileUpload}>
+          {mediaItem && mediaItem.public_name ? mediaItem.public_name : 'No File Uploaded'}
+        </Link>
+      </span>
     </div>
   )
 

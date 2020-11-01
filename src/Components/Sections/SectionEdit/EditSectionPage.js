@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { Grid, AppBar, Tabs, Tab, Typography } from '@material-ui/core'
-import { GetElementJSX } from '../SectionsMap'
+import { Grid, AppBar, Tabs, Tab, DialogTitle } from '@material-ui/core'
+import { GetElementJSX, sectionElements } from '../SectionsMap'
 import { useStore } from '../../../Hooks/Store'
 import shallow from 'zustand/shallow'
 import usePage from '../../../Hooks/usePage'
+import Loading from '../../CommonComponents/Loading'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -49,6 +50,8 @@ const currentSectionDetails = ({ pageId, sectionIndex, elementIndex }) => [
 // If currently editing an element, then we are currently editing a section.
 // Therefore we need to show the edit panel for the current section's elements.
 function EditSectionPage({ handleFinishEditingElement }) {
+  const editing = true
+
   const [pageId, sectionIndex, elementIndex] = useStore(
     useCallback(currentSectionDetails, []),
     shallow
@@ -63,9 +66,7 @@ function EditSectionPage({ handleFinishEditingElement }) {
 
   return sectionIndex !== null ? (
     <Grid container direction='column'>
-      <Grid item>
-        <Typography>Edit Section</Typography>
-      </Grid>
+      <DialogTitle>Edit Section</DialogTitle>
       <Grid item container direction='column'>
         <div style={{ flexGrow: 1, width: '100%' }}>
           <AppBar position='static' color='default'>
@@ -78,14 +79,15 @@ function EditSectionPage({ handleFinishEditingElement }) {
               textColor='secondary'
               aria-label='scrollable force tabs example'
             >
-              {currentPage.content.sections.map((element, idx) => (
-                <Tab key={idx} label={element.id} />
+              {currentPage.content.sections[sectionIndex].map((element, idx) => (
+                <Tab key={idx} label={sectionElements[element.id][0]} />
               ))}
             </Tabs>
           </AppBar>
-          {currentPage.content.sections.map((element, idx) => (
-            <TabPanel key={idx} value={elementIndex} index={idx}>
-              {GetElementJSX(element, true, sectionIndex, idx)}
+          {currentPage.content.sections[sectionIndex].map((element, idx) => (
+            <TabPanel key={idx} value={elementIndex} index={idx} style={{ margin: 32 }}>
+              {GetElementJSX(element, editing, sectionIndex, idx)}
+              {/* <div>{JSON.stringify(element)}</div> */}
             </TabPanel>
           ))}
         </div>
@@ -93,8 +95,10 @@ function EditSectionPage({ handleFinishEditingElement }) {
       <Grid item container></Grid>
     </Grid>
   ) : (
-    <div></div>
+    <div>
+      <Loading vertical />
+    </div>
   )
 }
 
-export default EditSectionPage
+export default React.memo(EditSectionPage)

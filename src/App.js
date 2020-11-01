@@ -8,7 +8,6 @@ import { ReactQueryDevtools } from 'react-query-devtools'
 
 import ThemesProvider from './Components/Contexts/ThemesContext'
 import LocaleProvider from './Components/Contexts/LocaleContext'
-import PortfolioProvider from './Components/Contexts/PortfolioContext'
 import PublicThemesProvider from './Components/Contexts/PublicThemesContext'
 
 import PublicPortfolio from './Components/LoggedOutComponents/PublicPortfolio'
@@ -22,24 +21,23 @@ export default function App() {
       <ThemesProvider>
         <CssBaseline>
           <LocaleProvider>
-            <PortfolioProvider>
-              <Switch>
-                <Route exact path='/publicfailed' render={() => <PublicPortfolioFailed />} />
-                <Route
-                  exact
-                  path='/public/:portfolio/:page'
-                  render={(routeProps) => (
-                    <PublicThemesProvider>
-                      <CssBaseline>
-                        <PublicPortfolio {...routeProps} />
-                      </CssBaseline>
-                    </PublicThemesProvider>
-                  )}
-                />
-                <Redirect from='/public/:portfolio' to='/public/:portfolio/0' />
-                <Route render={() => <Authentication />} />
-              </Switch>
-            </PortfolioProvider>
+            <Switch>
+              <Route exact path='/publicfailed' render={() => <PublicPortfolioFailed />} />
+              <Route
+                exact
+                path='/public/:portfolio/:page'
+                render={(routeProps) => (
+                  <PublicThemesProvider>
+                    <CssBaseline>
+                      <PublicPortfolio {...routeProps} />
+                    </CssBaseline>
+                  </PublicThemesProvider>
+                )}
+              />
+              <Redirect from='/public/:portfolio' to='/public/:portfolio/0' />
+              <Route render={() => <Authentication />} />
+            </Switch>
+            `
           </LocaleProvider>
         </CssBaseline>
         <ReactQueryDevtools initialIsOpen={false} />

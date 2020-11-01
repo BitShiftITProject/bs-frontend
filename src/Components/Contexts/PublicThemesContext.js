@@ -46,7 +46,6 @@ const PublicThemesProvider = ({ children }) => {
           ? currentPortfolio.theme
           : null || window.sessionStorage.getItem('publicTheme') || 'light'
 
-      // console.log('Theme:', theme)
       return theme
     }
 

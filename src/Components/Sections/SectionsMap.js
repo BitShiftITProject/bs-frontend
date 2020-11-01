@@ -1,11 +1,12 @@
 import React from 'react'
-import { YoutubeVideo, Image, Text, File } from './SectionElements'
+import { MediaPlayer, YoutubeVideo, Image, Text, File } from './SectionElements'
 
 export const sectionElements = {
-  text: Text,
-  image: Image,
-  video: YoutubeVideo,
-  file: File
+  text: ['Text', Text],
+  image: ['Image', Image],
+  mediaPlayer: ['Media Player', MediaPlayer],
+  video: ['Video', YoutubeVideo],
+  file: ['File', File]
 }
 
 // Receives section whose data field might be:
@@ -16,7 +17,7 @@ export const sectionElements = {
 //   field (editing is true and index is ignored)
 export function GetElementJSX(element, editing, sectionIndex, elementIndex) {
   const sectionElementName = element.id
-  const SectionElementComponent = sectionElements[sectionElementName]
+  const SectionElementComponent = sectionElements[sectionElementName][1]
 
   return (
     <SectionElementComponent

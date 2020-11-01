@@ -1,5 +1,5 @@
 import { useQuery, useQueryCache } from 'react-query'
-import { getUserPortfolios } from '../Backend/Fetch'
+import { getUserPortfolios, logout } from '../Backend/Fetch'
 
 export default function usePortfolios(user) {
   const cache = useQueryCache()
@@ -13,7 +13,10 @@ export default function usePortfolios(user) {
       onSuccess: (data) =>
         data.forEach((portfolio) => {
           cache.setQueryData(['portfolios', { id: portfolio.id }], portfolio)
-        })
+        }),
+      onError: () => {
+        logout()
+      }
     }
   })
 }

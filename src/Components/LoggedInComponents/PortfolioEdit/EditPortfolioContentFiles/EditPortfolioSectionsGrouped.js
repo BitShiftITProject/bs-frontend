@@ -15,7 +15,7 @@ import { useSnackbar } from 'notistack'
 
 const pageIdSelector = (state) => state.pageId
 const currentElementSelector = (state) => state.currentElement
-const finishEditingSelector = (state) => state.finishEditingSelector
+const finishEditingSelector = (state) => state.finishEditingElement
 const loadingSelector = ({ loading, setLoading }) => [loading, setLoading]
 
 /* Pages and adding/removing pages part of the editing portfolio*/
@@ -26,6 +26,12 @@ function EditPortfolioSectionsGrouped() {
 
   const classes = loggedInStyles()
   const fixedHeightPaper = classes.fixedHeightPaper
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   Locale                                   */
+  /* -------------------------------------------------------------------------- */
+
+  const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
   /*                           Edit Mode for a Section                          */
@@ -39,7 +45,7 @@ function EditPortfolioSectionsGrouped() {
 
   const currentElement = useStore(currentElementSelector)
 
-  const handleSaveSections = () => {
+  const handleSaveSections = useCallback(() => {
     setLoading(true)
 
     // // Patch the page with the current sections on the screen
@@ -55,13 +61,7 @@ function EditPortfolioSectionsGrouped() {
 
       setLoading(false)
     }, 1000)
-  }
-
-  /* -------------------------------------------------------------------------- */
-  /*                                   Locale                                   */
-  /* -------------------------------------------------------------------------- */
-
-  const intl = useIntl()
+  }, [currentPage, enqueueSnackbar, intl, setLoading])
 
   /* -------------------------------------------------------------------------- */
   /*                               Action Buttons                               */
@@ -108,7 +108,8 @@ function EditPortfolioSectionsGrouped() {
 
   const handleFinishEditingElement = useCallback(() => {
     finishEditingElement(currentPage, editPage)
-  }, [currentPage, editPage, finishEditingElement])
+    handleSaveSections()
+  }, [currentPage, editPage, finishEditingElement, handleSaveSections])
 
   return (
     <Grid item xs={12} md={8} lg={9}>
@@ -165,7 +166,7 @@ function EditPortfolioSectionsGrouped() {
             {sectionButtons}
           </div>
         )}
-        <Dialog open={!!currentElement} onClose={handleFinishEditingElement}>
+        <Dialog open={currentElement !== null} onClose={handleFinishEditingElement}>
           <EditSectionPage handleFinishEditingElement={handleFinishEditingElement} />
         </Dialog>
       </Paper>

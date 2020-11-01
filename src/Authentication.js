@@ -18,7 +18,7 @@ import SettingsPage from './Components/LoggedInComponents/SettingsPage'
 import HelpPage from './Components/LoggedInComponents/HelpPage'
 import Sidebar from './Components/LoggedInComponents/Sidebar'
 
-import { logout } from './Backend/Fetch'
+import { logoutNoReload } from './Backend/Fetch'
 import useUser from './Hooks/useUser'
 
 // async function isLoggedIn() {
@@ -82,7 +82,7 @@ function Authentication() {
       // console.log('User LOADING')
     } else if (userStatus === 'error' || !accessToken || accessToken === 'undefined') {
       setLoggedIn(false)
-      logout({ noReload: true })
+      logoutNoReload()
       // console.log('User FAILED')
     } else if (userStatus === 'success') {
       setLoggedIn(true)
