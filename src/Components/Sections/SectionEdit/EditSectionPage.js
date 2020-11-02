@@ -49,7 +49,7 @@ const currentSectionDetails = ({ pageId, sectionIndex, elementIndex }) => [
 
 // If currently editing an element, then we are currently editing a section.
 // Therefore we need to show the edit panel for the current section's elements.
-function EditSectionPage({ handleFinishEditingElement }) {
+function EditSectionPage({ handleEditAnotherElement }) {
   const editing = true
 
   const [pageId, sectionIndex, elementIndex] = useStore(
@@ -60,19 +60,18 @@ function EditSectionPage({ handleFinishEditingElement }) {
   const { data: currentPage } = usePage(pageId)
   // console.log('Current page in edit section page:', currentPage)
 
-  function handleChange() {
-    handleFinishEditingElement()
+  function handleClick(sectionIndex, elementIndex) {
+    handleEditAnotherElement(sectionIndex, elementIndex)
   }
 
   return sectionIndex !== null ? (
-    <Grid container direction='column'>
+    <Grid container direction='column' style={{ width: '600px' }}>
       <DialogTitle>Edit Section</DialogTitle>
       <Grid item container direction='column'>
         <div style={{ flexGrow: 1, width: '100%' }}>
           <AppBar position='static' color='default'>
             <Tabs
               value={elementIndex}
-              onChange={handleChange}
               variant='scrollable'
               scrollButtons='on'
               indicatorColor='secondary'
@@ -80,13 +79,17 @@ function EditSectionPage({ handleFinishEditingElement }) {
               aria-label='scrollable force tabs example'
             >
               {currentPage.content.sections[sectionIndex].map((element, idx) => (
-                <Tab key={idx} label={sectionElements[element.id][0]} />
+                <Tab
+                  key={idx}
+                  label={sectionElements[element.id][0]}
+                  onClick={() => handleClick(sectionIndex, idx)}
+                />
               ))}
             </Tabs>
           </AppBar>
           {currentPage.content.sections[sectionIndex].map((element, idx) => (
             <TabPanel key={idx} value={elementIndex} index={idx} style={{ margin: 32 }}>
-              {GetElementJSX(element, editing, sectionIndex, idx)}
+              {GetElementJSX(element, editing)}
               {/* <div>{JSON.stringify(element)}</div> */}
             </TabPanel>
           ))}

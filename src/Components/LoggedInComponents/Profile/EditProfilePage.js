@@ -10,6 +10,7 @@ import { logout } from '../../../Backend/Fetch'
 import { useHistory } from 'react-router-dom'
 import useUser from '../../../Hooks/useUser'
 import useEditUser from '../../../Hooks/useEditUser'
+import { useSnackbar } from 'notistack'
 
 // Initial About Me and Contact data, will be fetched from database for the
 // currently authenticated user as the initial data in the states of the forms
@@ -43,6 +44,7 @@ export default function EditProfilePage() {
   const [tagText, setTagText] = useState('')
   const [about, setAbout] = useReducer(reducer, initialAbout)
   const [contact, setContact] = useReducer(reducer, initialContact)
+  const [loading, setLoading] = useState(false)
 
   /* -------------------------------------------------------------------------- */
   /*                         Fetching Initial User Data                         */
@@ -82,6 +84,8 @@ export default function EditProfilePage() {
   /*                                  Handlers                                  */
   /* -------------------------------------------------------------------------- */
 
+  const { enqueueSnackbar } = useSnackbar()
+
   // Handles changes in any text input in the About Me form, reflects this
   // change in the 'about' state object
   const handleOnAboutChange = (event) => {
@@ -120,8 +124,18 @@ export default function EditProfilePage() {
 
   function handleSubmit(e) {
     e.preventDefault()
+
+    setLoading(true)
+
     const patchDetails = { ...about, ...contact }
     editUser({ patchDetails })
+
+    setTimeout(() => {
+      setLoading(false)
+      enqueueSnackbar('Profile saved!', {
+        variant: 'success'
+      })
+    }, 1250)
   }
   /* -------------------------------------------------------------------------- */
   /*                             Form to be Rendered                            */
@@ -162,7 +176,7 @@ export default function EditProfilePage() {
       <EditProfileListMenu setPage={setPage} page={page} />
 
       {/* FORM with user profile data*/}
-      <UserProfileDataForm handleSubmit={handleSubmit} form={form} />
+      <UserProfileDataForm handleSubmit={handleSubmit} form={form} loading={loading} />
     </Grid>
   )
   return <Sidebar content={content} />

@@ -15,19 +15,11 @@ export const sectionElements = {
 //   and index is not ignored, or
 // - NULL to return a section template from the section's ID
 //   field (editing is true and index is ignored)
-export function GetElementJSX(element, editing, sectionIndex, elementIndex) {
+export function GetElementJSX(element, editing) {
   const sectionElementName = element.id
   const SectionElementComponent = sectionElements[sectionElementName][1]
 
-  return (
-    <SectionElementComponent
-      name={sectionElementName}
-      editing={editing}
-      data={element.data}
-      sectionIndex={sectionIndex}
-      elementIndex={elementIndex}
-    />
-  )
+  return <SectionElementComponent editing={editing} data={element.data} />
 }
 
 export function ConvertToSection(section) {

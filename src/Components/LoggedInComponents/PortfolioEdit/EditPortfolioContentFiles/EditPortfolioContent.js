@@ -12,7 +12,6 @@ import useEditPortfolio from '../../../../Hooks/useEditPortfolio'
 import useAddPage from '../../../../Hooks/useAddPage'
 import useEditPage from '../../../../Hooks/useEditPage'
 import useDeletePage from '../../../../Hooks/useDeletePage'
-import Loading from '../../../CommonComponents/Loading'
 import usePages from '../../../../Hooks/usePages'
 import { useStore } from '../../../../Hooks/Store'
 import shallow from 'zustand/shallow'
@@ -76,10 +75,6 @@ function EditPortfolioContent() {
     // Reset the selected page ID, so at first, no page is selected
 
     setPageId(null)
-
-    if (!portfolioId) {
-      window.location.href = '/portfolios'
-    }
   }, [setPageId, portfolioId])
 
   // This is run after the portfolio content editing page is unmounted
@@ -283,7 +278,7 @@ function EditPortfolioContent() {
   /* -------------------------------------------------------------------------- */
 
   if (pagesStatus === 'loading') {
-    return <Loading vertical />
+    return <div></div>
   }
 
   return (

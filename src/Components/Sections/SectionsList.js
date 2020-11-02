@@ -10,6 +10,7 @@ import { useTheme } from '@material-ui/core/styles'
 import { useLocation } from 'react-router-dom'
 import useEditPage from '../../Hooks/useEditPage'
 import { useStore } from '../../Hooks/Store'
+import arrayMove from 'array-move'
 
 const pageIdSelector = (state) => state.pageId
 
@@ -22,13 +23,13 @@ function SectionsList({ sections, editing }) {
   const grid = sections ? sections.length : 0
 
   // reorders the result
-  const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list)
-    const [removed] = result.splice(startIndex, 1)
-    result.splice(endIndex, 0, removed)
+  // const reorder = (list, startIndex, endIndex) => {
+  //   const result = Array.from(list)
+  //   const [removed] = result.splice(startIndex, 1)
+  //   result.splice(endIndex, 0, removed)
 
-    return result
-  }
+  //   return result
+  // }
 
   const theme = useTheme()
 
@@ -37,7 +38,9 @@ function SectionsList({ sections, editing }) {
     // some basic styles to make the sections look a bit nicer
     userSelect: 'none',
     padding: grid * 2,
-    margin: `0 0 ${grid}px 0`,
+    margin: 8,
+    flexGrow: 1,
+    borderRadius: '8px',
 
     // change background colour if dragging
     background: isDragging
@@ -52,8 +55,8 @@ function SectionsList({ sections, editing }) {
   // when done with dragging
   const onDragEnd = (result) => {
     // dropped outside the list
-    if (result.source && result.destination) {
-      const newSections = reorder(sections, result.source.index, result.destination.index)
+    if (result.source && result.destination && result.source.index !== result.destination.index) {
+      const newSections = arrayMove(sections, result.source.index, result.destination.index)
       const patchDetails = { content: { sections: newSections } }
       editPage({ pageId, patchDetails })
     }
@@ -87,10 +90,21 @@ function SectionsList({ sections, editing }) {
                         style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
                       >
                         <SectionContainer key={sectionIndex} sectionIndex={sectionIndex}>
-                          <Grid container direction='row' spacing={2}>
+                          <Grid
+                            container
+                            direction='row'
+                            spacing={2}
+                            style={{ overflowX: 'scroll', flexWrap: 'nowrap' }}
+                          >
                             {section.map((element, elementIndex) => (
-                              <Grid item key={elementIndex} xs={12 / section.length}>
-                                {GetElementJSX(element, editing, sectionIndex, elementIndex)}
+                              <Grid
+                                key={elementIndex}
+                                item
+                                container
+                                justify='center'
+                                alignItems='center'
+                              >
+                                {GetElementJSX(element, editing)}
                               </Grid>
                             ))}
                           </Grid>
@@ -108,21 +122,17 @@ function SectionsList({ sections, editing }) {
     ) : (
       /* ------------------------ Public Portfolio Sections ----------------------- */
 
-      <div>
-        {sections.map((section, sectionIndex) => {
-          return (
-            <div key={sectionIndex}>
-              <Grid container direction='row' spacing={2}>
-                {section.map((element, elementIndex) => (
-                  <Grid item key={elementIndex} xs={12 / section.length}>
-                    {GetElementJSX(element, editing, sectionIndex, elementIndex)}
-                  </Grid>
-                ))}
+      <Grid container direction='column' spacing={3}>
+        {sections.map((section, sectionIndex) => (
+          <Grid item container key={sectionIndex} direction='row' spacing={2}>
+            {section.map((element, elementIndex) => (
+              <Grid key={elementIndex} item style={{ width: `calc(100% / ${section.length})` }}>
+                {GetElementJSX(element, editing)}
               </Grid>
-            </div>
-          )
-        })}
-      </div>
+            ))}
+          </Grid>
+        ))}
+      </Grid>
     )
 
   return sectionList

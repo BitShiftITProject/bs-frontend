@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import shallow from 'zustand/shallow'
 import { useIntl } from 'react-intl'
 import { withStyles, styled } from '@material-ui/core/styles'
@@ -56,6 +56,7 @@ function ForgotPassword(props) {
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
+  const [emailSubmitted, setEmailSubmitted] = useState(false)
   const [email, confirmationCode, newPassword, modifyForm] = useFormStore(
     useCallback(
       ({ email, confirmationCode, newPassword, modifyForm }) => [
@@ -88,6 +89,7 @@ function ForgotPassword(props) {
           variant: 'success'
         }
       )
+      setEmailSubmitted(true)
     } else {
       // Display error
       enqueueSnackbar(intl.formatMessage({ id: 'emailDoesNotExist' }), {
@@ -118,108 +120,128 @@ function ForgotPassword(props) {
 
   const content = (
     <div className={classes.div}>
-      <form onSubmit={(e) => handleSubmitEmail(e)} className={classes.form}>
-        {/*
-         * HEADING
-         */}
-        <CursorTypography component='h1' variant='h5'>
-          {intl.formatMessage({ id: 'forgotPassword' })}
-        </CursorTypography>
-        <Typography variant='subtitle2' style={{ width: '75%', textAlign: 'center' }} gutterBottom>
-          {intl.formatMessage({ id: 'forgotPasswordDescription' })}{' '}
-          <span role='img' aria-label='smiling cowboy lol'>
-            🤠
+      {!emailSubmitted ? (
+        <form onSubmit={handleSubmitEmail} className={classes.form}>
+          {/*
+           * HEADING
+           */}
+          <CursorTypography component='h1' variant='h5'>
+            {intl.formatMessage({ id: 'forgotPassword' })}
+          </CursorTypography>
+          <Typography
+            variant='subtitle2'
+            style={{ width: '75%', textAlign: 'center' }}
+            gutterBottom
+          >
+            {intl.formatMessage({ id: 'forgotPasswordDescription' })}{' '}
+            <span role='img' aria-label='smiling cowboy lol'>
+              🤠
+            </span>
+          </Typography>
+
+          {/* EMAIL */}
+
+          <PaddedTextField
+            inputProps={{ className: style.input }}
+            InputLabelProps={{
+              shrink: true
+            }}
+            className={style.formLabel}
+            id='forgot_password__email'
+            type='email'
+            placeholder={intl.formatMessage({ id: 'email' })}
+            // label={intl.formatMessage({ id: 'email' })}
+            name='email'
+            value={email}
+            onChange={handleChange}
+            required
+            variant='outlined'
+            fullWidth
+          />
+
+          <span>
+            <Fab type='submit' variant='extended' className={style.submit} color='primary'>
+              {intl.formatMessage({ id: 'sendCode' })}
+            </Fab>
           </span>
-        </Typography>
+        </form>
+      ) : (
+        <form onSubmit={handleResetPassword} className={classes.form}>
+          <CursorTypography component='h1' variant='h5'>
+            'Reset Password'
+          </CursorTypography>
 
-        {/* EMAIL */}
+          <Typography
+            variant='subtitle2'
+            style={{ width: '75%', textAlign: 'center' }}
+            gutterBottom
+          >
+            Check your email (<span style={{ fontWeight: 'bold' }}>{email}</span>) to get the
+            confirmation code for resetting your password.
+          </Typography>
 
-        <PaddedTextField
-          inputProps={{ className: style.input }}
-          InputLabelProps={{
-            shrink: true
-          }}
-          className={style.formLabel}
-          id='forgot_password__email'
-          type='email'
-          placeholder={intl.formatMessage({ id: 'email' })}
-          // label={intl.formatMessage({ id: 'email' })}
-          name='email'
-          value={email}
-          onChange={handleChange}
-          required
-          variant='outlined'
-          fullWidth
-        />
+          {/* CONFIRMATION CODE */}
 
-        <span>
-          <Fab type='submit' variant='extended' className={style.submit} color='primary'>
-            {intl.formatMessage({ id: 'sendCode' })}
-          </Fab>
-        </span>
-      </form>
-      <form onSubmit={(e) => handleResetPassword(e)} className={classes.form}>
-        {/* CONFIRMATION CODE */}
+          <PaddedTextField
+            inputProps={{ className: style.input }}
+            InputLabelProps={{
+              shrink: true
+            }}
+            className={style.formLabel}
+            id='forgot_password__confirmationCode'
+            placeholder={intl.formatMessage({ id: 'confirmationCode' })}
+            name='confirmationCode'
+            value={confirmationCode}
+            onChange={handleChange}
+            required
+            variant='outlined'
+            fullWidth
+          />
 
-        <PaddedTextField
-          inputProps={{ className: style.input }}
-          InputLabelProps={{
-            shrink: true
-          }}
-          className={style.formLabel}
-          id='forgot_password__confirmationCode'
-          placeholder={intl.formatMessage({ id: 'confirmationCode' })}
-          name='confirmationCode'
-          value={confirmationCode}
-          onChange={handleChange}
-          required
-          variant='outlined'
-          fullWidth
-        />
+          {/* NEW PASSWORD */}
 
-        {/* NEW PASSWORD */}
+          <PaddedTextField
+            inputProps={{ className: style.input }}
+            InputLabelProps={{
+              shrink: true
+            }}
+            className={style.formLabel}
+            id='forgot_password__newPassword'
+            type='password'
+            placeholder={intl.formatMessage({ id: 'newPassword' })}
+            name='newPassword'
+            value={newPassword}
+            onChange={handleChange}
+            required
+            variant='outlined'
+            fullWidth
+          />
 
-        <PaddedTextField
-          inputProps={{ className: style.input }}
-          InputLabelProps={{
-            shrink: true
-          }}
-          className={style.formLabel}
-          id='forgot_password__newPassword'
-          type='password'
-          placeholder={intl.formatMessage({ id: 'newPassword' })}
-          name='newPassword'
-          value={newPassword}
-          onChange={handleChange}
-          required
-          variant='outlined'
-          fullWidth
-        />
+          {/* RESET PASSWORD BUTTON */}
 
-        {/* RESET PASSWORD BUTTON */}
+          <span>
+            <Fab type='submit' variant='extended' className={style.submit} color='primary'>
+              {intl.formatMessage({ id: 'resetPassword' })}
+            </Fab>
+          </span>
 
-        <span>
-          <Fab type='submit' variant='extended' className={style.submit} color='primary'>
-            {intl.formatMessage({ id: 'resetPassword' })}
-          </Fab>
-        </span>
-
-        <span
-          className={style.links}
-          style={{
-            display: 'flex',
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'baseline',
-            marginBottom: '2%'
-          }}
-        >
-          <Link to='/login' variant='body2'>
-            {intl.formatMessage({ id: 'loginPromptForgotPassword' })}
-          </Link>
-        </span>
-      </form>
+          <span
+            className={style.links}
+            style={{
+              display: 'flex',
+              width: '100%',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'baseline',
+              marginBottom: '2%'
+            }}
+          >
+            <Link to='/login' variant='body2'>
+              {intl.formatMessage({ id: 'loginPromptForgotPassword' })}
+            </Link>
+          </span>
+        </form>
+      )}
     </div>
   )
 

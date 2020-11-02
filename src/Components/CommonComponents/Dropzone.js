@@ -10,8 +10,7 @@ import useUser from '../../Hooks/useUser'
 
 const useStyles = makeStyles((theme) => ({
   content: {
-    // margin: theme.spacing(4),
-    paddingTop: 0,
+    width: '100%',
     '& .MuiDropzoneArea-text': {
       fontSize: '1.2rem',
       margin: theme.spacing(3)
@@ -55,8 +54,12 @@ function Dropzone({ img, initialFile }) {
 
   // Dialog state
   const [files, setFiles] = useState(initialFile ? [initialFile] : [])
-  const [fileName, setFileName] = useState('')
-  const [fileExtension, setFileExtension] = useState('')
+  const [fileName, setFileName] = useState(
+    initialFile ? initialFile.file.name.substring(0, initialFile.file.name.lastIndexOf('.')) : ''
+  )
+  const [fileExtension, setFileExtension] = useState(
+    initialFile ? initialFile.file.name.split('.').pop() : ''
+  )
   const [loading, setLoading] = useState(false)
 
   // Max files that can be uploaded
@@ -160,7 +163,7 @@ function Dropzone({ img, initialFile }) {
 
       {/* File name */}
       {!loading ? (
-        <Grid container spacing={1}>
+        <Grid container spacing={1} justify='center' alignItems='center'>
           <Grid item xs={8}>
             <TextField
               variant='standard'
@@ -185,7 +188,9 @@ function Dropzone({ img, initialFile }) {
           </Grid>
         </Grid>
       ) : (
-        <Loading message='Uploading...' />
+        <Grid container justify='center' alignItems='center'>
+          <Loading message='Uploading...' />
+        </Grid>
       )}
     </div>
   )

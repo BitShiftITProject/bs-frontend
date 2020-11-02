@@ -4,6 +4,7 @@ import { getTheme } from '../../Themes/themes'
 import { getPortfolio } from '../../Backend/Fetch'
 import { useLocation } from 'react-router-dom'
 import { useStore } from '../../Hooks/Store'
+import usePortfolio from '../../Hooks/usePortfolio'
 
 const portfolioIdSelector = (state) => state.portfolioId
 
@@ -14,48 +15,33 @@ export const PublicThemesContext = createContext({
 })
 
 const PublicThemesProvider = ({ children }) => {
-  // Get current public portfolio URL
-  const { pathname } = useLocation()
-
   // Theme name to get Theme object
   const [themeName, setThemeName] = useState('light')
   const portfolioId = useStore(portfolioIdSelector)
+  const { data: currentPortfolio } = usePortfolio(portfolioId)
 
   useEffect(() => {
     async function getCurrentPortfolioTheme() {
       // Gets the current theme from the portfolio object of the current
       // portfolio in the URL
 
-      const path = pathname.split('/')
-
-      if (path[1] === 'public') {
-        const publicPortfolioId = path[2]
-        const currentPortfolio = await getPortfolio(publicPortfolioId)
-        const theme =
-          currentPortfolio.theme || currentPortfolio.theme !== 'undefined'
-            ? currentPortfolio.theme
-            : null || window.sessionStorage.getItem('publicTheme') || 'light'
-        return theme
-      }
-
-      // Gets the current theme from local storage
-      const currentPortfolio = await getPortfolio(portfolioId)
-
-      const theme =
-        currentPortfolio.theme || currentPortfolio.theme !== 'undefined'
+      const theme = currentPortfolio
+        ? currentPortfolio.theme || currentPortfolio.theme !== undefined
           ? currentPortfolio.theme
           : null || window.sessionStorage.getItem('publicTheme') || 'light'
+        : window.sessionStorage.getItem('publicTheme') || 'light'
 
       return theme
     }
 
     if (portfolioId) {
       getCurrentPortfolioTheme().then((theme) => {
+        // console.log('Theme:', theme)
         window.sessionStorage.setItem('publicTheme', theme)
         setThemeName(theme)
       })
     }
-  }, [pathname, portfolioId])
+  }, [portfolioId, currentPortfolio])
 
   // Gets the Theme object, which will be passed into Material-UI ThemeProvider
   const theme = getTheme(themeName)

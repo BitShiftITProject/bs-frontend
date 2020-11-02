@@ -185,6 +185,7 @@ function Login(props) {
           name='email'
           autoComplete='email'
           autoFocus
+          value={email}
           onChange={handleChange}
         />
         {/* Password */}
@@ -203,6 +204,7 @@ function Login(props) {
           type={showPassword ? 'text' : 'password'}
           id='password'
           autoComplete='current-password'
+          value={password}
           onChange={handleChange}
           InputProps={{
             // this is where the toggle button is added
@@ -254,7 +256,13 @@ function Login(props) {
           variant='extended'
           className={style.submit}
           color='primary'
-          style={{ width: '100%' }}
+          style={{
+            width: '100%'
+            // '& .MuiFab-label .Mui .MuiCircularProgress-root': {
+            //   maxWidth: '20px !important',
+            //   maxHeight: '20px !important'
+            // }
+          }}
         >
           {!loading ? (
             intl.formatMessage({ id: 'login' })

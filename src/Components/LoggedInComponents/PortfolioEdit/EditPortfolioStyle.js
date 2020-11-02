@@ -16,6 +16,7 @@ import { useIntl } from 'react-intl'
 import useEditPortfolio from '../../../Hooks/useEditPortfolio'
 import { useQueryCache } from 'react-query'
 import { useStore } from '../../../Hooks/Store'
+import usePortfolio from '../../../Hooks/usePortfolio'
 
 const portfolioIdSelector = (state) => state.portfolioId
 
@@ -46,7 +47,7 @@ export default function EditPortfolioStyle() {
   const { publicTheme, setPublicTheme } = useContext(PublicThemesContext)
 
   const portfolioId = useStore(portfolioIdSelector)
-  const portfolio = useQueryCache().getQueryData(['portfolios', portfolioId])
+  // const portfolio = usePortfolio(portfolioId)
   const [editPortfolio] = useEditPortfolio()
 
   function handleThemeChange(e) {
@@ -59,7 +60,7 @@ export default function EditPortfolioStyle() {
     const titleCase = e.target.value.replace(/([A-Z])/g, ' $1')
     const themeName = titleCase.charAt(0).toUpperCase() + titleCase.slice(1)
 
-    editPortfolio({ portfolioId: portfolio.id, patchDetails })
+    editPortfolio({ portfolioId: portfolioId, patchDetails })
 
     enqueueSnackbar(intl.formatMessage({ id: 'changedPortfolioTheme' }, { themeName }), {})
   }

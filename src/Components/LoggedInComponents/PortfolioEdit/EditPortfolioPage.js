@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { CssBaseline, Grid } from '@material-ui/core'
 import Sidebar from '../Sidebar'
@@ -8,8 +8,11 @@ import EditPortfolioStyle from './EditPortfolioStyle'
 import PublicThemesProvider from '../../Contexts/PublicThemesContext'
 import ThemesProvider from '../../Contexts/ThemesContext'
 import { useStore } from '../../../Hooks/Store'
+import shallow from 'zustand/shallow'
+import usePortfolios from '../../../Hooks/usePortfolios'
+import { useQueryCache } from 'react-query'
 
-const setPortfolioIdSelector = (state) => state.setPortfolioId
+const portfolioIdSelector = ({ portfolioId, setPortfolioId }) => [portfolioId, setPortfolioId]
 
 export default function EditPortfolioPage() {
   /* -------------------------------------------------------------------------- */
@@ -17,7 +20,15 @@ export default function EditPortfolioPage() {
   /* -------------------------------------------------------------------------- */
 
   const [editMode, setEditMode] = useState('content')
-  const setPortfolioId = useStore(setPortfolioIdSelector)
+  const [portfolioId, setPortfolioId] = useStore(useCallback(portfolioIdSelector, []), shallow)
+  const user = useQueryCache().getQueryData('user')
+  const { status: portfoliosStatus } = usePortfolios(user)
+
+  useEffect(() => {
+    if (!portfolioId) {
+      window.location.href = '/portfolios'
+    }
+  }, [portfolioId])
 
   useEffect(() => {
     return () => setPortfolioId(null)

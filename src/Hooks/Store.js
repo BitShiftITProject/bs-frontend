@@ -1,8 +1,10 @@
 import create from 'zustand'
 import produce from 'immer'
 
+// Copied from zustand docs to easily change nested state
 export const immer = (config) => (set, get, api) => config((fn) => set(produce(fn)), get, api)
 
+// Used in login, signup, forgot password forms
 const formStore = (set) => ({
   email: '',
   password: '',
@@ -24,11 +26,13 @@ const formStore = (set) => ({
     })
 })
 
+// "Global" client-side state
 const store = (set) => ({
-  portfolioId: null,
+  portfolioId: localStorage.getItem('portfolioId') || null,
   setPortfolioId: (id) =>
     set((state) => {
       // console.log('Changed Portfolio ID to:', id)
+      localStorage.setItem('portfolioId', id)
       state.portfolioId = id
     }),
   pageId: null,
@@ -37,23 +41,6 @@ const store = (set) => ({
       // console.log('Changed Page ID to:', id)
       state.pageId = id
     }),
-  // sections: {},
-  // modifySection: (sectionIndex, elementIndex, name, value) =>
-  //   set((state) => {
-  //     if (state.pageId) {
-  //       // Create the copy of the n-th element with the new data
-  //       const newElement = { id: name, data: value }
-
-  //       // Replaces the element at the given index with the new element
-  //       const newSection = Array.from(state.sections[state.pageId][sectionIndex])
-  //       newSection.splice(elementIndex, 1, newElement)
-
-  //       const newPage = Array.from(state.sections[state.pageId])
-  //       newPage.splice(sectionIndex, 1, newSection)
-
-  //       state.sections = { ...state.sections, [state.pageId]: newPage }
-  //     }
-  //   }),
 
   loading: false,
   setLoading: (value) =>
@@ -74,6 +61,10 @@ const store = (set) => ({
     }),
 
   currentElement: null,
+  setCurrentElement: (element) =>
+    set((state) => {
+      state.currentElement = element
+    }),
 
   startEditingElement: (sectionIndex, elementIndex, element) =>
     set((state) => {
@@ -104,6 +95,10 @@ const store = (set) => ({
       const patchDetails = { content: { sections: newPageSections } }
 
       editPageFn({ pageId: state.pageId, patchDetails })
+    }),
+
+  finishEditingSection: () =>
+    set((state) => {
       state.sectionIndex = null
       state.elementIndex = 0
       state.currentElement = null

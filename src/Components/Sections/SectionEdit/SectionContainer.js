@@ -18,7 +18,11 @@ import usePage from '../../../Hooks/usePage'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    padding: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing(1),
     // marginBottom: theme.spacing(2),
     borderRadius: 15,
     // backgroundColor: theme.palette.background.paperLight,
@@ -82,10 +86,11 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   middle: {
+    height: '100%',
     display: 'flex',
     alignItems: 'center',
-
-    justifyContent: 'center'
+    justifyContent: 'flex-start',
+    marginRight: 8
   }
 }))
 
@@ -149,100 +154,102 @@ function SectionContainer({ children, sectionIndex }) {
   }
 
   return (
-    <Grid container direction='row' justify='space-between' className={classes.container}>
-      {/* -------------------------------------------------------------------------- */}
-      <Grid item xs={1} className={classes.middle}>
-        <DragHandleIcon
-        // style={{'&:hover': {cursor: 'drag'}, '&:active': {cursor: 'dragging'}}}
-        />
-      </Grid>
-      {/* SECTION LABEL AND SECTION ELEMENTS */}
-
-      <Grid item xs={9} md={10} container direction='column'>
-        {children}
-      </Grid>
-
+    <div className={classes.container}>
       {/* -------------------------------------------------------------------------- */}
 
-      {/* SECTION ACTION BUTTONS */}
+      {/* SECTION ELEMENTS */}
+      <div className={classes.middle}>
+        <span style={{ transform: 'rotate(90deg)', color: ' rgba(0, 0, 0, 0.3)' }}>
+          <DragHandleIcon />
+        </span>
+      </div>
 
-      <Grid
-        item
-        xs={2}
-        md={1}
-        container
-        direction='column'
-        justify='flex-start'
-        alignItems='flex-end'
-        spacing={3}
-        className={classes.sectionIcons}
-      >
-        {/* -------------------------------------------------------------------------- */}
-        {/* EDIT AND DELETE BUTTON */}
-        {!confirmDelete && (
-          <>
-            <Tooltip
-              PopperProps={{ className: classes.tooltip }}
-              title={intl.formatMessage({ id: 'edit' })}
-              placement='right'
-            >
-              <Fab
-                size='small'
-                color='primary'
-                onClick={() => startEditingSection(sectionIndex)}
-                className={classes.editIcon}
-              >
-                <CreateTwoToneIcon />
-              </Fab>
-            </Tooltip>
-            <Tooltip
-              PopperProps={{ className: classes.tooltip }}
-              title={intl.formatMessage({ id: 'delete' })}
-              placement='right'
-            >
-              <Fab
-                size='small'
-                color='primary'
-                onClick={() => setConfirmDelete(true)}
-                className={classes.deleteIcon}
-              >
-                <DeleteTwoToneIcon />
-              </Fab>
-            </Tooltip>
-          </>
-        )}
+      <Grid container direction='row' justify='space-between'>
+        <Grid item xs={10}>
+          {children}
+        </Grid>
 
         {/* -------------------------------------------------------------------------- */}
-        {/* CONFIRM DELETE AND CANCEL BUTTONS */}
-        {/* After clicking the delete button once, we can confirm delete or opt to
-         * cancel the delete action to the section. */}
 
-        {confirmDelete && (
-          <>
-            <Tooltip
-              PopperProps={{ className: classes.tooltip }}
-              title={intl.formatMessage({ id: 'cancel' })}
-              placement='right'
-            >
-              {/* CANCEL DELETE BUTTON */}
-              <Fab size='small' onClick={() => setConfirmDelete(false)}>
-                <CloseTwoToneIcon />
-              </Fab>
-            </Tooltip>
-            <Tooltip
-              PopperProps={{ className: classes.tooltip }}
-              title={intl.formatMessage({ id: 'confirmDelete' })}
-              placement='right'
-            >
-              {/* CONFIRM DELETE BUTTON */}
-              <Fab size='small' onClick={deleteSection} className={classes.confirmDeleteIcon}>
-                <DeleteForeverTwoToneIcon />
-              </Fab>
-            </Tooltip>
-          </>
-        )}
+        {/* SECTION ACTION BUTTONS */}
+
+        <Grid
+          item
+          xs={2}
+          container
+          direction='column'
+          justify='flex-start'
+          alignItems='flex-end'
+          spacing={3}
+          className={classes.sectionIcons}
+        >
+          {/* -------------------------------------------------------------------------- */}
+          {/* EDIT AND DELETE BUTTON */}
+          {!confirmDelete && (
+            <>
+              <Tooltip
+                PopperProps={{ className: classes.tooltip }}
+                title={intl.formatMessage({ id: 'edit' })}
+                placement='right'
+              >
+                <Fab
+                  size='small'
+                  color='primary'
+                  onClick={() => startEditingSection(sectionIndex)}
+                  className={classes.editIcon}
+                >
+                  <CreateTwoToneIcon />
+                </Fab>
+              </Tooltip>
+              <Tooltip
+                PopperProps={{ className: classes.tooltip }}
+                title={intl.formatMessage({ id: 'delete' })}
+                placement='right'
+              >
+                <Fab
+                  size='small'
+                  color='primary'
+                  onClick={() => setConfirmDelete(true)}
+                  className={classes.deleteIcon}
+                >
+                  <DeleteTwoToneIcon />
+                </Fab>
+              </Tooltip>
+            </>
+          )}
+
+          {/* -------------------------------------------------------------------------- */}
+          {/* CONFIRM DELETE AND CANCEL BUTTONS */}
+          {/* After clicking the delete button once, we can confirm delete or opt to
+           * cancel the delete action to the section. */}
+
+          {confirmDelete && (
+            <>
+              <Tooltip
+                PopperProps={{ className: classes.tooltip }}
+                title={intl.formatMessage({ id: 'cancel' })}
+                placement='right'
+              >
+                {/* CANCEL DELETE BUTTON */}
+                <Fab size='small' onClick={() => setConfirmDelete(false)}>
+                  <CloseTwoToneIcon />
+                </Fab>
+              </Tooltip>
+              <Tooltip
+                PopperProps={{ className: classes.tooltip }}
+                title={intl.formatMessage({ id: 'confirmDelete' })}
+                placement='right'
+              >
+                {/* CONFIRM DELETE BUTTON */}
+                <Fab size='small' onClick={deleteSection} className={classes.confirmDeleteIcon}>
+                  <DeleteForeverTwoToneIcon />
+                </Fab>
+              </Tooltip>
+            </>
+          )}
+        </Grid>
       </Grid>
-    </Grid>
+    </div>
   )
 }
 

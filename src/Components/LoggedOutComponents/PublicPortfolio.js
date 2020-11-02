@@ -8,6 +8,7 @@ import useEditPortfolio from '../../Hooks/useEditPortfolio'
 import { useStore } from '../../Hooks/Store'
 
 const setPageIdSelector = (state) => state.setPageId
+const setPortfolioIdSelector = (state) => state.setPortfolioId
 
 function PublicPortfolio() {
   // Store the details of a portfolio so that we can use it later
@@ -17,6 +18,7 @@ function PublicPortfolio() {
   const { data: pages } = usePages(portfolioId)
   const [editPortfolio] = useEditPortfolio()
   const setPageId = useStore(setPageIdSelector)
+  const setPortfolioId = useStore(setPortfolioIdSelector)
 
   useEffect(() => {
     if (portfolioStatus === 'success' && !portfolio) {
@@ -26,6 +28,8 @@ function PublicPortfolio() {
 
   useEffect(() => {
     if (portfolioId && portfolio && pages) {
+      setPortfolioId(portfolioId)
+
       const pageOrder = portfolio.pageOrder
 
       if (!pageOrder) {
@@ -43,10 +47,10 @@ function PublicPortfolio() {
         window.location.href = '/publicfailed'
       }
     }
-  }, [editPortfolio, setPageId, pageIndex, pages, portfolio, portfolioId])
+  }, [editPortfolio, setPageId, pageIndex, pages, portfolio, portfolioId, setPortfolioId])
 
   return (
-    <div>
+    <div style={{ height: '100%' }}>
       {portfolio && pages ? (
         <PublicSidebar pages={pages} />
       ) : (
@@ -56,54 +60,6 @@ function PublicPortfolio() {
       )}
     </div>
   )
-  // ;<>
-  //   {portfolio && pages ? (
-  //     <PublicSidebar />
-  //   ) : (
-  //     <div style={{ height: '100vh' }}>
-  //       <Loading vertical />
-  //     </div>
-  //   )}
-  // </div>
-  // // If the portfolioDetails does not equal null then we have found one
-  // if (state.portfolioPages) {
-  //   // Array for storing JSX of sections to be displayed
-  //   let sectionsJSX = null
-  //   // If the sections array is present in the pages data then create the section JSX
-  //   if (state.portfolioPages[state.pageIndex].content.sections) {
-  //     sectionsJSX = (
-  //       <SectionsList
-  //         sections={state.portfolioPages[state.pageIndex].content.sections}
-  //         editing={false}
-  //       />
-  //     )
-  //   }
-  //   // Check to see if the page has sections or is the old formatting
-  //   const pageContent = state.portfolioPages[state.pageIndex].content.sections ? (
-  //     sectionsJSX
-  //   ) : (
-  //     <p>Loading...</p>
-  //   )
-
-  //   return (
-  //     // Display sidebar with pages data and section content
-  //     <PublicSidebar
-  //       pages={state.portfolioPages}
-  //       content={pageContent}
-  //       handlePageChange={handlePageChange}
-  //     />
-  //   )
-  // }
-  // // If portfolioDetails is null we are still fetching the portfolio
-  // // We don't have to be worried about getting stuck since if getPortfolio() returns null
-  // // Then it automatically redirects to /publicfailed
-  // else {
-  //   return (
-  // <div style={{ height: '100vh' }}>
-  //   <Loading vertical />
-  // </div>
-  //   )
-  // }
 }
 
 export default PublicPortfolio

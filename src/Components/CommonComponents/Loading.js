@@ -12,7 +12,7 @@ export default function Loading({ message, vertical }) {
       alignItems='center'
       spacing={2}
     >
-      <Grid item>
+      <Grid item style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <CircularProgress color='secondary' />
       </Grid>
       <Grid item>

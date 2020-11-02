@@ -74,7 +74,7 @@ const currentElementSelector = ({ currentElement, editCurrentElement }) => [
 //   - A section template, wrapped in the ExampleSection, where the 'data'
 //     attribute is null
 
-export const Text = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
+export const Text = React.memo(({ editing, data }) => {
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
@@ -90,7 +90,7 @@ export const Text = React.memo(({ name, editing, data, sectionIndex, elementInde
   return rendered
 })
 
-export const MediaPlayer = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
+export const MediaPlayer = React.memo(({ editing, data }) => {
   const [currentElement, editCurrentElement] = useStore(
     useCallback(currentElementSelector, []),
     shallow
@@ -111,7 +111,6 @@ export const MediaPlayer = React.memo(({ name, editing, data, sectionIndex, elem
         onChange={handleChange}
         fullWidth
         multiline
-        id={name}
         variant='outlined'
         label='Media URL'
         helperText={
@@ -119,14 +118,16 @@ export const MediaPlayer = React.memo(({ name, editing, data, sectionIndex, elem
         }
       />
     )
-  ) : (
+  ) : data !== '' ? (
     <ReactPlayer url={data} controls width='100%' />
+  ) : (
+    <div style={{ height: 0 }}></div>
   )
 
   return rendered
 })
 
-export const YoutubeVideo = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
+export const YoutubeVideo = React.memo(({ editing, data }) => {
   const [currentElement, editCurrentElement] = useStore(
     useCallback(currentElementSelector, []),
     shallow
@@ -148,7 +149,6 @@ export const YoutubeVideo = React.memo(({ name, editing, data, sectionIndex, ele
           onChange={handleChange}
           fullWidth
           multiline
-          id={name}
           variant='outlined'
         />
       </Tooltip>
@@ -160,7 +160,7 @@ export const YoutubeVideo = React.memo(({ name, editing, data, sectionIndex, ele
   return rendered
 })
 
-export const Image = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
+export const Image = React.memo(({ editing, data }) => {
   // The data being passed to the useMediaItem functions is the S3 key of the
   // image
   const { data: mediaItem } = useMediaItem(data)
@@ -176,18 +176,6 @@ export const Image = React.memo(({ name, editing, data, sectionIndex, elementInd
       // Make typography on the right show file name
       // Show button and typography in line
       <Grid container direction='row' spacing={2} justify='center' alignItems='center'>
-        {/* <Grid item>
-          {!file ? (
-            <p>Loading...</p>
-          ) : (
-            <Dropzone img initialFile={file === '' ? null : file} />
-          )}
-        </Grid>
-        <Grid item>
-          <Typography variant='h6'>
-            {mediaItem && mediaItem.public_name ? mediaItem.public_name : 'No File Uploaded'}
-          </Typography>
-        </Grid> */}
         <Dropzone
           img
           initialFile={
@@ -221,7 +209,7 @@ export const Image = React.memo(({ name, editing, data, sectionIndex, elementInd
   return rendered
 })
 
-export const File = React.memo(({ name, editing, data, sectionIndex, elementIndex }) => {
+export const File = React.memo(({ editing, data }) => {
   // The data being passed to the useMediaItem functions is the S3 key of the
   // file
   const { data: mediaItem } = useMediaItem(data)
@@ -252,23 +240,6 @@ export const File = React.memo(({ name, editing, data, sectionIndex, elementInde
       // Make typography on the right show file name
       // Show button and typography in line
       <Grid container direction='row' spacing={2} justify='center' alignItems='center'>
-        {/* <Grid item>
-          {file === null ? (
-            <p>Loading...</p>
-          ) : (
-            <Dropzone
-              sectionIndex={sectionIndex}
-              elementIndex={elementIndex}
-              elementName={name}
-              initialFile={file === '' ? null : file}
-            />
-          )}
-        </Grid>
-        <Grid item>
-          <Typography variant='h6'>
-            {mediaItem && mediaItem.public_name ? mediaItem.public_name : 'No File Uploaded'}
-          </Typography>
-        </Grid> */}
         <Dropzone
           initialFile={
             !file || file === ''
@@ -287,24 +258,33 @@ export const File = React.memo(({ name, editing, data, sectionIndex, elementInde
     )
   ) : (
     // Get file before showing
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justify: 'center',
-        alignItems: 'center'
-      }}
-    >
-      <span
-        onClick={handleClick}
-        style={{ display: 'flex', justify: 'center', alignItems: 'center' }}
-      >
-        <GetAppIcon className={classes.fileUploadIcon} />
-        <Link className={classes.fileUpload}>
-          {mediaItem && mediaItem.public_name ? mediaItem.public_name : 'No File Uploaded'}
-        </Link>
-      </span>
+    <div>
+      {file && (
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <span
+            onClick={handleClick}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: 100
+            }}
+          >
+            <GetAppIcon className={classes.fileUploadIcon} />
+            <Link className={classes.fileUpload}>
+              {mediaItem && mediaItem.public_name ? mediaItem.public_name : 'No File Uploaded'}
+            </Link>
+          </span>
+        </div>
+      )}
     </div>
   )
 

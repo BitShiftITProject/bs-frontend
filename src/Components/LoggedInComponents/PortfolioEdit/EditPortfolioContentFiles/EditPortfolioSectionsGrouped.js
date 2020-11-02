@@ -15,7 +15,9 @@ import { useSnackbar } from 'notistack'
 
 const pageIdSelector = (state) => state.pageId
 const currentElementSelector = (state) => state.currentElement
-const finishEditingSelector = (state) => state.finishEditingElement
+const startEditingElementSelector = (state) => state.startEditingElement
+const finishEditingElementSelector = (state) => state.finishEditingElement
+const finishEditingSectionSelector = (state) => state.finishEditingSection
 const loadingSelector = ({ loading, setLoading }) => [loading, setLoading]
 
 /* Pages and adding/removing pages part of the editing portfolio*/
@@ -64,52 +66,36 @@ function EditPortfolioSectionsGrouped() {
   }, [currentPage, enqueueSnackbar, intl, setLoading])
 
   /* -------------------------------------------------------------------------- */
-  /*                               Action Buttons                               */
-  /* -------------------------------------------------------------------------- */
-
-  const sectionButtons = (
-    <Grid
-      item
-      xs={2}
-      style={{ minWidth: '100%' }}
-      container
-      spacing={2}
-      direction='row'
-      justify='flex-end'
-      alignItems='center'
-      className={classes.floatingBottomContainer}
-    >
-      <Grid item className={classes.fabProgressContainer}>
-        <Fab
-          disabled={loading}
-          style={!pageId ? { visibility: 'hidden' } : {}}
-          color='secondary'
-          variant='extended'
-          onClick={handleSaveSections}
-        >
-          <CursorTypography variant='button'>
-            {intl.formatMessage({ id: 'saveSections' })}
-          </CursorTypography>
-        </Fab>
-        {loading && <CircularProgress size={24} className={classes.fabProgress} />}
-      </Grid>
-
-      <Grid item></Grid>
-      <SectionsButton />
-    </Grid>
-  )
-
-  /* -------------------------------------------------------------------------- */
   /*                        Edit Section Elements Dialog                        */
   /* -------------------------------------------------------------------------- */
 
   const [editPage] = useEditPage()
-  const finishEditingElement = useStore(useCallback(finishEditingSelector, []))
+  const startEditingElement = useStore(useCallback(startEditingElementSelector, []))
+  const finishEditingElement = useStore(useCallback(finishEditingElementSelector, []))
+  const finishEditingSection = useStore(useCallback(finishEditingSectionSelector, []))
 
-  const handleFinishEditingElement = useCallback(() => {
+  // const handleFinishEditingElement = useCallback(() => {
+  //   finishEditingElement(currentPage, editPage)
+  //   handleSaveSections()
+  // }, [currentPage, editPage, finishEditingElement, handleSaveSections])
+
+  const handleEditAnotherElement = useCallback(
+    (sectionIndex, elementIndex) => {
+      finishEditingElement(currentPage, editPage)
+      startEditingElement(
+        sectionIndex,
+        elementIndex,
+        currentPage.content.sections[sectionIndex][elementIndex]
+      )
+    },
+    [currentPage, finishEditingElement, startEditingElement, editPage]
+  )
+
+  const handleClose = useCallback(() => {
     finishEditingElement(currentPage, editPage)
+    finishEditingSection()
     handleSaveSections()
-  }, [currentPage, editPage, finishEditingElement, handleSaveSections])
+  }, [finishEditingSection, finishEditingElement, handleSaveSections])
 
   return (
     <Grid item xs={12} md={8} lg={9}>
@@ -118,7 +104,7 @@ function EditPortfolioSectionsGrouped() {
          * PAGE SECTIONS
          */}
 
-        {!pageId ? (
+        {!pageId && (
           <Grid
             item
             xs={12}
@@ -131,13 +117,14 @@ function EditPortfolioSectionsGrouped() {
               Select a page to start editing your portfolio
             </CursorTypography>
           </Grid>
-        ) : (
-          <div style={{ minHeight: '100%' }}>
+        )}
+        {pageId && (
+          <Grid container direction='column' style={{ minHeight: '100%' }}>
             {/* If not currently editing an element from any section, show the sections of the current page */}
 
             {/* If there are sections in the current page, show the sections list */}
             {/* If there are NO sections in the current page, show the instruction on how to add a section */}
-            {currentPage && currentPage.content && currentPage.content.sections ? (
+            {currentPage && currentPage.content && currentPage.content.sections.length ? (
               <Grid
                 item
                 xs={10}
@@ -163,13 +150,45 @@ function EditPortfolioSectionsGrouped() {
                 </CursorTypography>
               </Grid>
             )}
-            {sectionButtons}
-          </div>
+
+            {/* -------------------------------------------------------------------------- */}
+            {/* SAVE AND ADD SECTIONS BUTTON */}
+
+            <Grid
+              item
+              xs={2}
+              style={{ minWidth: '100%' }}
+              container
+              spacing={2}
+              direction='row'
+              justify='flex-end'
+              alignItems='flex-end'
+              // className={classes.floatingBottomContainer}
+            >
+              <Grid item style={{ padding: 0 }} className={classes.fabProgressContainer}>
+                <Fab
+                  disabled={loading}
+                  style={!pageId ? { visibility: 'hidden' } : {}}
+                  color='secondary'
+                  variant='extended'
+                  onClick={handleSaveSections}
+                >
+                  <CursorTypography variant='button'>
+                    {intl.formatMessage({ id: 'saveSections' })}
+                  </CursorTypography>
+                </Fab>
+                {loading && <CircularProgress size={24} className={classes.fabProgress} />}
+              </Grid>
+
+              <Grid item></Grid>
+              <SectionsButton />
+            </Grid>
+          </Grid>
         )}
-        <Dialog open={currentElement !== null} onClose={handleFinishEditingElement}>
-          <EditSectionPage handleFinishEditingElement={handleFinishEditingElement} />
-        </Dialog>
       </Paper>
+      <Dialog open={currentElement !== null} onClose={handleClose}>
+        <EditSectionPage handleEditAnotherElement={handleEditAnotherElement} />
+      </Dialog>
     </Grid>
   )
 }

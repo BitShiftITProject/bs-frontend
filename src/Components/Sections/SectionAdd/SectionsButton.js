@@ -103,7 +103,7 @@ function SectionsButton() {
                   xs={12 / elements.length}
                   style={{ height: '100%', position: 'relative' }}
                 >
-                  {GetElementJSX(section, editing, idx)}
+                  {GetElementJSX(section, editing)}
                   <Fab
                     size='small'
                     style={{ transform: 'scale(0.9)', position: 'absolute', top: -10, right: -5 }}

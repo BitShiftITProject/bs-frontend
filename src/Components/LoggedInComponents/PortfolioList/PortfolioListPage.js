@@ -188,48 +188,54 @@ function PortfolioListPage(props) {
         {/*
          * TITLE
          */}
-        <DialogTitle id='form-dialog-title'>
+        <DialogTitle id='form-dialog-title' style={{ width: 500 }}>
           {intl.formatMessage({ id: 'sharePortfolio' })}
         </DialogTitle>
 
-        <DialogContent>
-          <Grid container direction='row' justify='center' alignItems='center' spacing={1}>
-            {/*
-             * URL LINK
-             */}
-            <Grid item>
-              <TextField
-                onFocus={(e) => e.target.select()}
-                onCopy={() => {
-                  navigator.clipboard.writeText(
-                    user ? `http://bs-frontend.herokuapp.com/${clickedPortfolio.id}` : ''
-                  )
-                  enqueueSnackbar(intl.formatMessage({ id: 'copiedURLToClipboard' }), {
-                    variant: 'info'
-                  })
-                  setOpen(false)
-                }}
-                variant='outlined'
-                label={intl.formatMessage({ id: 'url' })}
-                defaultValue={
-                  user ? `http://bs-frontend.herokuapp.com/public/${clickedPortfolio.id}/0` : ''
-                }
-                readOnly
-                className={classes.urlField}
-              />
-            </Grid>
-            {/*
-             * COPY URL BUTTON
-             */}
-            <Grid item>
-              <Tooltip title={intl.formatMessage({ id: 'copy' })} placement='top'>
-                <IconButton onClick={copyToClipboard}>
-                  <FilterNoneOutlinedIcon />
-                </IconButton>
-              </Tooltip>
-            </Grid>
+        <Grid
+          container
+          direction='row'
+          justify='center'
+          alignItems='center'
+          spacing={1}
+          style={{ padding: 16 }}
+        >
+          {/*
+           * URL LINK
+           */}
+          <Grid item xs={10}>
+            <TextField
+              onFocus={(e) => e.target.select()}
+              onCopy={() => {
+                navigator.clipboard.writeText(
+                  user ? `http://bs-frontend.herokuapp.com/${clickedPortfolio.id}` : ''
+                )
+                enqueueSnackbar(intl.formatMessage({ id: 'copiedURLToClipboard' }), {
+                  variant: 'info'
+                })
+                setOpen(false)
+              }}
+              variant='outlined'
+              label={intl.formatMessage({ id: 'url' })}
+              defaultValue={
+                user ? `http://bs-frontend.herokuapp.com/public/${clickedPortfolio.id}/0` : ''
+              }
+              readOnly
+              className={classes.urlField}
+              fullWidth
+            />
           </Grid>
-        </DialogContent>
+          {/*
+           * COPY URL BUTTON
+           */}
+          <Grid item xs={2}>
+            <Tooltip title={intl.formatMessage({ id: 'copy' })} placement='top'>
+              <IconButton onClick={copyToClipboard}>
+                <FilterNoneOutlinedIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        </Grid>
       </div>
     ),
     /* -------------------------------------------------------------------------- */

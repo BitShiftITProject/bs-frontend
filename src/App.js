@@ -37,7 +37,6 @@ export default function App() {
               <Redirect from='/public/:portfolio' to='/public/:portfolio/0' />
               <Route render={() => <Authentication />} />
             </Switch>
-            `
           </LocaleProvider>
         </CssBaseline>
         <ReactQueryDevtools initialIsOpen={false} />
