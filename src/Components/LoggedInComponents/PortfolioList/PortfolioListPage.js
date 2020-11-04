@@ -209,7 +209,7 @@ function PortfolioListPage(props) {
               onFocus={(e) => e.target.select()}
               onCopy={() => {
                 navigator.clipboard.writeText(
-                  user ? `http://bs-frontend.herokuapp.com/${clickedPortfolio.id}` : ''
+                  user ? `http://bs-frontend.herokuapp.com/public/${clickedPortfolio.id}/0` : ''
                 )
                 enqueueSnackbar(intl.formatMessage({ id: 'copiedURLToClipboard' }), {
                   variant: 'info'
