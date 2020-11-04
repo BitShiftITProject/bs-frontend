@@ -6,7 +6,7 @@ import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { signupCheck } from '../../Backend/Fetch'
 import SignupLoginData from './SignupLoginData'
-import { useFormStore } from '../../Store'
+import { useFormStore } from '../../Hooks/Store'
 
 function SignupForm() {
   /* -------------------------------------------------------------------------- */
@@ -107,7 +107,6 @@ function SignupForm() {
   const form = (
     <SignupLoginData
       handleChange={handleChange}
-      handleSubmit={handleSubmit}
       handleClickShowPassword={handleClickShowPassword}
     />
   )

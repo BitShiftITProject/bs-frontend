@@ -4,7 +4,7 @@ import { Fab, Grid } from '@material-ui/core'
 import DoneIcon from '@material-ui/icons/Done'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
-import { useFormStore } from '../../Store'
+import { useFormStore } from '../../Hooks/Store'
 
 export default function SignupVerifyEmail() {
   const email = useFormStore((state) => state.email)

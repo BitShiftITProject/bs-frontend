@@ -1,12 +1,14 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Editor } from '@tinymce/tinymce-react'
-import { PortfolioContext } from '../Contexts/PortfolioContext'
+import { useStore } from '../../Hooks/Store'
 
-export default function TextEditor({ sectionIndex, elementIndex, name, data }) {
-  const { modifySection } = useContext(PortfolioContext)
+const editElementFunction = (state) => state.editCurrentElement
+
+export default function TextEditor({ data }) {
+  const editCurrentElement = useStore(editElementFunction)
 
   function handleEditorChange(content, editor) {
-    modifySection(sectionIndex, elementIndex, name, content)
+    editCurrentElement(content)
   }
 
   return (
@@ -18,15 +20,16 @@ export default function TextEditor({ sectionIndex, elementIndex, name, data }) {
         height: 300,
         // width: 600,
         plugins:
-          'paste searchreplace autolink directionality link codesample table charmap hr insertdatetime advlist lists wordcount textpattern noneditable help emoticons',
+          'paste searchreplace autolink directionality link code codesample table charmap hr insertdatetime advlist lists wordcount textpattern noneditable help emoticons',
         // menubar: 'edit insert format table help',
         menubar: false,
         toolbar:
-          'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | forecolor backcolor | outdent indent |  numlist bullist | fontsizeselect formatselect | link codesample charmap emoticons ',
+          'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | forecolor backcolor | outdent indent |  numlist bullist | link codesample charmap emoticons | fontselect fontsizeselect formatselect ',
         toolbar_sticky: true,
         noneditable_noneditable_class: 'mceNonEditable',
         toolbar_mode: 'sliding',
-        contextmenu: 'link table'
+        contextmenu: 'link table',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
       }}
       onEditorChange={handleEditorChange}
     />

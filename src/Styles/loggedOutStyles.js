@@ -2,11 +2,23 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const loggedOutStyles = makeStyles((theme) => ({
   root: {
-    width: '100vw',
+    // width: '100vw',
     height: '100%',
     textTransform: 'lowercase'
   },
+
+  centerContainer: {
+    minHeight: '75vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
   paper: {
+    width: 425,
+    [theme.breakpoints.between('sm', 'xl')]: {
+      width: 500
+    },
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -48,6 +60,7 @@ const loggedOutStyles = makeStyles((theme) => ({
   },
 
   appBarTitle: {
+    color: theme.palette.text.primary,
     display: 'flex',
     cursor: 'pointer',
     alignItems: 'center',

@@ -3,21 +3,24 @@ import Authentication from './Authentication'
 import { CssBaseline } from '@material-ui/core'
 import { Route, Switch, Redirect } from 'react-router-dom'
 // import { Scrollbars } from 'react-custom-scrollbars'
+import { QueryCache, ReactQueryCacheProvider } from 'react-query'
+// import { ReactQueryDevtools } from 'react-query-devtools'
 
 import ThemesProvider from './Components/Contexts/ThemesContext'
 import LocaleProvider from './Components/Contexts/LocaleContext'
-import PortfolioProvider from './Components/Contexts/PortfolioContext'
 import PublicThemesProvider from './Components/Contexts/PublicThemesContext'
 
 import PublicPortfolio from './Components/LoggedOutComponents/PublicPortfolio'
 import PublicPortfolioFailed from './Components/LoggedOutComponents/PublicPortfolioFailed'
 
+const queryCache = new QueryCache()
+
 export default function App() {
   return (
-    <ThemesProvider>
-      <CssBaseline>
-        <LocaleProvider>
-          <PortfolioProvider>
+    <ReactQueryCacheProvider queryCache={queryCache}>
+      <ThemesProvider>
+        <CssBaseline>
+          <LocaleProvider>
             <Switch>
               <Route exact path='/publicfailed' render={() => <PublicPortfolioFailed />} />
               <Route
@@ -34,9 +37,9 @@ export default function App() {
               <Redirect from='/public/:portfolio' to='/public/:portfolio/0' />
               <Route render={() => <Authentication />} />
             </Switch>
-          </PortfolioProvider>
-        </LocaleProvider>
-      </CssBaseline>
-    </ThemesProvider>
+          </LocaleProvider>
+        </CssBaseline>
+      </ThemesProvider>
+    </ReactQueryCacheProvider>
   )
 }

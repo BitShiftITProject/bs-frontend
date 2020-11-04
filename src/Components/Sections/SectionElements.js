@@ -1,17 +1,40 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import ReactHtmlParser from 'react-html-parser'
 import YouTube from 'react-youtube'
-import { Grid, TextField, Typography, styled, Tooltip, Link, makeStyles } from '@material-ui/core'
+import {
+  Grid,
+  TextField,
+  Typography,
+  styled,
+  Tooltip,
+  Link,
+  makeStyles,
+  Slider,
+  Icon
+} from '@material-ui/core'
 import GetAppIcon from '@material-ui/icons/GetApp'
-import { PortfolioContext } from '../Contexts/PortfolioContext'
 
-import { getMediaItem, getFile, getDataUrl, getPage } from '../../Backend/Fetch'
-import DropzoneButton from '../../Components/CommonComponents/DropzoneButton'
+import TextFieldsIcon from '@material-ui/icons/TextFields'
+import ImageTwoToneIcon from '@material-ui/icons/ImageTwoTone'
+import PlayCircleFilledTwoToneIcon from '@material-ui/icons/PlayCircleFilledTwoTone'
+import AttachmentTwoToneIcon from '@material-ui/icons/AttachmentTwoTone'
+import HeightIcon from '@material-ui/icons/Height'
+
+// import { getMediaItem, getFile, getDataUrl } from '../../Backend/Fetch'
+import Dropzone from '../CommonComponents/Dropzone'
 
 import TextEditor from '../TextEditor'
+import { useStore } from '../../Hooks/Store'
+// import usePage from '../../Hooks/usePage'
+import useFile from '../../Hooks/useFile'
+import useMediaItem from '../../Hooks/useMediaItem'
+import ReactPlayer from 'react-player'
+import shallow from 'zustand/shallow'
 
 const text = 'Text'
+const spacer = 'Spacer'
 const youtubeVideo = 'Video'
+const mediaPlayer = 'Media Player'
 const image = 'Image'
 const fileUpload = 'File'
 
@@ -41,6 +64,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
+const currentElementSelector = ({ currentElement, editCurrentElement }) => [
+  currentElement,
+  editCurrentElement
+]
+
 /* -------------------------------------------------------------------------- */
 /*                              Section Elements                              */
 /* -------------------------------------------------------------------------- */
@@ -49,13 +77,10 @@ const useStyles = makeStyles((theme) => ({
 // section may be comprised of a Paragraph section element and a Title section
 // element.
 
-// Section elements are rendered in the MapSection function in SectionsMap.js,
+// Section elements are rendered in the MapSectionToJSX function in SectionsMap.js,
 // which maps section IDs to the corresponding components that makes up that
 // section.
 
-// For example, a section with the section ID 'headingTitle'  is mapped to
-// a single Title section element:
-//
 // - If it was rendered in the non-editing mode (i.e. in a public portfolio),
 //   it is shown as a Typography component with the section's data.
 //
@@ -65,24 +90,111 @@ const useStyles = makeStyles((theme) => ({
 //   - A section template, wrapped in the ExampleSection, where the 'data'
 //     attribute is null
 
-export const Text = ({ name, editing, data, sectionIndex, elementIndex }) => {
+export const Text = React.memo(({ editing, data }) => {
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
-        <Typography variant='h6'>{text}</Typography>
+        <Icon style={{ transform: 'scale(4)', color: 'grey' }}>
+          <TextFieldsIcon />
+        </Icon>
       </ExampleSection>
     ) : (
-      <TextEditor sectionIndex={sectionIndex} elementIndex={elementIndex} name={name} data={data} />
+      <TextEditor data={data} />
     )
   ) : (
-    <div>{ReactHtmlParser(data)}</div>
+    <div style={{ wordBreak: 'break-all' }}>{ReactHtmlParser(data)}</div>
   )
 
   return rendered
-}
+})
 
-export const YoutubeVideo = ({ name, editing, data, sectionIndex, elementIndex }) => {
-  const { sections, pageId, modifySection } = useContext(PortfolioContext)
+export const Spacer = React.memo(({ editing, data }) => {
+  const [currentElement, editCurrentElement] = useStore(
+    useCallback(currentElementSelector, []),
+    shallow
+  )
+
+  const handleChange = (e, value) => {
+    editCurrentElement(value)
+  }
+
+  const rendered = editing ? (
+    data === null ? (
+      <ExampleSection container>
+        <Icon style={{ transform: 'scale(4)', color: 'grey' }}>
+          <HeightIcon style={{ transform: 'rotate(90deg)' }} />
+        </Icon>
+      </ExampleSection>
+    ) : (
+      <Slider
+        defaultValue={currentElement.data}
+        onChangeCommitted={handleChange}
+        getAriaValueText={(value) => {
+          return value
+        }}
+        aria-labelledby='discrete-slider'
+        valueLabelDisplay='auto'
+        step={10}
+        marks
+        min={10}
+        max={100}
+      />
+    )
+  ) : (
+    <div id='empty' />
+  )
+
+  return rendered
+})
+
+export const MediaPlayer = React.memo(({ editing, data }) => {
+  const [currentElement, editCurrentElement] = useStore(
+    useCallback(currentElementSelector, []),
+    shallow
+  )
+
+  const handleChange = (e) => {
+    editCurrentElement(e.target.value)
+  }
+
+  const rendered = editing ? (
+    data === null ? (
+      <ExampleSection container>
+        <Icon style={{ transform: 'scale(4)', color: 'grey' }}>
+          <PlayCircleFilledTwoToneIcon />
+        </Icon>
+      </ExampleSection>
+    ) : (
+      <TextField
+        value={currentElement.data}
+        onChange={handleChange}
+        fullWidth
+        multiline
+        variant='outlined'
+        label='Media URL'
+        helperText={
+          'Supports YouTube, Facebook, Soundcloud, Vimeo, Dailymotion, and any URL linking to a video or audio file'
+        }
+      />
+    )
+  ) : data !== '' ? (
+    <ReactPlayer url={data} controls width='100%' />
+  ) : (
+    <div style={{ height: 0 }}></div>
+  )
+
+  return rendered
+})
+
+export const YoutubeVideo = React.memo(({ editing, data }) => {
+  const [currentElement, editCurrentElement] = useStore(
+    useCallback(currentElementSelector, []),
+    shallow
+  )
+
+  const handleChange = (e) => {
+    editCurrentElement(e.target.value)
+  }
 
   const rendered = editing ? (
     data === null ? (
@@ -92,11 +204,10 @@ export const YoutubeVideo = ({ name, editing, data, sectionIndex, elementIndex }
     ) : (
       <Tooltip placement='top' title='Video ID (See FAQ)'>
         <TextField
-          value={sections[pageId][sectionIndex][elementIndex].data}
-          onChange={(e) => modifySection(sectionIndex, elementIndex, name, e.target.value)}
+          value={currentElement.data}
+          onChange={handleChange}
           fullWidth
           multiline
-          id={name}
           variant='outlined'
         />
       </Tooltip>
@@ -106,176 +217,71 @@ export const YoutubeVideo = ({ name, editing, data, sectionIndex, elementIndex }
   )
 
   return rendered
-}
+})
 
-export const Image = ({ name, editing, data, sectionIndex, elementIndex }) => {
-  const { sections, pageId } = useContext(PortfolioContext)
-  const [imageName, setImageName] = useState('')
-  const [file, setFile] = useState(null)
-
-  useEffect(() => {
-    async function getNameOfImage() {
-      if (sections[pageId][sectionIndex][elementIndex].data === '') {
-        return 'No Image Uploaded'
-      } else {
-        const file = await getMediaItem(sections[pageId][sectionIndex][elementIndex].data)
-        if (!file) return 'No Image Uploaded'
-        return file.public_name
-      }
-    }
-    async function getUploadedFile() {
-      if (editing) {
-        if (sections[pageId][sectionIndex][elementIndex].data === '') {
-          return null
-        } else {
-          let file = await getFile(sections[pageId][sectionIndex][elementIndex].data)
-          return file
-        }
-      } else {
-        if (data === '') {
-          return null
-        } else {
-          let file = await getDataUrl(data)
-          return file
-        }
-      }
-    }
-
-    if (data != null) {
-      getUploadedFile().then((file) => {
-        file != null ? setFile(file) : setFile('')
-      })
-      if (editing) {
-        getNameOfImage().then((name) => {
-          console.log('Image Name:', name)
-          setImageName(name)
-        })
-      }
-    }
-  }, [data, editing, sectionIndex, elementIndex, name, pageId])
+export const Image = React.memo(({ editing, data }) => {
+  // The data being passed to the useMediaItem functions is the S3 key of the
+  // image
+  const { data: mediaItem } = useMediaItem(data)
+  const { data: file } = useFile(data, editing)
 
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
-        <Typography variant='h6'>{image}</Typography>
+        <Icon style={{ transform: 'scale(4)', color: 'grey' }}>
+          <ImageTwoToneIcon />
+        </Icon>
       </ExampleSection>
     ) : (
       // Open up file dialog with function related to changing this value
       // Make typography on the right show file name
       // Show button and typography in line
       <Grid container direction='row' spacing={2} justify='center' alignItems='center'>
-        <Grid item>
-          {file === null ? (
-            <p>Loading...</p>
-          ) : (
-            <DropzoneButton
-              img
-              sectionIndex={sectionIndex}
-              elementIndex={elementIndex}
-              elementName={name}
-              initialFile={file === '' ? null : file}
-            />
-          )}
-        </Grid>
-        <Grid item>
-          <Typography variant='h6'>{imageName}</Typography>
-        </Grid>
+        <Dropzone
+          img
+          initialFile={
+            !file || file === ''
+              ? null
+              : {
+                  data: file,
+                  file: {
+                    name: mediaItem.public_name,
+                    path: mediaItem.public_name,
+                    type: mediaItem.file_type
+                  }
+                }
+          }
+        />
       </Grid>
     )
   ) : (
     // Get image before showing
-    <img
-      style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto', maxWidth: '100%' }}
-      src={file}
-      alt={imageName}
-    />
+    <div>
+      {file && (
+        <img
+          style={{
+            display: 'block',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            maxWidth: '100%'
+          }}
+          src={file}
+          alt={mediaItem ? mediaItem.public_name : 'No File Uploaded'}
+        />
+      )}
+    </div>
   )
 
   return rendered
-}
+})
 
-export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
-  const { pageId, sections } = useContext(PortfolioContext)
-  const [fileName, setFileName] = useState('')
-  const [file, setFile] = useState(null)
-  const [page, setPage] = useState(null)
+export const File = React.memo(({ editing, data }) => {
+  // The data being passed to the useMediaItem functions is the S3 key of the
+  // file
+  const { data: mediaItem } = useMediaItem(data)
+  const { data: file } = useFile(data, editing)
 
   const classes = useStyles()
-
-  useEffect(() => {
-    async function getCurrentPage(pageId) {
-      const currentPage = await getPage(pageId)
-      return currentPage
-    }
-
-    if (pageId) {
-      getCurrentPage(pageId).then((currentPage) => {
-        setPage(currentPage)
-      })
-    }
-  }, [pageId])
-
-  const getFileName = async () => {
-    // In EditPortfolioSectionsGrouped
-
-    if (sections[pageId]) {
-      if (sections[pageId][sectionIndex][elementIndex].data === '') {
-        return 'No File Uploaded'
-      } else {
-        const file = await getMediaItem(sections[pageId][sectionIndex][elementIndex].data)
-        if (!file) return 'No File Uploaded'
-        return file.public_name
-      }
-    } else if (
-      page &&
-      page.content.sections[sectionIndex] &&
-      page.content.sections[sectionIndex][elementIndex] &&
-      page.content.sections[sectionIndex][elementIndex].id === 'file'
-    ) {
-      if (page.content.sections[sectionIndex][elementIndex].data === '') {
-        return 'No File Uploaded'
-      } else {
-        const file = await getMediaItem(page.content.sections[sectionIndex][elementIndex].data)
-        if (!file) return 'No File Uploaded'
-        return file.public_name
-      }
-    } else {
-      return 'Loading...'
-    }
-  }
-
-  useEffect(() => {
-    async function getNameOfFile() {
-      return await getFileName()
-    }
-
-    async function getUploadedFile() {
-      if (editing) {
-        if (sections[pageId][sectionIndex][elementIndex].data === '') {
-          return null
-        } else {
-          let file = await getFile(sections[pageId][sectionIndex][elementIndex].data)
-          return file
-        }
-      } else {
-        if (data === '') {
-          return null
-        } else {
-          let file = await getDataUrl(data)
-          return file
-        }
-      }
-    }
-
-    if (data != null) {
-      getUploadedFile().then((file) => {
-        file != null ? setFile(file) : setFile('')
-      })
-      getNameOfFile().then((name) => {
-        setFileName(name)
-      })
-    }
-  }, [data, editing, sectionIndex, elementIndex, name, page])
 
   const handleClick = async () => {
     if (file) {
@@ -285,7 +291,7 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
       const a = document.createElement('a')
 
       a.href = blobURL
-      a.download = fileName
+      a.download = mediaItem.public_name
       a.click()
     }
   }
@@ -293,50 +299,62 @@ export const File = ({ name, editing, data, sectionIndex, elementIndex }) => {
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
-        <Typography variant='h6'>{fileUpload}</Typography>
+        <Icon style={{ transform: 'scale(4)', color: 'grey' }}>
+          <AttachmentTwoToneIcon />
+        </Icon>
       </ExampleSection>
     ) : (
       // Open up file dialog with function related to changing this value
       // Make typography on the right show file name
       // Show button and typography in line
       <Grid container direction='row' spacing={2} justify='center' alignItems='center'>
-        <Grid item>
-          {file === null ? (
-            <p>Loading...</p>
-          ) : (
-            <DropzoneButton
-              sectionIndex={sectionIndex}
-              elementIndex={elementIndex}
-              elementName={name}
-              initialFile={file === '' ? null : file}
-            />
-          )}
-        </Grid>
-        <Grid item>
-          <Typography variant='h6'>{fileName}</Typography>
-        </Grid>
+        <Dropzone
+          initialFile={
+            !file || file === ''
+              ? null
+              : {
+                  data: file,
+                  file: {
+                    name: mediaItem.public_name,
+                    path: mediaItem.public_name,
+                    type: mediaItem.file_type
+                  }
+                }
+          }
+        />
       </Grid>
     )
   ) : (
     // Get file before showing
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        justify: 'center',
-        alignItems: 'center'
-      }}
-    >
-      <span
-        onClick={handleClick}
-        style={{ display: 'flex', justify: 'center', alignItems: 'center' }}
-      >
-        <GetAppIcon className={classes.fileUploadIcon} />
-        <Link className={classes.fileUpload}>{page !== null && fileName !== null && fileName}</Link>
-      </span>
+    <div>
+      {file && (
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <span
+            onClick={handleClick}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: 100
+            }}
+          >
+            <GetAppIcon className={classes.fileUploadIcon} />
+            <Link className={classes.fileUpload}>
+              {mediaItem && mediaItem.public_name ? mediaItem.public_name : 'No File Uploaded'}
+            </Link>
+          </span>
+        </div>
+      )}
     </div>
   )
 
   return rendered
-}
+})

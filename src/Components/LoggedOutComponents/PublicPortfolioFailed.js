@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core'
 import clsx from 'clsx'
 import { ThemesContext } from '../Contexts/ThemesContext'
+import LandingContainer from './LandingContainer'
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -57,5 +58,5 @@ export default function PublicPortfolioFailed() {
     </Grid>
   )
 
-  return content
+  return <LandingContainer content={content} />
 }

@@ -14,17 +14,18 @@ import CloseIcon from '@material-ui/icons/Close'
 
 import { loggedInStyles, CursorTypography } from '../../../../Styles/loggedInStyles'
 
-import { patchPortfolio } from '../../../../Backend/Fetch'
+import useEditPortfolio from '../../../../Hooks/useEditPortfolio'
+import { useStore } from '../../../../Hooks/Store'
+import usePortfolio from '../../../../Hooks/usePortfolio'
+import usePages from '../../../../Hooks/usePages'
+
+const portfolioIdSelector = (state) => state.portfolioId
+const pageIdSelector = (state) => state.pageId
 
 /* Pages and adding/removing pages part of the editing portfolio*/
 export default function EditPortfolioPagesGrouped({
   handlePortfolioEvent,
   handlePageSelect,
-  portfolio,
-  setPortfolio,
-  pages,
-  setPages,
-  pageId,
   handlePageEvent
 }) {
   const classes = loggedInStyles()
@@ -33,8 +34,11 @@ export default function EditPortfolioPagesGrouped({
   // Locale
   const intl = useIntl()
 
-  // Portfolio URL
-  const portfolioLink = `/public/${portfolio.id}/0`
+  const portfolioId = useStore(portfolioIdSelector)
+  const pageId = useStore(pageIdSelector)
+  const { data: portfolio } = usePortfolio(portfolioId)
+  const { data: pages } = usePages(portfolioId)
+  const [editPortfolio] = useEditPortfolio(portfolioId)
 
   /* -------------------------------------------------------------------------- */
   /*                                Drag and Drop                               */
@@ -43,30 +47,16 @@ export default function EditPortfolioPagesGrouped({
   // Needed for react-beautiful-dnd to work, passed to the DragDropContext
   const onDragEnd = ({ source, destination }) => {
     if (pages.length > 1 && source && destination) {
-      // console.log(
-      //   'prev pageOrder:',
-      //   pages.map((p) => p.id)
-      // )
-
       // Update the pages state with the new order
       const newPages = arrayMove(pages, source.index, destination.index)
-      setPages(newPages)
-
-      // console.log(
-      //   'curr pageOrder:',
-      //   newPages.map((p) => p.id)
-      // )
 
       const patchDetails = { pageOrder: newPages.map((p) => p.id) }
-      patchPortfolio(portfolio.id, patchDetails).then(() => {
-        // Sets the currently shown portfolio as the updated portfolio
-        setPortfolio((p) => ({ ...p, ...patchDetails }))
-      })
+      editPortfolio({ portfolioId: portfolio.id, patchDetails })
     }
   }
 
   const handlePortfolioView = () => {
-    window.location.href = portfolioLink
+    window.open(`/public/${portfolio.id}/0`)
   }
 
   return (
@@ -103,7 +93,12 @@ export default function EditPortfolioPagesGrouped({
               <Fab
                 color='secondary'
                 size='small'
-                onClick={() => handlePortfolioEvent('editPortfolio', portfolio.title)}
+                onClick={() =>
+                  handlePortfolioEvent('editPortfolio', {
+                    title: portfolio.title,
+                    description: portfolio.description
+                  })
+                }
                 style={{
                   transform: 'scale(0.8)'
                 }}

@@ -1,5 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+
 import {
+  Paper,
+  Fab,
   Button,
   DialogActions,
   DialogContent,
@@ -13,6 +16,8 @@ import {
   Tooltip
 } from '@material-ui/core'
 import FilterNoneOutlinedIcon from '@material-ui/icons/FilterNoneOutlined'
+import AddIcon from '@material-ui/icons/Add'
+
 import { useHistory } from 'react-router-dom'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { useSnackbar } from 'notistack'
@@ -20,21 +25,44 @@ import { useSnackbar } from 'notistack'
 import transitions from '../../../Styles/transitions'
 import PortfolioCard from './PortfolioCard'
 import CustomDialog from '../../CommonComponents/CustomDialog'
-import { deletePortfolio } from '../../../Backend/Fetch'
+import { logout } from '../../../Backend/Fetch'
 import { useIntl } from 'react-intl'
+import useUser from '../../../Hooks/useUser'
+import usePortfolios from '../../../Hooks/usePortfolios'
+import { loggedInStyles } from '../../../Styles/loggedInStyles'
+import useDeletePortfolio from '../../../Hooks/useDeletePortfolio'
+import { useStore } from '../../../Hooks/Store'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
 /* -------------------------------------------------------------------------- */
 
 const useStyles = makeStyles((theme) => ({
+  addPortfolioFab: {
+    '&:hover': {
+      backgroundColor: theme.palette.primary.dark
+    }
+  },
+  addPortfolioIcon: {
+    marginLeft: theme.spacing(1),
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: theme.spacing(0.5)
+    }
+  },
   portfolio: {
     margin: theme.spacing(3)
   }
 }))
 
-const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
+const setPortfolioIdSelector = (state) => state.setPortfolioId
+
+function PortfolioListPage(props) {
   const classes = useStyles()
+  const fixedHeightPaper = loggedInStyles().fixedHeightPaper
+  const floatingTopContainer = loggedInStyles().floatingTopContainer
+
+  // Breakpoint sizes for portfolio
+  const { xs, md, lg } = props
 
   /* -------------------------------------------------------------------------- */
   /*                                   Locale                                   */
@@ -55,8 +83,28 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   /* -------------------------------------------------------------------------- */
+  /*                     Fetching Initial List of Portfolios                    */
+  /* -------------------------------------------------------------------------- */
+
+  const { data: user, status: userStatus } = useUser()
+  const { data: portfolios, status: portfoliosStatus } = usePortfolios(user)
+
+  useEffect(() => {
+    if (userStatus === ' error') logout()
+  }, [userStatus])
+
+  const [deletePortfolio] = useDeletePortfolio()
+  const setPortfolioId = useStore(setPortfolioIdSelector)
+
+  /* -------------------------------------------------------------------------- */
   /*                          Portfolio Event Handlers                          */
   /* -------------------------------------------------------------------------- */
+
+  /* ------------------------------ Add Portfolio ----------------------------- */
+
+  const handleAdd = (details) => {
+    history.push('/portfolios/add')
+  }
 
   /* ----------------------------- View Portfolio ----------------------------- */
 
@@ -64,7 +112,7 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   async function handleView(portfolioId) {
     // Get the current user, logs out if access token no longer valid
     // Go to the designated route for the public portfolio
-    history.push(`/public/${portfolioId}/0`)
+    window.open(`/public/${portfolioId}/0`)
   }
 
   /* ----------------------------- Edit Portfolio ----------------------------- */
@@ -73,7 +121,8 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   function handleEdit(portfolioId) {
     // Set portfolioId in session storage so EditPortfolioPage will fetch
     // portfolio from DB based on this ID
-    window.sessionStorage.setItem('portfolioId', portfolioId)
+    localStorage.setItem('portfolioId', portfolioId)
+    setPortfolioId(portfolioId)
     history.push('/portfolios/edit')
   }
 
@@ -82,24 +131,8 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   // Deletes the portfolio at whose ID is portfolioID, and closes the dialog
   async function handleDelete(portfolioId) {
     if (portfolioId) {
-      // Get the new list of portfolio IDs
-      const newPortfolioIds = portfolios
-        .map((portfolioObj) => portfolioObj.id)
-        .filter((id) => id !== portfolioId)
-
-      // Create a temporary Set item for it, used to filter the current portfolios
-      // state array, which consists of the portfolio objects (not just IDs)
-      const newPortfolioIdsSet = new Set(newPortfolioIds)
-      const newPortfolios = portfolios.filter((portfolioObj) =>
-        newPortfolioIdsSet.has(portfolioObj.id)
-      )
-
-      // Set the portfolios state as the new list of portfolio objects, which does
-      // not have the to-be-deleted portfolio
-      setPortfolios(newPortfolios)
-
       // Delete the portfolio from the portfolios DB
-      await deletePortfolio(portfolioId)
+      deletePortfolio({ portfolioId })
 
       enqueueSnackbar(
         intl.formatMessage({ id: 'deletedPortfolio' }, { portfolioTitle: clickedPortfolio.title }),
@@ -156,48 +189,54 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
         {/*
          * TITLE
          */}
-        <DialogTitle id='form-dialog-title'>
+        <DialogTitle id='form-dialog-title' style={{ width: 500 }}>
           {intl.formatMessage({ id: 'sharePortfolio' })}
         </DialogTitle>
 
-        <DialogContent>
-          <Grid container direction='row' justify='center' alignItems='center' spacing={1}>
-            {/*
-             * URL LINK
-             */}
-            <Grid item>
-              <TextField
-                onFocus={(e) => e.target.select()}
-                onCopy={() => {
-                  navigator.clipboard.writeText(
-                    user ? `http://bs-frontend.herokuapp.com/${clickedPortfolio.id}` : ''
-                  )
-                  enqueueSnackbar(intl.formatMessage({ id: 'copiedURLToClipboard' }), {
-                    variant: 'info'
-                  })
-                  setOpen(false)
-                }}
-                variant='outlined'
-                label={intl.formatMessage({ id: 'url' })}
-                defaultValue={
-                  user ? `http://bs-frontend.herokuapp.com/public/${clickedPortfolio.id}/0` : ''
-                }
-                readOnly
-                className={classes.urlField}
-              />
-            </Grid>
-            {/*
-             * COPY URL BUTTON
-             */}
-            <Grid item>
-              <Tooltip title={intl.formatMessage({ id: 'copy' })} placement='top'>
-                <IconButton onClick={copyToClipboard}>
-                  <FilterNoneOutlinedIcon />
-                </IconButton>
-              </Tooltip>
-            </Grid>
+        <Grid
+          container
+          direction='row'
+          justify='center'
+          alignItems='center'
+          spacing={1}
+          style={{ padding: 16 }}
+        >
+          {/*
+           * URL LINK
+           */}
+          <Grid item xs={10}>
+            <TextField
+              onFocus={(e) => e.target.select()}
+              onCopy={() => {
+                navigator.clipboard.writeText(
+                  user ? `http://bs-frontend.herokuapp.com/${clickedPortfolio.id}` : ''
+                )
+                enqueueSnackbar(intl.formatMessage({ id: 'copiedURLToClipboard' }), {
+                  variant: 'info'
+                })
+                setOpen(false)
+              }}
+              variant='outlined'
+              label={intl.formatMessage({ id: 'url' })}
+              defaultValue={
+                user ? `http://bs-frontend.herokuapp.com/public/${clickedPortfolio.id}/0` : ''
+              }
+              readOnly
+              className={classes.urlField}
+              fullWidth
+            />
           </Grid>
-        </DialogContent>
+          {/*
+           * COPY URL BUTTON
+           */}
+          <Grid item xs={2}>
+            <Tooltip title={intl.formatMessage({ id: 'copy' })} placement='top'>
+              <IconButton onClick={copyToClipboard}>
+                <FilterNoneOutlinedIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        </Grid>
       </div>
     ),
     /* -------------------------------------------------------------------------- */
@@ -240,40 +279,66 @@ const DraggablePortfolioList = ({ user, portfolios, setPortfolios }) => {
   const dialog = <CustomDialog open={open} setOpen={setOpen} content={dialogContent[dialogType]} />
 
   /* -------------------------------------------------------------------------- */
-  /*                                Page Content                                */
+  /*                               Portfolio List                               */
   /* -------------------------------------------------------------------------- */
 
   return (
-    <Grid item>
-      <Grid container>
+    <Grid item container xs={xs} md={md} lg={lg} direction='row'>
+      <Paper className={fixedHeightPaper}>
         {/*
-         * LIST OF PORTFOLIO CARDS
+         * ADD PORTFOLIO BUTTON
          */}
-        <TransitionGroup style={{ width: '100%', height: '100%' }}>
-          {portfolios.map((portfolio, idx) => (
-            <CSSTransition key={portfolio.id} classNames='fade' timeout={500}>
-              <Grid key={idx} item xs={12} className={classes.portfolio}>
-                {/*
-                 * PORTFOLIO CARD
-                 */}
-                <PortfolioCard
-                  index={idx}
-                  portfolio={portfolio}
-                  viewPortfolio={handleView}
-                  editPortfolio={handleEdit}
-                  sharePortfolio={handleClick}
-                  deletePortfolio={handleClick}
-                />
-              </Grid>
-            </CSSTransition>
-          ))}
-        </TransitionGroup>
-      </Grid>
+        <Grid item className={floatingTopContainer}>
+          <Fab
+            color='secondary'
+            variant='extended'
+            aria-label={intl.formatMessage({ id: 'addPortfolio' })}
+            onClick={handleAdd}
+          >
+            {intl.formatMessage({ id: 'addPortfolio' })}
+            <AddIcon className={classes.addPortfolioIcon} />
+          </Fab>
+        </Grid>
+        {/*
+         * PORTFOLIO LIST
+         */}
 
-      {/* DIALOG */}
-      {dialog}
+        {portfoliosStatus === 'success' ? (
+          <Grid item>
+            <Grid container>
+              {/*
+               * LIST OF PORTFOLIO CARDS
+               */}
+              <TransitionGroup style={{ width: '100%', height: '100%' }}>
+                {portfolios.map((portfolio, idx) => (
+                  <CSSTransition key={portfolio.id} classNames='fade' timeout={500}>
+                    <Grid key={idx} item xs={12} className={classes.portfolio}>
+                      {/*
+                       * PORTFOLIO CARD
+                       */}
+                      <PortfolioCard
+                        index={idx}
+                        portfolio={portfolio}
+                        viewPortfolio={handleView}
+                        editPortfolio={handleEdit}
+                        sharePortfolio={handleClick}
+                        deletePortfolio={handleClick}
+                      />
+                    </Grid>
+                  </CSSTransition>
+                ))}
+              </TransitionGroup>
+            </Grid>
+
+            {/* DIALOG */}
+            {dialog}
+          </Grid>
+        ) : (
+          <div></div>
+        )}
+      </Paper>
     </Grid>
   )
 }
 
-export default withStyles(transitions)(DraggablePortfolioList)
+export default withStyles(transitions)(PortfolioListPage)

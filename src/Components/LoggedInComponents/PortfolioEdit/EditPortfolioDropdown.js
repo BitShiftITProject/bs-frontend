@@ -15,6 +15,8 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useIntl } from 'react-intl'
+import { useStore } from '../../../Hooks/Store'
+import usePages from '../../../Hooks/usePages'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -41,6 +43,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
+const portfolioIdSelector = (state) => state.portfolioId
+
 export default function EditPortfolioDropdown({ setEditMode }) {
   const classes = useStyles()
 
@@ -54,6 +58,8 @@ export default function EditPortfolioDropdown({ setEditMode }) {
   /*                    Popper/Button State and its Handlers                    */
   /* -------------------------------------------------------------------------- */
 
+  const portfolioId = useStore(portfolioIdSelector)
+  const { status: pagesStatus } = usePages(portfolioId)
   const [open, setOpen] = useState(false)
   const anchorRef = useRef(null)
 
@@ -86,6 +92,8 @@ export default function EditPortfolioDropdown({ setEditMode }) {
 
     prevOpen.current = open
   }, [open])
+
+  if (pagesStatus === 'loading') return <div></div>
 
   return (
     <Grid item xs={12} md={12} lg={12} className={classes.root}>

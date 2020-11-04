@@ -9,9 +9,9 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import Loading from '../CommonComponents/Loading'
-import { useFormStore } from '../../Store'
+import { useFormStore } from '../../Hooks/Store'
 
-function SignupLoginData({ handleChange, handleSubmit, handleClickShowPassword }) {
+function SignupLoginData({ handleChange, handleClickShowPassword }) {
   /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */
   /* -------------------------------------------------------------------------- */
@@ -174,7 +174,7 @@ function SignupLoginData({ handleChange, handleSubmit, handleClickShowPassword }
                     aria-label='toggle password visibility'
                     onClick={handleClickShowPassword}
                   >
-                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    {!showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                   </IconButton>
                 </InputAdornment>
               )
@@ -182,8 +182,6 @@ function SignupLoginData({ handleChange, handleSubmit, handleClickShowPassword }
           />
         </Grid>
       </Grid>
-      {/* Loading sign up */}
-      {loading && <Loading message={intl.formatMessage({ id: 'signupLoading' })} />}
 
       {/* SIGN UP BUTTON */}
 
@@ -195,7 +193,7 @@ function SignupLoginData({ handleChange, handleSubmit, handleClickShowPassword }
         justify='center'
         alignItems='center'
       >
-        {!loading && (
+        {!loading ? (
           <Fab
             type='submit'
             variant='extended'
@@ -205,6 +203,8 @@ function SignupLoginData({ handleChange, handleSubmit, handleClickShowPassword }
           >
             {intl.formatMessage({ id: 'signUp' })}
           </Fab>
+        ) : (
+          <Loading size={24} message={intl.formatMessage({ id: 'signupLoading' })} />
         )}
       </Grid>
       <Grid
