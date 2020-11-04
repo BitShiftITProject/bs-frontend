@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import PortfolioList from './PortfolioList'
+import PortfolioListPage from './PortfolioListPage'
 import HomeProfile from './HomeProfile'
 import Sidebar from '../Sidebar'
 
@@ -11,7 +11,7 @@ export default function HomePage() {
        * Breakpoint sizes of each component passed in
        */}
       <HomeProfile xs={12} md={4} lg={3} />
-      <PortfolioList xs={12} md={8} lg={9} />
+      <PortfolioListPage xs={12} md={8} lg={9} />
     </Grid>
   )
 

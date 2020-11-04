@@ -1,29 +1,32 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Grid } from '@material-ui/core'
 
 import CustomDialog from '../../../CommonComponents/CustomDialog'
 import EditPortfolioPagesGrouped from './EditPortfolioPagesGrouped'
 import EditPortfolioSectionsGrouped from './EditPortfolioSectionsGrouped'
-import {
-  // page related imports
-  patchPage,
-  getPortfolio,
-  patchPortfolio,
-  postPageToPortfolio,
-  deletePage
-} from '../../../../Backend/Fetch'
 
-import { PortfolioContext } from '../../../Contexts/PortfolioContext'
 import DialogType from './DialogType'
 import { useSnackbar } from 'notistack'
 import { useIntl } from 'react-intl'
+import useEditPortfolio from '../../../../Hooks/useEditPortfolio'
+import useAddPage from '../../../../Hooks/useAddPage'
+import useEditPage from '../../../../Hooks/useEditPage'
+import useDeletePage from '../../../../Hooks/useDeletePage'
+import usePages from '../../../../Hooks/usePages'
+import { useStore } from '../../../../Hooks/Store'
+import shallow from 'zustand/shallow'
+import usePortfolio from '../../../../Hooks/usePortfolio'
 
-export default function EditPortfolioContent(props) {
+const portfolioIdSelector = (state) => state.portfolioId
+const pageSelector = ({ pageId, setPageId }) => [pageId, setPageId]
+const loadingSelector = ({ loading, setLoading }) => [loading, setLoading]
+
+function EditPortfolioContent() {
   /* -------------------------------------------------------------------------- */
   /*                                  Snackbars                                 */
   /* -------------------------------------------------------------------------- */
 
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar()
 
   /* -------------------------------------------------------------------------- */
   /*                                   Locale                                   */
@@ -32,28 +35,36 @@ export default function EditPortfolioContent(props) {
   const intl = useIntl()
 
   /* -------------------------------------------------------------------------- */
+  /*                         Fetching Current Portfolio                         */
+  /* -------------------------------------------------------------------------- */
+
+  // Fetches the portfolio using the portfolioId item set in the sessionStorage.
+  // The portfolioId is set in the sessionStorage when:
+  // - A user clicks on the Add Portfolio button in AddPortfolioPage
+  // - A user clicks on the Edit button in PortfolioCard
+
+  const portfolioId = useStore(portfolioIdSelector)
+  const [pageId, setPageId] = useStore(useCallback(pageSelector, []), shallow)
+  const { data: portfolio } = usePortfolio(portfolioId)
+  const { data: pages, status: pagesStatus } = usePages(portfolioId)
+  const [loading, setLoading] = useStore(useCallback(loadingSelector, []), shallow)
+
+  /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
-  const { portfolio, setPortfolio, pages, setPages } = props
   const [portfolioTitle, setPortfolioTitle] = useState('')
+  const [portfolioDescription, setPortfolioDescription] = useState('')
   const [pageTitle, setPageTitle] = useState('')
-  const [loading, setLoading] = useState(false)
 
-  // PortfolioContext stores all details about:
-  // - ID of currently-selected page (pageId) whose sections are shown,
-  // - Indexes of currently-editable (non-disabled) sections (editableSections)
-  // - Current portfolio's section objects by page ID (sections),
-  //   stored like the following example:
-  //
-  //       {
-  //         pageId1: [ {id: headingTitle, data: { title: "Hello" } } ],
-  //         pageId2: [ {id} singleText, data: { paragraph: "My name is React" } } ],
-  //       }
-  //
-  // EditPortfolioContent uses pageId and sections to render a selected page's sections,
-  // and adds sections via SectionsButton, and edit or delete sections SectionsList.
-  const { pageId, setPageId, resetEditState, sections, setSections } = useContext(PortfolioContext)
+  /* -------------------------------------------------------------------------- */
+  /*                              React Query Hooks                             */
+  /* -------------------------------------------------------------------------- */
+
+  const [editPortfolio] = useEditPortfolio()
+  const [addPage] = useAddPage()
+  const [editPage] = useEditPage()
+  const [deletePage] = useDeletePage()
 
   /* -------------------------------------------------------------------------- */
   /*                                   Effects                                  */
@@ -62,8 +73,9 @@ export default function EditPortfolioContent(props) {
   // This is run when the portfolio content editing page is first mounted
   useEffect(() => {
     // Reset the selected page ID, so at first, no page is selected
+
     setPageId(null)
-  }, [setPageId])
+  }, [setPageId, portfolioId])
 
   // This is run after the portfolio content editing page is unmounted
   useEffect(() => {
@@ -72,127 +84,9 @@ export default function EditPortfolioContent(props) {
     // anymore
     return () => {
       setPageId(null)
-      setSections([])
+      // setSections([])
     }
-  }, [setPageId, setSections])
-
-  // This is run when pages is first mounted and every time it is updated,
-  // such as when a page is added or deleted or when the changes
-  // to the sections within it are saved
-  useEffect(() => {
-    setSections((currentSections) => {
-      //
-      const newSections = pages
-        .map((page) => {
-          if (Object.keys(currentSections).includes(page.id)) {
-            return {}
-          }
-          return { [page.id]: page.content.sections }
-        })
-        .reduce((prev, curr) => ({ ...prev, ...curr }), currentSections)
-      // console.log(newSections)
-      return newSections
-    })
-  }, [pages, setSections])
-
-  /* -------------------------------------------------------------------------- */
-  /*                                Section Handlers                            */
-  /* -------------------------------------------------------------------------- */
-
-  // Adds a new correctly-formatted section object into the current page's list
-  // of sections (Note: Does not save to the backend)
-  function handleSectionAdd(newSection) {
-    setSections((currentSections) => {
-      // If this is the first section of the page, just set it as [newSection],
-      // otherwise just add newSection to the end of the current list of sections
-      const newSections = {
-        ...currentSections,
-        [pageId]: currentSections[pageId] ? [...currentSections[pageId], newSection] : [newSection]
-      }
-      return newSections
-    })
-
-    const pageTitle = pages.filter((page) => page.id === pageId)[0].title
-
-    // Shows a notification that the section has been added
-    enqueueSnackbar(intl.formatMessage({ id: 'addedSectionToPage' }, { pageTitle }), {
-      variant: 'info'
-    })
-  }
-
-  // Saves all the sections of the currently-selected page
-  async function handleSaveSections(e) {
-    e.preventDefault()
-    const savedPage = { content: { sections: sections[pageId] } }
-    // console.log(savedPage)
-
-    // Start showing loading animation
-    setLoading(true)
-
-    // Patch the page with the current sections on the screen
-    await patchPage(pageId, savedPage)
-
-    setTimeout(() => {
-      const pageTitle = pages.filter((page) => page.id === pageId)[0].title
-
-      // Show a notification that all sections have been saved
-      enqueueSnackbar(intl.formatMessage({ id: 'savedAllSections' }, { pageTitle }), {
-        variant: 'success'
-      })
-
-      setLoading(false)
-    }, 1000)
-  }
-
-  // sets the SPECFIC PAGES sections
-  const handleSetPageSection = (newUnsavedSection) => {
-    setSections((currentSections) => {
-      // If this is the first section of the page, just set it as [newSection],
-      // otherwise just add newSection to the end of the current list of sections
-      const newSections = {
-        ...currentSections
-      }
-      newSections[pageId] = newUnsavedSection
-      return newSections
-    })
-  }
-
-  // Deletes the section at a given index among the sections of the current page
-  function handleSectionDelete(sectionIndex) {
-    setSections((currentSections) => {
-      // Ensure that the current page has a section at the specified index
-      if (currentSections[pageId].length >= sectionIndex + 1) {
-        // Remove the section at the given index
-        const pageIdSections = currentSections[pageId]
-        pageIdSections.splice(sectionIndex, 1)
-
-        // Update the list of sections of the current page
-        const newSections = {
-          ...currentSections,
-          [pageId]: pageIdSections
-        }
-
-        // const pageTitle = pages.filter((page) => page.id === pageId)[0].title
-
-        // Show a notification that the section has been deleted from the page
-        const key = enqueueSnackbar(
-          intl.formatMessage({ id: 'deletedSectionFromPage' }, { pageTitle }),
-          {
-            variant: 'error',
-            persist: true
-          }
-        )
-
-        setTimeout(() => {
-          closeSnackbar(key)
-        }, 2500)
-
-        return newSections
-      }
-
-      return currentSections
-    })
-  }
+  }, [setPageId])
 
   /* -------------------------------------------------------------------------- */
   /*                                Dialog State                                */
@@ -212,8 +106,8 @@ export default function EditPortfolioContent(props) {
     handlePortfolioEdit,
     portfolioTitle,
     setPortfolioTitle,
-    setPortfolio,
-    portfolio,
+    portfolioDescription,
+    setPortfolioDescription,
     handleClose,
     handlePageAdd,
     pageTitle,
@@ -237,7 +131,8 @@ export default function EditPortfolioContent(props) {
     // The value variable is the portfolio title
 
     setDialogContent({ type: name, component: value })
-    setPortfolioTitle(value)
+    setPortfolioTitle(value.title)
+    setPortfolioDescription(value.description)
     setOpen(true)
   }
 
@@ -278,13 +173,14 @@ export default function EditPortfolioContent(props) {
 
     setLoading(true)
 
-    await patchPortfolio(portfolio.id, {
-      title: portfolioTitle,
-      description: portfolio.description
+    editPortfolio({
+      portfolioId: portfolio.id,
+      patchDetails: {
+        title: portfolioTitle,
+        description: portfolioDescription
+      }
     })
-    // Sets the currently shown portfolio as the updated portfolio
-    const updatedPortfolio = await getPortfolio(portfolio.id)
-    setPortfolio(updatedPortfolio)
+
     setLoading(false)
     setOpen(false)
   }
@@ -293,12 +189,7 @@ export default function EditPortfolioContent(props) {
 
   // Updates the page index and page content to be those of the selected page
   function handlePageSelect(id) {
-    resetEditState()
-    if (pageId === id) {
-      setPageId(null)
-    } else {
-      setPageId(id)
-    }
+    setPageId(id)
   }
 
   /* -------------------------------------------------------------------------- */
@@ -307,31 +198,25 @@ export default function EditPortfolioContent(props) {
     e.preventDefault()
     setLoading(true)
 
-    // Creates a new page with the user-updated pageTitle (basically the content
-    // of the text field) as its title and no content
-    const postDetails = {
-      title: pageTitle,
-      content: {
-        sections: []
-      }
-    }
-
     // Adds the new page to the Page DB, and saving the actual details of the
     // newly-added page
-    const newPage = await postPageToPortfolio(portfolio.id, postDetails).then((response) =>
-      response.json()
+    addPage({
+      portfolioId: portfolio.id,
+      postDetails: {
+        title: pageTitle,
+        content: {
+          sections: []
+        }
+      }
+    }).then((response) =>
+      response.json().then((newPage) => {
+        editPortfolio({
+          portfolioId: portfolio.id,
+          patchDetails: { pageOrder: [...portfolio.pageOrder, newPage.id] }
+        })
+      })
     )
 
-    // Updates the pages to included the newly added page in the frontend,
-    // without messing with the other pages' unsaved changes
-    setPages((pages) => [...pages, newPage])
-
-    // console.log(portfolio, newPage)
-
-    await patchPortfolio(portfolio.id, { pageOrder: [...portfolio.pageOrder, newPage.id] })
-    // Sets the currently shown portfolio as the updated portfolio
-    const updatedPortfolio = await getPortfolio(portfolio.id)
-    setPortfolio(updatedPortfolio)
     setLoading(false)
     setOpen(false)
   }
@@ -342,19 +227,8 @@ export default function EditPortfolioContent(props) {
     e.preventDefault()
     setLoading(true)
 
-    await patchPage(pages[dialogContent.component].id, { title: pageTitle })
+    editPage({ pageId: pages[dialogContent.component].id, patchDetails: { title: pageTitle } })
 
-    // Replace the title of the changed page manually to show the change in
-    // frontend, to avoid deleting any unsaved changes in the other pages'
-    setPages((pages) =>
-      pages.map((page) => {
-        if (page.id === pages[dialogContent.component].id) {
-          return { ...page, title: pageTitle }
-        } else {
-          return page
-        }
-      })
-    )
     setLoading(false)
     setOpen(false)
   }
@@ -364,37 +238,17 @@ export default function EditPortfolioContent(props) {
   // Removes a Page (and any reference to it) from the DB
   async function handlePageDelete(e) {
     e.preventDefault()
+
     setLoading(true)
     const toBeDeletedPageId = pages[dialogContent.component].id
     const toBeDeletedPageTitle = pages[dialogContent.component].title
-
-    // Get the new list of page IDs
-    const newPageIds = pages.map((pageObj) => pageObj.id).filter((id) => id !== toBeDeletedPageId)
-
-    // Create a temporary Set item for it, used to filter the current pages
-    // state array, which consists of the page objects (not just IDs)
-    const newPageIdsSet = new Set(newPageIds)
-    const newPages = pages.filter((pageObj) => newPageIdsSet.has(pageObj.id))
 
     if (pageId === toBeDeletedPageId) {
       setPageId(null)
     }
 
-    // Set the pages state as the new list of page objects, which does
-    // not have the to-be-deleted page
-    setPages(newPages)
-
-    // Removes to-be-deleted page from sections object, which was used
-    // to record changes of sections in the page, but now that it is
-    // being deleted, we shouldn't need to track it anymore
-    setSections((s) => {
-      const newSections = s
-      delete newSections[toBeDeletedPageId]
-      return newSections
-    })
-
     // Delete the portfolio from the portfolios DB
-    deletePage(toBeDeletedPageId).then(() => {
+    deletePage({ pageId: toBeDeletedPageId }).then(() => {
       // Show the notification after deleting the page
       enqueueSnackbar(
         intl.formatMessage({ id: 'deletedPage' }, { pageTitle: toBeDeletedPageTitle }),
@@ -405,12 +259,12 @@ export default function EditPortfolioContent(props) {
       )
     })
 
-    await patchPortfolio(portfolio.id, {
-      pageOrder: portfolio.pageOrder.filter((pageId) => pageId !== toBeDeletedPageId)
+    editPortfolio({
+      portfolioId: portfolio.id,
+      patchDetails: {
+        pageOrder: portfolio.pageOrder.filter((pageId) => pageId !== toBeDeletedPageId)
+      }
     })
-    // Sets the currently shown portfolio as the updated portfolio
-    const updatedPortfolio = await getPortfolio(portfolio.id)
-    setPortfolio(updatedPortfolio)
     setLoading(false)
     setOpen(false)
   }
@@ -423,33 +277,30 @@ export default function EditPortfolioContent(props) {
   /*                                Rendered Page                               */
   /* -------------------------------------------------------------------------- */
 
-  return (
-    <Grid container direction='row' spacing={0}>
-      {/* Pages and adding/removing pages part of the editing portfolio*/}
-      <EditPortfolioPagesGrouped
-        handlePortfolioEvent={handlePortfolioEvent}
-        handlePageSelect={handlePageSelect}
-        portfolio={portfolio}
-        setPortfolio={setPortfolio}
-        pages={pages}
-        setPages={setPages}
-        pageId={pageId}
-        handlePageEvent={handlePageEvent}
-      />
+  if (pagesStatus === 'loading') {
+    return <div></div>
+  }
 
-      {/*
-       * PAGE CONTENT (as in, the sections)
-       */}
-      <EditPortfolioSectionsGrouped
-        pageId={pageId}
-        handleSectionAdd={handleSectionAdd}
-        loading={loading}
-        sections={sections}
-        handleSaveSections={handleSaveSections}
-        handleSectionDelete={handleSectionDelete}
-        handleSetPageSection={handleSetPageSection}
-      />
-      {dialog}
-    </Grid>
+  return (
+    <div>
+      {portfolio && pages && (
+        <Grid container direction='row' spacing={0}>
+          {/* Pages and adding/removing pages part of the editing portfolio*/}
+          <EditPortfolioPagesGrouped
+            handlePortfolioEvent={handlePortfolioEvent}
+            handlePageSelect={handlePageSelect}
+            handlePageEvent={handlePageEvent}
+          />
+
+          {/*
+           * PAGE CONTENT (as in, the sections)
+           */}
+          <EditPortfolioSectionsGrouped />
+          {dialog}
+        </Grid>
+      )}
+    </div>
   )
 }
+
+export default EditPortfolioContent

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   CardContent,
   Card,
@@ -82,13 +82,13 @@ const PortfolioCard = (props) => {
   /* -------------------------------------------------------------------------- */
   /*                       Portfolio Details and Handlers                       */
   /* -------------------------------------------------------------------------- */
-  // Passed down from PortfolioList
+  // Passed down from PortfolioListPage
 
   const { index, portfolio, viewPortfolio, editPortfolio, sharePortfolio, deletePortfolio } = props
 
-  const getPageCount = async () => {
+  const getPageCount = useCallback(async () => {
     return getPortfolioPages(portfolio.id).then((pages) => pages.length)
-  }
+  }, [portfolio.id])
 
   const [hasPages, setHasPages] = useState(false)
 
@@ -96,7 +96,7 @@ const PortfolioCard = (props) => {
     getPageCount().then((pageCount) => {
       setHasPages(pageCount > 0)
     })
-  }, [])
+  }, [getPageCount])
 
   const handleView = () => {
     viewPortfolio(portfolio.id)
@@ -195,10 +195,10 @@ const PortfolioCard = (props) => {
               }
               placement='bottom'
             >
-              <span>
+              <span style={{ paddingBottom: 4 }}>
                 <IconButton
                   disabled={!hasPages}
-                  className={style.sdropzonehare}
+                  className={style.share}
                   onClick={(e) => sharePortfolio('share', portfolio.id, portfolio.title, index)}
                 >
                   <ShareIcon />
@@ -211,12 +211,14 @@ const PortfolioCard = (props) => {
            */}
           <Grid item>
             <Tooltip title={intl.formatMessage({ id: 'delete' })} placement='bottom'>
-              <IconButton
-                className={style.delete}
-                onClick={(e) => deletePortfolio('delete', portfolio.id, portfolio.title, index)}
-              >
-                <DeleteOutlineIcon />
-              </IconButton>
+              <span style={{ paddingBottom: 4 }}>
+                <IconButton
+                  className={style.delete}
+                  onClick={(e) => deletePortfolio('delete', portfolio.id, portfolio.title, index)}
+                >
+                  <DeleteOutlineIcon />
+                </IconButton>
+              </span>
             </Tooltip>
           </Grid>
         </Grid>

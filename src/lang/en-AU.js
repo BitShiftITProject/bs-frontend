@@ -127,11 +127,14 @@ export default {
     help: 'Help',
     faq: 'Frequently Asked Questions (FAQ)',
 
-    question1: 'How can I get a youtube video ID so i can place it into my portfolio?',
-    answer1: `To get the youtube video ID for a youtube video, navigate to the youtube video of choice on youtube and click the share button under the video.
-     You should be presented with a link, the last part of which is the video ID. 
-     For example, the video 'https://youtu.be/2g811Eo7K8U' has the ID '2g811Eo7K8U'. 
-     You can then place this ID into the youtube video element to show it in your portfolio.`,
+    // question1: 'How can I get a youtube video ID so i can place it into my portfolio?',
+    // answer1: `To get the youtube video ID for a youtube video, navigate to the youtube video of choice on youtube and click the share button under the video.
+    //  You should be presented with a link, the last part of which is the video ID.
+    //  For example, the video 'https://youtu.be/2g811Eo7K8U' has the ID '2g811Eo7K8U'.
+    //  You can then place this ID into the youtube video element to show it in your portfolio.`,
+
+    question1: 'Question 1',
+    answer1: 'Answer 1',
 
     question2: 'Question 2',
     answer2: 'Answer 2',

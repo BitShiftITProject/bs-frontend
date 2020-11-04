@@ -1,4 +1,3 @@
-
 import React from 'react'
 import {
   TextField,
@@ -11,30 +10,38 @@ import {
 import { useIntl } from 'react-intl'
 import { loggedInStyles } from '../../../../Styles/loggedInStyles'
 
-export default function DialogType(
-  {handlePortfolioEdit, 
-    portfolioTitle,
-    setPortfolioTitle,
-    setPortfolio,
-    portfolio,
-    handleClose, 
-    handlePageAdd, 
-    pageTitle, 
-    setPageTitle,
-    handlePageTitleEdit, 
-    handlePageDelete,
-    loading
-  }) {
+export default function DialogType({
+  handlePortfolioEdit,
+  portfolioTitle,
+  setPortfolioTitle,
+  portfolioDescription,
+  setPortfolioDescription,
+  handleClose,
+  handlePageAdd,
+  pageTitle,
+  setPageTitle,
+  handlePageTitleEdit,
+  handlePageDelete,
+  loading
+}) {
   const intl = useIntl()
   const classes = loggedInStyles()
 
-    return {
+  return {
     // Contains the contents to be rendered when a dialog is triggered, which is
     // to be sent to the CustomDialog component
     /* -------------------------------------------------------------------------- */
     // Dialog to show when the Edit button next to the portfolio title is clicked
     editPortfolio: (
-      <form onSubmit={loading ? (e) => {e.preventDefault()} : handlePortfolioEdit}>
+      <form
+        onSubmit={
+          loading
+            ? (e) => {
+                e.preventDefault()
+              }
+            : handlePortfolioEdit
+        }
+      >
         {/*
          * TITLE
          */}
@@ -68,8 +75,8 @@ export default function DialogType(
             id='portfolioDesc'
             label={intl.formatMessage({ id: 'portfolioDescription' })}
             fullWidth
-            value={portfolio.description}
-            onChange={(e) => setPortfolio({ ...portfolio, description: e.target.value })}
+            value={portfolioDescription}
+            onChange={(e) => setPortfolioDescription(e.target.value)}
           />
         </DialogContent>
         {/*
@@ -88,7 +95,15 @@ export default function DialogType(
     /* -------------------------------------------------------------------------- */
     // Dialog to show when the (+) button below pages is clicked to add a page
     addPage: (
-      <form onSubmit={loading ? (e) => {e.preventDefault()} : handlePageAdd}>
+      <form
+        onSubmit={
+          loading
+            ? (e) => {
+                e.preventDefault()
+              }
+            : handlePageAdd
+        }
+      >
         {/*
          * TITLE
          */}
@@ -129,7 +144,15 @@ export default function DialogType(
     /* -------------------------------------------------------------------------- */
     // Dialog to show when the Edit button next to a page is clicked
     editPage: (
-      <form onSubmit={loading ? (e) => {e.preventDefault()} : handlePageTitleEdit}>
+      <form
+        onSubmit={
+          loading
+            ? (e) => {
+                e.preventDefault()
+              }
+            : handlePageTitleEdit
+        }
+      >
         {/*
          * TITLE
          */}

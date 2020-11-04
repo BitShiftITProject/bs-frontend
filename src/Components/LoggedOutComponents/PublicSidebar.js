@@ -1,7 +1,11 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { Drawer, List, ListItem, ListItemText, makeStyles } from '@material-ui/core'
-import { useHistory } from 'react-router-dom'
-import { PortfolioContext } from '../Contexts/PortfolioContext'
+import { useHistory, useParams } from 'react-router-dom'
+import { useStore } from '../../Hooks/Store'
+import shallow from 'zustand/shallow'
+import SectionsList from '../Sections/SectionsList'
+import Loading from '../CommonComponents/Loading'
+import usePages from '../../Hooks/usePages'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -40,7 +44,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-function PublicSidebar(props) {
+const pageSelector = ({ pageId, setPageId }) => [pageId, setPageId]
+
+function PublicSidebar() {
   const classes = useStyles()
 
   /* -------------------------------------------------------------------------- */
@@ -48,20 +54,25 @@ function PublicSidebar(props) {
   /* -------------------------------------------------------------------------- */
 
   const history = useHistory()
-  const { setPageId } = useContext(PortfolioContext)
 
   /* -------------------------------------------------------------------------- */
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
-  const { pageIndex, content, pages, parentPortfolio } = props
+  const { portfolio: portfolioId } = useParams()
+  const { data: pages } = usePages(portfolioId)
+
+  const [pageId, setPageId] = useStore(useCallback(pageSelector, []), shallow)
 
   const pageTitles = pages.map((page) => page.title)
 
-  useEffect(() => {
-    // console.log(pages[pageIndex].id)
-    setPageId(pages[pageIndex].id)
-  }, [pages, setPageId, pageIndex])
+  const handleClick = useCallback(
+    (index) => {
+      setPageId(pages[index].id)
+      history.replace(history.location.pathname.split('/').slice(0, -1).join('/') + '/' + index)
+    },
+    [setPageId, history, pages]
+  )
 
   return (
     <div className={classes.root}>
@@ -76,22 +87,26 @@ function PublicSidebar(props) {
         <div className={classes.toolbar} />
         <List>
           {pageTitles.map((text, index) => (
-            <ListItem
-              button
-              key={text}
-              onClick={() => {
-                parentPortfolio.setState({ pageIndex: index })
-                history.replace(
-                  history.location.pathname.split('/').slice(0, -1).join('/') + '/' + index
-                )
-              }}
-            >
+            <ListItem button key={text} onClick={() => handleClick(index)}>
               <ListItemText primary={text} />
             </ListItem>
           ))}
         </List>
       </Drawer>
-      <div className={classes.content}>{content}</div>
+      <div className={classes.content}>
+        <div>
+          {pages && pageId ? (
+            <SectionsList
+              sections={pages.find((p) => p.id === pageId).content.sections}
+              editing={false}
+            />
+          ) : (
+            <div style={{ height: '100vh' }}>
+              <Loading vertical />
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

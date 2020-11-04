@@ -1,10 +1,10 @@
 import React from 'react'
 import { loggedInStyles } from '../../../Styles/loggedInStyles'
 
-import { Grid, Paper, Fab } from '@material-ui/core'
+import { Grid, Paper, Fab, CircularProgress } from '@material-ui/core'
 import { useIntl } from 'react-intl'
 
-export default function UserProfileDataForm({ handleSubmit, form }) {
+function UserProfileDataForm({ handleSubmit, form, loading }) {
   const intl = useIntl()
   // Used for general styles
   const classes = loggedInStyles()
@@ -18,8 +18,9 @@ export default function UserProfileDataForm({ handleSubmit, form }) {
         <Grid item style={{ overflowX: 'hidden', overflowY: 'scroll' }}>
           {form}
         </Grid>
-        <Grid item className={classes.floatingBottomContainer}>
+        <span style={{ width: 'max-content' }} className={classes.fabProgressContainer}>
           <Fab
+            disabled={loading}
             variant='extended'
             aria-label={intl.formatMessage({ id: 'saveChanges' })}
             onClick={handleSubmit}
@@ -27,8 +28,11 @@ export default function UserProfileDataForm({ handleSubmit, form }) {
           >
             {intl.formatMessage({ id: 'saveChanges' })}
           </Fab>
-        </Grid>
+          {loading && <CircularProgress size={24} className={classes.fabProgress} />}
+        </span>
       </Paper>
     </Grid>
   )
 }
+
+export default React.memo(UserProfileDataForm)

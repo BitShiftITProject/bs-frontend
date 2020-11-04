@@ -36,6 +36,7 @@ import HeaderBreadcrumbs from './HeaderBreadcrumbs'
 import { useIntl } from 'react-intl'
 import DarkAndLightModeButton from '../CommonComponents/DarkAndLightModeButton'
 import LanguageButton from '../CommonComponents/LanguageButton'
+import { useStore } from '../../Hooks/Store'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -144,6 +145,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
+const setPortfolioIdSelector = (state) => state.setPortfolioId
+
 export default function Sidebar(props) {
   /* -------------------------------------------------------------------------- */
   /*                             States and Handlers                            */
@@ -157,6 +160,8 @@ export default function Sidebar(props) {
   const handleDrawerClose = () => {
     setOpen(false)
   }
+
+  const setPortfolioId = useStore(setPortfolioIdSelector)
 
   /* -------------------------------------------------------------------------- */
   /*                                   Styling                                  */
@@ -262,7 +267,7 @@ export default function Sidebar(props) {
                 onClick={() => {
                   sessionStorage.removeItem('accessToken')
                   localStorage.removeItem('accessToken')
-                  window.sessionStorage.removeItem('portfolioId')
+                  setPortfolioId(null)
                   window.location.href = '/'
                 }}
                 color='inherit'
@@ -384,7 +389,7 @@ export default function Sidebar(props) {
   /*                                Page Content                                */
   /* -------------------------------------------------------------------------- */
 
-  // Content is the page component that will be rendered (e.g. PortfolioList, SettingsPage, etc.)
+  // Content is the page component that will be rendered (e.g. PortfolioListPage, SettingsPage, etc.)
   const { content } = props
 
   const pageContent = (

@@ -11,40 +11,41 @@ import Signup from './Components/LoggedOutComponents/Signup'
 import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
 
 import EditProfilePage from './Components/LoggedInComponents/Profile/EditProfilePage'
-import PortfolioList from './Components/LoggedInComponents/PortfolioList/PortfolioList'
-import AddPortfolioPage from './Components/LoggedInComponents/PortfolioList/AddPortfolioPage'
+import PortfolioListPage from './Components/LoggedInComponents/PortfolioList/PortfolioListPage'
+import AddPortfolioPage from './Components/LoggedInComponents/PortfolioAdd/AddPortfolioPage'
 import EditPortfolioPage from './Components/LoggedInComponents/PortfolioEdit/EditPortfolioPage'
 import SettingsPage from './Components/LoggedInComponents/SettingsPage'
 import HelpPage from './Components/LoggedInComponents/HelpPage'
 import Sidebar from './Components/LoggedInComponents/Sidebar'
 
-import { getUser, logout } from './Backend/Fetch'
+import { logoutNoReload } from './Backend/Fetch'
+import useUser from './Hooks/useUser'
 
-async function isLoggedIn() {
-  // Get access token from session storage
-  const accessToken = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
+// async function isLoggedIn() {
+//   // Get access token from session storage
+//   const accessToken = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
 
-  // If there is no access token in session storage then we are not logged in
-  if (!accessToken || accessToken === 'undefined') {
-    sessionStorage.removeItem('accessToken')
-    localStorage.removeItem('accessToken')
-    return false
-  } else {
-    /**
-     * There is an access token in session storage
-     * POST access token to the backend to check if we are logged in
-     */
+//   // If there is no access token in session storage then we are not logged in
+//   if (!accessToken || accessToken === 'undefined') {
+//     sessionStorage.removeItem('accessToken')
+//     localStorage.removeItem('accessToken')
+//     return false
+//   } else {
+//     /**
+//      * There is an access token in session storage
+//      * POST access token to the backend to check if we are logged in
+//      */
 
-    const user = await getUser()
+//     const user = await getUser()
 
-    if (!user) {
-      logout()
-      return false
-    } else {
-      return true
-    }
-  }
-}
+//     if (!user) {
+//       logout()
+//       return false
+//     } else {
+//       return true
+//     }
+//   }
+// }
 
 const useStyles = makeStyles((theme) => ({
   success: {
@@ -71,18 +72,25 @@ function Authentication() {
   /* -------------------------------------------------------------------------- */
 
   const [loggedIn, setLoggedIn] = useState(null)
+  const { status: userStatus } = useUser()
 
   useEffect(() => {
-    async function checkLoginState() {
-      const loginState = await isLoggedIn()
-      return loginState
+    const accessToken = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken')
+
+    if (userStatus === 'loading') {
+      setLoggedIn(null)
+      // console.log('User LOADING')
+    } else if (userStatus === 'error' || !accessToken || accessToken === 'undefined') {
+      setLoggedIn(false)
+      logoutNoReload()
+      // console.log('User FAILED')
+    } else if (userStatus === 'success') {
+      setLoggedIn(true)
+      // console.log('User SUCCESS')
     }
 
-    checkLoginState().then((loginState) => {
-      // console.log(loginState)
-      setLoggedIn(loginState)
-    })
-  }, [])
+    // console.log('End of useEffect')
+  }, [userStatus])
 
   /* -------------------------------------------------------------------------- */
   /*                               Snackbar Styles                              */
@@ -126,7 +134,7 @@ function Authentication() {
           <Route
             exact
             path='/portfolios'
-            render={() => <Sidebar content={<PortfolioList xs={12} md={12} lg={12} />} />}
+            render={() => <Sidebar content={<PortfolioListPage xs={12} md={12} lg={12} />} />}
           />
           <Route exact path='/profile' render={() => <EditProfilePage />} />
           {/* <Route exact path='/home' render={() => <HomePage />} /> */}
