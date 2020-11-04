@@ -219,6 +219,17 @@ const loggedInStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.error.main,
       color: theme.palette.error.contrastText
     }
+  },
+  addPortfolioForm: {
+    display: 'flex',
+    alignItems: 'center',
+    height: '50%',
+    [theme.breakpoints.between('xs', 'sm')]: {
+      width: '80%'
+    },
+    [theme.breakpoints.between('md', 'xl')]: {
+      width: '68%'
+    }
   }
 }))
 

@@ -2,7 +2,7 @@ import React from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { Grid } from '@material-ui/core'
 
-export default function Loading({ message, vertical }) {
+export default function Loading({ size, message, vertical }) {
   return (
     <Grid
       container
@@ -13,7 +13,7 @@ export default function Loading({ message, vertical }) {
       spacing={2}
     >
       <Grid item style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <CircularProgress color='secondary' />
+        <CircularProgress size={size ? size : 40} color='secondary' />
       </Grid>
       <Grid item>
         <p>{message}</p>

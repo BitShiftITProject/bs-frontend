@@ -14,9 +14,7 @@ import { themes } from '../../../Themes/themes'
 import { useSnackbar } from 'notistack'
 import { useIntl } from 'react-intl'
 import useEditPortfolio from '../../../Hooks/useEditPortfolio'
-import { useQueryCache } from 'react-query'
 import { useStore } from '../../../Hooks/Store'
-import usePortfolio from '../../../Hooks/usePortfolio'
 
 const portfolioIdSelector = (state) => state.portfolioId
 

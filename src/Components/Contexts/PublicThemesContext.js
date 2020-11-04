@@ -1,8 +1,6 @@
 import React, { useState, useEffect, createContext } from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
 import { getTheme } from '../../Themes/themes'
-import { getPortfolio } from '../../Backend/Fetch'
-import { useLocation } from 'react-router-dom'
 import { useStore } from '../../Hooks/Store'
 import usePortfolio from '../../Hooks/usePortfolio'
 

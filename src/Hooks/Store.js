@@ -17,12 +17,24 @@ const formStore = (set) => ({
   signUpFailed: false,
   confirmationCode: '',
   newPassword: '',
-  errorMessage: '',
+  errorMessage: ' ',
   loading: false,
   completed: false,
+  title: '',
+  description: '',
+  theme: 'light',
+  template: 'blank',
   modifyForm: (name, value) =>
     set((state) => {
       state[name] = value
+    }),
+  resetPortfolioForm: () =>
+    set((state) => {
+      state.title = ''
+      state.description = ''
+      state.theme = 'light'
+      state.template = 'blank'
+      state.errorMessage = ' '
     })
 })
 

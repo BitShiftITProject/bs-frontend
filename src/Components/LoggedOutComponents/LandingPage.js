@@ -7,6 +7,7 @@ import { Fab, Typography, makeStyles, Grid } from '@material-ui/core'
 import LandingContainer from './LandingContainer'
 import TextShuffle from '../CommonComponents/TextShuffle'
 import { ThemesContext } from '../Contexts/ThemesContext'
+import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 
 /* -------------------------------------------------------------------------- */
 /*                                   Styling                                  */
@@ -103,6 +104,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function LandingPage() {
   const classes = useStyles()
+  const style = loggedOutStyles()
 
   /* -------------------------------------------------------------------------- */
   /*                                   Locale                                   */
@@ -206,5 +208,5 @@ export default function LandingPage() {
     </Grid>
   )
 
-  return <LandingContainer content={content} />
+  return <LandingContainer content={<div className={style.centerContainer}>{content}</div>} />
 }

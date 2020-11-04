@@ -74,11 +74,6 @@ function EditPortfolioSectionsGrouped() {
   const finishEditingElement = useStore(useCallback(finishEditingElementSelector, []))
   const finishEditingSection = useStore(useCallback(finishEditingSectionSelector, []))
 
-  // const handleFinishEditingElement = useCallback(() => {
-  //   finishEditingElement(currentPage, editPage)
-  //   handleSaveSections()
-  // }, [currentPage, editPage, finishEditingElement, handleSaveSections])
-
   const handleEditAnotherElement = useCallback(
     (sectionIndex, elementIndex) => {
       finishEditingElement(currentPage, editPage)
@@ -95,7 +90,7 @@ function EditPortfolioSectionsGrouped() {
     finishEditingElement(currentPage, editPage)
     finishEditingSection()
     handleSaveSections()
-  }, [finishEditingSection, finishEditingElement, handleSaveSections])
+  }, [finishEditingSection, finishEditingElement, handleSaveSections, currentPage, editPage])
 
   return (
     <Grid item xs={12} md={8} lg={9}>

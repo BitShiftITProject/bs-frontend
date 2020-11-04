@@ -94,16 +94,14 @@ function SectionsList({ sections, editing }) {
                             container
                             direction='row'
                             spacing={2}
-                            style={{ overflowX: 'scroll', flexWrap: 'nowrap' }}
+                            style={{
+                              overflowX: 'scroll',
+                              flexWrap: 'nowrap',
+                              wordBreak: 'break-all'
+                            }}
                           >
                             {section.map((element, elementIndex) => (
-                              <Grid
-                                key={elementIndex}
-                                item
-                                container
-                                justify='center'
-                                alignItems='center'
-                              >
+                              <Grid key={elementIndex} item container>
                                 {GetElementJSX(element, editing)}
                               </Grid>
                             ))}
@@ -126,7 +124,11 @@ function SectionsList({ sections, editing }) {
         {sections.map((section, sectionIndex) => (
           <Grid item container key={sectionIndex} direction='row' spacing={2}>
             {section.map((element, elementIndex) => (
-              <Grid key={elementIndex} item style={{ width: `calc(100% / ${section.length})` }}>
+              <Grid
+                key={elementIndex}
+                item
+                style={{ width: `calc(100% / ${section.length})`, wordBreak: 'break-all' }}
+              >
                 {GetElementJSX(element, editing)}
               </Grid>
             ))}

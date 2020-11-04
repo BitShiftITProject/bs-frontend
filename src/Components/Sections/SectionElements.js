@@ -51,7 +51,6 @@ const currentElementSelector = ({ currentElement, editCurrentElement }) => [
   currentElement,
   editCurrentElement
 ]
-// const pageIdSelector = (state) => state.pageId
 
 /* -------------------------------------------------------------------------- */
 /*                              Section Elements                              */
@@ -84,7 +83,7 @@ export const Text = React.memo(({ editing, data }) => {
       <TextEditor data={data} />
     )
   ) : (
-    <div>{ReactHtmlParser(data)}</div>
+    <div style={{ wordBreak: 'break-all' }}>{ReactHtmlParser(data)}</div>
   )
 
   return rendered

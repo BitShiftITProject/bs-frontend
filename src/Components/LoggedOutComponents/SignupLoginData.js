@@ -182,8 +182,6 @@ function SignupLoginData({ handleChange, handleClickShowPassword }) {
           />
         </Grid>
       </Grid>
-      {/* Loading sign up */}
-      {loading && <Loading message={intl.formatMessage({ id: 'signupLoading' })} />}
 
       {/* SIGN UP BUTTON */}
 
@@ -195,7 +193,7 @@ function SignupLoginData({ handleChange, handleClickShowPassword }) {
         justify='center'
         alignItems='center'
       >
-        {!loading && (
+        {!loading ? (
           <Fab
             type='submit'
             variant='extended'
@@ -205,6 +203,8 @@ function SignupLoginData({ handleChange, handleClickShowPassword }) {
           >
             {intl.formatMessage({ id: 'signUp' })}
           </Fab>
+        ) : (
+          <Loading size={24} message={intl.formatMessage({ id: 'signupLoading' })} />
         )}
       </Grid>
       <Grid

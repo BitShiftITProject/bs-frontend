@@ -12,7 +12,7 @@ import ForgotPassword from './Components/LoggedOutComponents/ForgotPassword'
 
 import EditProfilePage from './Components/LoggedInComponents/Profile/EditProfilePage'
 import PortfolioListPage from './Components/LoggedInComponents/PortfolioList/PortfolioListPage'
-import AddPortfolioPage from './Components/LoggedInComponents/PortfolioList/AddPortfolioPage'
+import AddPortfolioPage from './Components/LoggedInComponents/PortfolioAdd/AddPortfolioPage'
 import EditPortfolioPage from './Components/LoggedInComponents/PortfolioEdit/EditPortfolioPage'
 import SettingsPage from './Components/LoggedInComponents/SettingsPage'
 import HelpPage from './Components/LoggedInComponents/HelpPage'

@@ -13,7 +13,6 @@ export default function usePortfolio(portfolioId) {
       enabled: portfolioId,
       staleTime: 3 * 60 * 1000,
       initialData: () => cache.getQueryData(['portfolios', { id: portfolioId }])
-      // initialStale: true
     }
   })
 }

@@ -267,7 +267,7 @@ function Login(props) {
           {!loading ? (
             intl.formatMessage({ id: 'login' })
           ) : (
-            <Loading message={intl.formatMessage({ id: 'loginLoading' })} />
+            <Loading size={24} message={intl.formatMessage({ id: 'loginLoading' })} />
           )}
         </Fab>
         {/* FORGOT PASSWORD AND SIGN UP LINKS */}

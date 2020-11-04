@@ -168,7 +168,7 @@ function ForgotPassword(props) {
       ) : (
         <form onSubmit={handleResetPassword} className={classes.form}>
           <CursorTypography component='h1' variant='h5'>
-            'Reset Password'
+            Reset Password
           </CursorTypography>
 
           <Typography

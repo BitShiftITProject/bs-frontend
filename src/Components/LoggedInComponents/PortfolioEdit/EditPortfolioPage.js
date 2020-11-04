@@ -22,13 +22,13 @@ export default function EditPortfolioPage() {
   const [editMode, setEditMode] = useState('content')
   const [portfolioId, setPortfolioId] = useStore(useCallback(portfolioIdSelector, []), shallow)
   const user = useQueryCache().getQueryData('user')
-  const { status: portfoliosStatus } = usePortfolios(user)
+  const { data: portfolio } = usePortfolios(user)
 
   useEffect(() => {
-    if (!portfolioId) {
+    if (!portfolioId || !portfolio) {
       window.location.href = '/portfolios'
     }
-  }, [portfolioId])
+  }, [portfolioId, portfolio])
 
   useEffect(() => {
     return () => setPortfolioId(null)

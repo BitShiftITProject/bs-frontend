@@ -121,6 +121,7 @@ function PortfolioListPage(props) {
   function handleEdit(portfolioId) {
     // Set portfolioId in session storage so EditPortfolioPage will fetch
     // portfolio from DB based on this ID
+    localStorage.setItem('portfolioId', portfolioId)
     setPortfolioId(portfolioId)
     history.push('/portfolios/edit')
   }

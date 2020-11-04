@@ -23,5 +23,5 @@ export function GetElementJSX(element, editing) {
 }
 
 export function ConvertToSection(section) {
-  return section.map((element) => ({ ...element, data: '' }))
+  return section.map((element) => ({ ...element, data: element.id === 'spacer' ? 50 : '' }))
 }
