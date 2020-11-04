@@ -1,26 +1,26 @@
-import React from 'react'
-import { Grid } from '@material-ui/core'
+import React from "react";
+import { Grid } from "@material-ui/core";
 
-import { GetElementJSX } from './SectionsMap'
-import SectionContainer from './SectionEdit/SectionContainer'
+import { GetElementJSX } from "./SectionsMap";
+import SectionContainer from "./SectionEdit/SectionContainer";
 
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-import { useTheme } from '@material-ui/core/styles'
-import { useLocation } from 'react-router-dom'
-import useEditPage from '../../Hooks/useEditPage'
-import { useStore } from '../../Hooks/Store'
-import arrayMove from 'array-move'
+import { useTheme } from "@material-ui/core/styles";
+import { useLocation } from "react-router-dom";
+import useEditPage from "../../Hooks/useEditPage";
+import { useStore } from "../../Hooks/Store";
+import arrayMove from "array-move";
 
-const pageIdSelector = (state) => state.pageId
+const pageIdSelector = (state) => state.pageId;
 
 function SectionsList({ sections, editing }) {
-  const { pathname } = useLocation()
-  const pageId = useStore(pageIdSelector)
-  const [editPage] = useEditPage()
+  const { pathname } = useLocation();
+  const pageId = useStore(pageIdSelector);
+  const [editPage] = useEditPage();
 
   // the grid for the drop and drag related sections
-  const grid = sections ? sections.length : 0
+  const grid = sections ? sections.length : 0;
 
   // reorders the result
   // const reorder = (list, startIndex, endIndex) => {
@@ -31,36 +31,44 @@ function SectionsList({ sections, editing }) {
   //   return result
   // }
 
-  const theme = useTheme()
+  const theme = useTheme();
 
   // styles for when theyre being dragged
   const getItemStyle = (isDragging, draggableStyle) => ({
     // some basic styles to make the sections look a bit nicer
-    userSelect: 'none',
+    userSelect: "none",
     padding: grid * 2,
     margin: 8,
     flexGrow: 1,
-    borderRadius: '8px',
+    borderRadius: "8px",
 
     // change background colour if dragging
     background: isDragging
       ? // theme.palette.background.paperHover
-        'lightgreen'
+        "lightgreen"
       : theme.palette.background.paperLight,
 
     // styles we need to apply on draggables
-    ...draggableStyle
-  })
+    ...draggableStyle,
+  });
 
   // when done with dragging
   const onDragEnd = (result) => {
     // dropped outside the list
-    if (result.source && result.destination && result.source.index !== result.destination.index) {
-      const newSections = arrayMove(sections, result.source.index, result.destination.index)
-      const patchDetails = { content: { sections: newSections } }
-      editPage({ pageId, patchDetails })
+    if (
+      result.source &&
+      result.destination &&
+      result.source.index !== result.destination.index
+    ) {
+      const newSections = arrayMove(
+        sections,
+        result.source.index,
+        result.destination.index
+      );
+      const patchDetails = { content: { sections: newSections } };
+      editPage({ pageId, patchDetails });
     }
-  }
+  };
 
   const sectionList =
     /* -------------------------------------------------------------------------- */
@@ -69,48 +77,79 @@ function SectionsList({ sections, editing }) {
 
     /* ---------------------------- Editable Sections --------------------------- */
 
-    !pathname.includes('public') ? (
+    !pathname.includes("public") ? (
       <div>
         <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId='droppable'>
+          <Droppable droppableId="droppable">
             {(provided, snapshot) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
                 {/* map the sections as dragable items */}
-                {sections.map((section, sectionIndex) => (
-                  <Draggable
-                    key={sectionIndex}
-                    draggableId={`item-${sectionIndex}`}
-                    index={sectionIndex}
-                  >
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-                      >
-                        <SectionContainer key={sectionIndex} sectionIndex={sectionIndex}>
-                          <Grid
-                            container
-                            direction='row'
-                            spacing={2}
-                            style={{
-                              overflowX: 'scroll',
-                              flexWrap: 'nowrap',
-                              wordBreak: 'break-all'
-                            }}
+                {sections.map((section, sectionIndex) => {
+                  let spacerWidth = 0;
+                  let spacerCount = 0;
+                  for (let i = 0; i < section.length; i++) {
+                    if (section[i].id === "spacer") {
+                      spacerWidth += section[i].data;
+                      spacerCount++;
+                    }
+                  }
+
+                  return (
+                    <Draggable
+                      key={sectionIndex}
+                      draggableId={`item-${sectionIndex}`}
+                      index={sectionIndex}
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={getItemStyle(
+                            snapshot.isDragging,
+                            provided.draggableProps.style
+                          )}
+                        >
+                          <SectionContainer
+                            key={sectionIndex}
+                            sectionIndex={sectionIndex}
                           >
-                            {section.map((element, elementIndex) => (
-                              <Grid key={elementIndex} item container>
-                                {GetElementJSX(element, editing)}
-                              </Grid>
-                            ))}
-                          </Grid>
-                        </SectionContainer>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
+                            <Grid
+                              container
+                              direction="row"
+                              spacing={2}
+                              style={{
+                                overflowX: "scroll",
+                                flexWrap: "nowrap",
+                              }}
+                            >
+                              {section.map((element, elementIndex) => {
+                                let width =
+                                  element.id === "spacer"
+                                    ? {
+                                        width: `${
+                                          (100 / section.length) *
+                                          (element.data / 100)
+                                        }%`,
+                                      }
+                                    : {
+                                        width: `calc(${
+                                          100 - spacerWidth / section.length
+                                        }% / ${section.length - spacerCount})`,
+                                      };
+                                return (
+                                  <Grid key={elementIndex} item style={width}>
+                                    {GetElementJSX(element, editing)}
+                                  </Grid>
+                                );
+                              })}
+                            </Grid>
+                          </SectionContainer>
+                        </div>
+                      )}
+                    </Draggable>
+                  );
+                })}
                 {provided.placeholder}
               </div>
             )}
@@ -120,24 +159,45 @@ function SectionsList({ sections, editing }) {
     ) : (
       /* ------------------------ Public Portfolio Sections ----------------------- */
 
-      <Grid container direction='column' spacing={3}>
-        {sections.map((section, sectionIndex) => (
-          <Grid item container key={sectionIndex} direction='row' spacing={2}>
-            {section.map((element, elementIndex) => (
-              <Grid
-                key={elementIndex}
-                item
-                style={{ width: `calc(100% / ${section.length})`, wordBreak: 'break-all' }}
-              >
-                {GetElementJSX(element, editing)}
-              </Grid>
-            ))}
-          </Grid>
-        ))}
-      </Grid>
-    )
+      <Grid container direction="column" spacing={3}>
+        {sections.map((section, sectionIndex) => {
+          let spacerWidth = 0;
+          let spacerCount = 0;
+          for (let i = 0; i < section.length; i++) {
+            if (section[i].id === "spacer") {
+              spacerWidth += section[i].data;
+              spacerCount++;
+            }
+          }
 
-  return sectionList
+          return (
+            <Grid item container key={sectionIndex} direction="row" spacing={2}>
+              {section.map((element, elementIndex) => {
+                let width =
+                  element.id === "spacer"
+                    ? {
+                        width: `${
+                          (100 / section.length) * (element.data / 100)
+                        }%`,
+                      }
+                    : {
+                        width: `calc(${100 - spacerWidth / section.length}% / ${
+                          section.length - spacerCount
+                        })`,
+                      };
+                return (
+                  <Grid key={elementIndex} item style={width}>
+                    {GetElementJSX(element, editing)}
+                  </Grid>
+                );
+              })}
+            </Grid>
+          );
+        })}
+      </Grid>
+    );
+
+  return sectionList;
 }
 
-export default SectionsList
+export default SectionsList;
