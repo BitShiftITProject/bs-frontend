@@ -1,5 +1,3 @@
-import { queryCache } from 'react-query'
-
 export const templates = {
   blank: [],
   curriculumVitae: [

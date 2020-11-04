@@ -1,6 +1,6 @@
-import React, { useCallback } from "react";
-import ReactHtmlParser from "react-html-parser";
-import YouTube from "react-youtube";
+import React, { useCallback } from 'react'
+import ReactHtmlParser from 'react-html-parser'
+import YouTube from 'react-youtube'
 import {
   Grid,
   TextField,
@@ -10,52 +10,59 @@ import {
   Link,
   makeStyles,
   Slider,
-} from "@material-ui/core";
-import GetAppIcon from "@material-ui/icons/GetApp";
+  Icon
+} from '@material-ui/core'
+import GetAppIcon from '@material-ui/icons/GetApp'
+
+import TextFieldsIcon from '@material-ui/icons/TextFields'
+import ImageTwoToneIcon from '@material-ui/icons/ImageTwoTone'
+import PlayCircleFilledTwoToneIcon from '@material-ui/icons/PlayCircleFilledTwoTone'
+import AttachmentTwoToneIcon from '@material-ui/icons/AttachmentTwoTone'
+import HeightIcon from '@material-ui/icons/Height'
 
 // import { getMediaItem, getFile, getDataUrl } from '../../Backend/Fetch'
-import Dropzone from "../CommonComponents/Dropzone";
+import Dropzone from '../CommonComponents/Dropzone'
 
-import TextEditor from "../TextEditor";
-import { useStore } from "../../Hooks/Store";
+import TextEditor from '../TextEditor'
+import { useStore } from '../../Hooks/Store'
 // import usePage from '../../Hooks/usePage'
-import useFile from "../../Hooks/useFile";
-import useMediaItem from "../../Hooks/useMediaItem";
-import ReactPlayer from "react-player";
-import shallow from "zustand/shallow";
+import useFile from '../../Hooks/useFile'
+import useMediaItem from '../../Hooks/useMediaItem'
+import ReactPlayer from 'react-player'
+import shallow from 'zustand/shallow'
 
-const text = "Text";
-const spacer = "Spacer";
-const youtubeVideo = "Video";
-const mediaPlayer = "Media Player";
-const image = "Image";
-const fileUpload = "File";
+const text = 'Text'
+const spacer = 'Spacer'
+const youtubeVideo = 'Video'
+const mediaPlayer = 'Media Player'
+const image = 'Image'
+const fileUpload = 'File'
 
 const ExampleSection = styled(Grid)({
-  overflowY: "hidden",
-  height: "100%",
-  border: "0.5px solid rgba(0,0,0,0.05)",
-  backgroundColor: "#F1F1F1",
-  color: "#000",
-  cursor: "default",
-  "& p": {
-    lineHeight: "auto",
+  overflowY: 'hidden',
+  height: '100%',
+  border: '0.5px solid rgba(0,0,0,0.05)',
+  backgroundColor: '#F1F1F1',
+  color: '#000',
+  cursor: 'default',
+  '& p': {
+    lineHeight: 'auto'
   },
-  justifyContent: "center",
-  alignItems: "center",
-});
+  justifyContent: 'center',
+  alignItems: 'center'
+})
 
 const useStyles = makeStyles((theme) => ({
   fileUploadIcon: {
-    transform: "scale(0.8)",
-    color: theme.palette.info.main,
+    transform: 'scale(0.8)',
+    color: theme.palette.info.main
   },
   fileUpload: {
-    cursor: "pointer",
-    fontWeight: "bold",
-    color: theme.palette.info.main,
-  },
-}));
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    color: theme.palette.info.main
+  }
+}))
 
 const currentElementSelector = ({ currentElement, editCurrentElement }) => [
   currentElement,
@@ -87,7 +94,9 @@ export const Text = React.memo(({ editing, data }) => {
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
-        <Typography variant="h6">{text}</Typography>
+        <Icon style={{ transform: 'scale(4)', color: 'grey' }}>
+          <TextFieldsIcon />
+        </Icon>
       </ExampleSection>
     ) : (
       <TextEditor data={data} />
@@ -96,33 +105,35 @@ export const Text = React.memo(({ editing, data }) => {
     <div style={{ wordBreak: 'break-all' }}>{ReactHtmlParser(data)}</div>
   )
 
-  return rendered;
-});
+  return rendered
+})
 
 export const Spacer = React.memo(({ editing, data }) => {
   const [currentElement, editCurrentElement] = useStore(
     useCallback(currentElementSelector, []),
     shallow
-  );
+  )
 
   const handleChange = (e, value) => {
-    editCurrentElement(value);
-  };
+    editCurrentElement(value)
+  }
 
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
-        <Typography variant="h6">{spacer}</Typography>
+        <Icon style={{ transform: 'scale(4)', color: 'grey' }}>
+          <HeightIcon style={{ transform: 'rotate(90deg)' }} />
+        </Icon>
       </ExampleSection>
     ) : (
       <Slider
         defaultValue={currentElement.data}
         onChangeCommitted={handleChange}
         getAriaValueText={(value) => {
-          return value;
+          return value
         }}
-        aria-labelledby="discrete-slider"
-        valueLabelDisplay="auto"
+        aria-labelledby='discrete-slider'
+        valueLabelDisplay='auto'
         step={10}
         marks
         min={10}
@@ -130,26 +141,28 @@ export const Spacer = React.memo(({ editing, data }) => {
       />
     )
   ) : (
-    <div id="empty" />
-  );
+    <div id='empty' />
+  )
 
-  return rendered;
-});
+  return rendered
+})
 
 export const MediaPlayer = React.memo(({ editing, data }) => {
   const [currentElement, editCurrentElement] = useStore(
     useCallback(currentElementSelector, []),
     shallow
-  );
+  )
 
   const handleChange = (e) => {
-    editCurrentElement(e.target.value);
-  };
+    editCurrentElement(e.target.value)
+  }
 
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
-        <Typography variant="h6">{mediaPlayer}</Typography>
+        <Icon style={{ transform: 'scale(4)', color: 'grey' }}>
+          <PlayCircleFilledTwoToneIcon />
+        </Icon>
       </ExampleSection>
     ) : (
       <TextField
@@ -157,89 +170,85 @@ export const MediaPlayer = React.memo(({ editing, data }) => {
         onChange={handleChange}
         fullWidth
         multiline
-        variant="outlined"
-        label="Media URL"
+        variant='outlined'
+        label='Media URL'
         helperText={
-          "Supports YouTube, Facebook, Soundcloud, Vimeo, Dailymotion, and any URL linking to a video or audio file"
+          'Supports YouTube, Facebook, Soundcloud, Vimeo, Dailymotion, and any URL linking to a video or audio file'
         }
       />
     )
-  ) : data !== "" ? (
-    <ReactPlayer url={data} controls width="100%" />
+  ) : data !== '' ? (
+    <ReactPlayer url={data} controls width='100%' />
   ) : (
     <div style={{ height: 0 }}></div>
-  );
+  )
 
-  return rendered;
-});
+  return rendered
+})
 
 export const YoutubeVideo = React.memo(({ editing, data }) => {
   const [currentElement, editCurrentElement] = useStore(
     useCallback(currentElementSelector, []),
     shallow
-  );
+  )
 
   const handleChange = (e) => {
-    editCurrentElement(e.target.value);
-  };
+    editCurrentElement(e.target.value)
+  }
 
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
-        <Typography variant="h6">{youtubeVideo}</Typography>
+        <Typography variant='h6'>{youtubeVideo}</Typography>
       </ExampleSection>
     ) : (
-      <Tooltip placement="top" title="Video ID (See FAQ)">
+      <Tooltip placement='top' title='Video ID (See FAQ)'>
         <TextField
           value={currentElement.data}
           onChange={handleChange}
           fullWidth
           multiline
-          variant="outlined"
+          variant='outlined'
         />
       </Tooltip>
     )
   ) : (
-    <YouTube videoId={data} opts={{ width: "100%" }} />
-  );
+    <YouTube videoId={data} opts={{ width: '100%' }} />
+  )
 
-  return rendered;
-});
+  return rendered
+})
 
 export const Image = React.memo(({ editing, data }) => {
   // The data being passed to the useMediaItem functions is the S3 key of the
   // image
-  const { data: mediaItem } = useMediaItem(data);
-  const { data: file } = useFile(data, editing);
+  const { data: mediaItem } = useMediaItem(data)
+  const { data: file } = useFile(data, editing)
 
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
-        <Typography variant="h6">{image}</Typography>
+        <Icon style={{ transform: 'scale(4)', color: 'grey' }}>
+          <ImageTwoToneIcon />
+        </Icon>
       </ExampleSection>
     ) : (
       // Open up file dialog with function related to changing this value
       // Make typography on the right show file name
       // Show button and typography in line
-      <Grid
-        container
-        direction="row"
-        spacing={2}
-        justify="center"
-        alignItems="center"
-      >
+      <Grid container direction='row' spacing={2} justify='center' alignItems='center'>
         <Dropzone
           img
           initialFile={
-            !file || file === ""
+            !file || file === ''
               ? null
               : {
                   data: file,
                   file: {
                     name: mediaItem.public_name,
                     path: mediaItem.public_name,
-                    type: mediaItem.file_type,
-                  },
+                    type: mediaItem.file_type
+                  }
                 }
           }
         />
@@ -251,69 +260,65 @@ export const Image = React.memo(({ editing, data }) => {
       {file && (
         <img
           style={{
-            display: "block",
-            marginLeft: "auto",
-            marginRight: "auto",
-            maxWidth: "100%",
+            display: 'block',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            maxWidth: '100%'
           }}
           src={file}
-          alt={mediaItem ? mediaItem.public_name : "No File Uploaded"}
+          alt={mediaItem ? mediaItem.public_name : 'No File Uploaded'}
         />
       )}
     </div>
-  );
+  )
 
-  return rendered;
-});
+  return rendered
+})
 
 export const File = React.memo(({ editing, data }) => {
   // The data being passed to the useMediaItem functions is the S3 key of the
   // file
-  const { data: mediaItem } = useMediaItem(data);
-  const { data: file } = useFile(data, editing);
+  const { data: mediaItem } = useMediaItem(data)
+  const { data: file } = useFile(data, editing)
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   const handleClick = async () => {
     if (file) {
-      const fileBlob = await (await fetch(file)).blob();
-      const blobURL = URL.createObjectURL(fileBlob);
+      const fileBlob = await (await fetch(file)).blob()
+      const blobURL = URL.createObjectURL(fileBlob)
 
-      const a = document.createElement("a");
+      const a = document.createElement('a')
 
-      a.href = blobURL;
-      a.download = mediaItem.public_name;
-      a.click();
+      a.href = blobURL
+      a.download = mediaItem.public_name
+      a.click()
     }
-  };
+  }
 
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
-        <Typography variant="h6">{fileUpload}</Typography>
+        <Icon style={{ transform: 'scale(4)', color: 'grey' }}>
+          <AttachmentTwoToneIcon />
+        </Icon>
       </ExampleSection>
     ) : (
       // Open up file dialog with function related to changing this value
       // Make typography on the right show file name
       // Show button and typography in line
-      <Grid
-        container
-        direction="row"
-        spacing={2}
-        justify="center"
-        alignItems="center"
-      >
+      <Grid container direction='row' spacing={2} justify='center' alignItems='center'>
         <Dropzone
           initialFile={
-            !file || file === ""
+            !file || file === ''
               ? null
               : {
                   data: file,
                   file: {
                     name: mediaItem.public_name,
                     path: mediaItem.public_name,
-                    type: mediaItem.file_type,
-                  },
+                    type: mediaItem.file_type
+                  }
                 }
           }
         />
@@ -325,33 +330,31 @@ export const File = React.memo(({ editing, data }) => {
       {file && (
         <div
           style={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
         >
           <span
             onClick={handleClick}
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              minHeight: 100,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: 100
             }}
           >
             <GetAppIcon className={classes.fileUploadIcon} />
             <Link className={classes.fileUpload}>
-              {mediaItem && mediaItem.public_name
-                ? mediaItem.public_name
-                : "No File Uploaded"}
+              {mediaItem && mediaItem.public_name ? mediaItem.public_name : 'No File Uploaded'}
             </Link>
           </span>
         </div>
       )}
     </div>
-  );
+  )
 
-  return rendered;
-});
+  return rendered
+})

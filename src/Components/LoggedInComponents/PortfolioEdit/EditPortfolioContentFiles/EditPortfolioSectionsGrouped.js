@@ -74,6 +74,10 @@ function EditPortfolioSectionsGrouped() {
   const finishEditingElement = useStore(useCallback(finishEditingElementSelector, []))
   const finishEditingSection = useStore(useCallback(finishEditingSectionSelector, []))
 
+  const autosaveElement = useCallback(() => {
+    finishEditingElement(currentPage, editPage)
+  }, [finishEditingElement, currentPage, editPage])
+
   const handleEditAnotherElement = useCallback(
     (sectionIndex, elementIndex) => {
       finishEditingElement(currentPage, editPage)
@@ -182,7 +186,10 @@ function EditPortfolioSectionsGrouped() {
         )}
       </Paper>
       <Dialog open={currentElement !== null} onClose={handleClose}>
-        <EditSectionPage handleEditAnotherElement={handleEditAnotherElement} />
+        <EditSectionPage
+          handleEditAnotherElement={handleEditAnotherElement}
+          autosaveElement={autosaveElement}
+        />
       </Dialog>
     </Grid>
   )

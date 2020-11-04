@@ -78,7 +78,7 @@ function SectionsButton() {
   /* -------------------------------------------------------------------------- */
 
   const dialogContent = (
-    <div>
+    <div style={{ width: '500px' }}>
       <DialogTitle>{intl.formatMessage({ id: 'addSection' })}</DialogTitle>
       <DialogContent>
         <Grid container direction='column' spacing={4}>
@@ -87,7 +87,7 @@ function SectionsButton() {
             <Grid
               style={{
                 height: 200,
-                padding: 24,
+                padding: 10,
                 marginTop: 16,
                 backgroundColor: 'rgba(0,0,0,0.1)'
               }}
@@ -100,13 +100,16 @@ function SectionsButton() {
                   key={idx}
                   container
                   item
-                  xs={12 / elements.length}
-                  style={{ height: '100%', position: 'relative' }}
+                  style={{
+                    height: '100%',
+                    position: 'relative',
+                    width: `calc(100% / ${elements.length})`
+                  }}
                 >
                   {GetElementJSX(section, editing)}
                   <Fab
                     size='small'
-                    style={{ transform: 'scale(0.9)', position: 'absolute', top: -10, right: -5 }}
+                    style={{ transform: 'scale(0.75)', position: 'absolute', top: 15, right: 18 }}
                     onClick={() => removeSectionElement(idx)}
                   >
                     <CloseIcon />
@@ -122,10 +125,7 @@ function SectionsButton() {
             <Grid item container direction='row' spacing={2}>
               {Object.keys(sectionElements).map((elementName, idx) => (
                 <Grid key={idx} item>
-                  <ButtonBase
-                    disabled={elements.length === 4}
-                    onClick={(e) => addSectionElement(elementName)}
-                  >
+                  <ButtonBase onClick={(e) => addSectionElement(elementName)}>
                     <Link color='textPrimary' style={{ textTransform: 'capitalize' }}>
                       {sectionElements[elementName][0]}
                     </Link>

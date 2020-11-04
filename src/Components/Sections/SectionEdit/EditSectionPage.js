@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Grid, AppBar, Tabs, Tab, DialogTitle } from '@material-ui/core'
 import { GetElementJSX, sectionElements } from '../SectionsMap'
@@ -49,7 +49,7 @@ const currentSectionDetails = ({ pageId, sectionIndex, elementIndex }) => [
 
 // If currently editing an element, then we are currently editing a section.
 // Therefore we need to show the edit panel for the current section's elements.
-function EditSectionPage({ handleEditAnotherElement }) {
+function EditSectionPage({ handleEditAnotherElement, autosaveElement }) {
   const editing = true
 
   const [pageId, sectionIndex, elementIndex] = useStore(
@@ -64,6 +64,16 @@ function EditSectionPage({ handleEditAnotherElement }) {
     handleEditAnotherElement(sectionIndex, elementIndex)
   }
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('Autosaved!')
+      autosaveElement()
+    }, 60 * 1000)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
   return sectionIndex !== null ? (
     <Grid container direction='column' style={{ width: '600px' }}>
       <DialogTitle>Edit Section</DialogTitle>
@@ -75,12 +85,12 @@ function EditSectionPage({ handleEditAnotherElement }) {
               variant='scrollable'
               scrollButtons='on'
               indicatorColor='secondary'
-              textColor='secondary'
               aria-label='scrollable force tabs example'
             >
               {currentPage.content.sections[sectionIndex].map((element, idx) => (
                 <Tab
                   key={idx}
+                  icon={sectionElements[element.id][2]}
                   label={sectionElements[element.id][0]}
                   onClick={() => handleClick(sectionIndex, idx)}
                 />
