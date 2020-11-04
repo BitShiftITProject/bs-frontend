@@ -66,7 +66,7 @@ function EditSectionPage({ handleEditAnotherElement, autosaveElement }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log('Autosaved!')
+      // console.log('Autosaved!')
       autosaveElement()
     }, 60 * 1000)
     return () => {

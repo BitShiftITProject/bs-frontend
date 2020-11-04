@@ -117,7 +117,7 @@ export default function AddPortfolioPage() {
       theme
     }
 
-    console.log(postDetails, template)
+    // console.log(postDetails, template)
 
     // Creates a portfolio belonging to the currently logged-in user,
     // if error, show an error helper text.
