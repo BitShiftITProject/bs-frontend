@@ -29,6 +29,8 @@ function PublicPortfolio() {
   }, [portfolioStatus, portfolio]);
 
   useEffect(() => {
+    console.log(portfolioId);
+    console.log(portfolio);
     console.log(pages);
     if (portfolioId && portfolio && pages) {
       setPortfolioId(portfolioId);
@@ -61,7 +63,7 @@ function PublicPortfolio() {
 
   return (
     <div style={{ height: "100%" }}>
-      {portfolio && pages ? (
+      {portfolio && pages && pages.length > 0 ? (
         <PublicSidebar pages={pages} />
       ) : (
         <div style={{ height: "100vh" }}>
