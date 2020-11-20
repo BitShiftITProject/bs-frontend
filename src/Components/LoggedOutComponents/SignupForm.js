@@ -52,7 +52,7 @@ function SignupForm() {
   )
 
   const handleClickShowPassword = () => modifyForm('showPassword', !showPassword)
-  const changeLoading = () => modifyForm('loading', !loading)
+  const changeLoading = (value) => modifyForm('loading', value)
 
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
@@ -82,7 +82,7 @@ function SignupForm() {
       password: password
     }
 
-    changeLoading()
+    changeLoading(true)
 
     const response = await signupCheck(details)
 
@@ -97,7 +97,8 @@ function SignupForm() {
       modifyForm('signUpFailed', true)
       modifyForm('errorMessage', error.error.message)
     }
-    changeLoading()
+
+    changeLoading(false)
   }
 
   /* -------------------------------------------------------------------------- */

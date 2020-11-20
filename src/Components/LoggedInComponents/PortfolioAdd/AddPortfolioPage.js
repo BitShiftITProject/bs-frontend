@@ -142,8 +142,8 @@ export default function AddPortfolioPage() {
           }, 1000)
         })
     } catch (error) {
-      modifyForm('errorMessage', 'An error occurred. Try again.')
       modifyForm('error', true)
+      modifyForm('errorMessage', 'An error occurred. Try again.')
     }
   }
 
@@ -160,6 +160,16 @@ export default function AddPortfolioPage() {
   }
 
   function handleNext() {
+    if (activeStep === 0) {
+      if (!title) {
+        modifyForm('error', true)
+        modifyForm('errorMessage', 'Title is required.')
+        return
+      } else {
+        modifyForm('error', false)
+        modifyForm('errorMessage', '')
+      }
+    }
     setActiveStep(activeStep + 1)
   }
 
@@ -172,7 +182,7 @@ export default function AddPortfolioPage() {
       <Grid item xs={12} container direction='column' justify='center' alignItems='center'>
         <Paper className={fixedHeightPaper}>
           <div>
-            <Stepper activeStep={activeStep} alternativeLabel nonLinear>
+            <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map((label, idx) => (
                 <Step key={label}>
                   <StepButton onClick={() => handleStep(idx)}>{label}</StepButton>
