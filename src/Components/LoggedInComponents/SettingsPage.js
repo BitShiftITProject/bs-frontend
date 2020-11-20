@@ -107,7 +107,7 @@ export default function SettingsPage() {
               alignItems='center'
             >
               <Grid item xs={settingNameSize}>
-                <CursorTypography>{intl.formatMessage({ id: 'theme' })}</CursorTypography>
+                <CursorTypography>{intl.formatMessage({ id: 'darkMode' })}</CursorTypography>
               </Grid>
               <Grid item xs={settingOptionSize}>
                 <Switch
@@ -146,7 +146,7 @@ export default function SettingsPage() {
 
       {/* LOGIN DATA */}
 
-      <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+      {/* <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <CursorTypography className={classes.heading}>
             {intl.formatMessage({ id: 'loginData' })}
@@ -154,7 +154,7 @@ export default function SettingsPage() {
           <CursorTypography className={classes.secondaryHeading}></CursorTypography>
         </AccordionSummary>
         <AccordionDetails></AccordionDetails>
-      </Accordion>
+      </Accordion> */}
     </div>
   )
 

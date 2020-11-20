@@ -4,12 +4,14 @@ import { themes } from '../../../Themes/themes'
 import shallow from 'zustand/shallow'
 import { useFormStore } from '../../../Hooks/Store'
 import { loggedInStyles } from '../../../Styles/loggedInStyles'
+import { useIntl } from 'react-intl'
 
 const portfolioThemeSelector = ({ theme, modifyForm }) => [theme, modifyForm]
 
 export default function PortfolioThemeForm() {
   const style = loggedInStyles()
   const [theme, modifyForm] = useFormStore(useCallback(portfolioThemeSelector, []), shallow)
+  const intl = useIntl()
 
   return (
     <FormControl component='fieldset' className={style.addPortfolioForm}>
@@ -19,10 +21,13 @@ export default function PortfolioThemeForm() {
         onChange={(e) => modifyForm('theme', e.target.value)}
       >
         {Object.keys(themes).map((theme) => {
-          const titleCase = theme.replace(/([A-Z])/g, ' $1')
-          const radioLabel = titleCase.charAt(0).toUpperCase() + titleCase.slice(1)
           return (
-            <FormControlLabel key={theme} value={theme} control={<Radio />} label={radioLabel} />
+            <FormControlLabel
+              key={theme}
+              value={theme}
+              control={<Radio />}
+              label={intl.formatMessage({ id: theme })}
+            />
           )
         })}
       </RadioGroup>

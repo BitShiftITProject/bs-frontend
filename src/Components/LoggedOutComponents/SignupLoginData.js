@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 
 import { TextField, Grid, InputAdornment, IconButton, Fab } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 
@@ -28,16 +29,38 @@ function SignupLoginData({ handleChange, handleClickShowPassword }) {
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
 
-  const [username, email, password, firstName, lastName, loading, showPassword] = useFormStore(
+  const [
+    username,
+    email,
+    password,
+    firstName,
+    lastName,
+    loading,
+    showPassword,
+    signUpFailed,
+    errorMessage
+  ] = useFormStore(
     useCallback(
-      ({ username, email, password, firstName, lastName, loading, showPassword }) => [
+      ({
         username,
         email,
         password,
         firstName,
         lastName,
         loading,
-        showPassword
+        showPassword,
+        signUpFailed,
+        errorMessage
+      }) => [
+        username,
+        email,
+        password,
+        firstName,
+        lastName,
+        loading,
+        showPassword,
+        signUpFailed,
+        errorMessage
       ],
       []
     ),
@@ -193,6 +216,13 @@ function SignupLoginData({ handleChange, handleClickShowPassword }) {
         justify='center'
         alignItems='center'
       >
+        {signUpFailed && (
+          <div style={{ paddingBottom: 5 }}>
+            <Alert variant='filled' severity='error'>
+              {errorMessage}
+            </Alert>
+          </div>
+        )}
         {!loading ? (
           <Fab
             type='submit'

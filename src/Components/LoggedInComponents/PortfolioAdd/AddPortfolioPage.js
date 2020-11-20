@@ -9,7 +9,8 @@ import {
   Fab,
   Stepper,
   Step,
-  StepButton
+  StepButton,
+  CircularProgress
 } from '@material-ui/core'
 
 import { loggedInStyles } from '../../../Styles/loggedInStyles'
@@ -38,11 +39,19 @@ const portfolioFormSelector = ({
   error,
   errorMessage,
   modifyForm,
-  resetPortfolioForm
-}) => [title, description, theme, template, error, errorMessage, modifyForm, resetPortfolioForm]
-
-const steps = ['Details', 'Theme', 'Template']
-const stepsLength = steps.length
+  resetPortfolioForm,
+  loading
+}) => [
+  title,
+  description,
+  theme,
+  template,
+  error,
+  errorMessage,
+  modifyForm,
+  resetPortfolioForm,
+  loading
+]
 
 export default function AddPortfolioPage() {
   /* -------------------------------------------------------------------------- */
@@ -50,6 +59,12 @@ export default function AddPortfolioPage() {
   /* -------------------------------------------------------------------------- */
 
   const intl = useIntl()
+  const steps = [
+    intl.formatMessage({ id: 'portfolioDetails' }),
+    intl.formatMessage({ id: 'theme' }),
+    intl.formatMessage({ id: 'template' })
+  ]
+  const stepsLength = steps.length
 
   /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
@@ -64,7 +79,8 @@ export default function AddPortfolioPage() {
     error,
     errorMessage,
     modifyForm,
-    resetPortfolioForm
+    resetPortfolioForm,
+    loading
   ] = useFormStore(useCallback(portfolioFormSelector, []), shallow)
   const { enqueueSnackbar } = useSnackbar()
 
@@ -72,7 +88,8 @@ export default function AddPortfolioPage() {
   /*                                   Styling                                  */
   /* -------------------------------------------------------------------------- */
 
-  const fixedHeightPaper = loggedInStyles().fixedHeightPaper
+  const classes = loggedInStyles()
+  const fixedHeightPaper = classes.fixedHeightPaper
 
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
@@ -103,7 +120,7 @@ export default function AddPortfolioPage() {
     }
 
     if (!title) {
-      modifyForm('errorMessage', 'Title is required.')
+      modifyForm('errorMessage', intl.formatMessage({ id: 'titleRequired' }))
       modifyForm('error', true)
       return
     }
@@ -116,6 +133,8 @@ export default function AddPortfolioPage() {
       pageOrder: [],
       theme
     }
+
+    modifyForm('loading', true)
 
     // console.log(postDetails, template)
 
@@ -142,8 +161,9 @@ export default function AddPortfolioPage() {
           }, 1000)
         })
     } catch (error) {
-      modifyForm('errorMessage', 'An error occurred. Try again.')
       modifyForm('error', true)
+      modifyForm('loading', false)
+      modifyForm('errorMessage', intl.formatMessage({ id: 'errorText' }))
     }
   }
 
@@ -160,6 +180,16 @@ export default function AddPortfolioPage() {
   }
 
   function handleNext() {
+    if (activeStep === 0) {
+      if (!title) {
+        modifyForm('error', true)
+        modifyForm('errorMessage', intl.formatMessage({ id: 'titleRequired' }))
+        return
+      } else {
+        modifyForm('error', false)
+        modifyForm('errorMessage', '')
+      }
+    }
     setActiveStep(activeStep + 1)
   }
 
@@ -172,7 +202,7 @@ export default function AddPortfolioPage() {
       <Grid item xs={12} container direction='column' justify='center' alignItems='center'>
         <Paper className={fixedHeightPaper}>
           <div>
-            <Stepper activeStep={activeStep} alternativeLabel nonLinear>
+            <Stepper activeStep={activeStep} alternativeLabel>
               {steps.map((label, idx) => (
                 <Step key={label}>
                   <StepButton onClick={() => handleStep(idx)}>{label}</StepButton>
@@ -210,28 +240,30 @@ export default function AddPortfolioPage() {
                     <Grid item>
                       <Fab variant='extended' size='medium' onClick={handleBack}>
                         <ArrowBackIosIcon />
-                        Back
+                        {intl.formatMessage({ id: 'back' })}
                       </Fab>
                     </Grid>
                   )}
                   {activeStep < stepsLength - 1 && (
                     <Grid item>
                       <Fab variant='extended' color='secondary' size='medium' onClick={handleNext}>
-                        Next
+                        {intl.formatMessage({ id: 'next' })}
                         <ArrowForwardIosIcon />
                       </Fab>
                     </Grid>
                   )}
                   {activeStep === stepsLength - 1 && (
-                    <Grid item>
+                    <Grid item className={classes.fabProgressContainer}>
                       <Button
                         type='submit'
                         variant='contained'
                         color='secondary'
                         onClick={handleSubmit}
+                        disabled={loading}
                       >
                         {intl.formatMessage({ id: 'addPortfolio' })}
                       </Button>
+                      {loading && <CircularProgress size={24} className={classes.fabProgress} />}
                     </Grid>
                   )}
                 </Grid>

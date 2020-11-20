@@ -5,10 +5,14 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  FormHelperText
 } from '@material-ui/core'
 import { useIntl } from 'react-intl'
 import { loggedInStyles } from '../../../../Styles/loggedInStyles'
+import { useFormStore } from '../../../../Hooks/Store'
+
+const errorMessageSelector = (state) => state.errorMessage
 
 export default function DialogType({
   handlePortfolioEdit,
@@ -26,6 +30,7 @@ export default function DialogType({
 }) {
   const intl = useIntl()
   const classes = loggedInStyles()
+  const errorMessage = useFormStore(errorMessageSelector)
 
   return {
     // Contains the contents to be rendered when a dialog is triggered, which is
@@ -82,6 +87,10 @@ export default function DialogType({
         {/*
          * BUTTONS
          */}
+        <FormHelperText error style={{ paddingLeft: 20, paddingRight: 20, textAlign: 'right' }}>
+          {errorMessage}
+        </FormHelperText>
+
         <DialogActions>
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
@@ -130,6 +139,9 @@ export default function DialogType({
         {/*
          * BUTTONS
          */}
+        <FormHelperText error style={{ paddingLeft: 20, paddingRight: 20, textAlign: 'right' }}>
+          {errorMessage}
+        </FormHelperText>
         <DialogActions>
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}
@@ -179,6 +191,9 @@ export default function DialogType({
         {/*
          * BUTTONS
          */}
+        <FormHelperText error style={{ paddingLeft: 20, paddingRight: 20, textAlign: 'right' }}>
+          {errorMessage}
+        </FormHelperText>
         <DialogActions>
           <Button onClick={handleClose} variant='outlined'>
             {intl.formatMessage({ id: 'cancel' })}

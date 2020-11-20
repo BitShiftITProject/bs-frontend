@@ -13,12 +13,13 @@ import useAddPage from '../../../../Hooks/useAddPage'
 import useEditPage from '../../../../Hooks/useEditPage'
 import useDeletePage from '../../../../Hooks/useDeletePage'
 import usePages from '../../../../Hooks/usePages'
-import { useStore } from '../../../../Hooks/Store'
+import { useFormStore, useStore } from '../../../../Hooks/Store'
 import shallow from 'zustand/shallow'
 import usePortfolio from '../../../../Hooks/usePortfolio'
 
 const portfolioIdSelector = (state) => state.portfolioId
 const pageSelector = ({ pageId, setPageId }) => [pageId, setPageId]
+const modifyFormSelector = (state) => state.modifyForm
 const loadingSelector = ({ loading, setLoading }) => [loading, setLoading]
 
 function EditPortfolioContent() {
@@ -94,6 +95,7 @@ function EditPortfolioContent() {
 
   const [open, setOpen] = useState(false)
   const [dialogContent, setDialogContent] = useState({ type: '', component: '' })
+  const modifyForm = useFormStore(modifyFormSelector)
 
   const handleClose = () => {
     setOpen(false)
@@ -130,6 +132,7 @@ function EditPortfolioContent() {
     // The name variable must match a dialogType key
     // The value variable is the portfolio title
 
+    modifyForm('errorMessage', ' ')
     setDialogContent({ type: name, component: value })
     setPortfolioTitle(value.title)
     setPortfolioDescription(value.description)
@@ -148,6 +151,7 @@ function EditPortfolioContent() {
     // The name variable must match a dialogType key
     // The value variable is the page index
 
+    modifyForm('errorMessage', ' ')
     setDialogContent({ type: name, component: value })
 
     // Set the page title text field's default value as empty for adding a page,
@@ -173,6 +177,12 @@ function EditPortfolioContent() {
 
     setLoading(true)
 
+    if (portfolioTitle === '') {
+      setLoading(false)
+      modifyForm('errorMessage', intl.formatMessage({ id: 'titleRequired' }))
+      return
+    }
+
     editPortfolio({
       portfolioId: portfolio.id,
       patchDetails: {
@@ -197,6 +207,12 @@ function EditPortfolioContent() {
   async function handlePageAdd(e) {
     e.preventDefault()
     setLoading(true)
+
+    if (pageTitle === '') {
+      setLoading(false)
+      modifyForm('errorMessage', intl.formatMessage({ id: 'titleRequired' }))
+      return
+    }
 
     // Adds the new page to the Page DB, and saving the actual details of the
     // newly-added page
@@ -226,6 +242,12 @@ function EditPortfolioContent() {
   async function handlePageTitleEdit(e) {
     e.preventDefault()
     setLoading(true)
+
+    if (pageTitle === '') {
+      setLoading(false)
+      modifyForm('errorMessage', intl.formatMessage({ id: 'titleRequired' }))
+      return
+    }
 
     editPage({ pageId: pages[dialogContent.component].id, patchDetails: { title: pageTitle } })
 
