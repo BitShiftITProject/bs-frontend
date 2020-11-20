@@ -72,7 +72,7 @@ function EditSectionPage({ handleEditAnotherElement, autosaveElement }) {
     return () => {
       clearInterval(interval)
     }
-  }, [])
+  }, [autosaveElement])
 
   return sectionIndex !== null ? (
     <Grid container direction='column' style={{ width: '600px' }}>

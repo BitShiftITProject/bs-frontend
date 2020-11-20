@@ -9,7 +9,8 @@ import {
   Fab,
   Stepper,
   Step,
-  StepButton
+  StepButton,
+  CircularProgress
 } from '@material-ui/core'
 
 import { loggedInStyles } from '../../../Styles/loggedInStyles'
@@ -38,8 +39,19 @@ const portfolioFormSelector = ({
   error,
   errorMessage,
   modifyForm,
-  resetPortfolioForm
-}) => [title, description, theme, template, error, errorMessage, modifyForm, resetPortfolioForm]
+  resetPortfolioForm,
+  loading
+}) => [
+  title,
+  description,
+  theme,
+  template,
+  error,
+  errorMessage,
+  modifyForm,
+  resetPortfolioForm,
+  loading
+]
 
 const steps = ['Details', 'Theme', 'Template']
 const stepsLength = steps.length
@@ -64,7 +76,8 @@ export default function AddPortfolioPage() {
     error,
     errorMessage,
     modifyForm,
-    resetPortfolioForm
+    resetPortfolioForm,
+    loading
   ] = useFormStore(useCallback(portfolioFormSelector, []), shallow)
   const { enqueueSnackbar } = useSnackbar()
 
@@ -72,7 +85,8 @@ export default function AddPortfolioPage() {
   /*                                   Styling                                  */
   /* -------------------------------------------------------------------------- */
 
-  const fixedHeightPaper = loggedInStyles().fixedHeightPaper
+  const classes = loggedInStyles()
+  const fixedHeightPaper = classes.fixedHeightPaper
 
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
@@ -117,6 +131,8 @@ export default function AddPortfolioPage() {
       theme
     }
 
+    modifyForm('loading', true)
+
     // console.log(postDetails, template)
 
     // Creates a portfolio belonging to the currently logged-in user,
@@ -143,6 +159,7 @@ export default function AddPortfolioPage() {
         })
     } catch (error) {
       modifyForm('error', true)
+      modifyForm('loading', false)
       modifyForm('errorMessage', 'An error occurred. Try again.')
     }
   }
@@ -233,15 +250,17 @@ export default function AddPortfolioPage() {
                     </Grid>
                   )}
                   {activeStep === stepsLength - 1 && (
-                    <Grid item>
+                    <Grid item className={classes.fabProgressContainer}>
                       <Button
                         type='submit'
                         variant='contained'
                         color='secondary'
                         onClick={handleSubmit}
+                        disabled={loading}
                       >
                         {intl.formatMessage({ id: 'addPortfolio' })}
                       </Button>
+                      {loading && <CircularProgress size={24} className={classes.fabProgress} />}
                     </Grid>
                   )}
                 </Grid>

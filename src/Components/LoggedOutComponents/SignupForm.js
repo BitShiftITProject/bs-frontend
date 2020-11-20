@@ -25,24 +25,14 @@ function SignupForm() {
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
-  const [
-    username,
-    email,
-    password,
-    firstName,
-    lastName,
-    loading,
-    showPassword,
-    modifyForm
-  ] = useFormStore(
+  const [username, email, password, firstName, lastName, showPassword, modifyForm] = useFormStore(
     useCallback(
-      ({ username, email, password, firstName, lastName, loading, showPassword, modifyForm }) => [
+      ({ username, email, password, firstName, lastName, showPassword, modifyForm }) => [
         username,
         email,
         password,
         firstName,
         lastName,
-        loading,
         showPassword,
         modifyForm
       ],

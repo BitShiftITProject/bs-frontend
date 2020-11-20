@@ -31,12 +31,12 @@ import useMediaItem from '../../Hooks/useMediaItem'
 import ReactPlayer from 'react-player'
 import shallow from 'zustand/shallow'
 
-const text = 'Text'
-const spacer = 'Spacer'
-const youtubeVideo = 'Video'
-const mediaPlayer = 'Media Player'
-const image = 'Image'
-const fileUpload = 'File'
+// const text = 'Text'
+// const spacer = 'Spacer'
+// const youtubeVideo = 'Video'
+// const mediaPlayer = 'Media Player'
+// const image = 'Image'
+// const fileUpload = 'File'
 
 const ExampleSection = styled(Grid)({
   overflowY: 'hidden',
@@ -199,7 +199,7 @@ export const YoutubeVideo = React.memo(({ editing, data }) => {
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
-        <Typography variant='h6'>{youtubeVideo}</Typography>
+        <Typography variant='h6'>Youtube Video</Typography>
       </ExampleSection>
     ) : (
       <Tooltip placement='top' title='Video ID (See FAQ)'>

@@ -4,7 +4,7 @@ import { CssBaseline } from '@material-ui/core'
 import { Route, Switch, Redirect } from 'react-router-dom'
 // import { Scrollbars } from 'react-custom-scrollbars'
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
-// import { ReactQueryDevtools } from 'react-query-devtools'
+import { ReactQueryDevtools } from 'react-query-devtools'
 
 import ThemesProvider from './Components/Contexts/ThemesContext'
 import LocaleProvider from './Components/Contexts/LocaleContext'
@@ -40,6 +40,7 @@ export default function App() {
           </LocaleProvider>
         </CssBaseline>
       </ThemesProvider>
+      <ReactQueryDevtools />
     </ReactQueryCacheProvider>
   )
 }
