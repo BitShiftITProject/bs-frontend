@@ -5,21 +5,22 @@ import DoneIcon from '@material-ui/icons/Done'
 import { CursorTypography } from '../../Styles/loggedInStyles'
 import { loggedOutStyles } from '../../Styles/loggedOutStyles'
 import { useFormStore } from '../../Hooks/Store'
+import { useIntl } from 'react-intl'
 
 export default function SignupVerifyEmail() {
   const email = useFormStore((state) => state.email)
+  const intl = useIntl()
 
   const style = loggedOutStyles()
-  // const intl = useIntl()
   return (
     <div className={style.signupDiv}>
       <Grid container direction='column' spacing={1} justify='center' alignItems='center'>
         <CursorTypography
           component='h1'
           variant='h5'
-          style={{ marginBlockStart: 0, marginInlineStart: 0 }}
+          style={{ marginBlockStart: 0, marginInlineStart: 0, paddingTop: 16 }}
         >
-          Verify your email address
+          {intl.formatMessage({ id: 'verifyEmail' })}
         </CursorTypography>
         <Fab style={{ backgroundColor: 'lightgreen' }}>
           <DoneIcon />
@@ -29,11 +30,13 @@ export default function SignupVerifyEmail() {
           component='p'
           variant='subtitle1'
         >
-          We have sent an email to <span style={{ fontWeight: 'bolder' }}>{email}</span> with a link
-          to verify your new account (link valid for 24 hours)
+          {intl.formatMessage(
+            { id: 'verifyLink' },
+            { email: <span style={{ fontWeight: 'bolder' }}>{email}</span> }
+          )}
           <br />
           <span style={{ fontWeight: 'bolder' }}>
-            Once you activate your account, you will be able to log in.
+            {intl.formatMessage({ id: 'logInAfterActivate' })}
           </span>
         </CursorTypography>
         <Fab

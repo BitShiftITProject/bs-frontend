@@ -83,7 +83,7 @@ function SectionsButton() {
       <DialogContent>
         <Grid container direction='column' spacing={4}>
           <Grid item container>
-            <Typography variant='button'>Preview</Typography>
+            <Typography variant='button'>{intl.formatMessage({ id: 'preview' })}</Typography>
             <Grid
               style={{
                 height: 200,
@@ -120,14 +120,16 @@ function SectionsButton() {
           </Grid>
           <Grid item container direction='column' spacing={2}>
             <Grid item>
-              <Typography variant='body1'>Choose elements to add to your new section:</Typography>
+              <Typography variant='body1'>
+                {intl.formatMessage({ id: 'chooseElements' })}
+              </Typography>
             </Grid>
             <Grid item container direction='row' spacing={2}>
               {Object.keys(sectionElements).map((elementName, idx) => (
                 <Grid key={idx} item>
                   <ButtonBase onClick={(e) => addSectionElement(elementName)}>
                     <Link color='textPrimary' style={{ textTransform: 'capitalize' }}>
-                      {sectionElements[elementName][0]}
+                      {intl.formatMessage({ id: elementName })}
                     </Link>
                   </ButtonBase>
                 </Grid>

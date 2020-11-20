@@ -71,7 +71,7 @@ export default function EditPortfolioStyle() {
     <Grid container direction='row' spacing={0}>
       <Grid item xs={12}>
         <Paper className={fixedHeightPaper}>
-          <Typography variant='h5'>Theme</Typography>
+          <Typography variant='h5'>{intl.formatMessage({ id: 'theme' })}</Typography>
           <FormControl component='fieldset'>
             <RadioGroup
               aria-label='theme chooser'
@@ -80,14 +80,12 @@ export default function EditPortfolioStyle() {
               onChange={handleThemeChange}
             >
               {Object.keys(themes).map((theme) => {
-                const titleCase = theme.replace(/([A-Z])/g, ' $1')
-                const radioLabel = titleCase.charAt(0).toUpperCase() + titleCase.slice(1)
                 return (
                   <FormControlLabel
                     key={theme}
                     value={theme}
                     control={<Radio />}
-                    label={radioLabel}
+                    label={intl.formatMessage({ id: theme })}
                   />
                 )
               })}

@@ -6,6 +6,7 @@ import { useStore } from '../../../Hooks/Store'
 import shallow from 'zustand/shallow'
 import usePage from '../../../Hooks/usePage'
 import Loading from '../../CommonComponents/Loading'
+import { useIntl } from 'react-intl'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props
@@ -50,6 +51,8 @@ const currentSectionDetails = ({ pageId, sectionIndex, elementIndex }) => [
 // If currently editing an element, then we are currently editing a section.
 // Therefore we need to show the edit panel for the current section's elements.
 function EditSectionPage({ handleEditAnotherElement, autosaveElement }) {
+  const intl = useIntl()
+
   const editing = true
 
   const [pageId, sectionIndex, elementIndex] = useStore(
@@ -76,7 +79,7 @@ function EditSectionPage({ handleEditAnotherElement, autosaveElement }) {
 
   return sectionIndex !== null ? (
     <Grid container direction='column' style={{ width: '600px' }}>
-      <DialogTitle>Edit Section</DialogTitle>
+      <DialogTitle>{intl.formatMessage({ id: 'editSection' })}</DialogTitle>
       <Grid item container direction='column'>
         <div style={{ flexGrow: 1, width: '100%' }}>
           <AppBar position='static' color='default'>
@@ -91,7 +94,7 @@ function EditSectionPage({ handleEditAnotherElement, autosaveElement }) {
                 <Tab
                   key={idx}
                   icon={sectionElements[element.id][2]}
-                  label={sectionElements[element.id][0]}
+                  label={intl.formatMessage({ id: element.id })}
                   onClick={() => handleClick(sectionIndex, idx)}
                 />
               ))}

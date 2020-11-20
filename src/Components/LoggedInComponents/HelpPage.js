@@ -44,7 +44,12 @@ export default function HelpPage() {
   const help = {
     [intl.formatMessage({ id: 'faq' })]: [
       { q: intl.formatMessage({ id: 'question1' }), a: intl.formatMessage({ id: 'answer1' }) },
-      { q: intl.formatMessage({ id: 'question2' }), a: intl.formatMessage({ id: 'answer2' }) }
+      { q: intl.formatMessage({ id: 'question2' }), a: intl.formatMessage({ id: 'answer2' }) },
+      { q: intl.formatMessage({ id: 'question3' }), a: intl.formatMessage({ id: 'answer3' }) },
+      { q: intl.formatMessage({ id: 'question4' }), a: intl.formatMessage({ id: 'answer4' }) },
+      { q: intl.formatMessage({ id: 'question5' }), a: intl.formatMessage({ id: 'answer5' }) },
+      { q: intl.formatMessage({ id: 'question6' }), a: intl.formatMessage({ id: 'answer6' }) },
+      { q: intl.formatMessage({ id: 'question7' }), a: intl.formatMessage({ id: 'answer7' }) }
     ]
   }
 

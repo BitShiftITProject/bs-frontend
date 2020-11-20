@@ -113,7 +113,7 @@ function EditPortfolioSectionsGrouped() {
             alignItems='center'
           >
             <CursorTypography variant='subtitle2'>
-              Select a page to start editing your portfolio
+              {intl.formatMessage({ id: 'selectAPage' })}
             </CursorTypography>
           </Grid>
         )}
@@ -145,7 +145,7 @@ function EditPortfolioSectionsGrouped() {
                 alignItems='center'
               >
                 <CursorTypography variant='subtitle2'>
-                  To add a section, click on Add Section and choose a template
+                  {intl.formatMessage({ id: 'clickAddSections' })}
                 </CursorTypography>
               </Grid>
             )}

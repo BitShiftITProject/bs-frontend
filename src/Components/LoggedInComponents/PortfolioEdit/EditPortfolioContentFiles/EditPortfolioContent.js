@@ -179,7 +179,7 @@ function EditPortfolioContent() {
 
     if (portfolioTitle === '') {
       setLoading(false)
-      modifyForm('errorMessage', 'Title is required.')
+      modifyForm('errorMessage', intl.formatMessage({ id: 'titleRequired' }))
       return
     }
 
@@ -210,7 +210,7 @@ function EditPortfolioContent() {
 
     if (pageTitle === '') {
       setLoading(false)
-      modifyForm('errorMessage', 'Title is required.')
+      modifyForm('errorMessage', intl.formatMessage({ id: 'titleRequired' }))
       return
     }
 
@@ -245,7 +245,7 @@ function EditPortfolioContent() {
 
     if (pageTitle === '') {
       setLoading(false)
-      modifyForm('errorMessage', 'Title is required.')
+      modifyForm('errorMessage', intl.formatMessage({ id: 'titleRequired' }))
       return
     }
 

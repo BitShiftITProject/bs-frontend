@@ -53,15 +53,18 @@ const portfolioFormSelector = ({
   loading
 ]
 
-const steps = ['Details', 'Theme', 'Template']
-const stepsLength = steps.length
-
 export default function AddPortfolioPage() {
   /* -------------------------------------------------------------------------- */
   /*                                   Locale                                   */
   /* -------------------------------------------------------------------------- */
 
   const intl = useIntl()
+  const steps = [
+    intl.formatMessage({ id: 'portfolioDetails' }),
+    intl.formatMessage({ id: 'theme' }),
+    intl.formatMessage({ id: 'template' })
+  ]
+  const stepsLength = steps.length
 
   /* -------------------------------------------------------------------------- */
   /*                          States and their Setters                          */
@@ -117,7 +120,7 @@ export default function AddPortfolioPage() {
     }
 
     if (!title) {
-      modifyForm('errorMessage', 'Title is required.')
+      modifyForm('errorMessage', intl.formatMessage({ id: 'titleRequired' }))
       modifyForm('error', true)
       return
     }
@@ -160,7 +163,7 @@ export default function AddPortfolioPage() {
     } catch (error) {
       modifyForm('error', true)
       modifyForm('loading', false)
-      modifyForm('errorMessage', 'An error occurred. Try again.')
+      modifyForm('errorMessage', intl.formatMessage({ id: 'errorText' }))
     }
   }
 
@@ -180,7 +183,7 @@ export default function AddPortfolioPage() {
     if (activeStep === 0) {
       if (!title) {
         modifyForm('error', true)
-        modifyForm('errorMessage', 'Title is required.')
+        modifyForm('errorMessage', intl.formatMessage({ id: 'titleRequired' }))
         return
       } else {
         modifyForm('error', false)
@@ -237,14 +240,14 @@ export default function AddPortfolioPage() {
                     <Grid item>
                       <Fab variant='extended' size='medium' onClick={handleBack}>
                         <ArrowBackIosIcon />
-                        Back
+                        {intl.formatMessage({ id: 'back' })}
                       </Fab>
                     </Grid>
                   )}
                   {activeStep < stepsLength - 1 && (
                     <Grid item>
                       <Fab variant='extended' color='secondary' size='medium' onClick={handleNext}>
-                        Next
+                        {intl.formatMessage({ id: 'next' })}
                         <ArrowForwardIosIcon />
                       </Fab>
                     </Grid>

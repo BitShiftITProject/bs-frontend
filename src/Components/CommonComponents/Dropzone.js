@@ -7,6 +7,7 @@ import useDeleteMediaItem from '../../Hooks/useDeleteMediaItem'
 import Loading from './Loading'
 import { postMediaContent } from '../../Backend/Fetch'
 import useUser from '../../Hooks/useUser'
+import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -43,6 +44,7 @@ const currentElementSelector = (state) => state.currentElement
 
 function Dropzone({ img, initialFile }) {
   const classes = useStyles()
+  const intl = useIntl()
 
   const user = useUser()
 
@@ -146,7 +148,7 @@ function Dropzone({ img, initialFile }) {
         }}
         // Dropzone settings
         disableRejectionFeedback={true}
-        dropzoneText={`Drag and drop or click to add ${onlyImage ? 'an image' : 'a file'}`}
+        dropzoneText={intl.formatMessage({ id: 'dropzoneText' })}
         dropzoneProps={{
           multiple: false,
           disabled: files.length >= filesLimit
@@ -167,7 +169,7 @@ function Dropzone({ img, initialFile }) {
           <Grid item xs={8}>
             <TextField
               variant='standard'
-              label='Filename'
+              label={intl.formatMessage({ id: 'filename' })}
               disabled={!files.length}
               readOnly
               value={fileName}
@@ -179,7 +181,7 @@ function Dropzone({ img, initialFile }) {
           <Grid item xs={4}>
             <TextField
               variant='standard'
-              label='Extension'
+              label={intl.formatMessage({ id: 'extension' })}
               disabled={!files.length}
               readOnly
               value={!files.length ? '' : '.' + fileExtension}
