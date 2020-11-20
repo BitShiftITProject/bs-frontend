@@ -20,11 +20,11 @@ export default function TextEditor({ data }) {
         height: 300,
         // width: 600,
         plugins:
-          'paste searchreplace autolink directionality link code codesample table charmap hr insertdatetime advlist lists wordcount textpattern noneditable help emoticons',
+          'paste searchreplace autolink directionality link code table hr insertdatetime advlist lists wordcount textpattern noneditable help',
         // menubar: 'edit insert format table help',
         menubar: false,
         toolbar:
-          'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | forecolor backcolor | outdent indent |  numlist bullist | link codesample charmap emoticons | fontselect fontsizeselect formatselect ',
+          'undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | forecolor backcolor | outdent indent |  numlist bullist | fontselect fontsizeselect formatselect ',
         toolbar_sticky: true,
         noneditable_noneditable_class: 'mceNonEditable',
         toolbar_mode: 'sliding',

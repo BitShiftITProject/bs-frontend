@@ -18,6 +18,7 @@ import useEditPortfolio from '../../../../Hooks/useEditPortfolio'
 import { useStore } from '../../../../Hooks/Store'
 import usePortfolio from '../../../../Hooks/usePortfolio'
 import usePages from '../../../../Hooks/usePages'
+import { useQueryCache } from 'react-query'
 
 const portfolioIdSelector = (state) => state.portfolioId
 const pageIdSelector = (state) => state.pageId
@@ -39,6 +40,7 @@ export default function EditPortfolioPagesGrouped({
   const { data: portfolio } = usePortfolio(portfolioId)
   const { data: pages } = usePages(portfolioId)
   const [editPortfolio] = useEditPortfolio(portfolioId)
+  const cache = useQueryCache()
 
   /* -------------------------------------------------------------------------- */
   /*                                Drag and Drop                               */
@@ -51,7 +53,9 @@ export default function EditPortfolioPagesGrouped({
       const newPages = arrayMove(pages, source.index, destination.index)
 
       const patchDetails = { pageOrder: newPages.map((p) => p.id) }
-      editPortfolio({ portfolioId: portfolio.id, patchDetails })
+      editPortfolio({ portfolioId: portfolio.id, patchDetails }).then(() => {
+        cache.refetchQueries(['pages', { portfolioId: portfolio.id }])
+      })
     }
   }
 

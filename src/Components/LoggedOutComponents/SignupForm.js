@@ -25,24 +25,14 @@ function SignupForm() {
   /*                          States and their Setters                          */
   /* -------------------------------------------------------------------------- */
 
-  const [
-    username,
-    email,
-    password,
-    firstName,
-    lastName,
-    loading,
-    showPassword,
-    modifyForm
-  ] = useFormStore(
+  const [username, email, password, firstName, lastName, showPassword, modifyForm] = useFormStore(
     useCallback(
-      ({ username, email, password, firstName, lastName, loading, showPassword, modifyForm }) => [
+      ({ username, email, password, firstName, lastName, showPassword, modifyForm }) => [
         username,
         email,
         password,
         firstName,
         lastName,
-        loading,
         showPassword,
         modifyForm
       ],
@@ -52,7 +42,7 @@ function SignupForm() {
   )
 
   const handleClickShowPassword = () => modifyForm('showPassword', !showPassword)
-  const changeLoading = () => modifyForm('loading', !loading)
+  const changeLoading = (value) => modifyForm('loading', value)
 
   /* -------------------------------------------------------------------------- */
   /*                                  Handlers                                  */
@@ -82,7 +72,7 @@ function SignupForm() {
       password: password
     }
 
-    changeLoading()
+    changeLoading(true)
 
     const response = await signupCheck(details)
 
@@ -97,7 +87,8 @@ function SignupForm() {
       modifyForm('signUpFailed', true)
       modifyForm('errorMessage', error.error.message)
     }
-    changeLoading()
+
+    changeLoading(false)
   }
 
   /* -------------------------------------------------------------------------- */

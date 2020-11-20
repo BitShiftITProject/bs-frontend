@@ -30,13 +30,14 @@ import useFile from '../../Hooks/useFile'
 import useMediaItem from '../../Hooks/useMediaItem'
 import ReactPlayer from 'react-player'
 import shallow from 'zustand/shallow'
+import { useIntl } from 'react-intl'
 
-const text = 'Text'
-const spacer = 'Spacer'
-const youtubeVideo = 'Video'
-const mediaPlayer = 'Media Player'
-const image = 'Image'
-const fileUpload = 'File'
+// const text = 'Text'
+// const spacer = 'Spacer'
+// const youtubeVideo = 'Video'
+// const mediaPlayer = 'Media Player'
+// const image = 'Image'
+// const fileUpload = 'File'
 
 const ExampleSection = styled(Grid)({
   overflowY: 'hidden',
@@ -157,6 +158,8 @@ export const MediaPlayer = React.memo(({ editing, data }) => {
     editCurrentElement(e.target.value)
   }
 
+  const intl = useIntl()
+
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
@@ -171,10 +174,8 @@ export const MediaPlayer = React.memo(({ editing, data }) => {
         fullWidth
         multiline
         variant='outlined'
-        label='Media URL'
-        helperText={
-          'Supports YouTube, Facebook, Soundcloud, Vimeo, Dailymotion, and any URL linking to a video or audio file'
-        }
+        label={intl.formatMessage({ id: 'url' })}
+        helperText={'YouTube, Facebook, Soundcloud, Vimeo, Dailymotion'}
       />
     )
   ) : data !== '' ? (
@@ -199,7 +200,7 @@ export const YoutubeVideo = React.memo(({ editing, data }) => {
   const rendered = editing ? (
     data === null ? (
       <ExampleSection container>
-        <Typography variant='h6'>{youtubeVideo}</Typography>
+        <Typography variant='h6'>Youtube Video</Typography>
       </ExampleSection>
     ) : (
       <Tooltip placement='top' title='Video ID (See FAQ)'>

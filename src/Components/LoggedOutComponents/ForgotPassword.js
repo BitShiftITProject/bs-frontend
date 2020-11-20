@@ -168,7 +168,7 @@ function ForgotPassword(props) {
       ) : (
         <form onSubmit={handleResetPassword} className={classes.form}>
           <CursorTypography component='h1' variant='h5'>
-            Reset Password
+            {intl.formatMessage('resetPassword')}
           </CursorTypography>
 
           <Typography
@@ -176,8 +176,10 @@ function ForgotPassword(props) {
             style={{ width: '75%', textAlign: 'center' }}
             gutterBottom
           >
-            Check your email (<span style={{ fontWeight: 'bold' }}>{email}</span>) to get the
-            confirmation code for resetting your password.
+            {intl.formatMessage(
+              { id: 'confirmationEmail' },
+              { email: <span style={{ fontWeight: 'bold' }}>{email}</span> }
+            )}
           </Typography>
 
           {/* CONFIRMATION CODE */}

@@ -4,7 +4,7 @@ import produce from 'immer'
 // Copied from zustand docs to easily change nested state
 export const immer = (config) => (set, get, api) => config((fn) => set(produce(fn)), get, api)
 
-// Used in login, signup, forgot password forms
+// Used in login, signup, forgot password, and add portfolio forms
 const formStore = (set) => ({
   email: '',
   password: '',
@@ -35,6 +35,7 @@ const formStore = (set) => ({
       state.theme = 'light'
       state.template = 'blank'
       state.errorMessage = ' '
+      state.loading = false
     })
 })
 
